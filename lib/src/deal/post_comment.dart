@@ -1,0 +1,135 @@
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+
+import '../models/comment.dart';
+import '../models/user_controller_impl.dart';
+import '../models/my_user.dart';
+import '../services/spring_service.dart';
+import '../widgets/loading_dialog.dart';
+
+class PostComment extends StatefulWidget {
+  const PostComment({Key? key, required this.dealId}) : super(key: key);
+
+  final String dealId;
+
+  @override
+  _PostCommentState createState() => _PostCommentState();
+}
+
+class _PostCommentState extends State<PostComment> {
+  late MyUser? user;
+  late TextEditingController commentController;
+
+  @override
+  void initState() {
+    user = context.read<UserControllerImpl>().user;
+    commentController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    commentController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final TextTheme textTheme = theme.textTheme;
+    final double deviceWidth = MediaQuery.of(context).size.width;
+
+    Future<void> onPressed() async {
+      GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
+
+      final Comment comment = Comment(
+        dealId: widget.dealId,
+        postedBy: user!.id!,
+        message: commentController.text,
+      );
+
+      final Comment? postedComment =
+          await GetIt.I.get<SpringService>().postComment(comment: comment);
+      print(postedComment);
+
+      // Pops the loading dialog.
+      Navigator.of(context).pop();
+      if (postedComment != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Your comment posted'),
+          ),
+        );
+        Navigator.of(context).pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred!'),
+          ),
+        );
+      }
+    }
+
+    Widget buildPostButton() {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        width: deviceWidth,
+        child: SizedBox(
+          height: 45,
+          child: ElevatedButton(
+            onPressed: commentController.text.isEmpty ? null : onPressed,
+            style: ElevatedButton.styleFrom(
+              primary: theme.colorScheme.secondary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+            ),
+            child: const Text('Yorumu Paylaş'),
+          ),
+        ),
+      );
+    }
+
+    Widget buildForm() {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TextField(
+              controller: commentController,
+              onChanged: (String? text) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                hintStyle: textTheme.bodyText2!.copyWith(
+                    color: theme.brightness == Brightness.light
+                        ? Colors.black54
+                        : Colors.grey),
+                hintText: 'Buraya yorumunuzu yazın...',
+              ),
+              minLines: 4,
+              maxLines: 30,
+            ),
+            const SizedBox(height: 10),
+            buildPostButton(),
+          ],
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text('Bir Yorum Paylaş', style: textTheme.headline6),
+          const SizedBox(height: 20),
+          buildForm(),
+        ],
+      ),
+    );
+  }
+}
