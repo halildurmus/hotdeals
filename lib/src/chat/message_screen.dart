@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/my_user.dart';
+import '../models/push_notification.dart';
 import '../models/report.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
@@ -80,6 +81,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   Future<void> _onSend(ChatMessage message) async {
     print(message.toJson());
+
     final DocumentReference<Json> documentReference = FirebaseFirestore.instance
         .collection('messages')
         .doc(widget.docId)
@@ -109,6 +111,23 @@ class _MessageScreenState extends State<MessageScreen> {
         );
       },
     );
+
+    final PushNotification notification = PushNotification(
+      title: '${widget.user2.nickname} sent you a message',
+      body: message.text,
+      actor: widget.user2.nickname!,
+      verb: 'message',
+      object: documentReference.id,
+      message: message.text,
+      avatar: widget.user2.avatar,
+    );
+
+    final bool result = await GetIt.I.get<SpringService>().sendPushNotification(
+        notification: notification, tokens: widget.user2.fcmTokens!);
+
+    if (result) {
+      print('Push notification sent to: ${widget.user2.nickname}');
+    }
   }
 
   Future<void> _confirmBlockUser(BuildContext context) async {
@@ -199,7 +218,7 @@ class _MessageScreenState extends State<MessageScreen> {
     if (_didRequestUnblockUser == true) {
       final bool _result = await GetIt.I
           .get<SpringService>()
-          .unblockUser(userId: widget.user2.uid);
+          .unblockUser(userUid: widget.user2.uid);
 
       if (_result) {
         await Provider.of<UserControllerImpl>(context, listen: false).getUser();

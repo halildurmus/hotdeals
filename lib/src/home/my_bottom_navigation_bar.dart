@@ -6,9 +6,9 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user_controller_impl.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
+import '../models/user_controller_impl.dart';
 import '../services/sqlite_service.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -105,15 +105,15 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                               )
                             : Badge(
                                 badgeColor: theme.primaryColor.withOpacity(.3),
-                                elevation: 0,
-                                position:
-                                    BadgePosition.topEnd(top: -12, end: -12),
                                 badgeContent: Text(
                                   unreadNotifications.toString(),
                                   style: TextStyle(
                                       color:
                                           theme.primaryColor.withOpacity(.9)),
                                 ),
+                                elevation: 0,
+                                position:
+                                    BadgePosition.topEnd(top: -12, end: -12),
                                 child: CircleAvatar(
                                   radius: 12.0,
                                   backgroundImage: NetworkImage(user!.avatar!),
@@ -121,7 +121,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                               )
                         : null,
                     text: 'Profil',
-                  )
+                  ),
                 ],
                 selectedIndex: activeScreen,
                 onTabChange: (int index) {

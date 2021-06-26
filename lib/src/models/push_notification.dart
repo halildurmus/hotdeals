@@ -5,8 +5,11 @@ class PushNotification {
     this.id,
     required this.title,
     required this.body,
-    required this.dataTitle,
-    required this.dataBody,
+    required this.actor,
+    required this.verb,
+    required this.object,
+    this.avatar,
+    this.message,
     this.isRead = false,
     this.createdAt,
   }) {
@@ -19,8 +22,10 @@ class PushNotification {
         id: map['id']! as int,
         title: map['title']! as String,
         body: map['body']! as String,
-        dataTitle: map['data_title']! as String,
-        dataBody: map['data_body']! as String,
+        actor: map['actor']! as String,
+        verb: map['verb']! as String,
+        object: map['object']! as String,
+        message: map['message'] as String?,
         isRead: map['is_read']! == 1,
         createdAt: DateTime.parse(map['created_at']! as String),
       );
@@ -28,10 +33,27 @@ class PushNotification {
   final int? id;
   final String title;
   final String body;
-  final String dataTitle;
-  final String dataBody;
+  final String actor;
+  final String verb;
+  final String object;
+  final String? avatar;
+  final String? message;
   bool isRead;
-  late final DateTime? createdAt;
+  DateTime? createdAt;
+
+  /// Converts a [PushNotification] into a [Json].
+  Json toJson() => <String, dynamic>{
+        'title': title,
+        'body': body,
+        // 'image': null,
+        'data': <String, dynamic>{
+          'actor': actor,
+          'verb': verb,
+          'object': object,
+          if (avatar != null) 'avatar': avatar,
+          if (message != null) 'message': message,
+        }
+      };
 
   /// Converts a [PushNotification] into a [Map].
   /// The keys must correspond to the names of the columns in the database.
@@ -39,14 +61,16 @@ class PushNotification {
         'id': id,
         'title': title,
         'body': body,
-        'data_title': dataTitle,
-        'data_body': dataBody,
+        'actor': actor,
+        'verb': verb,
+        'object': object,
+        'message': message,
         'is_read': isRead ? 1 : 0,
         'created_at': createdAt!.toIso8601String(),
       };
 
   @override
   String toString() {
-    return 'PushNotification{id: $id, title: $title, body: $body, dataTitle: $dataTitle, dataBody: $dataBody, isRead: $isRead, createdAt: $createdAt}';
+    return 'PushNotification{id: $id, title: $title, body: $body, actor: $actor, verb: $verb, object: $object, avatar: $avatar, message: $message, isRead: $isRead, createdAt: $createdAt}';
   }
 }

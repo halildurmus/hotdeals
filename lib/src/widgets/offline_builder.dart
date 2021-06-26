@@ -69,12 +69,12 @@ class OfflineBuilderState extends State<OfflineBuilder> {
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (!snapshot.hasData && !snapshot.hasError) {
           return const SizedBox();
-        }
-
-        if (snapshot.hasError) {
+        } else if (snapshot.hasError) {
+          print(snapshot.error);
           if (widget.errorBuilder != null) {
             return widget.errorBuilder!(context);
           }
+
           throw OfflineBuilderError(snapshot.error!);
         }
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:hotdeals/src/models/push_notification.dart';
 import 'package:http/http.dart';
 
 import '../models/category.dart';
@@ -18,7 +19,8 @@ import 'spring_service.dart';
 
 typedef Json = Map<String, dynamic>;
 
-const String _baseUrl = 'https://YOUR-BACKEND-URL:PORT';
+const String _baseUrl = 'http://hotdeals-backend.herokuapp.com';
+// const String _baseUrl = 'http://10.0.2.2:8080';
 
 class SpringServiceImpl implements SpringService {
   /// Creates an instance of [HttpServiceImpl] with given HTTP [httpService].
@@ -43,32 +45,26 @@ class SpringServiceImpl implements SpringService {
 
     try {
       final Response response = await _httpService.post(url, null);
-      if (response.statusCode == 200) {
-        return true;
-      }
+
+      return response.statusCode == 200;
     } on Exception catch (e) {
       print(e);
       return false;
     }
-
-    return true;
   }
 
   @override
-  Future<bool> unblockUser({required String userId}) async {
-    final String url = '$_baseUrl/users/unblock/$userId';
+  Future<bool> unblockUser({required String userUid}) async {
+    final String url = '$_baseUrl/users/unblock/$userUid';
 
     try {
       final Response response = await _httpService.post(url, null);
-      if (response.statusCode == 200) {
-        return true;
-      }
+
+      return response.statusCode == 200;
     } on Exception catch (e) {
       print(e);
       return false;
     }
-
-    return true;
   }
 
   @override
@@ -77,15 +73,12 @@ class SpringServiceImpl implements SpringService {
 
     try {
       final Response response = await _httpService.post(url, null);
-      if (response.statusCode == 200) {
-        return true;
-      }
+
+      return response.statusCode == 200;
     } on Exception catch (e) {
       print(e);
       return false;
     }
-
-    return true;
   }
 
   @override
@@ -94,15 +87,12 @@ class SpringServiceImpl implements SpringService {
 
     try {
       final Response response = await _httpService.post(url, null);
-      if (response.statusCode == 200) {
-        return true;
-      }
+
+      return response.statusCode == 200;
     } on Exception catch (e) {
       print(e);
       return false;
     }
-
-    return true;
   }
 
   @override
@@ -130,15 +120,30 @@ class SpringServiceImpl implements SpringService {
 
     try {
       final Response response = await _httpService.delete(url);
-      if (response.statusCode == 200) {
-        return true;
-      }
+
+      return response.statusCode == 200;
     } on Exception catch (e) {
       print(e);
       return false;
     }
+  }
 
-    return true;
+  @override
+  Future<bool> sendPushNotification({
+    required PushNotification notification,
+    required List<String> tokens,
+  }) async {
+    final String url = '$_baseUrl/notifications?tokens=${tokens.join(',')}';
+
+    try {
+      final Response response =
+          await _httpService.post(url, notification.toJson());
+
+      return response.statusCode == 200;
+    } on Exception catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   @override
@@ -329,6 +334,29 @@ class SpringServiceImpl implements SpringService {
   }
 
   @override
+  Future<List<MyUser>?> getBlockedUsers(
+      {required List<String> userUids}) async {
+    final String url =
+        '$_baseUrl/users/search/findAllByUidIn?userUids=${userUids.join(',')}';
+
+    try {
+      final Response response = await _httpService.get(url);
+      if (response.statusCode == 200) {
+        final List<MyUser> blockedUsers = userFromJson(response.body);
+
+        return blockedUsers;
+      }
+
+      return null;
+    } on Exception catch (e, stackTrace) {
+      print(e);
+      print(stackTrace);
+
+      return null;
+    }
+  }
+
+  @override
   Future<MyUser> getUserById({required String id}) async {
     final String url = '$_baseUrl/users/$id';
 
@@ -394,38 +422,6 @@ class SpringServiceImpl implements SpringService {
     }
   }
 
-  // @override
-  // Future<MyUser> removeFcmToken({
-  //   required String userId,
-  //   required int fcmTokenIndex,
-  //   required String fcmToken,
-  // }) async {
-  //   final String url = '$_baseUrl/users/$userId';
-  //   final List<Json> data = <Json>[
-  //     <String, dynamic>{
-  //       'op': 'remove',
-  //       'path': '/fcmTokens/$fcmTokenIndex',
-  //     }
-  //   ];
-  //
-  //   try {
-  //     final Response response = await _httpService.patch(url, data);
-  //     print(response.body);
-  //     if (response.statusCode == 200) {
-  //       final MyUser _myUser =
-  //           MyUser.fromJson(jsonDecode(response.body) as Json);
-  //
-  //       return _myUser;
-  //     }
-  //
-  //     throw Exception('An error occurred while removing fcm token!');
-  //   } on Exception catch (e, stackTrace) {
-  //     print(e);
-  //     print(stackTrace);
-  //     throw Exception('An error occurred while removing fcm token!');
-  //   }
-  // }
-
   @override
   Future<bool> logout({required String fcmToken}) async {
     const String url = '$_baseUrl/users/logout';
@@ -433,12 +429,8 @@ class SpringServiceImpl implements SpringService {
 
     try {
       final Response response = await _httpService.post(url, data);
-      print(response.body);
-      if (response.statusCode == 200) {
-        return true;
-      }
 
-      return false;
+      return response.statusCode == 200;
     } on Exception catch (e, stackTrace) {
       print(e);
       print(stackTrace);

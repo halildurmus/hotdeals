@@ -6,6 +6,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'chat/blocked_users.dart';
 import 'error_screen.dart';
 import 'models/categories.dart';
 import 'models/category.dart';
@@ -23,6 +24,7 @@ import 'settings/settings.view.dart';
 import 'settings/settings_controller.dart';
 import 'sign_in/auth_widget.dart';
 import 'sign_in/auth_widget_builder.dart';
+import 'widgets/notification_overlay_item.dart';
 import 'widgets/offline_builder.dart';
 
 class MyApp extends StatefulWidget {
@@ -53,6 +55,8 @@ class _MyAppState extends State<MyApp> {
       settings: routeSettings,
       builder: (BuildContext context) {
         switch (routeSettings.name) {
+          case BlockedUsers.routeName:
+            return const BlockedUsers();
           case Profile.routeName:
             return const Profile();
           case SettingsView.routeName:
@@ -128,23 +132,28 @@ class _MyAppState extends State<MyApp> {
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
 
+        // Constructs a PushNotification from the RemoteMessage.
         final PushNotification notification = PushNotification(
           title: message.notification!.title!,
           body: message.notification!.body!,
-          dataTitle: message.data['title'] as String,
-          dataBody: message.data['body'] as String,
+          actor: message.data['actor'] as String,
+          verb: message.data['verb'] as String,
+          object: message.data['object'] as String,
+          avatar: message.data['avatar'] as String?,
+          message: message.data['message'] as String?,
           createdAt: message.sentTime,
         );
-        // Saves the notification into the database.
-        sqliteService
-            .insert(notification)
-            .then((value) => print('Notification saved into the db.'));
+
+        // Saves the notification into the database if the notification's verb
+        // equals to 'comment'.
+        if (notification.verb == 'comment') {
+          sqliteService
+              .insert(notification)
+              .then((value) => print('Notification saved into the db.'));
+        }
 
         showOverlayNotification(
-          (BuildContext context) {
-            return MessageNotification(notification: notification);
-          },
-          duration: const Duration(seconds: 5),
+          (BuildContext context) => NotificationOverlayItem(notification),
         );
       }
     });
@@ -186,34 +195,6 @@ class _MyAppState extends State<MyApp> {
             },
           );
         },
-      ),
-    );
-  }
-}
-
-class MessageNotification extends StatelessWidget {
-  const MessageNotification({Key? key, required this.notification})
-      : super(key: key);
-
-  final PushNotification notification;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      child: SafeArea(
-        child: ListTile(
-          leading: SizedBox.fromSize(
-            size: const Size(40, 40),
-            child: const CircleAvatar(),
-          ),
-          title: Text(notification.title),
-          subtitle: Text(notification.body),
-          // trailing: IconButton(
-          //   onPressed: () {},
-          //   icon: const Icon(Icons.reply),
-          // ),
-        ),
       ),
     );
   }

@@ -3,15 +3,17 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../models/comment.dart';
-import '../models/user_controller_impl.dart';
+import '../models/deal.dart';
 import '../models/my_user.dart';
+import '../models/push_notification.dart';
+import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../widgets/loading_dialog.dart';
 
 class PostComment extends StatefulWidget {
-  const PostComment({Key? key, required this.dealId}) : super(key: key);
+  const PostComment({Key? key, required this.deal}) : super(key: key);
 
-  final String dealId;
+  final Deal deal;
 
   @override
   _PostCommentState createState() => _PostCommentState();
@@ -44,7 +46,7 @@ class _PostCommentState extends State<PostComment> {
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
       final Comment comment = Comment(
-        dealId: widget.dealId,
+        dealId: widget.deal.id!,
         postedBy: user!.id!,
         message: commentController.text,
       );
@@ -52,6 +54,33 @@ class _PostCommentState extends State<PostComment> {
       final Comment? postedComment =
           await GetIt.I.get<SpringService>().postComment(comment: comment);
       print(postedComment);
+
+      // Send push notification to the poster if the commentator is not
+      // the poster.
+      if (user!.id! != widget.deal.postedBy) {
+        final MyUser poster = await GetIt.I
+            .get<SpringService>()
+            .getUserById(id: widget.deal.postedBy!);
+
+        final PushNotification notification = PushNotification(
+          title: '${poster.nickname} commented on your post',
+          body: comment.message,
+          actor: poster.id!,
+          verb: 'comment',
+          object: widget.deal.id!,
+          message: comment.message,
+          avatar: poster.avatar,
+        );
+
+        final bool result = await GetIt.I
+            .get<SpringService>()
+            .sendPushNotification(
+                notification: notification, tokens: poster.fcmTokens!);
+
+        if (result) {
+          print('Push notification sent to: ${poster.nickname}');
+        }
+      }
 
       // Pops the loading dialog.
       Navigator.of(context).pop();

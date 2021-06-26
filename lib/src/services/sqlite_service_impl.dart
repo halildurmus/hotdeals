@@ -21,8 +21,10 @@ class SQLiteServiceImpl extends ChangeNotifier
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT,
         body TEXT,
-        data_title TEXT,
-        data_body TEXT,
+        actor TEXT,
+        verb TEXT,
+        object TEXT,
+        message TEXT,
         is_read INTEGER,
         created_at TEXT
       );''';
@@ -30,11 +32,11 @@ class SQLiteServiceImpl extends ChangeNotifier
   /// Opens the database and sets the database reference.
   @override
   Future<void> load() async {
-    final String path = join(await getDatabasesPath(), 'core3.db');
+    final String path = join(await getDatabasesPath(), 'core4.db');
 
     _db = await openDatabase(
       path,
-      version: 8,
+      version: 9,
       onCreate: (Database db, int version) async {
         // When creating the db, create the table
         await db.execute(tableNotification);

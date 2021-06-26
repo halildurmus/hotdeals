@@ -2,8 +2,9 @@ import 'dart:convert';
 
 typedef Json = Map<String, dynamic>;
 
-List<MyUser> userFromJson(String str) => List<MyUser>.from(
-    json.decode(str).map((Json x) => MyUser.fromJson(x)) as Iterable<MyUser>);
+List<MyUser> userFromJson(String str) =>
+    List<MyUser>.from((json.decode(str)['_embedded']['users'] as List<dynamic>)
+        .map<dynamic>((dynamic e) => MyUser.fromJson(e as Json)));
 
 class MyUser {
   MyUser({

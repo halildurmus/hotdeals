@@ -4,6 +4,7 @@ import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
+import '../models/push_notification.dart';
 import '../models/report.dart';
 import '../models/search_hit.dart';
 import '../models/store.dart';
@@ -12,7 +13,7 @@ import '../models/vote_type.dart';
 abstract class SpringService {
   Future<bool> blockUser({required String userId});
 
-  Future<bool> unblockUser({required String userId});
+  Future<bool> unblockUser({required String userUid});
 
   Future<bool> favoriteDeal({required String dealId});
 
@@ -21,6 +22,11 @@ abstract class SpringService {
   Future<Deal?> postDeal({required Deal deal});
 
   Future<void> removeDeal({required String dealId});
+
+  Future<bool> sendPushNotification({
+    required PushNotification notification,
+    required List<String> tokens,
+  });
 
   Future<Report?> sendReport({required Report report});
 
@@ -40,6 +46,8 @@ abstract class SpringService {
 
   Future<MyUser?> getMongoUser();
 
+  Future<List<MyUser>?> getBlockedUsers({required List<String> userUids});
+
   Future<MyUser> getUserById({required String id});
 
   Future<MyUser> getUserByUid({required String uid});
@@ -48,12 +56,6 @@ abstract class SpringService {
     required String userId,
     required String fcmToken,
   });
-
-  // Future<MyUser> removeFcmToken({
-  //   required String userId,
-  //   required int fcmTokenIndex,
-  //   required String fcmToken,
-  // });
 
   Future<void> logout({required String fcmToken});
 

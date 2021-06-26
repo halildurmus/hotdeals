@@ -731,7 +731,7 @@ class _DealDetailsState extends State<DealDetails> {
                 Radius.circular(20),
               ),
             ),
-            child: PostComment(dealId: _deal.id!),
+            child: PostComment(deal: _deal),
           );
         },
       ).then((dynamic value) {

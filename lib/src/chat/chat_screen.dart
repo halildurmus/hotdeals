@@ -2,15 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hotdeals/src/chat/blocked_users.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import '../models/user_controller_impl.dart';
 import '../models/my_user.dart';
+import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
 import 'message_screen.dart';
+
+enum _ChatPopup { blockedUsers }
 
 typedef Json = Map<String, dynamic>;
 
@@ -399,6 +402,25 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chats'),
+        actions: <Widget>[
+          PopupMenuButton<_ChatPopup>(
+            icon: const Icon(
+              FontAwesomeIcons.ellipsisV,
+              size: 20.0,
+            ),
+            onSelected: (_ChatPopup result) {
+              if (result == _ChatPopup.blockedUsers) {
+                Navigator.of(context).pushNamed(BlockedUsers.routeName);
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<_ChatPopup>>[
+              const PopupMenuItem<_ChatPopup>(
+                value: _ChatPopup.blockedUsers,
+                child: Text('Blocked Users'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,

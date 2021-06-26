@@ -33,11 +33,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // Loads the sqlite database.
   await sqliteService.load();
 
+  // Constructs a PushNotification from the RemoteMessage.
   final PushNotification notification = PushNotification(
     title: message.notification!.title!,
     body: message.notification!.body!,
-    dataTitle: message.data['title'] as String,
-    dataBody: message.data['body'] as String,
+    actor: message.data['actor'] as String,
+    verb: message.data['verb'] as String,
+    object: message.data['object'] as String,
+    message: message.data['message'] as String?,
     createdAt: message.sentTime,
   );
 
