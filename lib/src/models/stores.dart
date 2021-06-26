@@ -8,7 +8,7 @@ class Stores {
   List<Store>? get stores => _stores;
 
   Future<List<Store>> getStores() async {
-    _stores ??= await GetIt.I.get<SpringService>().getStores();
+    _stores = await GetIt.I.get<SpringService>().getStores();
 
     return _stores!;
   }

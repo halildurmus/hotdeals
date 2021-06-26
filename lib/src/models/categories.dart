@@ -10,7 +10,7 @@ class Categories {
       _categories!.where((Category e) => e.parent == '/').toList();
 
   Future<List<Category>> getCategories() async {
-    _categories ??= await GetIt.I.get<SpringService>().getCategories();
+    _categories = await GetIt.I.get<SpringService>().getCategories();
     // Sort categories alphabetically by name.
     _categories!.sort((Category a, Category b) => a.name.compareTo(b.name));
 
