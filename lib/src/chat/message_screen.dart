@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hotdeals/src/models/current_route.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -25,14 +26,13 @@ typedef Json = Map<String, dynamic>;
 enum _MessagePopup { blockUser, unblockUser, reportUser }
 
 class MessageScreen extends StatefulWidget {
-  const MessageScreen({
-    Key? key,
-    required this.docId,
-    required this.user2,
-  }) : super(key: key);
+  const MessageScreen({required this.docId, required this.user2, Key? key})
+      : super(key: key);
 
   final String docId;
   final MyUser user2;
+
+  static const String routeName = '/message';
 
   @override
   _MessageScreenState createState() => _MessageScreenState();
@@ -117,7 +117,7 @@ class _MessageScreenState extends State<MessageScreen> {
       body: message.text,
       actor: widget.user2.nickname!,
       verb: 'message',
-      object: documentReference.id,
+      object: widget.docId,
       message: message.text,
       avatar: widget.user2.avatar,
     );
@@ -264,6 +264,8 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   void dispose() {
     _messageController.dispose();
+    GetIt.I.get<CurrentRoute>().clearRouteName();
+    GetIt.I.get<CurrentRoute>().clearMessageArguments();
     super.dispose();
   }
 

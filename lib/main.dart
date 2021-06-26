@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hotdeals/src/models/current_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/app.dart';
@@ -44,10 +45,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     createdAt: message.sentTime,
   );
 
-  // Saves the notification into the database.
-  sqliteService
-      .insert(notification)
-      .then((value) => print('Background notification saved into the db.'));
+  // Saves the notification into the database if the notification's verb
+  // equals to 'comment'.
+  if (notification.verb == 'comment') {
+    sqliteService
+        .insert(notification)
+        .then((value) => print('Background notification saved into the db.'));
+  }
 }
 
 Future<void> main() async {
@@ -65,6 +69,7 @@ Future<void> main() async {
 
   // Registers Singleton classes.
   final GetIt getIt = GetIt.I;
+  getIt.registerSingleton<CurrentRoute>(CurrentRoute());
   getIt.registerSingleton<ConnectionService>(ConnectionService());
   getIt.registerSingleton<SQLiteService<PushNotification>>(SQLiteServiceImpl());
   getIt.registerSingleton<FirestoreService>(FirestoreService());

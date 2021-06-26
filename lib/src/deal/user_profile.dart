@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hotdeals/src/chat/message_arguments.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -229,8 +230,13 @@ class _UserProfileState extends State<UserProfile> {
                   final String conversationId = ChatUtil.getConversationID(
                       userID: loggedInUser!.uid, peerID: user.uid);
 
-                  NavigationUtil.navigate(context,
-                      MessageScreen(docId: conversationId, user2: user));
+                  Navigator.of(context).pushNamed(
+                    MessageScreen.routeName,
+                    arguments: MessageArguments(
+                      docId: conversationId,
+                      user2: user,
+                    ),
+                  );
                 };
               }
 

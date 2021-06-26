@@ -11,6 +11,7 @@ import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
+import 'message_arguments.dart';
 import 'message_screen.dart';
 
 enum _ChatPopup { blockedUsers }
@@ -201,9 +202,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                 final MyUser _user2 = snapshot.data!;
 
                                 return InkWell(
-                                  onTap: () => NavigationUtil.navigate(
-                                    context,
-                                    MessageScreen(
+                                  onTap: () => Navigator.of(context).pushNamed(
+                                    MessageScreen.routeName,
+                                    arguments: MessageArguments(
                                       docId: _items[index].id,
                                       user2: _user2,
                                     ),

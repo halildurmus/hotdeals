@@ -7,9 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 import 'chat/blocked_users.dart';
+import 'chat/message_arguments.dart';
+import 'chat/message_screen.dart';
 import 'error_screen.dart';
 import 'models/categories.dart';
 import 'models/category.dart';
+import 'models/current_route.dart';
 import 'models/my_user.dart';
 import 'models/push_notification.dart';
 import 'models/store.dart';
@@ -57,6 +60,18 @@ class _MyAppState extends State<MyApp> {
         switch (routeSettings.name) {
           case BlockedUsers.routeName:
             return const BlockedUsers();
+          case MessageScreen.routeName:
+            {
+              final MessageArguments args =
+                  routeSettings.arguments! as MessageArguments;
+
+              GetIt.I
+                  .get<CurrentRoute>()
+                  .updateRouteName(MessageScreen.routeName);
+              GetIt.I.get<CurrentRoute>().updateMessageArguments(args);
+
+              return MessageScreen(docId: args.docId, user2: args.user2);
+            }
           case Profile.routeName:
             return const Profile();
           case SettingsView.routeName:
@@ -151,10 +166,21 @@ class _MyAppState extends State<MyApp> {
               .insert(notification)
               .then((value) => print('Notification saved into the db.'));
         }
+        // If the notification's verb is 'message',
+        else if (notification.verb == 'message') {
+          final String currentRoute = GetIt.I.get<CurrentRoute>().routeName;
+          final MessageArguments? messageArguments =
+              GetIt.I.get<CurrentRoute>().messageArguments;
+          final String? messageDocId = messageArguments?.docId;
 
-        showOverlayNotification(
-          (BuildContext context) => NotificationOverlayItem(notification),
-        );
+          // Don't show notification if the conversation is on foreground.
+          if (currentRoute != MessageScreen.routeName &&
+              messageDocId != notification.object) {
+            showOverlayNotification(
+              (BuildContext context) => NotificationOverlayItem(notification),
+            );
+          }
+        }
       }
     });
     super.initState();
