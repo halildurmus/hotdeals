@@ -28,7 +28,7 @@ class _DealsState extends State<Deals> {
       GlobalKey<RefreshIndicatorState>();
   late Future<List<Deal>?> dealsFuture;
   int _selectedFilter = 0;
-  late FloatingSearchBarController _floatingSearchBarController;
+  late FloatingSearchBarController floatingSearchBarController;
   bool searchErrorOccurred = false;
   bool searchProgress = false;
   final List<String> searchResults = <String>[];
@@ -51,14 +51,14 @@ class _DealsState extends State<Deals> {
 
   @override
   void initState() {
-    _floatingSearchBarController = FloatingSearchBarController();
+    floatingSearchBarController = FloatingSearchBarController();
     dealsFuture = GetIt.I.get<SpringService>().getDealsSortedByCreatedAt();
     super.initState();
   }
 
   @override
   void dispose() {
-    _floatingSearchBarController.dispose();
+    floatingSearchBarController.dispose();
     super.dispose();
   }
 
@@ -279,7 +279,7 @@ class _DealsState extends State<Deals> {
           ),
           child: searchErrorOccurred
               ? buildSearchError()
-              : _floatingSearchBarController.query.isEmpty
+              : floatingSearchBarController.query.isEmpty
                   ? buildPlaceHolder()
                   : searchResults.isEmpty
                       ? buildNoResults()
@@ -291,7 +291,7 @@ class _DealsState extends State<Deals> {
           MediaQuery.of(context).orientation == Orientation.portrait;
 
       return FloatingSearchBar(
-        controller: _floatingSearchBarController,
+        controller: floatingSearchBarController,
         progress: searchProgress,
         hint: 'Search',
         scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
@@ -317,9 +317,8 @@ class _DealsState extends State<Deals> {
             icon: const Icon(Icons.search),
           )
         ],
-        builder: (BuildContext context, Animation<double> transition) {
-          return buildSearchResultBuilder();
-        },
+        builder: (BuildContext context, Animation<double> transition) =>
+            buildSearchResultBuilder(),
       );
     }
 
