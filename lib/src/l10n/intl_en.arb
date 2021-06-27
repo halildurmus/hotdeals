@@ -1,0 +1,21 @@
+{
+  "@@last_modified": "2020-07-28T11:17:31.076838",
+  "title": "hotdeals",
+  "@title": {
+    "description": "Title for the app",
+    "type": "text",
+    "placeholders": {}
+  },
+  "english": "English",
+  "@english": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  },
+  "turkish": "Turkish",
+  "@turkish": {
+    "description": "",
+    "type": "text",
+    "placeholders": {}
+  }
+}

@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import 'app_localizations.dart';
 import 'chat/blocked_users.dart';
 import 'chat/message_arguments.dart';
 import 'chat/message_screen.dart';
@@ -105,7 +108,17 @@ class _MyAppState extends State<MyApp> {
     return OverlaySupport.global(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'hotdeals',
+        locale: settingsController.locale,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          AppLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const <Locale>[
+          Locale('en', 'US'),
+          Locale('tr', 'TR'),
+        ],
         theme: FlexColorScheme.light(
           scheme: usedFlexScheme,
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
@@ -115,8 +128,8 @@ class _MyAppState extends State<MyApp> {
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
         ).toTheme,
         themeMode: settingsController.themeMode,
-        // onGenerateTitle: (BuildContext context) =>
-        // AppLocalizations.of(context)!.appTitle,
+        onGenerateTitle: (BuildContext context) =>
+            AppLocalizations.of(context)!.title,
         home: home ?? AuthWidget(userSnapshot: userSnapshot!),
         onGenerateRoute: home == null
             ? (RouteSettings routeSettings) =>
@@ -156,6 +169,7 @@ class _MyAppState extends State<MyApp> {
           object: message.data['object'] as String,
           avatar: message.data['avatar'] as String?,
           message: message.data['message'] as String?,
+          uid: FirebaseAuth.instance.currentUser?.uid,
           createdAt: message.sentTime,
         );
 

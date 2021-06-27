@@ -10,6 +10,7 @@ class PushNotification {
     required this.object,
     this.avatar,
     this.message,
+    this.uid,
     this.isRead = false,
     this.createdAt,
   }) {
@@ -26,6 +27,7 @@ class PushNotification {
         verb: map['verb']! as String,
         object: map['object']! as String,
         message: map['message'] as String?,
+        uid: map['uid'] as String?,
         isRead: map['is_read']! == 1,
         createdAt: DateTime.parse(map['created_at']! as String),
       );
@@ -38,6 +40,7 @@ class PushNotification {
   final String object;
   final String? avatar;
   final String? message;
+  final String? uid;
   bool isRead;
   DateTime? createdAt;
 
@@ -52,6 +55,7 @@ class PushNotification {
           'object': object,
           if (avatar != null) 'avatar': avatar,
           if (message != null) 'message': message,
+          if (uid != null) 'uid': uid,
         }
       };
 
@@ -65,12 +69,13 @@ class PushNotification {
         'verb': verb,
         'object': object,
         'message': message,
+        'uid': uid,
         'is_read': isRead ? 1 : 0,
         'created_at': createdAt!.toIso8601String(),
       };
 
   @override
   String toString() {
-    return 'PushNotification{id: $id, title: $title, body: $body, actor: $actor, verb: $verb, object: $object, avatar: $avatar, message: $message, isRead: $isRead, createdAt: $createdAt}';
+    return 'PushNotification{id: $id, title: $title, body: $body, actor: $actor, verb: $verb, object: $object, avatar: $avatar, message: $message, uid: $uid, isRead: $isRead, createdAt: $createdAt}';
   }
 }

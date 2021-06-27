@@ -17,13 +17,13 @@ class SettingsControllerImpl extends ChangeNotifier
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
-  // Make language a private variable so it is not updated directly without
+  // Make locale a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
-  late String _language;
+  late Locale _locale;
 
-  // Allow Widgets to read the user's preferred language.
+  // Allow Widgets to read the user's preferred locale.
   @override
-  String get language => _language;
+  Locale get locale => _locale;
 
   // Make ThemeMode a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
@@ -38,33 +38,33 @@ class SettingsControllerImpl extends ChangeNotifier
   /// settings from the service.
   @override
   Future<void> loadSettings() async {
-    _language = await _settingsService.language();
+    _locale = await _settingsService.locale();
     _themeMode = await _settingsService.themeMode();
 
     // Informs listeners a change has occurred.
     notifyListeners();
   }
 
-  /// Update and persist the language based on the user's selection.
+  /// Update and persist the locale based on the user's selection.
   @override
-  Future<void> updateLanguage(String? newLanguage) async {
-    if (newLanguage == null) {
+  Future<void> updateLocale(Locale? newLocale) async {
+    if (newLocale == null) {
       return;
     }
 
-    // Dot not perform any work if new and old language are identical
-    if (newLanguage == _language) {
+    // Dot not perform any work if new and old locale are identical
+    if (newLocale == _locale) {
       return;
     }
 
-    // Otherwise, store the new language in memory
-    _language = newLanguage;
+    // Otherwise, store the new locale in memory
+    _locale = newLocale;
 
     // Informs listeners a change has occurred.
     notifyListeners();
 
     // Persist the changes to a local database using the SettingService.
-    await _settingsService.updateLanguage(newLanguage);
+    await _settingsService.updateLocale(newLocale);
   }
 
   /// Update and persist the ThemeMode based on the user's selection.

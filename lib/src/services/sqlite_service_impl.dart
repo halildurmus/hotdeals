@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -25,6 +26,7 @@ class SQLiteServiceImpl extends ChangeNotifier
         verb TEXT,
         object TEXT,
         message TEXT,
+        uid TEXT,
         is_read INTEGER,
         created_at TEXT
       );''';
@@ -32,11 +34,11 @@ class SQLiteServiceImpl extends ChangeNotifier
   /// Opens the database and sets the database reference.
   @override
   Future<void> load() async {
-    final String path = join(await getDatabasesPath(), 'core4.db');
+    final String path = join(await getDatabasesPath(), 'core5.db');
 
     _db = await openDatabase(
       path,
-      version: 9,
+      version: 10,
       onCreate: (Database db, int version) async {
         // When creating the db, create the table
         await db.execute(tableNotification);
@@ -79,8 +81,12 @@ class SQLiteServiceImpl extends ChangeNotifier
   @override
   Future<List<PushNotification>> getAll() async {
     // Query the table for all the records.
-    final List<Map<String, dynamic>> maps =
-        await _db.query(tableNotificationName, orderBy: 'created_at DESC');
+    final List<Map<String, dynamic>> maps = await _db.query(
+      tableNotificationName,
+      orderBy: 'created_at DESC',
+      where: 'uid = ?',
+      whereArgs: [FirebaseAuth.instance.currentUser?.uid],
+    );
 
     // Convert the List<Map<String, dynamic> into a List<Notification>.
     return List<PushNotification>.generate(

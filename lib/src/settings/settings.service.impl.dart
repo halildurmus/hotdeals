@@ -21,17 +21,25 @@ class SettingsServiceImpl implements SettingsService {
   ///
   /// If the preferred language is not found then [Platform.localeName] is used.
   @override
-  Future<String> language() async {
-    return prefs.getString(_languageKey) ?? Platform.localeName;
+  Future<Locale> locale() async {
+    final String language =
+        prefs.getString(_languageKey) ?? Platform.localeName;
+    final Locale locale = Locale.fromSubtags(
+      languageCode: language.split('-')[0],
+      countryCode: language.split('-')[1],
+    );
+
+    return locale;
   }
 
   /// Persists the user's preferred language to local storage.
   @override
-  Future<void> updateLanguage(String language) async {
-    prefs.setString(_languageKey, language);
+  Future<void> updateLocale(Locale language) async {
+    prefs.setString(_languageKey, language.toLanguageTag());
   }
 
   /// Loads the user's preferred [ThemeMode] from [SharedPreferences].
+  @override
   Future<ThemeMode> themeMode() async {
     final String? appThemeValue = prefs.getString(_themeKey);
     if (appThemeValue == 'light') {
@@ -44,6 +52,7 @@ class SettingsServiceImpl implements SettingsService {
   }
 
   /// Persists the user's preferred [ThemeMode] to local storage.
+  @override
   Future<void> updateThemeMode(ThemeMode theme) async {
     prefs.setString(_themeKey, describeEnum(theme));
   }

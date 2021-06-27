@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dash_chat/dash_chat.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -119,6 +120,7 @@ class _MessageScreenState extends State<MessageScreen> {
       verb: 'message',
       object: widget.docId,
       message: message.text,
+      uid: FirebaseAuth.instance.currentUser?.uid,
       avatar: widget.user2.avatar,
     );
 

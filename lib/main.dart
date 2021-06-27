@@ -1,15 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hotdeals/src/models/current_route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/app.dart';
 import 'src/models/categories.dart';
-import 'src/models/category.dart';
+import 'src/models/current_route.dart';
 import 'src/models/push_notification.dart';
-import 'src/models/store.dart';
 import 'src/models/stores.dart';
 import 'src/services/connection_service.dart';
 import 'src/services/firestore_service.dart';
@@ -33,7 +32,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   // Loads the sqlite database.
   await sqliteService.load();
-
   // Constructs a PushNotification from the RemoteMessage.
   final PushNotification notification = PushNotification(
     title: message.notification!.title!,
@@ -42,6 +40,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     verb: message.data['verb'] as String,
     object: message.data['object'] as String,
     message: message.data['message'] as String?,
+    uid: FirebaseAuth.instance.currentUser?.uid,
     createdAt: message.sentTime,
   );
 

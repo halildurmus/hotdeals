@@ -24,6 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_facebook_auth: ^3.5.0
+  flutter_localizations:
+    sdk: flutter
   flutter_rating_bar: ^4.0.0
   flutter_svg: ^0.22.0
   font_awesome_flutter: ^9.0.0

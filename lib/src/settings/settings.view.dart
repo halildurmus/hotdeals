@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hotdeals/src/models/my_user.dart';
-import 'package:hotdeals/src/services/spring_service.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../models/user_controller_impl.dart';
 import '../services/auth_service.dart';
+import '../services/spring_service.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/exception_alert_dialog.dart';
 import '../widgets/radio_item.dart';
@@ -23,14 +23,6 @@ class SettingsView extends StatelessWidget {
   static const String routeName = '/settings';
 
   final SettingsController controller;
-
-  String getLanguageName(String languageCode) {
-    if (languageCode == 'en_US') {
-      return 'English';
-    } else {
-      return 'Turkish';
-    }
-  }
 
   Future<void> _confirmSignOut(BuildContext context) async {
     final bool _didRequestSignOut = await const CustomAlertDialog(
@@ -74,53 +66,76 @@ class SettingsView extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
 
+    Widget getLanguageImage(Locale locale) {
+      return SvgPicture.asset('assets/icons/${locale.toLanguageTag()}.svg');
+    }
+
+    String getLanguageName(Locale locale) {
+      if (locale == const Locale('en', 'US')) {
+        return AppLocalizations.of(context)!.english;
+      }
+
+      return AppLocalizations.of(context)!.turkish;
+    }
+
+    String getThemeName(ThemeMode themeMode) {
+      return describeEnum(themeMode)[0].toUpperCase() +
+          describeEnum(themeMode).substring(1);
+    }
+
     void changeLanguage() {
       showDialog<void>(
         context: context,
         builder: (BuildContext ctx) {
-          return SettingsDialog(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                RadioItem<String>(
-                  onChanged: controller.updateLanguage,
-                  onTap: () {
-                    controller.updateLanguage('en_US');
-                  },
-                  providerValue: controller.language,
-                  radioValue: 'en_US',
-                  text: 'English',
-                  iconPath: 'assets/icons/en_US.svg',
-                ),
-                RadioItem<String>(
-                  onChanged: controller.updateLanguage,
-                  onTap: () {
-                    controller.updateLanguage('tr_TR');
-                  },
-                  providerValue: controller.language,
-                  radioValue: 'tr_TR',
-                  text: 'Turkish',
-                  iconPath: 'assets/icons/tr_TR.svg',
-                ),
-                const SizedBox(height: 15.0),
-                SizedBox(
-                  height: 45.0,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+          return StatefulBuilder(
+            builder: (BuildContext context,
+                void Function(void Function()) setState) {
+              return SettingsDialog(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    RadioItem<Locale>(
+                      onChanged: controller.updateLocale,
+                      onTap: () {
+                        controller.updateLocale(const Locale('en', 'US'));
+                      },
+                      providerValue: controller.locale,
+                      radioValue: const Locale('en', 'US'),
+                      text: AppLocalizations.of(context)!.english,
+                      iconPath: 'assets/icons/en-US.svg',
+                    ),
+                    RadioItem<Locale>(
+                      onChanged: controller.updateLocale,
+                      onTap: () {
+                        controller.updateLocale(const Locale('tr', 'TR'));
+                      },
+                      providerValue: controller.locale,
+                      radioValue: const Locale('tr', 'TR'),
+                      text: AppLocalizations.of(context)!.turkish,
+                      iconPath: 'assets/icons/tr-TR.svg',
+                    ),
+                    const SizedBox(height: 15.0),
+                    SizedBox(
+                      height: 45.0,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(
+                          'Ok',
+                          style: textTheme.bodyText1!
+                              .copyWith(color: Colors.white),
+                        ),
                       ),
                     ),
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      'Ok',
-                      style: textTheme.bodyText1!.copyWith(color: Colors.white),
-                    ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           );
         },
       );
@@ -195,16 +210,15 @@ class SettingsView extends StatelessWidget {
       body: Column(
         children: <Widget>[
           SettingsListItem(
-            image: SvgPicture.asset('assets/icons/${controller.language}.svg'),
+            image: getLanguageImage(controller.locale),
             title: 'Language',
-            subtitle: getLanguageName(controller.language),
+            subtitle: getLanguageName(controller.locale),
             onTap: changeLanguage,
           ),
           SettingsListItem(
             icon: Icons.settings_brightness,
             title: 'Theme',
-            subtitle: describeEnum(controller.themeMode)[0].toUpperCase() +
-                describeEnum(controller.themeMode).substring(1),
+            subtitle: getThemeName(controller.themeMode),
             onTap: changeAppTheme,
           ),
           SettingsListItem(
