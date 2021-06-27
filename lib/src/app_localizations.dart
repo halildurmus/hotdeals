@@ -210,6 +210,20 @@ class AppLocalizations {
         locale: localeName,
       );
 
+  String get today => Intl.message(
+        'TODAY',
+        name: 'today',
+        desc: '',
+        locale: localeName,
+      );
+
+  String get yesterday => Intl.message(
+        'YESTERDAY',
+        name: 'yesterday',
+        desc: '',
+        locale: localeName,
+      );
+
   String get logoutConfirm => Intl.message(
         'Are you sure you want to log out?',
         name: 'logoutConfirm',

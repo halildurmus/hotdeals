@@ -176,13 +176,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  dash_chat:
-    dependency: "direct main"
-    description:
-      path: "lib/packages/chat"
-      relative: true
-    source: path
-    version: "1.1.16"
   fake_async:
     dependency: transitive
     description:
@@ -348,7 +341,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_parsed_text:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_parsed_text
       url: "https://pub.dartlang.org"

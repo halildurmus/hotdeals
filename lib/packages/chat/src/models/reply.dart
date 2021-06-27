@@ -4,11 +4,9 @@ part of dash_chat;
 class Reply {
   Reply({
     required this.title,
-    String? messageId,
+    this.messageId,
     this.value,
-  }) {
-    this.messageId = messageId ?? const Uuid().v4().toString();
-  }
+  });
 
   Reply.fromJson(Map<dynamic, dynamic> json) {
     title = json['title'] as String;

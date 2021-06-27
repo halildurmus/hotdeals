@@ -183,6 +183,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "system": MessageLookupByLibrary.simpleMessage("Sistem"),
         "theme": MessageLookupByLibrary.simpleMessage("Tema"),
         "title": MessageLookupByLibrary.simpleMessage("Başlık"),
+        "today": MessageLookupByLibrary.simpleMessage("BUGÜN"),
         "tryAgain": MessageLookupByLibrary.simpleMessage("Tekrar dene"),
         "turkish": MessageLookupByLibrary.simpleMessage("Türkçe"),
         "unblock": MessageLookupByLibrary.simpleMessage("ENGELİ KALDIR"),
@@ -195,6 +196,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "updateProfile":
             MessageLookupByLibrary.simpleMessage("Profili Güncelle"),
         "uploadImage": MessageLookupByLibrary.simpleMessage("Resim Yükle"),
+        "yesterday": MessageLookupByLibrary.simpleMessage("DÜN"),
         "youHaveBlockedThisUser": MessageLookupByLibrary.simpleMessage(
             "Bu kullanıcıyı engellediniz "),
         "youHaveNotFavoritedAnyDeal": MessageLookupByLibrary.simpleMessage(

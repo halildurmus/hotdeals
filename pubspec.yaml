@@ -12,8 +12,8 @@ dependencies:
   cloud_firestore: ^2.2.0
   connectivity: ^3.0.3
   cupertino_icons: ^1.0.2
-  dash_chat:
-    path: lib/packages/chat
+  #dash_chat:
+    #path: lib/packages/chat
   firebase_auth: ^1.1.2
   firebase_core: ^1.1.0
   firebase_messaging: ^10.0.2
@@ -26,6 +26,7 @@ dependencies:
   flutter_facebook_auth: ^3.5.0
   flutter_localizations:
     sdk: flutter
+  flutter_parsed_text: ^2.2.1
   flutter_rating_bar: ^4.0.0
   flutter_svg: ^0.22.0
   font_awesome_flutter: ^9.0.0

@@ -63,6 +63,20 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "today": "BUGÜN",
+  "@today": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yesterday": "DÜN",
+  "@yesterday": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "atCategory": "{category} kategorisinde",
   "@atCategory": {
     "description": "",

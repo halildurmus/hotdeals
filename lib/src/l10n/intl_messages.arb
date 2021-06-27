@@ -63,6 +63,20 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "today": "TODAY",
+  "@today": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yesterday": "YESTERDAY",
+  "@yesterday": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "atCategory": "at {category}",
   "@atCategory": {
     "description": "",

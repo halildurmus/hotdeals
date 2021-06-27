@@ -2,10 +2,11 @@ part of dash_chat;
 
 class DateBuilder extends StatelessWidget {
   const DateBuilder({
+    Key? key,
     required this.date,
     this.customDateBuilder,
     this.dateFormat,
-  });
+  }) : super(key: key);
 
   final DateTime date;
   final Widget Function(String)? customDateBuilder;
@@ -25,13 +26,15 @@ class DateBuilder extends StatelessWidget {
 
     String getDateText() {
       if (calculateDifference(date) == -1) {
-        return 'YESTERDAY';
+        return AppLocalizations.of(context)!.yesterday;
       } else if (calculateDifference(date) == 0) {
-        return 'TODAY';
+        return AppLocalizations.of(context)!.today;
       } else {
         return dateFormat != null
             ? dateFormat!.format(date)
-            : DateFormat('MMM d, yyy', 'en_US').format(date);
+            : DateFormat(
+                    'MMM d, yyy', Localizations.localeOf(context).languageCode)
+                .format(date);
       }
     }
 
