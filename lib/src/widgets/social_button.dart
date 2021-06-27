@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SocialButton extends StatelessWidget {
   const SocialButton({
+    Key? key,
     this.backgroundColor,
     required this.onPressed,
     required this.text,
@@ -26,9 +27,11 @@ class SocialButton extends StatelessWidget {
     this.height,
     this.width = double.infinity,
     this.tapTargetSize,
-  }) : _mini = false;
+  })  : _mini = false,
+        super(key: key);
 
   const SocialButton.mini({
+    Key? key,
     this.backgroundColor,
     required this.onPressed,
     this.text,
@@ -40,7 +43,7 @@ class SocialButton extends StatelessWidget {
     this.iconColor = Colors.white,
     this.splashColor = Colors.white30,
     this.padding = const EdgeInsets.all(8.0),
-    this.innerPadding = const EdgeInsets.all(0.0),
+    this.innerPadding = EdgeInsets.zero,
     this.elevation = 0.0,
     this.highlightElevation = 0.0,
     this.shape = const RoundedRectangleBorder(
@@ -51,7 +54,8 @@ class SocialButton extends StatelessWidget {
     this.height = 25.0,
     this.width = 25.0,
     this.tapTargetSize = MaterialTapTargetSize.shrinkWrap,
-  }) : _mini = true;
+  })  : _mini = true,
+        super(key: key);
 
   final bool _mini;
   final IconData? icon;
@@ -99,13 +103,12 @@ class SocialButton extends StatelessWidget {
       );
     }
 
-    return Container(
+    return ConstrainedBox(
       constraints: BoxConstraints(
         maxWidth: width,
       ),
       child: Center(
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
@@ -115,7 +118,6 @@ class SocialButton extends StatelessWidget {
             Text(
               text!,
               style: TextStyle(
-                backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
                 color: textColor,
                 fontSize: fontSize,
                 fontWeight: FontWeight.bold,
@@ -131,16 +133,10 @@ class SocialButton extends StatelessWidget {
   Widget _getIconOrImage() {
     if (image != null) {
       return image!;
+    } else if (icon != null) {
+      return Icon(icon, size: iconSize, color: iconColor);
     }
 
-    if (icon != null) {
-      return Icon(
-        icon,
-        size: iconSize,
-        color: iconColor,
-      );
-    } else {
-      return const SizedBox();
-    }
+    return const SizedBox();
   }
 }
