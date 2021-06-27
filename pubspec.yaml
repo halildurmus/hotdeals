@@ -20,11 +20,10 @@ dependencies:
   firebase_picture_uploader:
     path: lib/packages/flutter_firebase_picture_uploader
   firebase_storage: ^8.1.0
-  flex_color_scheme: ^2.1.1
+  flex_color_scheme: ^3.0.0
   flutter:
     sdk: flutter
-  #flutter_facebook_auth: ^3.3.2+2
-  #flutter_html: ^2.1.0
+  flutter_facebook_auth: ^3.5.0
   flutter_rating_bar: ^4.0.0
   flutter_svg: ^0.22.0
   font_awesome_flutter: ^9.0.0

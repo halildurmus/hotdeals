@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
-//import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -22,38 +22,47 @@ class FirebaseAuthService implements AuthService {
 
   @override
   Future<MyUser> signInWithFacebook() async {
-    return MyUser(uid: 'dsadsa');
     // Trigger the sign-in flow
-    // final LoginResult loginResult = await FacebookAuth.instance.login();
-    //
-    // if (loginResult.status == LoginStatus.success) {
-    //   // Create a credential from the access token
-    //   final UserCredential userCredential =
-    //       await _firebaseAuth.signInWithCredential(
-    //     FacebookAuthProvider.credential(loginResult.accessToken!.token),
-    //   );
-    //
-    //   if (userCredential.additionalUserInfo!.isNewUser) {
-    //     await _springService.createMongoUser(userCredential.user!);
-    //   }
-    //
-    //   return _userFromFirebase(userCredential.user!);
-    // } else if (loginResult.status == LoginStatus.operationInProgress) {
-    //   throw PlatformException(
-    //     code: 'ERROR_OPERATION_IN_PROGRESS',
-    //     message: 'You have a previous login operation in progress',
-    //   );
-    // } else if (loginResult.status == LoginStatus.cancelled) {
-    //   throw PlatformException(
-    //     code: 'ERROR_CANCELLED',
-    //     message: 'Sign in aborted by user',
-    //   );
-    // } else {
-    //   throw PlatformException(
-    //     code: 'ERROR_FAILED',
-    //     message: 'Sign in failed',
-    //   );
-    // }
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+
+    if (loginResult.status == LoginStatus.success) {
+      // Create a credential from the access token
+      final UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(
+        FacebookAuthProvider.credential(loginResult.accessToken!.token),
+      );
+
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        try {
+          print(userCredential.user);
+          await _springService.createMongoUser(userCredential.user!);
+        } on Exception catch (e, stackTrace) {
+          print(e);
+          print(stackTrace);
+          throw PlatformException(
+            code: 'MONGODB_CREATE_USER_ERROR',
+            message: 'Could not create user on MongoDB',
+          );
+        }
+      }
+
+      return _userFromFirebase(userCredential.user)!;
+    } else if (loginResult.status == LoginStatus.operationInProgress) {
+      throw PlatformException(
+        code: 'ERROR_OPERATION_IN_PROGRESS',
+        message: 'You have a previous login operation in progress',
+      );
+    } else if (loginResult.status == LoginStatus.cancelled) {
+      throw PlatformException(
+        code: 'ERROR_CANCELLED',
+        message: 'Sign in aborted by user',
+      );
+    } else {
+      throw PlatformException(
+        code: 'ERROR_FAILED',
+        message: 'Sign in failed',
+      );
+    }
   }
 
   @override

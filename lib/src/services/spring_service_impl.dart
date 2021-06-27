@@ -305,8 +305,9 @@ class SpringServiceImpl implements SpringService {
       }
 
       throw Exception('An error occurred while creating the user!');
-    } on Exception catch (e) {
+    } on Exception catch (e, stackTrace) {
       print(e);
+      print(stackTrace);
       throw Exception('An error occurred while creating the user!');
     }
   }
