@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
+import '../constants.dart';
 import '../models/user_controller_impl.dart';
 import '../services/auth_service.dart';
 import '../services/spring_service.dart';
@@ -72,7 +72,7 @@ class SettingsView extends StatelessWidget {
     }
 
     String getLanguageName(Locale locale) {
-      if (locale == const Locale('en', 'US')) {
+      if (locale == Constants.english) {
         return AppLocalizations.of(context)!.english;
       }
 
@@ -103,20 +103,20 @@ class SettingsView extends StatelessWidget {
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
                       onTap: () {
-                        controller.updateLocale(const Locale('en', 'US'));
+                        controller.updateLocale(Constants.english);
                       },
                       providerValue: controller.locale,
-                      radioValue: const Locale('en', 'US'),
+                      radioValue: Constants.english,
                       text: AppLocalizations.of(context)!.english,
                       iconPath: 'assets/icons/en-US.svg',
                     ),
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
                       onTap: () {
-                        controller.updateLocale(const Locale('tr', 'TR'));
+                        controller.updateLocale(Constants.turkish);
                       },
                       providerValue: controller.locale,
-                      radioValue: const Locale('tr', 'TR'),
+                      radioValue: Constants.turkish,
                       text: AppLocalizations.of(context)!.turkish,
                       iconPath: 'assets/icons/tr-TR.svg',
                     ),
