@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Locale, ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'settings_service.dart';
@@ -22,8 +22,8 @@ class SettingsServiceImpl implements SettingsService {
   /// If the preferred language is not found then [Platform.localeName] is used.
   @override
   Future<Locale> locale() async {
-    final String language =
-        prefs.getString(_languageKey) ?? Platform.localeName;
+    final String language = prefs.getString(_languageKey) ??
+        Platform.localeName.replaceFirst('_', '-');
     final Locale locale = Locale.fromSubtags(
       languageCode: language.split('-')[0],
       countryCode: language.split('-')[1],

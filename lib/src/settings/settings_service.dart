@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Locale, ThemeMode;
 
 /// An abstract class used for storing and retrieving user settings.
 abstract class SettingsService {
