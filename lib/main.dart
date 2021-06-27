@@ -79,14 +79,17 @@ Future<void> main() async {
   getIt.registerSingleton<LoadingDialog>(const LoadingDialog());
 
   // Fetches categories and stores.
-  await getIt
-      .get<Categories>()
-      .getCategories()
-      .onError((Object? error, StackTrace stackTrace) => <Category>[]);
-  await getIt
-      .get<Stores>()
-      .getStores()
-      .onError((Object? error, StackTrace stackTrace) => <Store>[]);
+  try {
+    await Future.wait<dynamic>(
+      <Future<dynamic>>[
+        getIt.get<Categories>().getCategories(),
+        getIt.get<Stores>().getStores(),
+      ],
+    );
+  } on Exception catch (e) {
+    print('Failed to fetch categories and stores in main!');
+    print(e);
+  }
 
   // Initializes the ConnectionService.
   getIt.get<ConnectionService>().initialize();

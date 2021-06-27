@@ -191,8 +191,18 @@ class _MyAppState extends State<MyApp> {
     Widget buildErrorScreen() {
       Future<void> onTap() async {
         try {
-          categories = await GetIt.I.get<Categories>().getCategories();
-          stores = await GetIt.I.get<Stores>().getStores();
+          await Future.wait<dynamic>(
+            <Future<dynamic>>[
+              GetIt.I
+                  .get<Categories>()
+                  .getCategories()
+                  .then<void>((List<Category> value) => categories = value),
+              GetIt.I
+                  .get<Stores>()
+                  .getStores()
+                  .then<void>((List<Store> value) => stores = value),
+            ],
+          );
         } on Exception catch (e) {
           print('Failed to fetch categories and stores!');
           print(e);
