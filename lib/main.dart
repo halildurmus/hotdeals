@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'src/app.dart';
 import 'src/models/categories.dart';
@@ -19,6 +20,7 @@ import 'src/services/sqlite_service_impl.dart';
 import 'src/settings/settings.controller.impl.dart';
 import 'src/settings/settings.service.impl.dart';
 import 'src/settings/settings_controller.dart';
+import 'src/utils/tr_short_messages.dart';
 import 'src/widgets/loading_dialog.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -110,6 +112,9 @@ Future<void> main() async {
 
   // Loads the user's preferred settings.
   await getIt.get<SettingsController>().loadSettings();
+
+  // Registers Turkish short messages for timeago.
+  timeago.setLocaleMessages('tr_short', TrShortMessages());
 
   // Runs the app with MyApp attached to the screen.
   runApp(const MyApp());

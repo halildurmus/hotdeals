@@ -6,6 +6,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/search_hit.dart';
@@ -32,12 +33,6 @@ class _DealsState extends State<Deals> {
   bool searchErrorOccurred = false;
   bool searchProgress = false;
   final List<String> searchResults = <String>[];
-
-  final List<String> _filterChoices = <String>[
-    'En Yeni',
-    'En Beğenilen',
-    'En Ucuz',
-  ];
 
   void _sortDeals(int index) {
     if (index == 0) {
@@ -66,6 +61,12 @@ class _DealsState extends State<Deals> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final MyUser? user = Provider.of<UserControllerImpl>(context).user;
+
+    final List<String> _filterChoices = <String>[
+      AppLocalizations.of(context)!.newest,
+      AppLocalizations.of(context)!.mostLiked,
+      AppLocalizations.of(context)!.cheapest,
+    ];
 
     Widget buildChoiceChips() {
       return Container(
@@ -135,8 +136,8 @@ class _DealsState extends State<Deals> {
         padding: const EdgeInsets.symmetric(vertical: 16),
         itemCount: 1,
         itemBuilder: (BuildContext context, int index) {
-          return const Text(
-            'Could not find any deal',
+          return Text(
+            AppLocalizations.of(context)!.couldNotFindAnyDeal,
             textAlign: TextAlign.center,
           );
         },
@@ -162,8 +163,8 @@ class _DealsState extends State<Deals> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               itemCount: 1,
               itemBuilder: (BuildContext context, int index) {
-                return const Text(
-                  'An error occurred!',
+                return Text(
+                  AppLocalizations.of(context)!.anErrorOccurred,
                   textAlign: TextAlign.center,
                 );
               },
@@ -227,7 +228,9 @@ class _DealsState extends State<Deals> {
 
     Widget buildFloatingSearchBar() {
       Widget buildSearchError() {
-        return const ListTile(title: Text('An error occurred!'));
+        return ListTile(
+          title: Text(AppLocalizations.of(context)!.anErrorOccurred),
+        );
       }
 
       Widget buildPlaceHolder() {
@@ -235,7 +238,9 @@ class _DealsState extends State<Deals> {
       }
 
       Widget buildNoResults() {
-        return const ListTile(title: Text('No results'));
+        return ListTile(
+          title: Text(AppLocalizations.of(context)!.noResults),
+        );
       }
 
       Widget buildSearchResults() {
@@ -293,7 +298,7 @@ class _DealsState extends State<Deals> {
       return FloatingSearchBar(
         controller: floatingSearchBarController,
         progress: searchProgress,
-        hint: 'Search',
+        hint: AppLocalizations.of(context)!.search,
         scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
         transitionDuration: const Duration(milliseconds: 500),
         transitionCurve: Curves.easeInOut,
@@ -335,7 +340,7 @@ class _DealsState extends State<Deals> {
         },
         elevation: 3,
         icon: const Icon(LineIcons.tags),
-        label: const Text('Paylaş'),
+        label: Text(AppLocalizations.of(context)!.post),
       );
     }
 

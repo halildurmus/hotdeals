@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hotdeals/src/app_localizations.dart';
 
 import '../models/categories.dart';
 import '../models/comment.dart';
@@ -76,7 +77,8 @@ class _DealListItemState extends State<DealListItem> {
 
     Widget buildDealCategory() {
       return Text(
-        'at ${_categories.getCategoryName(category: deal.category)}',
+        AppLocalizations.of(context)!
+            .atCategory(_categories.getCategoryName(category: deal.category)),
         style: textTheme.subtitle1!.copyWith(
           fontSize: 13,
           fontStyle: FontStyle.italic,

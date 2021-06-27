@@ -1,21 +1,862 @@
 {
-  "@@last_modified": "2020-07-28T11:17:31.076838",
-  "title": "hotdeals",
-  "@title": {
+  "@@last_modified": "2021-06-27T21:56:55.224753",
+  "appTitle": "hotdeals",
+  "@appTitle": {
     "description": "Title for the app",
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {}
   },
   "english": "İngilizce",
   "@english": {
     "description": "",
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {}
   },
   "turkish": "Türkçe",
   "@turkish": {
     "description": "",
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {}
+  },
+  "online": "ÇEVRİMİÇİ",
+  "@online": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "offline": "ÇEVRİMDIŞI",
+  "@offline": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkYourInternet": "Lütfen internet bağlantınızı kontrol edin",
+  "@checkYourInternet": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "anErrorOccurred": "Bir hata oluştu.",
+  "@anErrorOccurred": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "anErrorOccurredWhile": "Bazı veriler çekilirken bir hata oluştu.",
+  "@anErrorOccurredWhile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tryAgain": "Tekrar dene",
+  "@tryAgain": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "atCategory": "{category} kategorisinde",
+  "@atCategory": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "category"
+    ],
+    "placeholders": {
+      "category": {
+        "example": "Electronics"
+      }
+    }
+  },
+  "ok": "Tamam",
+  "@ok": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cancel": "Vazgeç",
+  "@cancel": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "loading": "Yükleniyor...",
+  "@loading": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "commentedOnYourPost": " gönderine yorum yaptı",
+  "@commentedOnYourPost": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dealCount": "{count,plural, =0{Fırsat yok}=1{{count} fırsat}=2{{count} fırsat}few{{count} fırsat}many{{count} fırsat}other{{count} fırsat}}",
+  "@dealCount": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "signIn": "Giriş Yap",
+  "@signIn": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "continueWithFacebook": "Facebook ile devam et",
+  "@continueWithFacebook": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "continueWithGoogle": "Google ile devam et",
+  "@continueWithGoogle": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signInFailed": "Giriş başarısız",
+  "@signInFailed": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "logout": "Çıkış",
+  "@logout": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "logoutConfirm": "Çıkış yapmak istediğinizden emin misiniz?",
+  "@logoutConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "logoutFailed": "Çıkış başarısız",
+  "@logoutFailed": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "system": "Sistem",
+  "@system": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "light": "Açık",
+  "@light": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dark": "Koyu",
+  "@dark": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings": "Ayarlar",
+  "@settings": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "theme": "Tema",
+  "@theme": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "language": "Dil",
+  "@language": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youHaveNotPostedAnyDeal": "Henüz herhangi bir fırsat paylaşmadınız!",
+  "@youHaveNotPostedAnyDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youHaveNotFavoritedAnyDeal": "Henüz herhangi bir fırsatı favorilerinize eklemediniz!",
+  "@youHaveNotFavoritedAnyDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noNotifications": "Henüz bildirim yok!",
+  "@noNotifications": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "updateProfile": "Profili Güncelle",
+  "@updateProfile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notifications": "Bildirimler",
+  "@notifications": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "posts": "Paylaşımlar",
+  "@posts": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorites": "Favoriler",
+  "@favorites": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "profile": "Profil",
+  "@profile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "selectSource": "Kaynağı seçin",
+  "@selectSource": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "camera": "Kamera",
+  "@camera": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gallery": "Galeri",
+  "@gallery": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "avatar": "Avatar",
+  "@avatar": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "nickname": "Takma ad",
+  "@nickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "updateNickname": "Takma adı güncelle",
+  "@updateNickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "generalSettings": "Genel Ayarlar",
+  "@generalSettings": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deals": "Fırsatlar",
+  "@deals": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "browse": "Gözat",
+  "@browse": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "chats": "Sohbetler",
+  "@chats": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "categories": "Kategoriler",
+  "@categories": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "stores": "Mağazalar",
+  "@stores": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "couldNotFindAnyDeal": "Hiçbir fırsat bulunamadı",
+  "@couldNotFindAnyDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unblock": "ENGELİ KALDIR",
+  "@unblock": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "blockedUsers": "Engelli Kullanıcılar",
+  "@blockedUsers": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noBlockedUsers": "Henüz bloklanmış bir kullanıcı yok!",
+  "@noBlockedUsers": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "anErrorOccurredWhileBlocking": "Kullanıcıyı engellerken bir hata oluştu!",
+  "@anErrorOccurredWhileBlocking": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "anErrorOccurredWhileUnblocking": "Kullanıcının engeli kaldırılırken bir hata oluştu!",
+  "@anErrorOccurredWhileUnblocking": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyUnblocked": "Kullanıcının engeli başarıyla kaldırıldı!",
+  "@successfullyUnblocked": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unblockUser": "Kullanıcının Engelini Kaldır",
+  "@unblockUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sendMessage": "Mesaj Gönder",
+  "@sendMessage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "joined": "{date} tarihinde katıldı",
+  "@joined": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "date"
+    ],
+    "placeholders": {
+      "date": {
+        "example": "Jun 2021"
+      }
+    }
+  },
+  "couldNotFindAnyResultFor": "{keyword} için herhangi bir sonuç bulunamadı",
+  "@couldNotFindAnyResultFor": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "keyword"
+    ],
+    "placeholders": {
+      "keyword": {
+        "example": "iphone"
+      }
+    }
+  },
+  "dealsPosted": " fırsat paylaştı",
+  "@dealsPosted": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "commentsPosted": " yorum yaptı",
+  "@commentsPosted": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aboutUser": "Kullanıcı Hakkında",
+  "@aboutUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sentYouMessage": " sana bir mesaj gönderdi",
+  "@sentYouMessage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "blockConfirm": "Kullanıcıyı engellemek istediğiniziden emin misiniz?",
+  "@blockConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unblockConfirm": "Kullanıcının engelini kaldırmak istediğinizden emin misiniz?",
+  "@unblockConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyBlocked": "Kullanıcı, başarıyla engellendi.",
+  "@successfullyBlocked": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youNeedToSignIn": "Giriş yapmalısınız",
+  "@youNeedToSignIn": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youNeedToSignInToSee": "Aktif konuşmaları görmek için giriş yapmanız gerekiyor",
+  "@youNeedToSignInToSee": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noChats": "Henüz sohbet yok",
+  "@noChats": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noActiveConversations": "Aktif görüşme yok ",
+  "@noActiveConversations": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youHaveBlockedThisUser": "Bu kullanıcıyı engellediniz ",
+  "@youHaveBlockedThisUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "image": "Resim",
+  "@image": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterYourMessage": "Mesajınızı girin",
+  "@enterYourMessage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reportUser": "Kullanıcıyı Şikayet Et",
+  "@reportUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "blockUser": "Kullanıcıyı Engelle",
+  "@blockUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "spam": "Spam",
+  "@spam": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "post": "Paylaş",
+  "@post": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "newest": "En Yeni",
+  "@newest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "mostLiked": "En Beğenilen",
+  "@mostLiked": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cheapest": "En Ucuz",
+  "@cheapest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noResults": "Sonuç yok",
+  "@noResults": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search": "Ara",
+  "@search": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyReportedDeal": "Fırsat, başarıyla şikayet edildi",
+  "@successfullyReportedDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyReportedUser": "Kullanıcı, başarıyla şikayet edildi",
+  "@successfullyReportedUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "harassing": "Taciz",
+  "@harassing": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "other": "Diğer",
+  "@other": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterSomeDetailsAboutReport": "Şikayetinizle alakalı bazı bilgiler girin",
+  "@enterSomeDetailsAboutReport": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterYourComment": "Yorumunuzu girin",
+  "@enterYourComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postComment": "Yorum paylaş",
+  "@postComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postAComment": "Bir Yorum Paylaş",
+  "@postAComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "originalPrice": "Orijinal Fiyat",
+  "@originalPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheOriginalPrice": "Lütfen fırsatın orijinal fiyatını girin.",
+  "@pleaseEnterTheOriginalPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "discountPrice": "İndirimli Fiyat",
+  "@discountPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "title": "Başlık",
+  "@title": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterDealUrl": "Fırsat URL'ini girin",
+  "@enterDealUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "uploadImage": "Resim Yükle",
+  "@uploadImage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "category": "Kategori",
+  "@category": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "store": "Mağaza",
+  "@store": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheDealUrl": "Lütfen fırsat URL'ini girin.",
+  "@pleaseEnterTheDealUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseUploadAtLeastOneImage": "Lütfen en az bir resim yükleyin.",
+  "@pleaseUploadAtLeastOneImage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postDeal": "Fırsat Paylaş",
+  "@postDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyPostedYourDeal": "Fırsat, başarıyla paylaşıldı",
+  "@successfullyPostedYourDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterValidUrl": "Lütfen geçerli bir URL girin.",
+  "@pleaseEnterValidUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheDealTitle": "Lütfen fırsat başlığını girin.",
+  "@pleaseEnterTheDealTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheDiscountPrice": "Lütfen fırsatın indirimli fiyatını girin.",
+  "@pleaseEnterTheDiscountPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "originalPriceCannotBeLower": "Orijinal fiyat, indirimli fiyattan küçük olamaz.",
+  "@originalPriceCannotBeLower": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "discountPriceCannotBeGreater": "İndirimli fiyat, orijinal fiyattan büyük olamaz.",
+  "@discountPriceCannotBeGreater": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterSomeDetailsAboutDeal": "Bu fırsatla ilgili bazı ayrıntıları girin ",
+  "@enterSomeDetailsAboutDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postedYourComment": "Yorumunuz başarıyla gönderildi",
+  "@postedYourComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postADeal": "Bir Fırsat Paylaş",
+  "@postADeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "seeDeal": "Fırsatı Gör",
+  "@seeDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noComments": "Henüz yorum yok",
+  "@noComments": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "startTheConversation": "Konuşmayı başlat",
+  "@startTheConversation": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "didYouLikeTheDeal": "Fırsatı beğendiniz mi?",
+  "@didYouLikeTheDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "originalPoster": "PAYLAŞAN KULLANICI",
+  "@originalPoster": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dealScore": "Fırsat Puanı",
+  "@dealScore": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reportDeal": "Fırsatı Şikayet Et",
+  "@reportDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "repost": "Kopya",
+  "@repost": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "commentCount": "{count,plural, =0{Yorum yok}=1{{count} yorum}=2{{count} yorum}few{{count} yorum}many{{count} yorum}other{{count} yorum}}",
+  "@commentCount": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
   }
 }

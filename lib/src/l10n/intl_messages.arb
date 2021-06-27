@@ -1,21 +1,862 @@
 {
-  "@@last_modified": "2020-07-28T11:17:31.076838",
-  "title": "hotdeals",
-  "@title": {
+  "@@last_modified": "2021-06-27T22:30:40.835480",
+  "appTitle": "hotdeals",
+  "@appTitle": {
     "description": "Title for the app",
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {}
   },
   "english": "English",
   "@english": {
     "description": "",
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {}
   },
   "turkish": "Turkish",
   "@turkish": {
     "description": "",
     "type": "text",
+    "placeholders_order": [],
     "placeholders": {}
+  },
+  "online": "ONLINE",
+  "@online": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "offline": "OFFLINE",
+  "@offline": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "checkYourInternet": "Please check your internet connection",
+  "@checkYourInternet": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "anErrorOccurred": "An error occurred.",
+  "@anErrorOccurred": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "anErrorOccurredWhile": "An error occurred while fetching some data.",
+  "@anErrorOccurredWhile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tryAgain": "Try again",
+  "@tryAgain": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "atCategory": "at {category}",
+  "@atCategory": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "category"
+    ],
+    "placeholders": {
+      "category": {
+        "example": "Electronics"
+      }
+    }
+  },
+  "ok": "Ok",
+  "@ok": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "commentedOnYourPost": " commented on your post",
+  "@commentedOnYourPost": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dealCount": "{count,plural, =0{No deal}=1{{count} deals}=2{{count} deals}few{{count} deals}many{{count} deals}other{{count} deals}}",
+  "@dealCount": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "signIn": "Sign In",
+  "@signIn": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "continueWithFacebook": "Continue with Facebook",
+  "@continueWithFacebook": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "continueWithGoogle": "Continue with Google",
+  "@continueWithGoogle": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "signInFailed": "Sign in failed",
+  "@signInFailed": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "logoutConfirm": "Are you sure you want to log out?",
+  "@logoutConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "logoutFailed": "Logout failed",
+  "@logoutFailed": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "system": "System",
+  "@system": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "light": "Light",
+  "@light": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dark": "Dark",
+  "@dark": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "language": "Language",
+  "@language": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youHaveNotPostedAnyDeal": "You haven't posted any deal yet!",
+  "@youHaveNotPostedAnyDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youHaveNotFavoritedAnyDeal": "You haven't favorited any deal yet!",
+  "@youHaveNotFavoritedAnyDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noNotifications": "No notifications yet!",
+  "@noNotifications": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "updateProfile": "Update Profile",
+  "@updateProfile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "posts": "Posts",
+  "@posts": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "favorites": "Favorites",
+  "@favorites": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "selectSource": "Select source",
+  "@selectSource": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "camera": "Camera",
+  "@camera": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gallery": "Gallery",
+  "@gallery": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "avatar": "Avatar",
+  "@avatar": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "nickname": "Nickname",
+  "@nickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "updateNickname": "Update nickname",
+  "@updateNickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "generalSettings": "General Settings",
+  "@generalSettings": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deals": "Deals",
+  "@deals": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "browse": "Browse",
+  "@browse": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "chats": "Chats",
+  "@chats": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "categories": "Categories",
+  "@categories": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "stores": "Stores",
+  "@stores": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "couldNotFindAnyDeal": "Couldn't found any deal",
+  "@couldNotFindAnyDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unblock": "UNBLOCK",
+  "@unblock": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "blockedUsers": "Blocked Users",
+  "@blockedUsers": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noBlockedUsers": "No blocked users yet!",
+  "@noBlockedUsers": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "anErrorOccurredWhileBlocking": "An error occurred while blocking this user!",
+  "@anErrorOccurredWhileBlocking": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "anErrorOccurredWhileUnblocking": "An error occurred while unblocking this user!",
+  "@anErrorOccurredWhileUnblocking": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyUnblocked": "Successfully unblocked this user!",
+  "@successfullyUnblocked": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unblockUser": "Unblock User",
+  "@unblockUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sendMessage": "Send Message",
+  "@sendMessage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "joined": "Joined {date}",
+  "@joined": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "date"
+    ],
+    "placeholders": {
+      "date": {
+        "example": "Jun 2021"
+      }
+    }
+  },
+  "couldNotFindAnyResultFor": "Couldn't find any result for {keyword}",
+  "@couldNotFindAnyResultFor": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "keyword"
+    ],
+    "placeholders": {
+      "keyword": {
+        "example": "iphone"
+      }
+    }
+  },
+  "dealsPosted": " Deals Posted",
+  "@dealsPosted": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "commentsPosted": " Comments Posted",
+  "@commentsPosted": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aboutUser": "About User",
+  "@aboutUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sentYouMessage": " sent you a message",
+  "@sentYouMessage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "blockConfirm": "Are you sure you want to block this user?",
+  "@blockConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unblockConfirm": "Are you sure you want to unblock this user?",
+  "@unblockConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyBlocked": "Successfully blocked this user.",
+  "@successfullyBlocked": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youNeedToSignIn": "You need to sign in",
+  "@youNeedToSignIn": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youNeedToSignInToSee": "You need to sign in to see active conversations",
+  "@youNeedToSignInToSee": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noChats": "No chats yet",
+  "@noChats": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noActiveConversations": "No active conversations",
+  "@noActiveConversations": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "youHaveBlockedThisUser": "You've blocked this user",
+  "@youHaveBlockedThisUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "image": "Image",
+  "@image": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterYourMessage": "Enter your message",
+  "@enterYourMessage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reportUser": "Report User",
+  "@reportUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "blockUser": "Block User",
+  "@blockUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "spam": "Spam",
+  "@spam": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "post": "Post",
+  "@post": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "newest": "Newest",
+  "@newest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "mostLiked": "Most Liked",
+  "@mostLiked": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cheapest": "Cheapest",
+  "@cheapest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noResults": "No results",
+  "@noResults": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "search": "Search",
+  "@search": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyReportedDeal": "Successfully reported deal",
+  "@successfullyReportedDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyReportedUser": "Successfully reported user",
+  "@successfullyReportedUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "harassing": "Harassing",
+  "@harassing": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "other": "Other",
+  "@other": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterSomeDetailsAboutReport": "Enter some details about your report",
+  "@enterSomeDetailsAboutReport": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterYourComment": "Enter your comment",
+  "@enterYourComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postComment": "Post comment",
+  "@postComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postAComment": "Post a Comment",
+  "@postAComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "originalPrice": "Original Price",
+  "@originalPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheOriginalPrice": "Please enter the deal's original price.",
+  "@pleaseEnterTheOriginalPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "discountPrice": "Discount Price",
+  "@discountPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "title": "Title",
+  "@title": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterDealUrl": "Enter deal URL",
+  "@enterDealUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "uploadImage": "Upload Image",
+  "@uploadImage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "category": "Category",
+  "@category": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "store": "Store",
+  "@store": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheDealUrl": "Please enter the deal URL.",
+  "@pleaseEnterTheDealUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseUploadAtLeastOneImage": "Please upload at least one image.",
+  "@pleaseUploadAtLeastOneImage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postDeal": "Post Deal",
+  "@postDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "successfullyPostedYourDeal": "Successfully posted your deal",
+  "@successfullyPostedYourDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterValidUrl": "Please enter a valid URL.",
+  "@pleaseEnterValidUrl": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheDealTitle": "Please enter the deal title.",
+  "@pleaseEnterTheDealTitle": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheDiscountPrice": "Please enter the deal discount price.",
+  "@pleaseEnterTheDiscountPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "originalPriceCannotBeLower": "The original price cannot be lower than the discount price.",
+  "@originalPriceCannotBeLower": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "discountPriceCannotBeGreater": "The discount price cannot be greater than the original price.",
+  "@discountPriceCannotBeGreater": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterSomeDetailsAboutDeal": "Enter here some details about this deal",
+  "@enterSomeDetailsAboutDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postedYourComment": "Successfully posted your comment",
+  "@postedYourComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "postADeal": "Post a Deal",
+  "@postADeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "seeDeal": "See Deal",
+  "@seeDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noComments": "No comments yet",
+  "@noComments": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "startTheConversation": "Start the conversation",
+  "@startTheConversation": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "didYouLikeTheDeal": "Did you like the deal?",
+  "@didYouLikeTheDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "originalPoster": "ORIGINAL POSTER",
+  "@originalPoster": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dealScore": "Deal Score",
+  "@dealScore": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reportDeal": "Report Deal",
+  "@reportDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "repost": "Repost",
+  "@repost": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "commentCount": "{count,plural, =0{No comment}=1{{count} comments}=2{{count} comments}few{{count} comments}many{{count} comments}other{{count} comments}}",
+  "@commentCount": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
   }
 }

@@ -7,8 +7,9 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user_controller_impl.dart';
+import '../app_localizations.dart';
 import '../models/my_user.dart';
+import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../widgets/loading_dialog.dart';
 import '../widgets/settings_list_item.dart';
@@ -105,7 +106,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      'Select source',
+                      AppLocalizations.of(context)!.selectSource,
                       textAlign: TextAlign.center,
                       style: textTheme.subtitle1!.copyWith(
                         fontWeight: FontWeight.bold,
@@ -118,7 +119,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
             ListTile(
               horizontalTitleGap: 0,
               leading: const Icon(Icons.photo_camera),
-              title: const Text('Camera'),
+              title: Text(AppLocalizations.of(context)!.camera),
               onTap: () async {
                 await getImg(userId, ImageSource.camera);
                 Navigator.of(context).pop();
@@ -127,7 +128,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
             ListTile(
               horizontalTitleGap: 0,
               leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
+              title: Text(AppLocalizations.of(context)!.gallery),
               onTap: () async {
                 await getImg(userId, ImageSource.gallery);
                 Navigator.of(context).pop();
@@ -183,9 +184,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         onChanged: (String? text) {
                           setState(() {});
                         },
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Nickname',
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: AppLocalizations.of(context)!.nickname,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -213,7 +214,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                   Navigator.of(context).pop();
                                 },
                           child: Text(
-                            'Update nickname',
+                            AppLocalizations.of(context)!.updateNickname,
                             style: textTheme.bodyText1!
                                 .copyWith(color: Colors.white),
                           ),
@@ -231,7 +232,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Profile'),
+        title: Text(AppLocalizations.of(context)!.updateProfile),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,7 +240,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Text(
-              'General Settings',
+              AppLocalizations.of(context)!.generalSettings,
               style: textTheme.subtitle1,
             ),
           ),
@@ -247,12 +248,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
             image: CircleAvatar(
               backgroundImage: NetworkImage(user.avatar!),
             ),
-            title: 'Avatar',
+            title: AppLocalizations.of(context)!.avatar,
             onTap: () => showImagePicker(user.id!),
           ),
           SettingsListItem(
             icon: Icons.edit,
-            title: 'Nickname',
+            title: AppLocalizations.of(context)!.nickname,
             subtitle: user.nickname,
             onTap: nicknameOnTap,
           ),

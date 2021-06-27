@@ -129,7 +129,7 @@ class _MyAppState extends State<MyApp> {
         ).toTheme,
         themeMode: settingsController.themeMode,
         onGenerateTitle: (BuildContext context) =>
-            AppLocalizations.of(context)!.title,
+            AppLocalizations.of(context)!.appTitle,
         home: home ?? AuthWidget(userSnapshot: userSnapshot!),
         onGenerateRoute: home == null
             ? (RouteSettings routeSettings) =>

@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hotdeals/src/chat/blocked_users.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
-import '../utils/navigation_util.dart';
+import 'blocked_users.dart';
 import 'message_arguments.dart';
 import 'message_screen.dart';
 
@@ -61,21 +61,19 @@ class _ChatScreenState extends State<ChatScreen> {
                 size: 150.0,
               ),
               const SizedBox(height: 16.0),
-              const Text(
-                'You need to sign in',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.youNeedToSignIn,
+                style: const TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'You need to sign in to see active conversations',
+                  AppLocalizations.of(context)!.youNeedToSignInToSee,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15.5,
-                  ),
+                  style: const TextStyle(fontSize: 15.5),
                 ),
               ),
             ],
@@ -96,21 +94,19 @@ class _ChatScreenState extends State<ChatScreen> {
                 size: 150.0,
               ),
               const SizedBox(height: 16.0),
-              const Text(
-                'No chats yet',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.noChats,
+                style: const TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'No active conversations',
+                  AppLocalizations.of(context)!.noActiveConversations,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15.5,
-                  ),
+                  style: const TextStyle(fontSize: 15.5),
                 ),
               ),
             ],
@@ -191,8 +187,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           AsyncSnapshot<MyUser> snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.none:
-                            return const Center(
-                                child: Text('An error occurred!'));
+                            return Center(
+                              child: Text(AppLocalizations.of(context)!
+                                  .anErrorOccurred),
+                            );
                           case ConnectionState.active:
                           case ConnectionState.waiting:
                             return buildCircularProgressIndicator();
@@ -270,7 +268,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       const SizedBox(
                                                           width: 4.0),
                                                       Text(
-                                                        "You've blocked this user",
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .youHaveBlockedThisUser,
                                                         style: TextStyle(
                                                           color:
                                                               theme.errorColor,
@@ -283,18 +283,21 @@ class _ChatScreenState extends State<ChatScreen> {
                                                   )
                                                 else if (_lastMessageIsImage)
                                                   Row(
-                                                    children: const <Widget>[
-                                                      Icon(
+                                                    children: <Widget>[
+                                                      const Icon(
                                                         FontAwesomeIcons
                                                             .solidImage,
                                                         color: Color.fromRGBO(
                                                             117, 117, 117, 1),
                                                         size: 16.0,
                                                       ),
-                                                      SizedBox(width: 4.0),
+                                                      const SizedBox(
+                                                          width: 4.0),
                                                       Text(
-                                                        'Image',
-                                                        style: TextStyle(
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .image,
+                                                        style: const TextStyle(
                                                           fontSize: 15.0,
                                                           fontWeight:
                                                               FontWeight.w300,
@@ -329,10 +332,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                           children: <Widget>[
                                             Text(
                                               timeago.format(_sentAt,
-                                                  locale: 'en_short'),
-                                              // timeago.format(_sentAt,
-                                              //     locale:
-                                              //     '${Localizations.localeOf(context).languageCode}_short'),
+                                                  locale:
+                                                      '${Localizations.localeOf(context).languageCode}_short'),
                                               style: TextStyle(
                                                 color: _isRead
                                                     ? Colors.grey
@@ -369,8 +370,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
                               print(snapshot.error);
 
-                              return const Center(
-                                  child: Text('An error occurred!'));
+                              return Center(
+                                child: Text(AppLocalizations.of(context)!
+                                    .anErrorOccurred),
+                              );
                             }
                           default:
                             return buildCircularProgressIndicator();
@@ -402,7 +405,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chats'),
+        title: Text(AppLocalizations.of(context)!.chats),
         actions: <Widget>[
           PopupMenuButton<_ChatPopup>(
             icon: const Icon(
@@ -415,9 +418,9 @@ class _ChatScreenState extends State<ChatScreen> {
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<_ChatPopup>>[
-              const PopupMenuItem<_ChatPopup>(
+              PopupMenuItem<_ChatPopup>(
                 value: _ChatPopup.blockedUsers,
-                child: Text('Blocked Users'),
+                child: Text(AppLocalizations.of(context)!.blockedUsers),
               ),
             ],
           ),

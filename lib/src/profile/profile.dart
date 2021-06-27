@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../settings/settings.view.dart';
@@ -67,7 +68,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     onPressed: () =>
                         NavigationUtil.navigate(context, const UpdateProfile()),
-                    child: const Text('Update Profile'),
+                    child: Text(AppLocalizations.of(context)!.updateProfile),
                   ),
                 ),
               ],
@@ -87,18 +88,18 @@ class _ProfileState extends State<Profile> {
         margin: const EdgeInsets.only(top: 5),
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.only(bottom: 2.0),
-        child: const Center(
+        child: Center(
           child: TabBar(
             isScrollable: true,
             indicatorSize: TabBarIndicatorSize.label,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
             ),
             tabs: <Tab>[
-              Tab(text: 'Bildirimlerim'),
-              Tab(text: 'Paylaşımlarım'),
-              Tab(text: 'Favorilerim'),
+              Tab(text: AppLocalizations.of(context)!.notifications),
+              Tab(text: AppLocalizations.of(context)!.posts),
+              Tab(text: AppLocalizations.of(context)!.favorites),
             ],
           ),
         ),
@@ -118,7 +119,7 @@ class _ProfileState extends State<Profile> {
     Widget buildProfile() {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Profile'),
+          title: Text(AppLocalizations.of(context)!.profile),
           actions: <IconButton>[
             IconButton(
               onPressed: () {

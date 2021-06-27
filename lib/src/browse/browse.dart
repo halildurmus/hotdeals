@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
 import 'browse_categories.dart';
 import 'browse_stores.dart';
 
@@ -32,9 +33,9 @@ class _BrowseState extends State<Browse> with SingleTickerProviderStateMixin {
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
             ),
-            tabs: const <Tab>[
-              Tab(text: 'Kategoriler'),
-              Tab(text: 'Mağazalar'),
+            tabs: <Tab>[
+              Tab(text: AppLocalizations.of(context)!.categories),
+              Tab(text: AppLocalizations.of(context)!.stores),
             ],
           ),
         ),

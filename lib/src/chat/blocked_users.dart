@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
@@ -39,7 +40,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
               side: BorderSide(color: theme.errorColor),
             ),
             child: Text(
-              'UNBLOCK',
+              AppLocalizations.of(context)!.unblock,
               style: theme.textTheme.subtitle2!.copyWith(
                 color: theme.errorColor,
               ),
@@ -51,11 +52,11 @@ class _BlockedUsersState extends State<BlockedUsers> {
   }
 
   Future<void> confirmUnblockUser(BuildContext context, String userUid) async {
-    final bool didRequestUnblockUser = await const CustomAlertDialog(
-          title: 'Unblock User',
-          content: 'Are you sure you want to unblock this user?',
-          cancelActionText: 'Cancel',
-          defaultActionText: 'Ok',
+    final bool didRequestUnblockUser = await CustomAlertDialog(
+          title: AppLocalizations.of(context)!.unblockUser,
+          content: AppLocalizations.of(context)!.unblockConfirm,
+          cancelActionText: AppLocalizations.of(context)!.cancel,
+          defaultActionText: AppLocalizations.of(context)!.ok,
         ).show(context) ??
         false;
 
@@ -68,13 +69,13 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
         final SnackBar snackBar = SnackBar(
           content: Row(
-            children: const <Widget>[
-              Icon(FontAwesomeIcons.checkCircle, size: 20.0),
+            children: <Widget>[
+              const Icon(FontAwesomeIcons.checkCircle, size: 20.0),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    'Successfully unblocked this user',
+                    AppLocalizations.of(context)!.successfullyUnblocked,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -89,13 +90,14 @@ class _BlockedUsersState extends State<BlockedUsers> {
       } else {
         final SnackBar snackBar = SnackBar(
           content: Row(
-            children: const <Widget>[
-              Icon(FontAwesomeIcons.exclamationCircle, size: 20.0),
+            children: <Widget>[
+              const Icon(FontAwesomeIcons.exclamationCircle, size: 20.0),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    'An error occurred while unblocking this user',
+                    AppLocalizations.of(context)!
+                        .anErrorOccurredWhileUnblocking,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -135,21 +137,11 @@ class _BlockedUsersState extends State<BlockedUsers> {
                 size: 150.0,
               ),
               const SizedBox(height: 16.0),
-              const Text(
-                'No blocked users yet',
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.noBlockedUsers,
+                style: const TextStyle(
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'No blocked users description',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 15.5,
-                  ),
                 ),
               ),
             ],
@@ -191,7 +183,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Blocked Users'),
+        title: Text(AppLocalizations.of(context)!.blockedUsers),
       ),
       body: RefreshIndicator(
         onRefresh: onRefresh,

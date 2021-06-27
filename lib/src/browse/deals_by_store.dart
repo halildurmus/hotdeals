@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../app_localizations.dart';
 import '../models/deal.dart';
 import '../models/store.dart';
 import '../services/spring_service.dart';
@@ -49,14 +50,18 @@ class _DealsByStoreState extends State<DealsByStore> {
             final List<Deal> deals = snapshot.data!;
 
             if (deals.isEmpty) {
-              return const Center(child: Text('Could not find any deal'));
+              return Center(
+                child: Text(AppLocalizations.of(context)!.couldNotFindAnyDeal),
+              );
             }
 
             return DealListItemBuilder(deals: deals);
           } else if (snapshot.hasError) {
             print(snapshot.error);
 
-            return const Center(child: Text('An error occurred!'));
+            return Center(
+              child: Text(AppLocalizations.of(context)!.anErrorOccurred),
+            );
           }
 
           return const Center(child: CircularProgressIndicator());

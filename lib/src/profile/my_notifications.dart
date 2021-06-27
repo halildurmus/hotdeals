@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../app_localizations.dart';
 import '../models/push_notification.dart';
 import '../services/sqlite_service.dart';
 import '../widgets/notification_item.dart';
@@ -58,14 +59,18 @@ class _MyNotificationsState extends State<MyNotifications> {
               final List<PushNotification> notifications = snapshot.data!;
 
               if (notifications.isEmpty) {
-                return const Center(child: Text('No notifications yet!'));
+                return Center(
+                  child: Text(AppLocalizations.of(context)!.noNotifications),
+                );
               }
 
               return buildNotifications(notifications);
             } else if (snapshot.hasError) {
               print(snapshot.error);
 
-              return const Center(child: Text('An error occurred!'));
+              return Center(
+                child: Text(AppLocalizations.of(context)!.anErrorOccurred),
+              );
             }
 
             return const Center(child: CircularProgressIndicator());

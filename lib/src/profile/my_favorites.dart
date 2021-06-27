@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../models/deal.dart';
-import '../models/user_controller_impl.dart';
 import '../models/my_user.dart';
+import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../widgets/deal_list_item_builder.dart';
 
@@ -27,8 +28,9 @@ class _MyFavoritesState extends State<MyFavorites> {
           final List<Deal> deals = snapshot.data!;
 
           if (deals.isEmpty) {
-            return const Center(
-              child: Text("You haven't favorited any deal yet!"),
+            return Center(
+              child: Text(
+                  AppLocalizations.of(context)!.youHaveNotFavoritedAnyDeal),
             );
           }
 
@@ -36,7 +38,9 @@ class _MyFavoritesState extends State<MyFavorites> {
         } else if (snapshot.hasError) {
           print(snapshot.error);
 
-          return const Center(child: Text('An error occurred!'));
+          return Center(
+            child: Text(AppLocalizations.of(context)!.anErrorOccurred),
+          );
         }
 
         return const Center(child: CircularProgressIndicator());

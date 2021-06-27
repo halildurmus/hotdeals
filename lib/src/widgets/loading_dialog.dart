@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
+
 class LoadingDialog extends StatelessWidget {
   const LoadingDialog({Key? key}) : super(key: key);
 
-  Widget _buildAlertDialog() {
+  Widget _buildAlertDialog(BuildContext context) {
     return AlertDialog(
       content: Row(
-        children: const <Widget>[
-          CircularProgressIndicator(),
-          SizedBox(width: 16),
-          Text('Loading...'),
+        children: <Widget>[
+          const CircularProgressIndicator(),
+          const SizedBox(width: 16),
+          Text(AppLocalizations.of(context)!.loading),
         ],
       ),
     );
@@ -19,10 +21,10 @@ class LoadingDialog extends StatelessWidget {
     showDialog<void>(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext ctx) => _buildAlertDialog(),
+      builder: (BuildContext ctx) => _buildAlertDialog(ctx),
     );
   }
 
   @override
-  Widget build(BuildContext context) => _buildAlertDialog();
+  Widget build(BuildContext context) => _buildAlertDialog(context);
 }

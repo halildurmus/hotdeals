@@ -1,14 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'custom_alert_dialog.dart';
 
 class ExceptionAlertDialog extends CustomAlertDialog {
-  ExceptionAlertDialog(
-      {required String title, required PlatformException exception})
-      : super(
+  ExceptionAlertDialog({
+    Key? key,
+    required String title,
+    required PlatformException exception,
+  }) : super(
+          key: key,
           title: title,
           content: message(exception) ?? '',
-          defaultActionText: 'OK',
         );
 
   static String? message(PlatformException exception) {

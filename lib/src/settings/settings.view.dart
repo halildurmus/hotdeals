@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -25,10 +26,10 @@ class SettingsView extends StatelessWidget {
   final SettingsController controller;
 
   Future<void> _confirmSignOut(BuildContext context) async {
-    final bool _didRequestSignOut = await const CustomAlertDialog(
-          title: 'Are you sure you want to log out?',
-          cancelActionText: 'Cancel',
-          defaultActionText: 'Logout',
+    final bool _didRequestSignOut = await CustomAlertDialog(
+          title: AppLocalizations.of(context)!.logoutConfirm,
+          cancelActionText: AppLocalizations.of(context)!.cancel,
+          defaultActionText: AppLocalizations.of(context)!.logout,
         ).show(context) ??
         false;
 
@@ -55,7 +56,7 @@ class SettingsView extends StatelessWidget {
       Provider.of<UserControllerImpl>(context, listen: false).logout();
     } on PlatformException catch (e) {
       await ExceptionAlertDialog(
-        title: 'Logout failed',
+        title: AppLocalizations.of(context)!.logoutFailed,
         exception: e,
       ).show(context);
     }
@@ -79,8 +80,13 @@ class SettingsView extends StatelessWidget {
     }
 
     String getThemeName(ThemeMode themeMode) {
-      return describeEnum(themeMode)[0].toUpperCase() +
-          describeEnum(themeMode).substring(1);
+      if (themeMode == ThemeMode.system) {
+        return AppLocalizations.of(context)!.system;
+      } else if (themeMode == ThemeMode.light) {
+        return AppLocalizations.of(context)!.light;
+      }
+
+      return AppLocalizations.of(context)!.dark;
     }
 
     void changeLanguage() {
@@ -126,7 +132,7 @@ class SettingsView extends StatelessWidget {
                         ),
                         onPressed: () => Navigator.of(context).pop(),
                         child: Text(
-                          'Ok',
+                          AppLocalizations.of(context)!.ok,
                           style: textTheme.bodyText1!
                               .copyWith(color: Colors.white),
                         ),
@@ -157,7 +163,7 @@ class SettingsView extends StatelessWidget {
                   providerValue: controller.themeMode,
                   radioValue: ThemeMode.system,
                   icon: Icons.brightness_auto,
-                  text: 'System',
+                  text: AppLocalizations.of(context)!.system,
                 ),
                 RadioItem<ThemeMode>(
                   onChanged: controller.updateThemeMode,
@@ -167,7 +173,7 @@ class SettingsView extends StatelessWidget {
                   providerValue: controller.themeMode,
                   radioValue: ThemeMode.light,
                   icon: Icons.light_mode,
-                  text: 'Light',
+                  text: AppLocalizations.of(context)!.light,
                 ),
                 RadioItem<ThemeMode>(
                   onChanged: controller.updateThemeMode,
@@ -177,7 +183,7 @@ class SettingsView extends StatelessWidget {
                   providerValue: controller.themeMode,
                   radioValue: ThemeMode.dark,
                   icon: Icons.dark_mode,
-                  text: 'Dark',
+                  text: AppLocalizations.of(context)!.dark,
                 ),
                 const SizedBox(height: 15.0),
                 SizedBox(
@@ -191,7 +197,7 @@ class SettingsView extends StatelessWidget {
                     ),
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
-                      'Ok',
+                      AppLocalizations.of(context)!.ok,
                       style: textTheme.bodyText1!.copyWith(color: Colors.white),
                     ),
                   ),
@@ -205,26 +211,26 @@ class SettingsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.settings),
       ),
       body: Column(
         children: <Widget>[
           SettingsListItem(
             image: getLanguageImage(controller.locale),
-            title: 'Language',
+            title: AppLocalizations.of(context)!.language,
             subtitle: getLanguageName(controller.locale),
             onTap: changeLanguage,
           ),
           SettingsListItem(
             icon: Icons.settings_brightness,
-            title: 'Theme',
+            title: AppLocalizations.of(context)!.theme,
             subtitle: getThemeName(controller.themeMode),
             onTap: changeAppTheme,
           ),
           SettingsListItem(
             hasNavigation: false,
             icon: Icons.cancel,
-            title: 'Logout',
+            title: AppLocalizations.of(context)!.logout,
             onTap: () => _confirmSignOut(context),
           ),
         ],

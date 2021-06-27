@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hotdeals/src/chat/message_arguments.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
+import '../chat/message_arguments.dart';
 import '../chat/message_screen.dart';
 import '../models/my_user.dart';
 import '../models/report.dart';
@@ -12,7 +13,6 @@ import '../models/user_controller_impl.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
-import '../utils/navigation_util.dart';
 import '../widgets/loading_dialog.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -81,13 +81,15 @@ class _UserProfileState extends State<UserProfile> {
       if (sentReport != null) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Reported User')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.successfullyReportedUser)),
         );
         Navigator.of(context).pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred!'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
           ),
         );
       }
@@ -112,12 +114,12 @@ class _UserProfileState extends State<UserProfile> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        'Report User',
+                        AppLocalizations.of(context)!.reportUser,
                         style: textTheme.headline6,
                       ),
                       const SizedBox(height: 10),
                       CheckboxListTile(
-                        title: const Text('Harassing'),
+                        title: Text(AppLocalizations.of(context)!.harassing),
                         value: harassingCheckbox,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -126,7 +128,7 @@ class _UserProfileState extends State<UserProfile> {
                         },
                       ),
                       CheckboxListTile(
-                        title: const Text('Spam'),
+                        title: Text(AppLocalizations.of(context)!.spam),
                         value: spamCheckbox,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -135,7 +137,7 @@ class _UserProfileState extends State<UserProfile> {
                         },
                       ),
                       CheckboxListTile(
-                        title: const Text('Other'),
+                        title: Text(AppLocalizations.of(context)!.other),
                         value: otherCheckbox,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -152,8 +154,8 @@ class _UserProfileState extends State<UserProfile> {
                               color: theme.brightness == Brightness.light
                                   ? Colors.black54
                                   : Colors.grey),
-                          hintText:
-                              'Enter some details about your report here...',
+                          hintText: AppLocalizations.of(context)!
+                              .enterSomeDetailsAboutReport,
                         ),
                         minLines: 1,
                         maxLines: 10,
@@ -175,7 +177,8 @@ class _UserProfileState extends State<UserProfile> {
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
-                            child: const Text('Report User'),
+                            child:
+                                Text(AppLocalizations.of(context)!.reportUser),
                           ),
                         ),
                       )
@@ -206,7 +209,7 @@ class _UserProfileState extends State<UserProfile> {
                 style: ElevatedButton.styleFrom(
                   primary: theme.colorScheme.secondary,
                 ),
-                child: const Text('Report User'),
+                child: Text(AppLocalizations.of(context)!.reportUser),
               ),
             ),
           ),
@@ -250,7 +253,7 @@ class _UserProfileState extends State<UserProfile> {
                     style: ElevatedButton.styleFrom(
                       primary: theme.colorScheme.secondary,
                     ),
-                    child: const Text('Send Message'),
+                    child: Text(AppLocalizations.of(context)!.sendMessage),
                   ),
                 ),
               );
@@ -270,7 +273,8 @@ class _UserProfileState extends State<UserProfile> {
               size: 18),
           const SizedBox(width: 6),
           Text(
-            'Joined ${DateFormat.yMMM().format(user.createdAt!)}',
+            AppLocalizations.of(context)!
+                .joined(DateFormat.yMMM().format(user.createdAt!)),
             style: textTheme.bodyText2!.copyWith(
                 color: theme.brightness == Brightness.dark ? Colors.grey : null,
                 fontSize: 13),
@@ -301,7 +305,7 @@ class _UserProfileState extends State<UserProfile> {
               }
 
               return Text(
-                '$postedDeals Deals Posted',
+                '$postedDeals ${AppLocalizations.of(context)!.dealsPosted}',
                 style: textTheme.bodyText2!.copyWith(
                     color: theme.brightness == Brightness.dark
                         ? Colors.grey
@@ -336,7 +340,7 @@ class _UserProfileState extends State<UserProfile> {
               }
 
               return Text(
-                '$postedComments Comments Posted',
+                '$postedComments ${AppLocalizations.of(context)!.commentsPosted}',
                 style: textTheme.bodyText2!.copyWith(
                     color: theme.brightness == Brightness.dark
                         ? Colors.grey
@@ -394,7 +398,7 @@ class _UserProfileState extends State<UserProfile> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            'About User',
+            AppLocalizations.of(context)!.aboutUser,
             style: textTheme.headline6!.copyWith(fontSize: 16),
           ),
           const Divider(),

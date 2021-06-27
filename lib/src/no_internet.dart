@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 
+import 'app_localizations.dart';
 import 'services/connection_service.dart';
 
 class NoInternet extends StatefulWidget {
@@ -53,7 +54,9 @@ class _NoInternetState extends State<NoInternet> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                isConnected ? 'ONLINE' : 'OFFLINE',
+                isConnected
+                    ? AppLocalizations.of(context)!.online
+                    : AppLocalizations.of(context)!.offline,
                 style: textTheme.bodyText2!.copyWith(color: Colors.white),
               ),
               if (!isConnected) const SizedBox(width: 8),
@@ -85,7 +88,7 @@ class _NoInternetState extends State<NoInternet> {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    'Please check your internet connection',
+                    AppLocalizations.of(context)!.checkYourInternet,
                     style: textTheme.bodyText2!.copyWith(fontSize: 15),
                   ),
                 ],
@@ -96,7 +99,7 @@ class _NoInternetState extends State<NoInternet> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('hotdeals'),
+        title: Text(AppLocalizations.of(context)!.appTitle),
       ),
       body: Stack(
         fit: StackFit.expand,

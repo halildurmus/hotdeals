@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../app_localizations.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../widgets/deal_list_item_builder.dart';
@@ -48,7 +49,8 @@ class _SearchDealsState extends State<SearchDeals> {
             if (deals.isEmpty) {
               return Center(
                 child: Text(
-                  'Could not find any result for "${widget.keyword}"',
+                  AppLocalizations.of(context)!
+                      .couldNotFindAnyResultFor(widget.keyword),
                 ),
               );
             }
@@ -57,7 +59,9 @@ class _SearchDealsState extends State<SearchDeals> {
           } else if (snapshot.hasError) {
             print(snapshot.error);
 
-            return const Center(child: Text('An error occurred!'));
+            return Center(
+              child: Text(AppLocalizations.of(context)!.anErrorOccurred),
+            );
           }
 
           return const Center(child: CircularProgressIndicator());

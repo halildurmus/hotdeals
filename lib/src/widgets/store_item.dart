@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../app_localizations.dart';
 import '../models/store.dart';
 import '../services/spring_service.dart';
 
@@ -76,7 +77,8 @@ class _StoreItemState extends State<StoreItem> {
                   }
 
                   return Text(
-                    '$dealsText Fırsat',
+                    AppLocalizations.of(context)!.dealCount(
+                        dealsText == '...' ? 0 : int.parse(dealsText)),
                     style: textTheme.subtitle2!
                         .copyWith(color: theme.primaryColorLight),
                   );

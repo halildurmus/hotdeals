@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../deal/deal_details.dart';
 import '../models/deal.dart';
-import '../models/user_controller_impl.dart';
 import '../models/my_user.dart';
+import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
 import 'deal_list_item.dart';

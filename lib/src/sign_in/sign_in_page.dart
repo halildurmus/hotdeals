@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../services/auth_service.dart';
 import '../widgets/exception_alert_dialog.dart';
 import '../widgets/social_button.dart';
@@ -43,7 +44,7 @@ class SignInPage extends StatelessWidget {
   Future<void> showSignInError(
       BuildContext context, PlatformException exception) async {
     await ExceptionAlertDialog(
-      title: 'Sign in failed',
+      title: AppLocalizations.of(context)!.signInFailed,
       exception: exception,
     ).show(context);
   }
@@ -78,7 +79,7 @@ class SignInPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Sign in',
+            AppLocalizations.of(context)!.signIn,
             style: textTheme.headline2!.copyWith(
               color: theme.primaryColor,
               fontWeight: FontWeight.bold,
@@ -88,7 +89,7 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             backgroundColor: const Color.fromRGBO(63, 91, 150, 1),
             icon: FontAwesomeIcons.facebook,
-            text: 'Continue with Facebook',
+            text: AppLocalizations.of(context)!.continueWithFacebook,
             onPressed: () => signInWithFacebook(context),
             height: 48.0,
           ),
@@ -96,7 +97,7 @@ class SignInPage extends StatelessWidget {
           SocialButton(
             backgroundColor: const Color.fromRGBO(66, 133, 244, 1),
             icon: FontAwesomeIcons.google,
-            text: 'Continue with Google',
+            text: AppLocalizations.of(context)!.continueWithGoogle,
             onPressed: () => signInWithGoogle(context),
             height: 48.0,
           ),
@@ -112,7 +113,7 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Giriş Yap'),
+        title: Text(AppLocalizations.of(context)!.signIn),
       ),
       body: isLoading
           ? Center(

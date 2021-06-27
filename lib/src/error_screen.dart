@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import 'models/categories.dart';
-import 'models/stores.dart';
+import 'app_localizations.dart';
 import 'widgets/loading_dialog.dart';
 
 class ErrorScreen extends StatelessWidget {
@@ -14,13 +13,13 @@ class ErrorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('hotdeals'),
+        title: Text(AppLocalizations.of(context)!.appTitle),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('An error occurred while fetching some data.'),
+            Text(AppLocalizations.of(context)!.anErrorOccurredWhile),
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () async {
@@ -28,7 +27,7 @@ class ErrorScreen extends StatelessWidget {
                 await onTap();
                 Navigator.of(context).pop();
               },
-              child: const Text('Try again'),
+              child: Text(AppLocalizations.of(context)!.tryAgain),
             ),
           ],
         ),

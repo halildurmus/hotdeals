@@ -2,19 +2,21 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
+
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
     Key? key,
     required this.title,
     this.content,
     this.cancelActionText,
-    required this.defaultActionText,
+    this.defaultActionText,
   }) : super(key: key);
 
   final String title;
   final String? content;
   final String? cancelActionText;
-  final String defaultActionText;
+  final String? defaultActionText;
 
   Future<bool?> show(BuildContext context) async {
     return showDialog<bool>(
@@ -88,7 +90,7 @@ class CustomAlertDialog extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 11.0),
                     child: Text(
-                      defaultActionText,
+                      defaultActionText ?? AppLocalizations.of(context)!.ok,
                       style: textTheme.bodyText1!.copyWith(
                         color: Colors.white,
                         fontSize: 18,

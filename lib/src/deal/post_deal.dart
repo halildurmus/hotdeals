@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:validators/validators.dart';
 
+import '../app_localizations.dart';
 import '../models/categories.dart';
 import '../models/category.dart';
 import '../models/deal.dart';
@@ -74,7 +75,7 @@ class _PostDealState extends State<PostDeal> {
         initialImages: dealImages,
         onPicturesChange: dealImageCallback,
         buttonStyle: PictureUploadButtonStyle(),
-        buttonText: 'Upload Picture',
+        buttonText: AppLocalizations.of(context)!.uploadImage,
         localization: PictureUploadLocalization(),
         settings: PictureUploadSettings(
           uploadDirectory: '/deal_images/',
@@ -91,9 +92,9 @@ class _PostDealState extends State<PostDeal> {
 
     Widget buildCategoriesDropdown() {
       return DropdownButtonFormField<Category>(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Kategori',
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: AppLocalizations.of(context)!.category,
         ),
         value: selectedCategory,
         onChanged: (Category? newValue) {
@@ -126,9 +127,9 @@ class _PostDealState extends State<PostDeal> {
 
     Widget buildStoresDropdown() {
       return DropdownButtonFormField<Store>(
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Store',
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: AppLocalizations.of(context)!.store,
         ),
         value: selectedStore,
         onChanged: (Store? newValue) {
@@ -181,8 +182,9 @@ class _PostDealState extends State<PostDeal> {
     Future<void> onPressed() async {
       if (!areImagesReady()) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please upload at least one picture!'),
+          SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.pleaseUploadAtLeastOneImage),
           ),
         );
         return;
@@ -216,15 +218,16 @@ class _PostDealState extends State<PostDeal> {
       Navigator.of(context).pop();
       if (postedDeal != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Your deal posted'),
+          SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.successfullyPostedYourDeal),
           ),
         );
         Navigator.of(context).popUntil((Route<void> route) => route.isFirst);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred!'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
           ),
         );
       }
@@ -245,7 +248,7 @@ class _PostDealState extends State<PostDeal> {
             style: ElevatedButton.styleFrom(
               primary: theme.colorScheme.secondary,
             ),
-            child: const Text('Fırsatı Paylaş'),
+            child: Text(AppLocalizations.of(context)!.postDeal),
           ),
         ),
       );
@@ -267,16 +270,16 @@ class _PostDealState extends State<PostDeal> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: dealUrlController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Fırsat linkini girin',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.enterDealUrl,
                 ),
                 textInputAction: TextInputAction.next,
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the deal URL.';
+                    return AppLocalizations.of(context)!.pleaseEnterTheDealUrl;
                   } else if (!isURL(value)) {
-                    return 'Please enter a valid URL.';
+                    return AppLocalizations.of(context)!.pleaseEnterValidUrl;
                   }
 
                   return null;
@@ -285,14 +288,15 @@ class _PostDealState extends State<PostDeal> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: titleController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Başlık',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.title,
                 ),
                 textInputAction: TextInputAction.next,
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the deal title.';
+                    return AppLocalizations.of(context)!
+                        .pleaseEnterTheDealTitle;
                   }
 
                   return null;
@@ -301,20 +305,22 @@ class _PostDealState extends State<PostDeal> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: priceController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'İndirimsiz Fiyat',
-                  prefixIcon: Icon(LineIcons.dollarSign, size: 20),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.originalPrice,
+                  prefixIcon: const Icon(LineIcons.dollarSign, size: 20),
                 ),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the deal price.';
+                    return AppLocalizations.of(context)!
+                        .pleaseEnterTheOriginalPrice;
                   } else if (discountPriceController.text.isNotEmpty &&
                       (int.parse(value) <
                           int.parse(discountPriceController.text))) {
-                    return 'The price cannot be lower than the discount price.';
+                    return AppLocalizations.of(context)!
+                        .originalPriceCannotBeLower;
                   }
 
                   return null;
@@ -323,19 +329,21 @@ class _PostDealState extends State<PostDeal> {
               const SizedBox(height: 10),
               TextFormField(
                 controller: discountPriceController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'İndirimli Fiyat',
-                  prefixIcon: Icon(LineIcons.dollarSign, size: 20),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: AppLocalizations.of(context)!.discountPrice,
+                  prefixIcon: const Icon(LineIcons.dollarSign, size: 20),
                 ),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the deal discount price.';
+                    return AppLocalizations.of(context)!
+                        .pleaseEnterTheDiscountPrice;
                   } else if (priceController.text.isNotEmpty &&
                       (int.parse(value) > int.parse(priceController.text))) {
-                    return 'The discount price cannot be greater than the price.';
+                    return AppLocalizations.of(context)!
+                        .discountPriceCannotBeGreater;
                   }
 
                   return null;
@@ -349,14 +357,14 @@ class _PostDealState extends State<PostDeal> {
               TextFormField(
                 controller: descriptionController,
                 decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintStyle: textTheme.bodyText2!.copyWith(
-                        color: theme.brightness == Brightness.light
-                            ? Colors.black54
-                            : Colors.grey),
-                    hintText: 'Fırsatla alakalı detaylı bilgileri buraya girin'
-                    //hintText: 'Type at least 5 words of additional information here! What else should the community know? (Include the important stuff: product details, coupon code, expiration date, etc.)',
-                    ),
+                  border: const OutlineInputBorder(),
+                  hintStyle: textTheme.bodyText2!.copyWith(
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black54
+                          : Colors.grey),
+                  hintText:
+                      AppLocalizations.of(context)!.enterSomeDetailsAboutDeal,
+                ),
                 minLines: 4,
                 maxLines: 30,
                 validator: (String? value) {
@@ -386,7 +394,10 @@ class _PostDealState extends State<PostDeal> {
     }
 
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: const Text('Bir Fırsat Paylaş')),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(AppLocalizations.of(context)!.postADeal),
+      ),
       body: buildBody(),
     );
   }

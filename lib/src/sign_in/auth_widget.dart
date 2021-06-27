@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../home/home.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
@@ -99,7 +100,11 @@ class AuthWidget extends StatelessWidget {
         print(userSnapshot.error);
         print(userSnapshot.stackTrace);
 
-        return const Scaffold(body: Center(child: Text('An error occurred!')));
+        return Scaffold(
+          body: Center(
+            child: Text(AppLocalizations.of(context)!.anErrorOccurred),
+          ),
+        );
       }
     }
 

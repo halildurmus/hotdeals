@@ -7,16 +7,17 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app_localizations.dart';
 import '../deal/post_comment.dart';
 import '../deal/user_profile.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
-import '../models/user_controller_impl.dart';
 import '../models/my_user.dart';
 import '../models/report.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
+import '../models/user_controller_impl.dart';
 import '../models/vote_type.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
@@ -145,13 +146,16 @@ class _DealDetailsState extends State<DealDetails> {
       Navigator.of(context).pop();
       if (sentReport != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Reported Deal')),
+          SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.successfullyReportedDeal),
+          ),
         );
         Navigator.of(context).pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred!'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
           ),
         );
       }
@@ -189,12 +193,13 @@ class _DealDetailsState extends State<DealDetails> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Text(
-                                    'Report Deal',
+                                    AppLocalizations.of(context)!.reportDeal,
                                     style: textTheme.headline6,
                                   ),
                                   const SizedBox(height: 10),
                                   CheckboxListTile(
-                                    title: const Text('Repost'),
+                                    title: Text(
+                                        AppLocalizations.of(context)!.repost),
                                     value: repostCheckbox,
                                     onChanged: (bool? newValue) {
                                       setState(() {
@@ -203,7 +208,8 @@ class _DealDetailsState extends State<DealDetails> {
                                     },
                                   ),
                                   CheckboxListTile(
-                                    title: const Text('Spam'),
+                                    title: Text(
+                                        AppLocalizations.of(context)!.spam),
                                     value: spamCheckbox,
                                     onChanged: (bool? newValue) {
                                       setState(() {
@@ -212,7 +218,8 @@ class _DealDetailsState extends State<DealDetails> {
                                     },
                                   ),
                                   CheckboxListTile(
-                                    title: const Text('Other'),
+                                    title: Text(
+                                        AppLocalizations.of(context)!.other),
                                     value: otherCheckbox,
                                     onChanged: (bool? newValue) {
                                       setState(() {
@@ -230,8 +237,8 @@ class _DealDetailsState extends State<DealDetails> {
                                                   Brightness.light
                                               ? Colors.black54
                                               : Colors.grey),
-                                      hintText:
-                                          'Enter some details about your report here...',
+                                      hintText: AppLocalizations.of(context)!
+                                          .enterSomeDetailsAboutReport,
                                     ),
                                     minLines: 1,
                                     maxLines: 10,
@@ -255,7 +262,9 @@ class _DealDetailsState extends State<DealDetails> {
                                                 BorderRadius.circular(30.0),
                                           ),
                                         ),
-                                        child: const Text('Report Deal'),
+                                        child: Text(
+                                            AppLocalizations.of(context)!
+                                                .reportDeal),
                                       ),
                                     ),
                                   )
@@ -271,9 +280,9 @@ class _DealDetailsState extends State<DealDetails> {
               },
               itemBuilder: (BuildContext context) =>
                   <PopupMenuEntry<_DealPopup>>[
-                const PopupMenuItem<_DealPopup>(
+                PopupMenuItem<_DealPopup>(
                   value: _DealPopup.reportDeal,
-                  child: Text('Report Deal'),
+                  child: Text(AppLocalizations.of(context)!.reportDeal),
                 ),
               ],
             ),
@@ -417,7 +426,7 @@ class _DealDetailsState extends State<DealDetails> {
                         DealScoreBox(dealScore: _deal.dealScore!),
                         const SizedBox(width: 5),
                         Text(
-                          'Fırsat Puanı',
+                          AppLocalizations.of(context)!.dealScore,
                           style: textTheme.bodyText2!.copyWith(
                             color: theme.brightness == Brightness.light
                                 ? Colors.black54
@@ -443,13 +452,14 @@ class _DealDetailsState extends State<DealDetails> {
                             final List<Comment>? comments;
 
                             if (snapshot.hasData) {
-                              comments = snapshot.data!;
+                              comments = snapshot.data;
                             } else {
                               comments = <Comment>[];
                             }
 
                             return Text(
-                              '${comments.length} yorum',
+                              AppLocalizations.of(context)!
+                                  .commentCount(comments!.length),
                               style: textTheme.bodyText2!.copyWith(
                                 color: theme.primaryColor,
                                 fontWeight: FontWeight.w500,
@@ -547,7 +557,7 @@ class _DealDetailsState extends State<DealDetails> {
         child: Row(
           children: <Widget>[
             Text(
-              'Fırsatı beğendiniz mi?',
+              AppLocalizations.of(context)!.didYouLikeTheDeal,
               style: textTheme.bodyText2!.copyWith(
                 color: theme.brightness == Brightness.light
                     ? Colors.black54
@@ -668,7 +678,7 @@ class _DealDetailsState extends State<DealDetails> {
               nickname = snapshot.data!.nickname!;
             } else if (snapshot.hasError) {
               print(snapshot.error.toString());
-              nickname = 'An error occurred';
+              nickname = AppLocalizations.of(context)!.anErrorOccurred;
             }
 
             return GestureDetector(
@@ -691,7 +701,7 @@ class _DealDetailsState extends State<DealDetails> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 3, vertical: 1),
                         child: Text(
-                          'PAYLAŞAN KULLANICI',
+                          AppLocalizations.of(context)!.originalPoster,
                           style: textTheme.bodyText2!.copyWith(
                             color: Colors.white,
                             fontSize: 10,
@@ -753,12 +763,12 @@ class _DealDetailsState extends State<DealDetails> {
             ),
             const SizedBox(height: 16.0),
             Text(
-              'No comments yet',
+              AppLocalizations.of(context)!.noComments,
               style: textTheme.headline6,
             ),
             const SizedBox(height: 10.0),
             Text(
-              'Start the conversation',
+              AppLocalizations.of(context)!.startTheConversation,
               style: textTheme.bodyText2!.copyWith(fontSize: 15),
             ),
           ],
@@ -787,7 +797,8 @@ class _DealDetailsState extends State<DealDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        '${comments.length} Yorum',
+                        AppLocalizations.of(context)!
+                            .commentCount(comments.length),
                         style: textTheme.subtitle1!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
@@ -797,7 +808,7 @@ class _DealDetailsState extends State<DealDetails> {
                           postCommentOnTap();
                         },
                         child: Text(
-                          'Yorum Paylaş',
+                          AppLocalizations.of(context)!.postComment,
                           style: textTheme.subtitle2!.copyWith(
                               color: theme.brightness == Brightness.light
                                   ? theme.primaryColor
@@ -844,7 +855,8 @@ class _DealDetailsState extends State<DealDetails> {
                                       nickname = snapshot.data!.nickname!;
                                     } else if (snapshot.hasError) {
                                       print(snapshot.error.toString());
-                                      nickname = 'An error occurred';
+                                      nickname = AppLocalizations.of(context)!
+                                          .anErrorOccurred;
                                     }
 
                                     return GestureDetector(
@@ -867,8 +879,11 @@ class _DealDetailsState extends State<DealDetails> {
                                   },
                                 ),
                                 Text(
-                                  timeago.format(comment.createdAt!,
-                                      locale: 'en'),
+                                  timeago.format(
+                                    comment.createdAt!,
+                                    locale:
+                                        '${Localizations.localeOf(context).languageCode}_short',
+                                  ),
                                   style: textTheme.bodyText2!.copyWith(
                                     color: Colors.grey.shade600,
                                     fontSize: 12,
@@ -908,7 +923,7 @@ class _DealDetailsState extends State<DealDetails> {
           onPressed: () {
             postCommentOnTap();
           },
-          child: const Text('Bir Yorum Paylaş'),
+          child: Text(AppLocalizations.of(context)!.postAComment),
         ),
       );
     }
@@ -950,7 +965,7 @@ class _DealDetailsState extends State<DealDetails> {
             style: ElevatedButton.styleFrom(
               primary: theme.colorScheme.secondary,
             ),
-            child: const Text('See Deal'),
+            child: Text(AppLocalizations.of(context)!.seeDeal),
           ),
         ),
       );

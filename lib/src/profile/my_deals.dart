@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../models/deal.dart';
-import '../models/user_controller_impl.dart';
 import '../models/my_user.dart';
+import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../widgets/deal_list_item_builder.dart';
 
@@ -37,8 +38,9 @@ class _MyDealsState extends State<MyDeals> {
           final List<Deal> deals = snapshot.data!;
 
           if (deals.isEmpty) {
-            return const Center(
-              child: Text("You haven't posted any deal yet!"),
+            return Center(
+              child:
+                  Text(AppLocalizations.of(context)!.youHaveNotPostedAnyDeal),
             );
           }
 
@@ -46,7 +48,9 @@ class _MyDealsState extends State<MyDeals> {
         } else if (snapshot.hasError) {
           print(snapshot.error);
 
-          return const Center(child: Text('An error occurred!'));
+          return Center(
+            child: Text(AppLocalizations.of(context)!.anErrorOccurred),
+          );
         }
 
         return const Center(child: CircularProgressIndicator());

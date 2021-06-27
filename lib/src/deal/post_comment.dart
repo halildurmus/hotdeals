@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
@@ -64,7 +65,8 @@ class _PostCommentState extends State<PostComment> {
             .getUserById(id: widget.deal.postedBy!);
 
         final PushNotification notification = PushNotification(
-          title: '${poster.nickname} commented on your post',
+          title:
+              '${poster.nickname} ${AppLocalizations.of(context)!.commentedOnYourPost}',
           body: comment.message,
           actor: poster.id!,
           verb: 'comment',
@@ -88,15 +90,15 @@ class _PostCommentState extends State<PostComment> {
       Navigator.of(context).pop();
       if (postedComment != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Your comment posted'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.postedYourComment),
           ),
         );
         Navigator.of(context).pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred!'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
           ),
         );
       }
@@ -116,7 +118,7 @@ class _PostCommentState extends State<PostComment> {
                 borderRadius: BorderRadius.circular(30.0),
               ),
             ),
-            child: const Text('Yorumu Paylaş'),
+            child: Text(AppLocalizations.of(context)!.postComment),
           ),
         ),
       );
@@ -139,7 +141,7 @@ class _PostCommentState extends State<PostComment> {
                     color: theme.brightness == Brightness.light
                         ? Colors.black54
                         : Colors.grey),
-                hintText: 'Buraya yorumunuzu yazın...',
+                hintText: AppLocalizations.of(context)!.enterYourComment,
               ),
               minLines: 4,
               maxLines: 30,
@@ -156,7 +158,8 @@ class _PostCommentState extends State<PostComment> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text('Bir Yorum Paylaş', style: textTheme.headline6),
+          Text(AppLocalizations.of(context)!.postAComment,
+              style: textTheme.headline6),
           const SizedBox(height: 20),
           buildForm(),
         ],

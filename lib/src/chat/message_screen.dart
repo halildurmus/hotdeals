@@ -8,12 +8,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hotdeals/src/models/current_route.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import '../app_localizations.dart';
+import '../models/current_route.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/report.dart';
@@ -114,7 +115,8 @@ class _MessageScreenState extends State<MessageScreen> {
     );
 
     final PushNotification notification = PushNotification(
-      title: '${widget.user2.nickname} sent you a message',
+      title:
+          '${widget.user2.nickname} ${AppLocalizations.of(context)!.sentYouMessage}',
       body: message.text,
       actor: widget.user2.nickname!,
       verb: 'message',
@@ -133,11 +135,11 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   Future<void> _confirmBlockUser(BuildContext context) async {
-    final bool _didRequestBlockUser = await const CustomAlertDialog(
-          title: 'Block User',
-          content: 'Are you sure that you want to block this user?',
-          cancelActionText: 'Cancel',
-          defaultActionText: 'Ok',
+    final bool _didRequestBlockUser = await CustomAlertDialog(
+          title: AppLocalizations.of(context)!.blockUser,
+          content: AppLocalizations.of(context)!.blockConfirm,
+          cancelActionText: AppLocalizations.of(context)!.cancel,
+          defaultActionText: AppLocalizations.of(context)!.ok,
         ).show(context) ??
         false;
 
@@ -165,7 +167,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    'The user has been blocked.',
+                    AppLocalizations.of(context)!.successfullyBlocked,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
@@ -193,7 +195,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    'An error occurred while blocking this user.',
+                    AppLocalizations.of(context)!.anErrorOccurredWhileBlocking,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
@@ -209,11 +211,11 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   Future<void> _confirmUnblockUser(BuildContext context) async {
-    final bool _didRequestUnblockUser = await const CustomAlertDialog(
-          title: 'Unblock User',
-          content: 'Are you sure that you want to unblock this user?',
-          cancelActionText: 'Cancel',
-          defaultActionText: 'Ok',
+    final bool _didRequestUnblockUser = await CustomAlertDialog(
+          title: AppLocalizations.of(context)!.unblockUser,
+          content: AppLocalizations.of(context)!.unblockConfirm,
+          cancelActionText: AppLocalizations.of(context)!.cancel,
+          defaultActionText: AppLocalizations.of(context)!.ok,
         ).show(context) ??
         false;
 
@@ -241,7 +243,8 @@ class _MessageScreenState extends State<MessageScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
-                    'An error occurred while unblocking the user.',
+                    AppLocalizations.of(context)!
+                        .anErrorOccurredWhileUnblocking,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
@@ -303,13 +306,15 @@ class _MessageScreenState extends State<MessageScreen> {
       if (sentReport != null) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Reported User')),
+          SnackBar(
+              content:
+                  Text(AppLocalizations.of(context)!.successfullyReportedUser)),
         );
         Navigator.of(context).pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred!'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
           ),
         );
       }
@@ -334,12 +339,12 @@ class _MessageScreenState extends State<MessageScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
-                        'Report User',
+                        AppLocalizations.of(context)!.reportUser,
                         style: textTheme.headline6,
                       ),
                       const SizedBox(height: 10),
                       CheckboxListTile(
-                        title: const Text('Harassing'),
+                        title: Text(AppLocalizations.of(context)!.harassing),
                         value: _harassingCheckbox,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -348,7 +353,7 @@ class _MessageScreenState extends State<MessageScreen> {
                         },
                       ),
                       CheckboxListTile(
-                        title: const Text('Spam'),
+                        title: Text(AppLocalizations.of(context)!.spam),
                         value: _spamCheckbox,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -357,7 +362,7 @@ class _MessageScreenState extends State<MessageScreen> {
                         },
                       ),
                       CheckboxListTile(
-                        title: const Text('Other'),
+                        title: Text(AppLocalizations.of(context)!.other),
                         value: _otherCheckbox,
                         onChanged: (bool? newValue) {
                           setState(() {
@@ -374,8 +379,8 @@ class _MessageScreenState extends State<MessageScreen> {
                               color: theme.brightness == Brightness.light
                                   ? Colors.black54
                                   : Colors.grey),
-                          hintText:
-                              'Enter some details about your report here...',
+                          hintText: AppLocalizations.of(context)!
+                              .enterSomeDetailsAboutReport,
                         ),
                         minLines: 1,
                         maxLines: 10,
@@ -397,7 +402,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                             ),
-                            child: const Text('Report User'),
+                            child:
+                                Text(AppLocalizations.of(context)!.reportUser),
                           ),
                         ),
                       )
@@ -463,12 +469,12 @@ class _MessageScreenState extends State<MessageScreen> {
                     ? _MessagePopup.unblockUser
                     : _MessagePopup.blockUser,
                 child: _isUserBlocked
-                    ? const Text('Unblock User')
-                    : const Text('Block User'),
+                    ? Text(AppLocalizations.of(context)!.unblockUser)
+                    : Text(AppLocalizations.of(context)!.blockUser),
               ),
-              const PopupMenuItem<_MessagePopup>(
+              PopupMenuItem<_MessagePopup>(
                 value: _MessagePopup.reportUser,
-                child: Text('Report User'),
+                child: Text(AppLocalizations.of(context)!.reportUser),
               ),
             ],
           ),
@@ -537,8 +543,8 @@ class _MessageScreenState extends State<MessageScreen> {
                 borderRadius: BorderRadius.circular(24.0),
                 color: theme.backgroundColor,
               ),
-              inputDecoration: const InputDecoration.collapsed(
-                hintText: 'Mesajınızı buraya yazın',
+              inputDecoration: InputDecoration.collapsed(
+                hintText: AppLocalizations.of(context)!.enterYourMessage,
               ),
               inputMaxLines: 5,
               inputToolbarPadding: const EdgeInsets.only(

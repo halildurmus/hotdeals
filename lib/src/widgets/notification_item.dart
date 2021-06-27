@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../services/spring_service.dart';
@@ -53,7 +54,8 @@ class NotificationItem extends StatelessWidget {
                       children: <TextSpan>[
                         if (notification.verb == 'comment')
                           TextSpan(
-                            text: ' commented on your post',
+                            text: AppLocalizations.of(context)!
+                                .commentedOnYourPost,
                             style: textTheme.bodyText2,
                           ),
                       ],
@@ -96,8 +98,8 @@ class NotificationItem extends StatelessWidget {
             shrinkWrap: true,
             itemCount: 1,
             itemBuilder: (BuildContext context, int index) {
-              return const Text(
-                'An error occurred!',
+              return Text(
+                AppLocalizations.of(context)!.anErrorOccurred,
                 textAlign: TextAlign.center,
               );
             },

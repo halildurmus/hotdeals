@@ -6,6 +6,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller_impl.dart';
@@ -67,13 +68,13 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                 tabBackgroundColor: theme.primaryColor,
                 padding: const EdgeInsets.all(16),
                 tabs: <GButton>[
-                  const GButton(
+                  GButton(
                     icon: LineIcons.tag,
-                    text: 'Fırsatlar',
+                    text: AppLocalizations.of(context)!.deals,
                   ),
-                  const GButton(
+                  GButton(
                     icon: LineIcons.compass,
-                    text: 'Gözat',
+                    text: AppLocalizations.of(context)!.browse,
                   ),
                   GButton(
                     icon: LineIcons.facebookMessenger,
@@ -93,7 +94,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                               color: theme.primaryColorLight,
                             ),
                           ),
-                    text: 'Sohbetler',
+                    text: AppLocalizations.of(context)!.chats,
                   ),
                   GButton(
                     icon: LineIcons.user,
@@ -120,7 +121,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                                 ),
                               )
                         : null,
-                    text: 'Profil',
+                    text: AppLocalizations.of(context)!.profile,
                   ),
                 ],
                 selectedIndex: activeScreen,
