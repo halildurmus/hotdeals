@@ -68,11 +68,11 @@ class _PostCommentState extends State<PostComment> {
           title:
               '${poster.nickname} ${AppLocalizations.of(context)!.commentedOnYourPost}',
           body: comment.message,
-          actor: poster.id!,
+          actor: user!.id!,
           verb: 'comment',
           object: widget.deal.id!,
           message: comment.message,
-          uid: FirebaseAuth.instance.currentUser?.uid,
+          uid: poster.id,
           avatar: poster.avatar,
         );
 
