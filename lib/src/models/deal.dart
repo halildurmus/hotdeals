@@ -27,7 +27,7 @@ class Deal {
     required this.store,
     required this.price,
     required this.discountPrice,
-    this.specialMark,
+    this.isNew,
     this.createdAt,
     this.updatedAt,
   });
@@ -48,11 +48,9 @@ class Deal {
         discountPrice: json['discountPrice'] as double,
         dealScore: json['dealScore'] as int,
         views: json['views'] as int,
-        specialMark: DateTime.now()
-                    .difference(DateTime.parse(json['createdAt'] as String)) <=
-                const Duration(days: 1)
-            ? 'Yeni'
-            : null,
+        isNew: DateTime.now()
+                .difference(DateTime.parse(json['createdAt'] as String)) <=
+            const Duration(days: 1),
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
@@ -72,7 +70,7 @@ class Deal {
   final String store;
   final double price;
   final double discountPrice;
-  final String? specialMark;
+  final bool? isNew;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -93,6 +91,6 @@ class Deal {
 
   @override
   String toString() {
-    return 'Deal{id: $id, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, price: $price, discountPrice: $discountPrice, specialMark: $specialMark, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'Deal{id: $id, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, price: $price, discountPrice: $discountPrice, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }

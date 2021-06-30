@@ -63,6 +63,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "newMark": "New",
+  "@newMark": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "today": "TODAY",
   "@today": {
     "description": "",

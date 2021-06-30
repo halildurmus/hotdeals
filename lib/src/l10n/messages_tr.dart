@@ -109,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "logoutFailed": MessageLookupByLibrary.simpleMessage("Çıkış başarısız"),
         "mostLiked": MessageLookupByLibrary.simpleMessage("En Beğenilen"),
         "newest": MessageLookupByLibrary.simpleMessage("En Yeni"),
+        "newMark": MessageLookupByLibrary.simpleMessage("Yeni"),
         "nickname": MessageLookupByLibrary.simpleMessage("Takma ad"),
         "noActiveConversations":
             MessageLookupByLibrary.simpleMessage("Aktif görüşme yok "),

@@ -210,6 +210,13 @@ class AppLocalizations {
         locale: localeName,
       );
 
+  String get newMark => Intl.message(
+        'New',
+        name: 'newMark',
+        desc: '',
+        locale: localeName,
+      );
+
   String get today => Intl.message(
         'TODAY',
         name: 'today',

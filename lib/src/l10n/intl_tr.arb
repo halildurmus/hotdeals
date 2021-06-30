@@ -63,6 +63,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "newMark": "Yeni",
+  "@newMark": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "today": "BUGÜN",
   "@today": {
     "description": "",

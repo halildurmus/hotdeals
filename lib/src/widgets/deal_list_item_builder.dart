@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
+import '../app_localizations.dart';
 import '../deal/deal_details.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
@@ -88,7 +89,8 @@ class _DealListItemBuilderState extends State<DealListItemBuilder> {
               });
             }
           }, isFavorited, index),
-          specialMark: deal.specialMark,
+          specialMark:
+              deal.isNew! ? AppLocalizations.of(context)!.newMark : null,
         );
       },
     );

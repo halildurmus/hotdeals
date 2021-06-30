@@ -106,6 +106,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "logoutFailed": MessageLookupByLibrary.simpleMessage("Logout failed"),
         "mostLiked": MessageLookupByLibrary.simpleMessage("Most Liked"),
         "newest": MessageLookupByLibrary.simpleMessage("Newest"),
+        "newMark": MessageLookupByLibrary.simpleMessage("New"),
         "nickname": MessageLookupByLibrary.simpleMessage("Nickname"),
         "noActiveConversations":
             MessageLookupByLibrary.simpleMessage("No active conversations"),
