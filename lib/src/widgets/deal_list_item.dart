@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hotdeals/src/app_localizations.dart';
 
+import '../app_localizations.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
@@ -44,7 +44,7 @@ class _DealListItemState extends State<DealListItem> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
-    final double width = MediaQuery.of(context).size.width;
+    final double deviceWidth = MediaQuery.of(context).size.width;
     final Deal deal = widget.deal;
 
     Widget buildDealCoverPhoto() {
@@ -69,9 +69,15 @@ class _DealListItemState extends State<DealListItem> {
     }
 
     Widget buildDealTitle() {
-      return Text(
-        deal.title,
-        style: textTheme.headline6!.copyWith(fontSize: 18),
+      return SizedBox(
+        width: deviceWidth * .65,
+        child: Text(
+          deal.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          softWrap: false,
+          style: textTheme.headline6!.copyWith(fontSize: 18),
+        ),
       );
     }
 
@@ -236,7 +242,7 @@ class _DealListItemState extends State<DealListItem> {
 
     return Container(
       height: 145,
-      width: width,
+      width: deviceWidth,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Opacity(
         opacity: widget.inactiveMessage == null ? 1 : .6,

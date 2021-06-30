@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
@@ -501,15 +502,21 @@ class _DealDetailsState extends State<DealDetails> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      _deal.title,
-                      style: textTheme.headline6!
-                          .copyWith(fontWeight: FontWeight.bold),
+                    SizedBox(
+                      width: deviceWidth * .7,
+                      child: Text(
+                        _deal.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.headline6!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
