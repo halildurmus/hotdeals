@@ -34,9 +34,9 @@ class HttpServiceImpl implements HttpService {
       response = await _client.delete(
         Uri.parse(url),
         headers: <String, String>{
-          'Accept': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
           'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
         },
       ).timeout(_timeout, onTimeout: () {
         throw Exception('Server timeout');
@@ -61,9 +61,9 @@ class HttpServiceImpl implements HttpService {
       response = await _client.get(
         Uri.parse(url),
         headers: <String, String>{
-          'Accept': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
           if (auth) 'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
         },
       ).timeout(_timeout, onTimeout: () {
         throw Exception('Server timeout');
@@ -87,7 +87,7 @@ class HttpServiceImpl implements HttpService {
           .patch(
         Uri.parse(url),
         headers: <String, String>{
-          'Accept': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
           'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json-patch+json',
         },
@@ -118,9 +118,9 @@ class HttpServiceImpl implements HttpService {
           .post(
         Uri.parse(url),
         headers: <String, String>{
-          'Accept': 'application/json',
+          'Accept': 'application/json; charset=utf-8',
           if (auth) 'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
         },
         body: jsonEncode(data),
       )
