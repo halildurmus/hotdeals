@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'src/app.dart';
+import 'src/firebase_messaging_listener.dart';
 import 'src/models/categories.dart';
 import 'src/models/current_route.dart';
 import 'src/models/push_notification.dart';
@@ -23,38 +24,6 @@ import 'src/settings/settings_controller.dart';
 import 'src/utils/tr_short_messages.dart';
 import 'src/widgets/loading_dialog.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // Initializes a new Firebase App instance.
-  await Firebase.initializeApp();
-
-  print('Handling a background message: ${message.messageId}');
-
-  // Creates a new SQLiteServiceImpl instance.
-  final SQLiteService<PushNotification> sqliteService = SQLiteServiceImpl();
-
-  // Loads the sqlite database.
-  await sqliteService.load();
-  // Constructs a PushNotification from the RemoteMessage.
-  final PushNotification notification = PushNotification(
-    title: message.notification!.title!,
-    body: message.notification!.body!,
-    actor: message.data['actor'] as String,
-    verb: message.data['verb'] as String,
-    object: message.data['object'] as String,
-    message: message.data['message'] as String?,
-    uid: FirebaseAuth.instance.currentUser?.uid,
-    createdAt: message.sentTime,
-  );
-
-  // Saves the notification into the database if the notification's verb
-  // equals to 'comment'.
-  if (notification.verb == 'comment') {
-    sqliteService
-        .insert(notification)
-        .then((value) => print('Background notification saved into the db.'));
-  }
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -66,7 +35,7 @@ Future<void> main() async {
 
   // Sets a message handler function which is called when the app is in the
   // background or terminated.
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   // Registers Singleton classes.
   final GetIt getIt = GetIt.I;
@@ -98,10 +67,12 @@ Future<void> main() async {
   // Loads the sqlite database.
   await getIt.get<SQLiteService<PushNotification>>().load();
 
-  // Calculates the unread notifications count.
-  await getIt
-      .get<SQLiteService<PushNotification>>()
-      .calculateUnreadNotifications();
+  // Calculates the unread notifications count if there is a signed in user.
+  if (FirebaseAuth.instance.currentUser != null) {
+    await getIt
+        .get<SQLiteService<PushNotification>>()
+        .calculateUnreadNotifications();
+  }
 
   // Initializes a new SharedPreferences instance.
   final SharedPreferences prefs = await SharedPreferences.getInstance();

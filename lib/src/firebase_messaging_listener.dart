@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -9,6 +10,7 @@ import 'chat/message_screen.dart';
 import 'models/current_route.dart';
 import 'models/push_notification.dart';
 import 'services/sqlite_service.dart';
+import 'services/sqlite_service_impl.dart';
 import 'widgets/notification_overlay_item.dart';
 
 /// Sets a message handler function which is called when the app is in the
@@ -63,4 +65,38 @@ void subscribeToFCM() {
       }
     },
   );
+}
+
+/// A Firebase message handler function which is called when the app is in the
+/// background or terminated.
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // Initializes a new Firebase App instance.
+  await Firebase.initializeApp();
+
+  print('Handling a background message: ${message.messageId}');
+
+  // Creates a new SQLiteServiceImpl instance.
+  final SQLiteService<PushNotification> sqliteService = SQLiteServiceImpl();
+
+  // Loads the sqlite database.
+  await sqliteService.load();
+  // Constructs a PushNotification from the RemoteMessage.
+  final PushNotification notification = PushNotification(
+    title: message.notification!.title!,
+    body: message.notification!.body!,
+    actor: message.data['actor'] as String,
+    verb: message.data['verb'] as String,
+    object: message.data['object'] as String,
+    message: message.data['message'] as String?,
+    uid: FirebaseAuth.instance.currentUser?.uid,
+    createdAt: message.sentTime,
+  );
+
+  // Saves the notification into the database if the notification's verb
+  // equals to 'comment'.
+  if (notification.verb == 'comment') {
+    sqliteService
+        .insert(notification)
+        .then((value) => print('Background notification saved into the db.'));
+  }
 }
