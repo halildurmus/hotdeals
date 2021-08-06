@@ -6,7 +6,6 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 import 'app_localizations.dart';
-import 'constants.dart';
 import 'error_screen.dart';
 import 'firebase_messaging_listener.dart';
 import 'models/categories.dart';
@@ -16,6 +15,7 @@ import 'models/store.dart';
 import 'models/stores.dart';
 import 'offline_builder.dart';
 import 'routing/app_router.dart';
+import 'settings/locales.dart' as locales;
 import 'settings/settings_controller.dart';
 import 'sign_in/auth_widget.dart';
 import 'sign_in/auth_widget_builder.dart';
@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: Constants.supportedLocales,
+        supportedLocales: locales.supportedLocales,
         theme: FlexColorScheme.light(
           scheme: usedFlexScheme,
           visualDensity: FlexColorScheme.comfortablePlatformDensity,

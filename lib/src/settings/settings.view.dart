@@ -7,7 +7,6 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
-import '../constants.dart';
 import '../models/user_controller_impl.dart';
 import '../services/auth_service.dart';
 import '../services/spring_service.dart';
@@ -16,6 +15,7 @@ import '../widgets/exception_alert_dialog.dart';
 import '../widgets/radio_item.dart';
 import '../widgets/settings_dialog.dart';
 import '../widgets/settings_list_item.dart';
+import 'locales.dart' as locales;
 import 'settings_controller.dart';
 
 class SettingsView extends StatelessWidget {
@@ -72,7 +72,7 @@ class SettingsView extends StatelessWidget {
     }
 
     String getLanguageName(Locale locale) {
-      if (locale == Constants.english) {
+      if (locale == locales.en_US) {
         return AppLocalizations.of(context)!.english;
       }
 
@@ -103,20 +103,20 @@ class SettingsView extends StatelessWidget {
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
                       onTap: () {
-                        controller.updateLocale(Constants.english);
+                        controller.updateLocale(locales.en_US);
                       },
                       providerValue: controller.locale,
-                      radioValue: Constants.english,
+                      radioValue: locales.en_US,
                       text: AppLocalizations.of(context)!.english,
                       iconPath: 'assets/icons/en-US.svg',
                     ),
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
                       onTap: () {
-                        controller.updateLocale(Constants.turkish);
+                        controller.updateLocale(locales.tr_TR);
                       },
                       providerValue: controller.locale,
-                      radioValue: Constants.turkish,
+                      radioValue: locales.tr_TR,
                       text: AppLocalizations.of(context)!.turkish,
                       iconPath: 'assets/icons/tr-TR.svg',
                     ),

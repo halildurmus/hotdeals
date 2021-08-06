@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hotdeals/src/models/push_notification.dart';
 import 'package:http/http.dart';
 
 import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
+import '../models/push_notification.dart';
 import '../models/report.dart';
 import '../models/search_hit.dart';
 import '../models/store.dart';
@@ -20,6 +20,7 @@ import 'spring_service.dart';
 typedef Json = Map<String, dynamic>;
 
 const String _baseUrl = 'http://hotdeals-backend.herokuapp.com';
+// Use the below URL for local testing on Android emulators.
 // const String _baseUrl = 'http://10.0.2.2:8080';
 
 class SpringServiceImpl implements SpringService {

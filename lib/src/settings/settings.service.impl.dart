@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Locale, ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'locales.dart' as locales;
 import 'settings_service.dart';
 
 /// A service that stores and retrieves user settings.
@@ -14,22 +15,18 @@ class SettingsServiceImpl implements SettingsService {
   SettingsServiceImpl(this.prefs);
 
   final SharedPreferences prefs;
-  static const String _languageKey = 'language';
-  static const String _themeKey = 'appTheme';
+  static const String _languageKey = 'app-language';
+  static const String _themeKey = 'app-theme';
 
   /// Loads the user's preferred language from [SharedPreferences].
   ///
   /// If the preferred language is not found then [Platform.localeName] is used.
   @override
   Future<Locale> locale() async {
-    final String language = prefs.getString(_languageKey) ??
+    final String languageTag = prefs.getString(_languageKey) ??
         Platform.localeName.replaceFirst('_', '-');
-    final Locale locale = Locale.fromSubtags(
-      languageCode: language.split('-')[0],
-      countryCode: language.split('-')[1],
-    );
 
-    return locale;
+    return locales.getLocale(languageTag);
   }
 
   /// Persists the user's preferred language to local storage.
