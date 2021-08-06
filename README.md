@@ -65,8 +65,9 @@ To get a local copy up and running follow these simple steps.
 2. Register the app on **[Firebase](https://firebase.google.com)**.
 3. Download the configuration file from the [Firebase Console](https://console.firebase.google.com) (google-services.json). 
 4. Copy `google-services.json` file into the `android/app` directory.
-5. Open `android/app/src/main/res/values/strings.xml` file and change `facebook_app_id` and `fb_login_protocol_scheme` values.
-6. To get the packages needed for the app, run:
+5. Open `android/app/src/main/res/values/strings.xml` file and change `facebook_app_id` and `fb_login_protocol_scheme` values with yours.
+6. The environment configuration will be read from `config/dev_config.dart` by default unless you specify the environment using `--dart-define=ENV=prod` in the run args. Depending your environment, you may need to change apiBaseUrl inside the `dev_config.dart`.
+8. To get the packages needed for the app, run:
 ```Dart
 flutter pub get
 ```
