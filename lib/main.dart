@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'src/app.dart';
+import 'src/config/environment.dart';
 import 'src/firebase_messaging_listener.dart';
 import 'src/models/categories.dart';
 import 'src/models/current_route.dart';
@@ -36,6 +37,15 @@ Future<void> main() async {
   // Sets a message handler function which is called when the app is in the
   // background or terminated.
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  GetIt.I.registerSingleton<Environment>(Environment());
+  // Reads the environment value.
+  const String environment = String.fromEnvironment(
+    'ENV',
+    defaultValue: Environment.dev,
+  );
+  // Initializes the Environment configuration.
+  GetIt.I.get<Environment>().initialize(environment);
 
   // Registers Singleton classes.
   final GetIt getIt = GetIt.I;

@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 
+import '../config/environment.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
@@ -19,13 +21,14 @@ import 'spring_service.dart';
 
 typedef Json = Map<String, dynamic>;
 
-const String _baseUrl = 'http://hotdeals-backend.herokuapp.com';
-// Use the below URL for local testing on Android emulators.
-// const String _baseUrl = 'http://10.0.2.2:8080';
+// Retrieves the base URL from environment config.
+final String _baseUrl = GetIt.I.get<Environment>().config.apiBaseUrl;
 
+/// An implementation of the [SpringService] that used for communicating with
+/// the backend.
 class SpringServiceImpl implements SpringService {
-  /// Creates an instance of [HttpServiceImpl] with given HTTP [httpService].
-  /// If no [httpService] is given, automatically initializes a new HTTP [httpService].
+  /// Creates an instance of [SpringServiceImpl] with given [httpService].
+  /// If no [httpService] is given, automatically creates a new [httpService].
   factory SpringServiceImpl({HttpService? httpService}) {
     if (httpService == null) {
       return SpringServiceImpl._privateConstructor(HttpServiceImpl());
@@ -98,7 +101,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<Deal?> postDeal({required Deal deal}) async {
-    const String url = '$_baseUrl/deals';
+    final String url = '$_baseUrl/deals';
 
     try {
       final Response response = await _httpService.post(url, deal.toJson());
@@ -149,7 +152,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<Report?> sendReport({required Report report}) async {
-    const String url = '$_baseUrl/reports';
+    final String url = '$_baseUrl/reports';
 
     try {
       final Response response = await _httpService.post(url, report.toJson());
@@ -188,7 +191,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<Comment?> postComment({required Comment comment}) async {
-    const String url = '$_baseUrl/comments';
+    final String url = '$_baseUrl/comments';
 
     try {
       final Response response = await _httpService.post(url, comment.toJson());
@@ -208,7 +211,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<List<Category>> getCategories() async {
-    const String url = '$_baseUrl/categories';
+    final String url = '$_baseUrl/categories';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -227,7 +230,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<Category?> createCategory({required Category category}) async {
-    const String url = '$_baseUrl/categories';
+    final String url = '$_baseUrl/categories';
 
     try {
       final Response response = await _httpService.post(url, category.toJson());
@@ -266,7 +269,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<List<Store>> getStores() async {
-    const String url = '$_baseUrl/stores';
+    final String url = '$_baseUrl/stores';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -285,7 +288,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<MyUser> createMongoUser(User user) async {
-    const String url = '$_baseUrl/users';
+    final String url = '$_baseUrl/users';
     final String? fcmToken = await FirebaseMessaging.instance.getToken();
     final Json _data = <String, dynamic>{
       'uid': user.uid,
@@ -315,7 +318,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<MyUser?> getMongoUser() async {
-    const String url = '$_baseUrl/users/me';
+    final String url = '$_baseUrl/users/me';
 
     try {
       final Response response = await _httpService.get(url);
@@ -426,7 +429,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<bool> logout({required String fcmToken}) async {
-    const String url = '$_baseUrl/users/logout';
+    final String url = '$_baseUrl/users/logout';
     final Json data = <String, dynamic>{'fcmToken': fcmToken};
 
     try {
@@ -496,7 +499,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<List<Deal>?> getUserFavorites() async {
-    const String url = '$_baseUrl/users/favorites';
+    final String url = '$_baseUrl/users/favorites';
 
     try {
       final Response response = await _httpService.get(url);
@@ -613,7 +616,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<List<Deal>?> getDealsSortedByCreatedAt() async {
-    const String url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
+    final String url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -632,7 +635,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<List<Deal>?> getDealsSortedByDealScore() async {
-    const String url = '$_baseUrl/deals/search/findAllByOrderByDealScoreDesc';
+    final String url = '$_baseUrl/deals/search/findAllByOrderByDealScoreDesc';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -705,7 +708,7 @@ class SpringServiceImpl implements SpringService {
 
   @override
   Future<List<Deal>?> getDealsSortedByPrice() async {
-    const String url = '$_baseUrl/deals/search/findAllByOrderByDiscountPrice';
+    final String url = '$_baseUrl/deals/search/findAllByOrderByDiscountPrice';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -747,7 +750,7 @@ class SpringServiceImpl implements SpringService {
     required String dealId,
     required VoteType voteType,
   }) async {
-    const String url = '$_baseUrl/deals/vote';
+    final String url = '$_baseUrl/deals/vote';
     final Json data = <String, dynamic>{
       'dealId': dealId,
       'voteType': voteType.asString,
