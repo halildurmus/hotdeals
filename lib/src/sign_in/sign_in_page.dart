@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
 import '../services/auth_service.dart';
+import '../settings/settings.view.dart';
 import '../widgets/exception_alert_dialog.dart';
 import '../widgets/social_button.dart';
 import 'sign_in_manager.dart';
@@ -114,6 +116,14 @@ class SignInPage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(AppLocalizations.of(context)!.signIn),
+        actions: <IconButton>[
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(SettingsView.routeName);
+            },
+            icon: LineIcon.cog(),
+          ),
+        ],
       ),
       body: isLoading
           ? Center(

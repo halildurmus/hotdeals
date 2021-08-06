@@ -53,7 +53,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         builder: (BuildContext context, UserControllerImpl mongoUser,
             Widget? child) {
           final MyUser? user = mongoUser.user;
-          final bool isLoggedIn = _user != null;
+          final bool _isLoggedIn = _user != null;
 
           return AnimatedBuilder(
             animation: sqliteService,
@@ -87,7 +87,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                             badgeContent: Text(
                               unreadMessages.toString(),
                               style: TextStyle(
-                                  color: theme.primaryColor.withOpacity(.9)),
+                                color: theme.primaryColor.withOpacity(.9),
+                              ),
                             ),
                             child: Icon(
                               LineIcons.facebookMessenger,
@@ -98,7 +99,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                   ),
                   GButton(
                     icon: LineIcons.user,
-                    leading: isLoggedIn
+                    leading: _isLoggedIn
                         ? widget.activeScreen == 3 || unreadNotifications == 0
                             ? CircleAvatar(
                                 radius: 12.0,
@@ -109,8 +110,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                                 badgeContent: Text(
                                   unreadNotifications.toString(),
                                   style: TextStyle(
-                                      color:
-                                          theme.primaryColor.withOpacity(.9)),
+                                    color: theme.primaryColor.withOpacity(.9),
+                                  ),
                                 ),
                                 elevation: 0,
                                 position:

@@ -227,12 +227,13 @@ class SettingsView extends StatelessWidget {
             subtitle: getThemeName(controller.themeMode),
             onTap: changeAppTheme,
           ),
-          SettingsListItem(
-            hasNavigation: false,
-            icon: Icons.cancel,
-            title: AppLocalizations.of(context)!.logout,
-            onTap: () => _confirmSignOut(context),
-          ),
+          if (Provider.of<UserControllerImpl>(context).user != null)
+            SettingsListItem(
+              hasNavigation: false,
+              icon: Icons.cancel,
+              title: AppLocalizations.of(context)!.logout,
+              onTap: () => _confirmSignOut(context),
+            ),
         ],
       ),
     );
