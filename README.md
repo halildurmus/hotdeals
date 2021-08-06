@@ -27,7 +27,17 @@ The app's **Backend** can be found **[here](https://github.com/halildurmus/hotde
 
 ## Screenshots
 
-![](https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/preview.png)
+<p align="center">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/home-dark.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/deal-details1-dark.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/deal-details2-dark.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/chats-dark.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/chat-dark.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/profile-dark.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/home-light.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/deal-details1-light.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/deal-details2-light.png" width="270">
+</p>
 
 ## Features
 
