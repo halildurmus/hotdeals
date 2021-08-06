@@ -10,6 +10,7 @@ import '../models/search_hit.dart';
 import '../models/store.dart';
 import '../models/vote_type.dart';
 
+/// An abstract class that used for communicating with the backend.
 abstract class SpringService {
   Future<bool> blockUser({required String userId});
 

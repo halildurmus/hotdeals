@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// An abstract class that many Widgets can interact with to read user settings, update
-/// user settings, or listen to user settings changes.
+/// An abstract class that many Widgets can interact with to read user settings,
+/// update user settings, or listen to user settings changes.
 abstract class SettingsController extends ChangeNotifier {
   /// Returns the user's preferred [Locale].
   Locale get locale;

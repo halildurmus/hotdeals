@@ -7,9 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'locales.dart' as locales;
 import 'settings_service.dart';
 
-/// A service that stores and retrieves user settings.
+/// An implementation of the [SettingsService] used for storing and retrieving
+/// user settings.
 ///
-/// This class persist the user settings locally, using the
+/// This implementation persist the user settings locally, using the
 /// [shared_preferences] package.
 class SettingsServiceImpl implements SettingsService {
   SettingsServiceImpl(this.prefs);

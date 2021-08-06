@@ -8,6 +8,8 @@ import 'package:sqflite/sqflite.dart';
 import '../models/push_notification.dart';
 import 'sqlite_service.dart';
 
+/// An implementation of the [SQLiteService] that many Widgets
+/// can interact with to create, read and update notifications.
 class SQLiteServiceImpl extends ChangeNotifier
     implements SQLiteService<PushNotification> {
   late Database _db;

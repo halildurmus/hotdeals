@@ -1,7 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show ChangeNotifier;
 
+/// An abstract class that many Widgets can interact with to create, read and
+/// update notifications.
 abstract class SQLiteService<T> extends ChangeNotifier {
   int unreadNotifications = 0;
 
