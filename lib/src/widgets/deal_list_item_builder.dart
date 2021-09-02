@@ -44,7 +44,7 @@ class _DealListItemBuilderState extends State<DealListItemBuilder> {
     final MyUser? user = Provider.of<UserControllerImpl>(context).user;
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.only(top: 16, bottom: 60),
       itemCount: widget.deals.length,
       itemBuilder: (BuildContext context, int index) {
         final Deal deal = widget.deals.elementAt(index);
