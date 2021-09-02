@@ -365,13 +365,28 @@ class _MessageScreenState extends State<MessageScreen> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16),
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: const Icon(
-                  FontAwesomeIcons.times,
-                  color: Color.fromRGBO(148, 148, 148, 1),
-                  size: 20.0,
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: const Icon(
+                      FontAwesomeIcons.times,
+                      color: Color.fromRGBO(148, 148, 148, 1),
+                      size: 20.0,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text(
+                      AppLocalizations.of(context)!.selectSource,
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.subtitle1!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             ListTile(
