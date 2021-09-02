@@ -57,9 +57,9 @@ class _MessageScreenState extends State<MessageScreen> {
         .get();
 
     final bool isLatestMessageEmpty =
-        _latestMessage.get('latestMessage') == <dynamic>{};
-    final String? latestMessageAuthorId =
-        _latestMessage.get('latestMessage')['author']?['id'] as String?;
+        (_latestMessage.get('latestMessage') as Json).isEmpty;
+    final String latestMessageAuthorId =
+        _latestMessage.get('latestMessage')['author']['id'] as String;
 
     if (!isLatestMessageEmpty && latestMessageAuthorId == widget.user2.uid) {
       await FirebaseFirestore.instance
