@@ -12,27 +12,41 @@
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
-final messages = MessageLookup();
+final MessageLookup messages = MessageLookup();
 
 typedef String MessageIfAbsent(String? messageStr, List<Object>? args);
 
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'tr';
 
-  static m0(category) => "${category} kategorisinde";
+  static String m0(String category) => "${category} kategorisinde";
 
-  static m1(count) =>
-      "${Intl.plural(count, zero: 'Yorum yok', one: '${count} yorum', two: '${count} yorum', few: '${count} yorum', many: '${count} yorum', other: '${count} yorum')}";
+  static String m1(int count) => Intl.plural(count,
+      zero: 'Yorum yok',
+      one: '${count} yorum',
+      two: '${count} yorum',
+      few: '${count} yorum',
+      many: '${count} yorum',
+      other: '${count} yorum');
 
-  static m2(keyword) => "${keyword} için herhangi bir sonuç bulunamadı";
+  static String m2(String keyword) =>
+      "${keyword} için herhangi bir sonuç bulunamadı";
 
-  static m3(count) =>
-      "${Intl.plural(count, zero: 'Fırsat yok', one: '${count} fırsat', two: '${count} fırsat', few: '${count} fırsat', many: '${count} fırsat', other: '${count} fırsat')}";
+  static String m3(int count) => Intl.plural(count,
+      zero: 'Fırsat yok',
+      one: '${count} fırsat',
+      two: '${count} fırsat',
+      few: '${count} fırsat',
+      many: '${count} fırsat',
+      other: '${count} fırsat');
 
-  static m4(date) => "${date} tarihinde katıldı";
+  static String m4(String date) => "${date} tarihinde katıldı";
 
-  final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+  final Map<String, Function> messages =
+      _notInlinedMessages(_notInlinedMessages);
+
+  static Map<String, Function> _notInlinedMessages(dynamic _) =>
+      <String, Function>{
         "aboutUser": MessageLookupByLibrary.simpleMessage("Kullanıcı Hakkında"),
         "anErrorOccurred":
             MessageLookupByLibrary.simpleMessage("Bir hata oluştu."),
@@ -84,7 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "İndirimli fiyat, orijinal fiyattan büyük olamaz."),
         "english": MessageLookupByLibrary.simpleMessage("İngilizce"),
         "enterDealUrl":
-            MessageLookupByLibrary.simpleMessage("Fırsat URL\'ini girin"),
+            MessageLookupByLibrary.simpleMessage("Fırsat URL'ini girin"),
         "enterSomeDetailsAboutDeal": MessageLookupByLibrary.simpleMessage(
             "Bu fırsatla ilgili bazı ayrıntıları girin "),
         "enterSomeDetailsAboutReport": MessageLookupByLibrary.simpleMessage(
@@ -94,6 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "enterYourMessage":
             MessageLookupByLibrary.simpleMessage("Mesajınızı girin"),
         "favorites": MessageLookupByLibrary.simpleMessage("Favoriler"),
+        "file": MessageLookupByLibrary.simpleMessage("Dosya"),
         "gallery": MessageLookupByLibrary.simpleMessage("Galeri"),
         "generalSettings":
             MessageLookupByLibrary.simpleMessage("Genel Ayarlar"),
@@ -133,7 +148,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseEnterTheDealTitle": MessageLookupByLibrary.simpleMessage(
             "Lütfen fırsat başlığını girin."),
         "pleaseEnterTheDealUrl": MessageLookupByLibrary.simpleMessage(
-            "Lütfen fırsat URL\'ini girin."),
+            "Lütfen fırsat URL'ini girin."),
         "pleaseEnterTheDiscountPrice": MessageLookupByLibrary.simpleMessage(
             "Lütfen fırsatın indirimli fiyatını girin."),
         "pleaseEnterTheOriginalPrice": MessageLookupByLibrary.simpleMessage(
@@ -198,8 +213,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Profili Güncelle"),
         "uploadImage": MessageLookupByLibrary.simpleMessage("Resim Yükle"),
         "yesterday": MessageLookupByLibrary.simpleMessage("DÜN"),
-        "youHaveBlockedThisUser": MessageLookupByLibrary.simpleMessage(
-            "Bu kullanıcıyı engellediniz "),
+        "youHaveBeenBlockedByThisUser": MessageLookupByLibrary.simpleMessage(
+            "Bu kullanıcı tarafından engellendiniz"),
+        "youHaveBlockedThisUser":
+            MessageLookupByLibrary.simpleMessage("Bu kullanıcıyı engellediniz"),
         "youHaveNotFavoritedAnyDeal": MessageLookupByLibrary.simpleMessage(
             "Henüz herhangi bir fırsatı favorilerinize eklemediniz!"),
         "youHaveNotPostedAnyDeal": MessageLookupByLibrary.simpleMessage(

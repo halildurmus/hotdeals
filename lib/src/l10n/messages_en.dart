@@ -12,27 +12,40 @@
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
-final messages = MessageLookup();
+final MessageLookup messages = MessageLookup();
 
 typedef String MessageIfAbsent(String? messageStr, List<Object>? args);
 
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(category) => "at ${category}";
+  static String m0(String category) => "at ${category}";
 
-  static m1(count) =>
-      "${Intl.plural(count, zero: 'No comment', one: '${count} comments', two: '${count} comments', few: '${count} comments', many: '${count} comments', other: '${count} comments')}";
+  static String m1(int count) => Intl.plural(count,
+      zero: 'No comment',
+      one: '${count} comments',
+      two: '${count} comments',
+      few: '${count} comments',
+      many: '${count} comments',
+      other: '${count} comments');
 
-  static m2(keyword) => "Couldn\'t find any result for ${keyword}";
+  static String m2(String keyword) => "Couldn't find any result for ${keyword}";
 
-  static m3(count) =>
-      "${Intl.plural(count, zero: 'No deal', one: '${count} deals', two: '${count} deals', few: '${count} deals', many: '${count} deals', other: '${count} deals')}";
+  static String m3(int count) => Intl.plural(count,
+      zero: 'No deal',
+      one: '${count} deals',
+      two: '${count} deals',
+      few: '${count} deals',
+      many: '${count} deals',
+      other: '${count} deals');
 
-  static m4(date) => "Joined ${date}";
+  static String m4(String date) => "Joined ${date}";
 
-  final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+  final Map<String, Function> messages =
+      _notInlinedMessages(_notInlinedMessages);
+
+  static Map<String, Function> _notInlinedMessages(dynamic _) =>
+      <String, Function>{
         "aboutUser": MessageLookupByLibrary.simpleMessage("About User"),
         "anErrorOccurred":
             MessageLookupByLibrary.simpleMessage("An error occurred."),
@@ -68,7 +81,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "continueWithGoogle":
             MessageLookupByLibrary.simpleMessage("Continue with Google"),
         "couldNotFindAnyDeal":
-            MessageLookupByLibrary.simpleMessage("Couldn\'t found any deal"),
+            MessageLookupByLibrary.simpleMessage("Couldn't found any deal"),
         "couldNotFindAnyResultFor": m2,
         "dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "dealCount": m3,
@@ -91,6 +104,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "enterYourMessage":
             MessageLookupByLibrary.simpleMessage("Enter your message"),
         "favorites": MessageLookupByLibrary.simpleMessage("Favorites"),
+        "file": MessageLookupByLibrary.simpleMessage("File"),
         "gallery": MessageLookupByLibrary.simpleMessage("Gallery"),
         "generalSettings":
             MessageLookupByLibrary.simpleMessage("General Settings"),
@@ -134,7 +148,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pleaseEnterTheDiscountPrice": MessageLookupByLibrary.simpleMessage(
             "Please enter the deal discount price."),
         "pleaseEnterTheOriginalPrice": MessageLookupByLibrary.simpleMessage(
-            "Please enter the deal\'s original price."),
+            "Please enter the deal's original price."),
         "pleaseEnterValidUrl":
             MessageLookupByLibrary.simpleMessage("Please enter a valid URL."),
         "pleaseUploadAtLeastOneImage": MessageLookupByLibrary.simpleMessage(
@@ -190,12 +204,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "updateProfile": MessageLookupByLibrary.simpleMessage("Update Profile"),
         "uploadImage": MessageLookupByLibrary.simpleMessage("Upload Image"),
         "yesterday": MessageLookupByLibrary.simpleMessage("YESTERDAY"),
+        "youHaveBeenBlockedByThisUser": MessageLookupByLibrary.simpleMessage(
+            "You\'ve been blocked by this user"),
         "youHaveBlockedThisUser":
             MessageLookupByLibrary.simpleMessage("You\'ve blocked this user"),
         "youHaveNotFavoritedAnyDeal": MessageLookupByLibrary.simpleMessage(
-            "You haven\'t favorited any deal yet!"),
+            "You haven't favorited any deal yet!"),
         "youHaveNotPostedAnyDeal": MessageLookupByLibrary.simpleMessage(
-            "You haven\'t posted any deal yet!"),
+            "You haven't posted any deal yet!"),
         "youNeedToSignIn":
             MessageLookupByLibrary.simpleMessage("You need to sign in"),
         "youNeedToSignInToSee": MessageLookupByLibrary.simpleMessage(

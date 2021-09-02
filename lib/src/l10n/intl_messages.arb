@@ -533,8 +533,22 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "youHaveBeenBlockedByThisUser": "You've been blocked by this user",
+  "@youHaveBeenBlockedByThisUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "youHaveBlockedThisUser": "You've blocked this user",
   "@youHaveBlockedThisUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file": "File",
+  "@file": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
