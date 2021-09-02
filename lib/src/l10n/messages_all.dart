@@ -20,9 +20,11 @@ import 'messages_en.dart' as messages_en;
 import 'messages_tr.dart' as messages_tr;
 
 typedef Future<dynamic> LibraryLoader();
-Map<String, LibraryLoader> _deferredLibraries = {
-  'en': () => Future.value(null),
-  'tr': () => Future.value(null),
+
+Map<String, LibraryLoader> _deferredLibraries =
+    <String, Future<dynamic> Function()>{
+  'en': () => Future<dynamic>.value(null),
+  'tr': () => Future<dynamic>.value(null),
 };
 
 MessageLookupByLibrary? _findExact(String localeName) {
@@ -38,18 +40,19 @@ MessageLookupByLibrary? _findExact(String localeName) {
 
 /// User programs should call this before using [localeName] for messages.
 Future<bool> initializeMessages(String localeName) async {
-  final availableLocale = Intl.verifiedLocale(
-    localeName,
-    (locale) => _deferredLibraries[locale] != null,
-    onFailure: (_) => null);
+  final String? availableLocale = Intl.verifiedLocale(
+      localeName, (String locale) => _deferredLibraries[locale] != null,
+      onFailure: (_) => null);
   if (availableLocale == null) {
-    return Future.value(false);
+    return Future<bool>.value(false);
   }
-  final lib = _deferredLibraries[availableLocale];
-  await (lib == null ? Future.value(false) : lib());
+
+  final LibraryLoader? lib = _deferredLibraries[availableLocale];
+  await (lib == null ? Future<bool>.value(false) : lib());
   initializeInternalMessageLookup(() => CompositeMessageLookup());
   messageLookup.addLocale(availableLocale, _findGeneratedMessagesFor);
-  return Future.value(true);
+
+  return Future<bool>.value(true);
 }
 
 bool _messagesExistFor(String locale) {
@@ -61,8 +64,11 @@ bool _messagesExistFor(String locale) {
 }
 
 MessageLookupByLibrary? _findGeneratedMessagesFor(String locale) {
-  final actualLocale = Intl.verifiedLocale(locale, _messagesExistFor,
-      onFailure: (_) => null);
-  if (actualLocale == null) return null;
+  final String? actualLocale =
+      Intl.verifiedLocale(locale, _messagesExistFor, onFailure: (_) => null);
+  if (actualLocale == null) {
+    return null;
+  }
+
   return _findExact(actualLocale);
 }

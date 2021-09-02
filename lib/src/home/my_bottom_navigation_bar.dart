@@ -163,9 +163,10 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                   e.get('latestMessage') as Map<String, dynamic>;
 
               if (e != null) {
-                final String senderId = latestMessage['senderId'] as String;
+                final String senderId = latestMessage['author']['id'] as String;
                 if (senderId != _user?.uid) {
-                  final bool isRead = latestMessage['isRead'] as bool;
+                  final bool isRead =
+                      (latestMessage['status'] as String) == 'seen';
 
                   if (!isRead) {
                     unreadMessages++;

@@ -585,9 +585,23 @@ class AppLocalizations {
         locale: localeName,
       );
 
+  String get youHaveBeenBlockedByThisUser => Intl.message(
+        "You've been blocked by this user",
+        name: 'youHaveBeenBlockedByThisUser',
+        desc: '',
+        locale: localeName,
+      );
+
   String get youHaveBlockedThisUser => Intl.message(
         "You've blocked this user",
         name: 'youHaveBlockedThisUser',
+        desc: '',
+        locale: localeName,
+      );
+
+  String get file => Intl.message(
+        'File',
+        name: 'file',
         desc: '',
         locale: localeName,
       );

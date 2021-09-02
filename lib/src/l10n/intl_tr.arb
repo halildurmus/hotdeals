@@ -533,8 +533,22 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "youHaveBeenBlockedByThisUser": "Bu kullanıcı tarafından engellendiniz",
+  "@youHaveBeenBlockedByThisUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "youHaveBlockedThisUser": "Bu kullanıcıyı engellediniz ",
   "@youHaveBlockedThisUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "file": "Dosya",
+  "@file": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

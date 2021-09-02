@@ -129,16 +129,16 @@ class _ChatScreenState extends State<ChatScreen> {
         stream: FirebaseFirestore.instance
             .collection('messages')
             .where('users', arrayContains: _user!.uid)
-            .orderBy('latestMessage.sentAt', descending: true)
+            .orderBy('latestMessage.createdAt', descending: true)
             .snapshots(),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (snapshot.hasData) {
             final List<DocumentSnapshot<Json>> _items = snapshot.data!.docs;
 
-            // Removes empty message docs
+            // Removes empty message docs.
             _items.removeWhere((DocumentSnapshot<Json> e) =>
-                (e.get('latestMessage') as Map<String, dynamic>).isEmpty);
+                (e.get('latestMessage') as Json).isEmpty);
 
             if (_items.isEmpty) {
               return _buildNoChats();
@@ -159,14 +159,17 @@ class _ChatScreenState extends State<ChatScreen> {
                       _user2Id = _items[index].id.split('_')[0];
                     }
 
-                    final Map<String, dynamic> _latestMessage = _items[index]
-                        .get('latestMessage') as Map<String, dynamic>;
+                    final Map<String, dynamic> _latestMessage =
+                        _items[index].get('latestMessage') as Json;
+                    final bool _lastMessageIsFile =
+                        _latestMessage['type'] == 'file';
                     final bool _lastMessageIsImage =
-                        _latestMessage['image'] != null;
-                    final String _sentBy = _latestMessage['senderId'] as String;
+                        _latestMessage['type'] == 'image';
+                    final String _sentBy =
+                        _latestMessage['author']['id'] as String;
                     bool _isRead;
                     if (_sentBy != _user!.uid) {
-                      _isRead = _latestMessage['isRead'] as bool;
+                      _isRead = (_latestMessage['status'] as String) == 'seen';
                     } else {
                       _isRead = true;
                     }
@@ -174,9 +177,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     final bool _isUserBlocked =
                         user!.blockedUsers!.contains(_user2Id);
 
-                    final DateTime _sentAt =
+                    final DateTime _createdAt =
                         DateTime.fromMillisecondsSinceEpoch(
-                      _latestMessage['sentAt'] as int,
+                      _latestMessage['createdAt'] as int,
                     );
 
                     return FutureBuilder<MyUser>(
@@ -268,15 +271,43 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       const SizedBox(
                                                           width: 4.0),
                                                       Text(
-                                                        AppLocalizations.of(
-                                                                context)!
-                                                            .youHaveBlockedThisUser,
+                                                        "You can't chat with this user",
                                                         style: TextStyle(
                                                           color:
                                                               theme.errorColor,
                                                           fontSize: 15.0,
                                                           fontWeight:
                                                               FontWeight.w300,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                else if (_lastMessageIsFile)
+                                                  Row(
+                                                    children: <Widget>[
+                                                      const Icon(
+                                                        Icons.description,
+                                                        color: Color.fromRGBO(
+                                                            117, 117, 117, 1),
+                                                        size: 18.0,
+                                                      ),
+                                                      const SizedBox(
+                                                          width: 4.0),
+                                                      SizedBox(
+                                                        width: _width / 1.8,
+                                                        child: Text(
+                                                          _latestMessage['name']
+                                                              as String,
+                                                          maxLines: 1,
+                                                          softWrap: false,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 15.0,
+                                                            fontWeight:
+                                                                FontWeight.w300,
+                                                          ),
                                                         ),
                                                       ),
                                                     ],
@@ -309,7 +340,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                   SizedBox(
                                                     width: _width / 1.8,
                                                     child: Text(
-                                                      _latestMessage['message']
+                                                      _latestMessage['text']
                                                           as String,
                                                       maxLines: 1,
                                                       softWrap: false,
@@ -331,7 +362,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                               CrossAxisAlignment.end,
                                           children: <Widget>[
                                             Text(
-                                              timeago.format(_sentAt,
+                                              timeago.format(_createdAt,
                                                   locale:
                                                       '${Localizations.localeOf(context).languageCode}_short'),
                                               style: TextStyle(
