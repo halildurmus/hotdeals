@@ -547,6 +547,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "youCannotChatWithThisUser": "You can't chat with this user",
+  "@youCannotChatWithThisUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "file": "File",
   "@file": {
     "description": "",

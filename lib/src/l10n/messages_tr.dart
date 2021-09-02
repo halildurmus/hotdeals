@@ -213,6 +213,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Profili Güncelle"),
         "uploadImage": MessageLookupByLibrary.simpleMessage("Resim Yükle"),
         "yesterday": MessageLookupByLibrary.simpleMessage("DÜN"),
+        "youCannotChatWithThisUser": MessageLookupByLibrary.simpleMessage(
+            "Bu kullanıcıyla mesajlaşamazsın"),
         "youHaveBeenBlockedByThisUser": MessageLookupByLibrary.simpleMessage(
             "Bu kullanıcı tarafından engellendiniz"),
         "youHaveBlockedThisUser":

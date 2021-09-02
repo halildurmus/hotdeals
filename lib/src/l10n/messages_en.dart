@@ -204,6 +204,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "updateProfile": MessageLookupByLibrary.simpleMessage("Update Profile"),
         "uploadImage": MessageLookupByLibrary.simpleMessage("Upload Image"),
         "yesterday": MessageLookupByLibrary.simpleMessage("YESTERDAY"),
+        "youCannotChatWithThisUser": MessageLookupByLibrary.simpleMessage(
+            "You can\'t chat with this user"),
         "youHaveBeenBlockedByThisUser": MessageLookupByLibrary.simpleMessage(
             "You\'ve been blocked by this user"),
         "youHaveBlockedThisUser":

@@ -547,6 +547,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "youCannotChatWithThisUser": "Bu kullanıcıyla mesajlaşamazsın",
+  "@youCannotChatWithThisUser": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "file": "Dosya",
   "@file": {
     "description": "",

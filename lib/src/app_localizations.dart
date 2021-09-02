@@ -599,6 +599,13 @@ class AppLocalizations {
         locale: localeName,
       );
 
+  String get youCannotChatWithThisUser => Intl.message(
+        "You can't chat with this user",
+        name: 'youCannotChatWithThisUser',
+        desc: '',
+        locale: localeName,
+      );
+
   String get file => Intl.message(
         'File',
         name: 'file',
