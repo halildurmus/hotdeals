@@ -22,32 +22,32 @@ class _MyNotificationsState extends State<MyNotifications> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget buildNotifications(List<PushNotification> notifications) {
-      return ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        itemCount: notifications.length,
-        itemBuilder: (BuildContext context, int index) {
-          final PushNotification notification = notifications.elementAt(index);
+  Widget buildNotifications(List<PushNotification> notifications) {
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      itemCount: notifications.length,
+      itemBuilder: (BuildContext context, int index) {
+        final PushNotification notification = notifications.elementAt(index);
 
-          Future<void> onTap() async {
-            if (notification.isRead) {
-              return;
-            }
-
-            notification.isRead = true;
-            await sqliteService.update(notification);
+        Future<void> onTap() async {
+          if (notification.isRead) {
+            return;
           }
 
-          return NotificationItem(onTap: onTap, notification: notification);
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return const SizedBox();
-        },
-      );
-    }
+          notification.isRead = true;
+          await sqliteService.update(notification);
+        }
 
+        return NotificationItem(onTap: onTap, notification: notification);
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const SizedBox();
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: sqliteService,
       builder: (BuildContext context, Widget? child) {
