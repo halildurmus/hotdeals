@@ -80,19 +80,16 @@ class _ProfileState extends State<Profile> {
 
     Widget buildTabBar() {
       return Container(
-        decoration: BoxDecoration(
-          color: theme.brightness == Brightness.light
-              ? theme.primaryColor
-              : theme.scaffoldBackgroundColor,
-        ),
         margin: const EdgeInsets.only(top: 5),
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.only(bottom: 2.0),
+        padding: const EdgeInsets.only(bottom: 2),
         child: Center(
           child: TabBar(
-            isScrollable: true,
+            indicatorColor: theme.primaryColor,
             indicatorSize: TabBarIndicatorSize.label,
-            labelStyle: const TextStyle(
+            isScrollable: true,
+            labelColor: theme.primaryColor,
+            unselectedLabelColor: theme.primaryColorLight,
+            labelStyle: textTheme.bodyText2!.copyWith(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
             ),
