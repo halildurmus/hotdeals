@@ -352,10 +352,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     final String _docId = _items[index].id;
                     String _user2Id;
-                    if (_user!.uid == _items[index].id.split('_')[0]) {
-                      _user2Id = _items[index].id.split('_')[1];
+                    if (_user!.uid == _docId.split('_')[0]) {
+                      _user2Id = _docId.split('_')[1];
                     } else {
-                      _user2Id = _items[index].id.split('_')[0];
+                      _user2Id = _docId.split('_')[0];
                     }
                     final Json _latestMessage =
                         _items[index].get('latestMessage') as Json;
