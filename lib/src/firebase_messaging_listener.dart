@@ -46,9 +46,7 @@ void subscribeToFCM() {
           sqliteService
               .insert(notification)
               .then((value) => print('Notification saved into the db.'));
-        }
-        // If the notification's verb is 'message',
-        else if (notification.verb == 'message') {
+        } else if (notification.verb == 'message') {
           final String currentRoute = GetIt.I.get<CurrentRoute>().routeName;
           final MessageArguments? messageArguments =
               GetIt.I.get<CurrentRoute>().messageArguments;
@@ -59,6 +57,7 @@ void subscribeToFCM() {
               messageDocId != notification.object) {
             showOverlayNotification(
               (BuildContext context) => NotificationOverlayItem(notification),
+              duration: const Duration(seconds: 3),
             );
           }
         }
