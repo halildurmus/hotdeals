@@ -287,10 +287,10 @@ class _MessageScreenState extends State<MessageScreen> {
           createdAt: DateTime.now().millisecondsSinceEpoch,
           status: types.Status.sent,
           author: types.User(id: _user.uid, imageUrl: _user.avatar),
-          mimeType: lookupMimeType(result.files.single.path ?? ''),
+          mimeType: lookupMimeType(result.files.single.path),
           name: result.files.single.name,
           size: result.files.single.size,
-          uri: result.files.single.path ?? '',
+          uri: result.files.single.path,
         );
 
         _sendMessage(fileMessage: message);
