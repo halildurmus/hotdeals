@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../widgets/slider_indicator.dart';
 
@@ -33,20 +34,9 @@ class _MyImageScreen extends State<ImageFullScreen> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final List<Widget> items = widget.images.map((String item) {
-      return Center(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            color: theme.brightness == Brightness.dark ? Colors.white : null,
-          ),
-          padding: theme.brightness == Brightness.dark
-              ? const EdgeInsets.all(2)
-              : null,
-          child: Image.network(
-            item,
-            fit: BoxFit.cover,
-          ),
-        ),
+      return PhotoView(
+        imageProvider: NetworkImage(item),
+        backgroundDecoration: BoxDecoration(color: theme.backgroundColor),
       );
     }).toList();
 
