@@ -12,23 +12,27 @@ import 'firebase_picture_upload_controller.dart';
 
 /// Defines the source for image selection
 enum ImageSourceExtended {
-  /// gallery will be opened for image selection
-  gallery,
+  /// user will be asked if camera or gallery shall be used
+  askUser,
 
   /// camera will be opened for image selection
   camera,
 
-  /// user will be asked if camera or gallery shall be used
-  askUser
+  /// gallery will be opened for image selection
+  gallery,
 }
 
 class PictureUploadLocalization {
   /// Localization for PictureUploadWidget
   PictureUploadLocalization({
+    this.abort = 'Abort',
     this.camera = 'Camera',
     this.gallery = 'Gallery',
-    this.abort = 'Abort',
+    this.selectSource = 'Select source',
   });
+
+  /// Abort text for image input selection
+  final String abort;
 
   /// Camera text for image input selection
   final String camera;
@@ -36,102 +40,96 @@ class PictureUploadLocalization {
   /// Gallery text for image input selection
   final String gallery;
 
-  /// Abort text for image input selection
-  final String abort;
+  /// Select source text for image input selection
+  final String selectSource;
 }
 
 class PictureUploadSettings {
   /// Basic settings for PictureUploadWidget
   PictureUploadSettings({
-    this.uploadDirectory = '/Uploads/',
-    this.imageSource = ImageSourceExtended.gallery,
-    this.customUploadFunction,
     this.customDeleteFunction,
-    this.onErrorFunction,
-    this.minImageCount = 0,
-    this.maxImageCount = 5,
+    this.customUploadFunction,
     this.imageManipulationSettings = const ImageManipulationSettings(),
+    this.imageSource = ImageSourceExtended.askUser,
+    this.maxImageCount = 5,
+    this.minImageCount = 0,
+    this.onErrorFunction,
+    this.uploadDirectory = '/Uploads/',
   });
-
-  /// The directory where you want to upload to
-  final String uploadDirectory;
-
-  /// Defines which image source shall be used if user clicks button (options: ask_user, gallery, camera)
-  final ImageSourceExtended imageSource;
-
-  /// The function which shall be called to upload the image, if you don't want to use the default one
-  final Function? customUploadFunction;
 
   /// The function which shall be called to delete the image, if you don't want to use the default one
   final Function? customDeleteFunction;
 
-  /// The function which shall be called if an error occurs
-  final Function? onErrorFunction;
+  /// The function which shall be called to upload the image, if you don't want to use the default one
+  final Function? customUploadFunction;
 
-  /// The minimum images which shall be uploaded (controls the delete button)
-  final int minImageCount;
+  /// The settings how the image shall be modified before upload
+  final ImageManipulationSettings imageManipulationSettings;
+
+  /// Defines which image source shall be used if user clicks button (options: ask_user, gallery, camera)
+  final ImageSourceExtended imageSource;
 
   /// The maximum images which can be uploaded
   final int maxImageCount;
 
-  /// The settings how the image shall be modified before upload
-  final ImageManipulationSettings imageManipulationSettings;
+  /// The minimum images which shall be uploaded (controls the delete button)
+  final int minImageCount;
+
+  /// The function which shall be called if an error occurs
+  final Function? onErrorFunction;
+
+  /// The directory where you want to upload to
+  final String uploadDirectory;
 }
 
 class ImageManipulationSettings {
   /// The settings how the image shall be modified before upload
   const ImageManipulationSettings({
-    this.enableCropping = true,
     this.aspectRatio = const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
-    this.maxWidth = 800,
-    this.maxHeight = 800,
     this.compressQuality = 75,
+    this.enableCropping = false,
+    this.maxHeight = 800,
+    this.maxWidth = 800,
   });
-
-  /// If true, a cropping screen will appear after image selection (with maxWidth, maxHeight & aspectRatio setting applied)
-  final bool enableCropping;
 
   /// The requested aspect ratio for the image
   final CropAspectRatio aspectRatio;
 
-  /// The requested maxWidth of the image
-  final int maxWidth;
+  /// The requested compressQuality of the image [0..100]
+  final int compressQuality;
+
+  /// If true, a cropping screen will appear after image selection (with maxWidth, maxHeight & aspectRatio setting applied)
+  final bool enableCropping;
 
   /// The requested maxHeight of the image
   final int maxHeight;
 
-  /// The requested compressQuality of the image [0..100]
-  final int compressQuality;
+  /// The requested maxWidth of the image
+  final int maxWidth;
 }
 
 class PictureUploadButtonStyle {
   /// Style options for PictureUploadWidget
   PictureUploadButtonStyle({
+    this.backgroundColor = Colors.blueAccent,
+    this.closeIconBackgroundColor = const Color(0xFFE5E5EA),
+    this.closeIconColor = Colors.blueAccent,
+    this.fontColor = Colors.white,
+    this.fontSize = 14.0,
     this.iconData = CupertinoIcons.photo_camera,
     this.iconSize = 40.0,
-    this.backgroundColor = CupertinoColors.systemBlue,
-    this.width = 80,
     this.height = 100,
-    this.fontColor = CupertinoColors.white,
-    this.fontSize = 14.0,
-    this.closeIconColor = CupertinoColors.systemBlue,
-    this.closeIconBackgroundColor = CupertinoColors.lightBackgroundGray,
+    this.width = 80,
   });
-
-  /// The icon which shall be displayed within the upload button
-  final IconData iconData;
-
-  /// The icon size of the icon
-  final double iconSize;
 
   /// The background color of the upload button
   final Color backgroundColor;
 
-  /// The width of the button
-  final double width;
+  /// The background color of the close icon box
+  final Color closeIconBackgroundColor;
 
-  /// The height of the button
-  final double height;
+  /// The color of the close icon
+  final Color closeIconColor;
 
   /// The font color of the text within the upload button
   final Color fontColor;
@@ -139,63 +137,69 @@ class PictureUploadButtonStyle {
   /// The font size of the text within the upload button
   final double fontSize;
 
-  /// The color of the close icon
-  final Color closeIconColor;
+  /// The icon which shall be displayed within the upload button
+  final IconData iconData;
 
-  /// The background color of the close icon box
-  final Color closeIconBackgroundColor;
+  /// The icon size of the icon
+  final double iconSize;
+
+  /// The height of the button
+  final double height;
+
+  /// The width of the button
+  final double width;
 }
 
 class PictureUploadWidget extends StatefulWidget {
   /// PictureUploadWidget displays a customizable button which opens a specified image source (see settings)
   /// which is used to select an image. The selected image can be manipulated and is uploaded afterwards.
   PictureUploadWidget({
-    PictureUploadSettings? settings,
     PictureUploadButtonStyle? buttonStyle,
     PictureUploadLocalization? localization,
+    PictureUploadSettings? settings,
     FirebaseStorage? storageInstance,
-    required this.onPicturesChange,
-    this.initialImages,
     this.buttonText = 'Upload Picture',
     this.enabled = true,
-  })  : settings = settings ?? PictureUploadSettings(),
-        buttonStyle = buttonStyle ?? PictureUploadButtonStyle(),
+    this.initialImages,
+    required this.onPicturesChange,
+  })  : buttonStyle = buttonStyle ?? PictureUploadButtonStyle(),
         localization = localization ?? PictureUploadLocalization(),
+        settings = settings ?? PictureUploadSettings(),
         storageInstance = storageInstance ?? FirebaseStorage.instance;
-
-  /// Function is called after an image is uploaded, the the UploadJob as parameter
-  final Function onPicturesChange;
-
-  /// The images which shall be displayed initial
-  final List<UploadJob>? initialImages;
-
-  /// The text displayed within the upload button
-  final String buttonText;
-
-  /// Localization for widget texts
-  final PictureUploadLocalization localization;
-
-  /// If false, the widget won't react if clicked
-  final bool enabled;
-
-  /// All configuration settings for the upload
-  final PictureUploadSettings settings;
 
   /// All ui customization settings for the upload button
   final PictureUploadButtonStyle buttonStyle;
 
+  /// Localization for widget texts
+  final PictureUploadLocalization localization;
+
+  /// All configuration settings for the upload
+  final PictureUploadSettings settings;
+
   /// The firebase storage instance to be used by the plugin
   final FirebaseStorage storageInstance;
 
+  /// The text displayed within the upload button
+  final String buttonText;
+
+  /// If false, the widget won't react if clicked
+  final bool enabled;
+
+  /// The images which shall be displayed initial
+  final List<UploadJob>? initialImages;
+
+  /// Function is called after an image is uploaded, the the UploadJob as parameter
+  final Function onPicturesChange;
+
   @override
-  _PictureUploadWidgetState createState() => new _PictureUploadWidgetState();
+  _PictureUploadWidgetState createState() => _PictureUploadWidgetState();
 }
 
 /// State of the widget
 class _PictureUploadWidgetState extends State<PictureUploadWidget> {
-  int _uploadsProcessing = 0;
   List<UploadJob> _activeUploadedFiles = [];
   late FirebasePictureUploadController _pictureUploadController;
+  int _uploadsProcessing = 0;
 
   @override
   void initState() {
@@ -206,11 +210,11 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
     }
 
     _pictureUploadController =
-        new FirebasePictureUploadController(widget.storageInstance);
+        FirebasePictureUploadController(widget.storageInstance);
 
     if (_activeUploadedFiles.length < widget.settings.maxImageCount &&
         !activeJobsContainUploadWidget()) {
-      _activeUploadedFiles.add(new UploadJob());
+      _activeUploadedFiles.add(UploadJob());
     }
   }
 
@@ -228,7 +232,7 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
   }
 
   void onImageChange(UploadJob uploadJob) {
-    // update Uploadjobs list
+    // update UploadJobs list
     for (int i = _activeUploadedFiles.length - 1; i >= 0; i--) {
       if (_activeUploadedFiles[i].id == uploadJob.id) {
         _activeUploadedFiles[i] = uploadJob;
@@ -244,13 +248,13 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
       if (uploadJob.action == UploadAction.actionUpload &&
           _activeUploadedFiles.length < widget.settings.maxImageCount &&
           !activeJobsContainUploadWidget()) {
-        _activeUploadedFiles.add(new UploadJob());
+        _activeUploadedFiles.add(UploadJob());
       }
     } else {
       _uploadsProcessing--;
 
       if (uploadJob.action == UploadAction.actionUpload) {
-        // issue occured? => remove
+        // issue occurred? => remove
         if (uploadJob.storageReference == null) {
           // remove from active uploaded files
           for (int i = _activeUploadedFiles.length - 1; i >= 0; i--) {
@@ -263,7 +267,7 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
           if (_activeUploadedFiles.length ==
                   widget.settings.maxImageCount - 1 &&
               !activeJobsContainUploadWidget()) {
-            _activeUploadedFiles.add(new UploadJob());
+            _activeUploadedFiles.add(UploadJob());
           }
         }
       } else if (uploadJob.action == UploadAction.actionDelete &&
@@ -278,19 +282,10 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
 
         if (_activeUploadedFiles.length == widget.settings.maxImageCount - 1 &&
             !activeJobsContainUploadWidget()) {
-          _activeUploadedFiles.add(new UploadJob());
+          _activeUploadedFiles.add(UploadJob());
         }
       }
     }
-
-    /*
-    final List<UploadJob> uploadedImages = [];
-    for (var curJob in _activeUploadedFiles) {
-      if (curJob.storageReference != null) {
-        uploadedImages.add(curJob);
-      }
-    }
-    */
 
     widget.onPicturesChange(
         uploadJobs: _activeUploadedFiles,
@@ -310,7 +305,7 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
       if (activeJobsContainUploadWidget())
         displayedImagesCount = displayedImagesCount - 1;
 
-      uploadedImages.add(new SingleProfilePictureUploadWidget(
+      uploadedImages.add(SingleProfilePictureUploadWidget(
         initialValue: uploadJob,
         onPictureChange: onImageChange,
         position: cnt,
@@ -327,13 +322,14 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
   @override
   Widget build(BuildContext context) {
     if (_activeUploadedFiles.isEmpty) {
-      _activeUploadedFiles.add(new UploadJob());
+      _activeUploadedFiles.add(UploadJob());
     }
 
     final List<SingleProfilePictureUploadWidget> pictureUploadWidgets =
         getCurrentlyUploadedFilesWidgets();
-    return new Wrap(
-        spacing: 0.0,
+
+    return Wrap(
+        spacing: 5.0,
         // gap between adjacent chips
         runSpacing: 0.0,
         // gap between lines
@@ -352,7 +348,7 @@ class SingleProfilePictureUploadWidget extends StatefulWidget {
     this.enableDelete = false,
     required this.pictureUploadWidget,
     required this.pictureUploadController,
-  }) : super(key: new Key(initialValue.id.toString()));
+  }) : super(key: Key(initialValue.id.toString()));
 
   final Function onPictureChange;
   final UploadJob initialValue;
@@ -363,7 +359,7 @@ class SingleProfilePictureUploadWidget extends StatefulWidget {
 
   @override
   _SingleProfilePictureUploadWidgetState createState() =>
-      new _SingleProfilePictureUploadWidgetState();
+      _SingleProfilePictureUploadWidgetState();
 }
 
 /// State of the widget
@@ -454,7 +450,7 @@ class _SingleProfilePictureUploadWidgetState
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      'Select source',
+                      widget.pictureUploadWidget.localization.selectSource,
                       textAlign: TextAlign.center,
                       style: textTheme.subtitle1!.copyWith(
                         fontWeight: FontWeight.bold,
@@ -467,13 +463,13 @@ class _SingleProfilePictureUploadWidgetState
             ListTile(
               horizontalTitleGap: 0,
               leading: const Icon(Icons.photo_camera),
-              title: const Text('Camera'),
+              title: Text(widget.pictureUploadWidget.localization.camera),
               onTap: () => Navigator.of(context).pop(ImageSource.camera),
             ),
             ListTile(
               horizontalTitleGap: 0,
               leading: const Icon(Icons.photo_library),
-              title: const Text('Gallery'),
+              title: Text(widget.pictureUploadWidget.localization.gallery),
               onTap: () => Navigator.of(context).pop(ImageSource.gallery),
             ),
           ],
@@ -519,10 +515,6 @@ class _SingleProfilePictureUploadWidgetState
           File(image.path),
           widget.pictureUploadWidget.settings.imageManipulationSettings);
     }
-
-    // if (finalImage == null) {
-    //   return;
-    // }
 
     // update display state
     setState(() {
@@ -609,7 +601,7 @@ class _SingleProfilePictureUploadWidgetState
   }
 
   Widget getNewImageButton() {
-    final Widget buttonContent = new Column(
+    final Widget buttonContent = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -624,86 +616,91 @@ class _SingleProfilePictureUploadWidgetState
                   fontSize: widget.pictureUploadWidget.buttonStyle.fontSize)),
         ]);
 
-    return new CupertinoButton(
+    return CupertinoButton(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: new Container(
-            width: widget.pictureUploadWidget.buttonStyle.width,
-            height: widget.pictureUploadWidget.buttonStyle.height,
-            decoration: BoxDecoration(
+        child: Container(
+          width: widget.pictureUploadWidget.buttonStyle.width,
+          height: widget.pictureUploadWidget.buttonStyle.height,
+          decoration: BoxDecoration(
+            color: widget.pictureUploadWidget.buttonStyle.backgroundColor,
+            border: Border.all(
                 color: widget.pictureUploadWidget.buttonStyle.backgroundColor,
-                border: Border.all(
-                    color:
-                        widget.pictureUploadWidget.buttonStyle.backgroundColor,
-                    width: 0.0),
-                borderRadius: new BorderRadius.circular(8.0)),
-            child: buttonContent),
+                width: 0.0),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: buttonContent,
+        ),
         onPressed: !widget.pictureUploadWidget.enabled ? null : _uploadImage);
   }
 
   Widget getExistingImageWidget() {
     final Container existingImageWidget = Container(
-        padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
-        child: ClipRRect(
-          borderRadius: new BorderRadius.circular(8.0),
-          child: _uploadJob.imageProvider != null
-              ? Image(
-                  image: _uploadJob.imageProvider!,
-                  width: widget.pictureUploadWidget.buttonStyle.width,
-                  height: widget.pictureUploadWidget.buttonStyle.height,
-                  fit: BoxFit.fitHeight)
-              : _uploadJob.image != null
-                  ? Image.file(
-                      _uploadJob.image!,
-                      width: widget.pictureUploadWidget.buttonStyle.width,
-                      height: widget.pictureUploadWidget.buttonStyle.height,
-                      fit: BoxFit.fitHeight,
-                    )
-                  : Container(),
-        ));
+      padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: _uploadJob.imageProvider != null
+            ? Image(
+                image: _uploadJob.imageProvider!,
+                width: widget.pictureUploadWidget.buttonStyle.width,
+                height: widget.pictureUploadWidget.buttonStyle.height,
+                fit: BoxFit.fitHeight)
+            : _uploadJob.image != null
+                ? Image.file(
+                    _uploadJob.image!,
+                    width: widget.pictureUploadWidget.buttonStyle.width,
+                    height: widget.pictureUploadWidget.buttonStyle.height,
+                    fit: BoxFit.fitHeight,
+                  )
+                : const SizedBox(),
+      ),
+    );
 
     final Widget processingIndicator = Container(
-        width: widget.pictureUploadWidget.buttonStyle.width,
-        height: widget.pictureUploadWidget.buttonStyle.height + 10,
-        child: const Center(child: const CircularProgressIndicator()));
+      width: widget.pictureUploadWidget.buttonStyle.width,
+      height: widget.pictureUploadWidget.buttonStyle.height + 10,
+      child: const Center(child: const CircularProgressIndicator()),
+    );
 
-    final Widget deleteButton = Container(
-        width: widget.pictureUploadWidget.buttonStyle.width + 10,
-        height: widget.pictureUploadWidget.buttonStyle.height,
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            GestureDetector(
-              onTap: !widget.pictureUploadWidget.enabled ? null : _deleteImage,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(
-                      color: widget.pictureUploadWidget.buttonStyle
-                          .closeIconBackgroundColor,
-                      width: 1.0),
-                ),
-                height: 28.0, // height of the button
-                width: 28.0, // width of the button
-                child: Icon(Icons.close,
+    final Widget deleteButton = SizedBox(
+      height: widget.pictureUploadWidget.buttonStyle.height,
+      width: widget.pictureUploadWidget.buttonStyle.width + 10,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          GestureDetector(
+            onTap: !widget.pictureUploadWidget.enabled ? null : _deleteImage,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget
+                    .pictureUploadWidget.buttonStyle.closeIconBackgroundColor,
+                border: Border.all(
                     color:
                         widget.pictureUploadWidget.buttonStyle.closeIconColor,
-                    size: 17.0),
+                    width: 1.0),
+              ),
+              height: 28.0, // height of the button
+              width: 28.0, // width of the button
+              child: Icon(
+                Icons.close,
+                color: widget.pictureUploadWidget.buttonStyle.closeIconColor,
+                size: 17.0,
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
 
-    return new Stack(
+    return Stack(
       children: [
         existingImageWidget,
         _uploadJob.uploadProcessing
             ? processingIndicator
             : widget.enableDelete
                 ? deleteButton
-                : Container(),
+                : const SizedBox(),
       ],
     );
   }
@@ -715,7 +712,7 @@ class _SingleProfilePictureUploadWidgetState
         _uploadJob.storageReference == null) {
       return getNewImageButton();
     } else {
-      return new Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      return Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
         getExistingImageWidget(),
       ]);
     }
@@ -765,7 +762,9 @@ class UploadJob {
     if (other is! UploadJob) {
       return false;
     }
+
     final UploadJob otherUploadJob = other;
+
     return id == otherUploadJob.id;
   }
 

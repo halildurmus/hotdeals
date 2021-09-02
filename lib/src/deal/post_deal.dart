@@ -72,20 +72,28 @@ class _PostDealState extends State<PostDeal> {
 
     Widget buildPictureUpload() {
       return PictureUploadWidget(
-        initialImages: dealImages,
-        onPicturesChange: dealImageCallback,
-        buttonStyle: PictureUploadButtonStyle(),
         buttonText: AppLocalizations.of(context)!.uploadImage,
-        localization: PictureUploadLocalization(),
+        buttonStyle: PictureUploadButtonStyle(
+          backgroundColor: theme.primaryColor,
+          closeIconBackgroundColor: theme.brightness == Brightness.dark
+              ? theme.primaryColorLight
+              : Colors.white,
+          closeIconColor: theme.brightness == Brightness.dark
+              ? theme.primaryColorDark
+              : theme.primaryColorLight,
+        ),
+        initialImages: dealImages,
+        localization: PictureUploadLocalization(
+          abort: AppLocalizations.of(context)!.cancel,
+          camera: AppLocalizations.of(context)!.camera,
+          gallery: AppLocalizations.of(context)!.gallery,
+          selectSource: AppLocalizations.of(context)!.selectSource,
+        ),
+        onPicturesChange: dealImageCallback,
         settings: PictureUploadSettings(
           uploadDirectory: '/deal_images/',
-          imageSource: ImageSourceExtended.askUser,
-          minImageCount: 1,
+          minImageCount: 0,
           maxImageCount: 5,
-          imageManipulationSettings: const ImageManipulationSettings(
-            enableCropping: false,
-            compressQuality: 75,
-          ),
         ),
       );
     }
@@ -266,6 +274,7 @@ class _PostDealState extends State<PostDeal> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              const SizedBox(height: 5),
               buildPictureUpload(),
               const SizedBox(height: 20),
               TextFormField(
