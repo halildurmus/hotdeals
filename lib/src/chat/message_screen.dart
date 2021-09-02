@@ -352,6 +352,10 @@ class _MessageScreenState extends State<MessageScreen> {
             _isAttachmentUploading = false;
           });
         }
+      } else {
+        setState(() {
+          _isAttachmentUploading = false;
+        });
       }
     }
 
