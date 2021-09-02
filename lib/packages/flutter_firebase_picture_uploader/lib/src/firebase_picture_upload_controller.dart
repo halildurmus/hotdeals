@@ -23,7 +23,7 @@ class FirebasePictureUploadController {
     bool useCaching = true,
     bool storeInCache = true,
   }) async {
-    // try getting the download link from persistency
+    // try getting the download link from persistence
     if (useCaching) {
       try {
         persistentKeyValueStore ??= await SharedPreferences.getInstance();

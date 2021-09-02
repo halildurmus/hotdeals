@@ -116,7 +116,7 @@ class PictureUploadButtonStyle {
     this.closeIconColor = Colors.blueAccent,
     this.fontColor = Colors.white,
     this.fontSize = 14.0,
-    this.iconData = CupertinoIcons.photo_camera,
+    this.iconData = Icons.add_a_photo,
     this.iconSize = 40.0,
     this.height = 100,
     this.width = 80,
@@ -602,35 +602,42 @@ class _SingleProfilePictureUploadWidgetState
 
   Widget getNewImageButton() {
     final Widget buttonContent = Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(widget.pictureUploadWidget.buttonStyle.iconData,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          widget.pictureUploadWidget.buttonStyle.iconData,
+          color: widget.pictureUploadWidget.buttonStyle.fontColor,
+          size: widget.pictureUploadWidget.buttonStyle.iconSize,
+        ),
+        const SizedBox(height: 5.0),
+        Text(
+          widget.pictureUploadWidget.buttonText,
+          textAlign: TextAlign.center,
+          style: TextStyle(
               color: widget.pictureUploadWidget.buttonStyle.fontColor,
-              size: widget.pictureUploadWidget.buttonStyle.iconSize),
-          const Padding(padding: const EdgeInsets.only(bottom: 5.0)),
-          Text(widget.pictureUploadWidget.buttonText,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: widget.pictureUploadWidget.buttonStyle.fontColor,
-                  fontSize: widget.pictureUploadWidget.buttonStyle.fontSize)),
-        ]);
+              fontSize: widget.pictureUploadWidget.buttonStyle.fontSize),
+        ),
+      ],
+    );
 
-    return CupertinoButton(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-        child: Container(
-          width: widget.pictureUploadWidget.buttonStyle.width,
-          height: widget.pictureUploadWidget.buttonStyle.height,
-          decoration: BoxDecoration(
-            color: widget.pictureUploadWidget.buttonStyle.backgroundColor,
-            border: Border.all(
-                color: widget.pictureUploadWidget.buttonStyle.backgroundColor,
-                width: 0.0),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: ElevatedButton(
+        onPressed: !widget.pictureUploadWidget.enabled ? null : _uploadImage,
+        style: ElevatedButton.styleFrom(
+          fixedSize: Size(
+            widget.pictureUploadWidget.buttonStyle.width,
+            widget.pictureUploadWidget.buttonStyle.height,
+          ),
+          padding: EdgeInsets.zero,
+          primary: widget.pictureUploadWidget.buttonStyle.backgroundColor,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: buttonContent,
         ),
-        onPressed: !widget.pictureUploadWidget.enabled ? null : _uploadImage);
+        child: buttonContent,
+      ),
+    );
   }
 
   Widget getExistingImageWidget() {
@@ -643,7 +650,8 @@ class _SingleProfilePictureUploadWidgetState
                 image: _uploadJob.imageProvider!,
                 width: widget.pictureUploadWidget.buttonStyle.width,
                 height: widget.pictureUploadWidget.buttonStyle.height,
-                fit: BoxFit.fitHeight)
+                fit: BoxFit.fitHeight,
+              )
             : _uploadJob.image != null
                 ? Image.file(
                     _uploadJob.image!,

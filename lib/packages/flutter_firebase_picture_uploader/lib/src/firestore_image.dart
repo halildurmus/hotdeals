@@ -1,5 +1,4 @@
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FirestoreImage extends StatefulWidget {
@@ -51,13 +50,12 @@ class FirestoreImageState extends State<FirestoreImage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loaded) {
-      return FadeInImage(
-          image: NetworkImage(_imageUrl),
-          placeholder: placeholder,
-          fit: BoxFit.fitWidth);
-    } else {
-      return fallback;
-    }
+    return _loaded
+        ? FadeInImage(
+            image: NetworkImage(_imageUrl),
+            placeholder: placeholder,
+            fit: BoxFit.fitWidth,
+          )
+        : fallback;
   }
 }
