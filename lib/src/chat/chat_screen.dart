@@ -118,8 +118,206 @@ class _ChatScreenState extends State<ChatScreen> {
     Widget buildCircularProgressIndicator() {
       return const Padding(
         padding: EdgeInsets.only(top: 16.0),
-        child: Center(
-          child: CircularProgressIndicator(),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    Widget _buildBlockedText() {
+      return Row(
+        children: <Widget>[
+          Icon(LineIcons.ban, size: 18.0, color: theme.errorColor),
+          const SizedBox(width: 4.0),
+          Text(
+            AppLocalizations.of(context)!.youCannotChatWithThisUser,
+            style: TextStyle(
+              color: theme.errorColor,
+              fontSize: 15.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget _buildFileText(String fileName) {
+      return Row(
+        children: <Widget>[
+          const Icon(
+            Icons.description,
+            color: Color.fromRGBO(117, 117, 117, 1),
+            size: 18.0,
+          ),
+          const SizedBox(width: 4.0),
+          SizedBox(
+            width: _width / 1.8,
+            child: Text(
+              fileName,
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget _buildImageText() {
+      return Row(
+        children: <Widget>[
+          const Icon(
+            FontAwesomeIcons.solidImage,
+            color: Color.fromRGBO(117, 117, 117, 1),
+            size: 16.0,
+          ),
+          const SizedBox(width: 4.0),
+          Text(
+            AppLocalizations.of(context)!.image,
+            style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
+          ),
+        ],
+      );
+    }
+
+    Widget _buildMessageText(String text) {
+      return SizedBox(
+        width: _width / 1.8,
+        child: Text(
+          text,
+          maxLines: 1,
+          softWrap: false,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
+        ),
+      );
+    }
+
+    Widget _buildUserAvatar(String avatarURL) {
+      return CircleAvatar(
+        radius: 24.0,
+        backgroundImage: NetworkImage(avatarURL),
+      );
+    }
+
+    Widget _buildUserNickname(String nickname) {
+      return SizedBox(
+        width: _width / 1.8,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              nickname,
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget _buildMessageTime(DateTime createdAt, bool isRead) {
+      return Text(
+        timeago.format(
+          createdAt,
+          locale: '${Localizations.localeOf(context).languageCode}_short',
+        ),
+        style: TextStyle(
+          color: isRead ? Colors.grey : theme.primaryColor,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    }
+
+    Widget _buildUnreadIndicator() {
+      return Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: CircleAvatar(
+          radius: 12.0,
+          backgroundColor: theme.primaryColor,
+          child: const Text(
+            '1',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 13.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget _buildMessage(
+        String docId, Json lastMessage, MyUser user, MyUser user2) {
+      final bool _lastMessageIsFile = lastMessage['type'] == 'file';
+      final bool _lastMessageIsImage = lastMessage['type'] == 'image';
+      final String _sentBy = lastMessage['author']['id'] as String;
+      bool _isRead;
+      if (_sentBy != _user!.uid) {
+        _isRead = (lastMessage['status'] as String) == 'seen';
+      } else {
+        _isRead = true;
+      }
+      final bool _isUserBlocked = user.blockedUsers!.contains(user2.uid);
+      final DateTime _createdAt = DateTime.fromMillisecondsSinceEpoch(
+        lastMessage['createdAt'] as int,
+      );
+
+      return InkWell(
+        onTap: () => Navigator.of(context).pushNamed(
+          MessageScreen.routeName,
+          arguments: MessageArguments(
+            docId: docId,
+            user2: user2,
+          ),
+        ),
+        highlightColor: theme.primaryColorLight.withOpacity(.1),
+        splashColor: theme.primaryColorLight.withOpacity(.1),
+        child: Container(
+          color:
+              _isRead ? Colors.transparent : theme.primaryColor.withOpacity(.2),
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  _buildUserAvatar(user2.avatar!),
+                  const SizedBox(width: 10.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildUserNickname(user2.nickname!),
+                      const SizedBox(height: 4.0),
+                      if (_isUserBlocked)
+                        _buildBlockedText()
+                      else if (_lastMessageIsFile)
+                        _buildFileText(lastMessage['name'] as String)
+                      else if (_lastMessageIsImage)
+                        _buildImageText()
+                      else
+                        _buildMessageText(lastMessage['text'] as String),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  _buildMessageTime(_createdAt, _isRead),
+                  if (!_isRead) _buildUnreadIndicator()
+                ],
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -152,35 +350,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 return ListView.separated(
                   itemCount: _items.length,
                   itemBuilder: (BuildContext context, int index) {
+                    final String _docId = _items[index].id;
                     String _user2Id;
                     if (_user!.uid == _items[index].id.split('_')[0]) {
                       _user2Id = _items[index].id.split('_')[1];
                     } else {
                       _user2Id = _items[index].id.split('_')[0];
                     }
-
-                    final Map<String, dynamic> _latestMessage =
+                    final Json _latestMessage =
                         _items[index].get('latestMessage') as Json;
-                    final bool _lastMessageIsFile =
-                        _latestMessage['type'] == 'file';
-                    final bool _lastMessageIsImage =
-                        _latestMessage['type'] == 'image';
-                    final String _sentBy =
-                        _latestMessage['author']['id'] as String;
-                    bool _isRead;
-                    if (_sentBy != _user!.uid) {
-                      _isRead = (_latestMessage['status'] as String) == 'seen';
-                    } else {
-                      _isRead = true;
-                    }
-
-                    final bool _isUserBlocked =
-                        user!.blockedUsers!.contains(_user2Id);
-
-                    final DateTime _createdAt =
-                        DateTime.fromMillisecondsSinceEpoch(
-                      _latestMessage['createdAt'] as int,
-                    );
 
                     return FutureBuilder<MyUser>(
                       future: GetIt.I
@@ -202,201 +380,8 @@ class _ChatScreenState extends State<ChatScreen> {
                               if (snapshot.hasData) {
                                 final MyUser _user2 = snapshot.data!;
 
-                                return InkWell(
-                                  onTap: () => Navigator.of(context).pushNamed(
-                                    MessageScreen.routeName,
-                                    arguments: MessageArguments(
-                                      docId: _items[index].id,
-                                      user2: _user2,
-                                    ),
-                                  ),
-                                  highlightColor:
-                                      theme.primaryColorLight.withOpacity(.1),
-                                  splashColor:
-                                      theme.primaryColorLight.withOpacity(.1),
-                                  child: Container(
-                                    color: _isRead
-                                        ? Colors.transparent
-                                        : theme.primaryColor.withOpacity(.2),
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            CircleAvatar(
-                                              radius: 24.0,
-                                              backgroundImage:
-                                                  NetworkImage(_user2.avatar!),
-                                            ),
-                                            const SizedBox(width: 10.0),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                SizedBox(
-                                                  width: _width / 1.8,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        _user2.nickname!,
-                                                        maxLines: 1,
-                                                        softWrap: false,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 4.0),
-                                                if (_isUserBlocked)
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Icon(
-                                                        LineIcons.ban,
-                                                        size: 18.0,
-                                                        color: theme.errorColor,
-                                                      ),
-                                                      const SizedBox(
-                                                          width: 4.0),
-                                                      Text(
-                                                        "You can't chat with this user",
-                                                        style: TextStyle(
-                                                          color:
-                                                              theme.errorColor,
-                                                          fontSize: 15.0,
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                else if (_lastMessageIsFile)
-                                                  Row(
-                                                    children: <Widget>[
-                                                      const Icon(
-                                                        Icons.description,
-                                                        color: Color.fromRGBO(
-                                                            117, 117, 117, 1),
-                                                        size: 18.0,
-                                                      ),
-                                                      const SizedBox(
-                                                          width: 4.0),
-                                                      SizedBox(
-                                                        width: _width / 1.8,
-                                                        child: Text(
-                                                          _latestMessage['name']
-                                                              as String,
-                                                          maxLines: 1,
-                                                          softWrap: false,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 15.0,
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                else if (_lastMessageIsImage)
-                                                  Row(
-                                                    children: <Widget>[
-                                                      const Icon(
-                                                        FontAwesomeIcons
-                                                            .solidImage,
-                                                        color: Color.fromRGBO(
-                                                            117, 117, 117, 1),
-                                                        size: 16.0,
-                                                      ),
-                                                      const SizedBox(
-                                                          width: 4.0),
-                                                      Text(
-                                                        AppLocalizations.of(
-                                                                context)!
-                                                            .image,
-                                                        style: const TextStyle(
-                                                          fontSize: 15.0,
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )
-                                                else
-                                                  SizedBox(
-                                                    width: _width / 1.8,
-                                                    child: Text(
-                                                      _latestMessage['text']
-                                                          as String,
-                                                      maxLines: 1,
-                                                      softWrap: false,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                        fontSize: 15.0,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                      ),
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: <Widget>[
-                                            Text(
-                                              timeago.format(_createdAt,
-                                                  locale:
-                                                      '${Localizations.localeOf(context).languageCode}_short'),
-                                              style: TextStyle(
-                                                color: _isRead
-                                                    ? Colors.grey
-                                                    : theme.primaryColor,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            if (!_isRead)
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8.0),
-                                                child: CircleAvatar(
-                                                  radius: 12.0,
-                                                  backgroundColor:
-                                                      theme.primaryColor,
-                                                  child: const Text(
-                                                    '1',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 13.0,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                return _buildMessage(
+                                    _docId, _latestMessage, user!, _user2);
                               }
 
                               print(snapshot.error);
@@ -434,8 +419,8 @@ class _ChatScreenState extends State<ChatScreen> {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
+    PreferredSizeWidget _buildAppBar() {
+      return AppBar(
         title: Text(AppLocalizations.of(context)!.chats),
         actions: <Widget>[
           PopupMenuButton<_ChatPopup>(
@@ -456,7 +441,11 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
         ],
-      ),
+      );
+    }
+
+    return Scaffold(
+      appBar: _buildAppBar(),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
         child: _user == null ? _buildSignIn() : _buildChats(),
