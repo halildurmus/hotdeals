@@ -503,7 +503,7 @@ class _SingleProfilePictureUploadWidgetState
     }
 
     // manipulate image as requested
-    final image = await _imagePicker.getImage(
+    final image = await _imagePicker.pickImage(
         source: imageSource,
         imageQuality: widget.pictureUploadWidget.settings
             .imageManipulationSettings.compressQuality);

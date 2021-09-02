@@ -304,7 +304,7 @@ class _MessageScreenState extends State<MessageScreen> {
     Future<void> _handleImageSelection() async {
       final ImagePicker picker = ImagePicker();
 
-      final PickedFile? pickedFile = await picker.getImage(
+      final XFile? pickedFile = await picker.pickImage(
         imageQuality: 70,
         maxWidth: 1440,
         source: ImageSource.camera,

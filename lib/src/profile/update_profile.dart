@@ -45,8 +45,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   Future<void> getImg(String userId, ImageSource imageSource) async {
     final ImagePicker picker = ImagePicker();
-    final PickedFile? pickedFile =
-        await picker.getImage(source: imageSource, maxWidth: 1000);
+    final XFile? pickedFile =
+        await picker.pickImage(source: imageSource, maxWidth: 1000);
 
     showLoadingDialog();
 
