@@ -15,7 +15,7 @@ dependencies:
   file_picker: ^4.0.0
   firebase_auth: ^3.1.0
   firebase_core: ^1.1.0
-  firebase_messaging: ^10.0.2
+  firebase_messaging: ^10.0.6
   firebase_picture_uploader:
     path: lib/packages/flutter_firebase_picture_uploader
   firebase_storage: ^10.0.3
