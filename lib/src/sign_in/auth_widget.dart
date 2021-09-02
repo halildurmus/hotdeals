@@ -51,12 +51,12 @@ class AuthWidget extends StatelessWidget {
                     final String fcmToken = snapshot.data!;
 
                     if (!user.fcmTokens!.contains(fcmToken)) {
-                      return FutureBuilder<MyUser>(
+                      return FutureBuilder<bool>(
                         future: GetIt.I
                             .get<SpringService>()
                             .addFcmToken(userId: user.id!, fcmToken: fcmToken),
                         builder: (BuildContext context,
-                            AsyncSnapshot<MyUser> snapshot) {
+                            AsyncSnapshot<bool> snapshot) {
                           if (snapshot.hasData) {
                             Provider.of<UserControllerImpl>(context,
                                     listen: false)

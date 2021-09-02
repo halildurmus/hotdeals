@@ -53,7 +53,7 @@ abstract class SpringService {
 
   Future<MyUser> getUserByUid({required String uid});
 
-  Future<MyUser> addFcmToken({
+  Future<bool> addFcmToken({
     required String userId,
     required String fcmToken,
   });

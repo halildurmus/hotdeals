@@ -402,27 +402,20 @@ class SpringServiceImpl implements SpringService {
   }
 
   @override
-  Future<MyUser> addFcmToken({
+  Future<bool> addFcmToken({
     required String userId,
     required String fcmToken,
   }) async {
-    final String url = '$_baseUrl/users/$userId';
-    final List<Json> data = <Json>[
-      <String, dynamic>{'op': 'add', 'path': '/fcmTokens/-', 'value': fcmToken}
-    ];
+    final String url = '$_baseUrl/users/add-fcm-token';
+    final Json data = <String, dynamic>{'fcmToken': fcmToken};
 
     try {
-      final Response response = await _httpService.patch(url, data);
-      if (response.statusCode == 200) {
-        final MyUser _myUser =
-            MyUser.fromJson(jsonDecode(response.body) as Json);
+      final Response response = await _httpService.post(url, data);
 
-        return _myUser;
-      }
-
-      throw Exception('An error occurred while adding fcm token!');
-    } on Exception catch (e) {
+      return response.statusCode == 200;
+    } on Exception catch (e, stackTrace) {
       print(e);
+      print(stackTrace);
       throw Exception('An error occurred while adding fcm token!');
     }
   }
