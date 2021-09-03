@@ -21,6 +21,7 @@ import '../models/stores.dart';
 import '../models/user_controller_impl.dart';
 import '../models/vote_type.dart';
 import '../services/spring_service.dart';
+import '../settings/settings_controller.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/deal_score_box.dart';
 import '../widgets/loading_dialog.dart';
@@ -889,7 +890,7 @@ class _DealDetailsState extends State<DealDetails> {
                                   timeago.format(
                                     comment.createdAt!,
                                     locale:
-                                        '${Localizations.localeOf(context).languageCode}_short',
+                                        '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
                                   ),
                                   style: textTheme.bodyText2!.copyWith(
                                     color: Colors.grey.shade600,

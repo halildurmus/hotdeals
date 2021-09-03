@@ -10,6 +10,7 @@ import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
+import '../settings/settings_controller.dart';
 import '../utils/chat_util.dart';
 import 'blocked_users.dart';
 import 'message_arguments.dart';
@@ -228,7 +229,8 @@ class _ChatScreenState extends State<ChatScreen> {
       return Text(
         timeago.format(
           createdAt,
-          locale: '${Localizations.localeOf(context).languageCode}_short',
+          locale:
+              '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
         ),
         style: TextStyle(
           color: isRead ? Colors.grey : theme.primaryColor,

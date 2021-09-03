@@ -6,6 +6,7 @@ import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../services/spring_service.dart';
+import '../settings/settings_controller.dart';
 
 class NotificationItem extends StatelessWidget {
   const NotificationItem({
@@ -73,12 +74,22 @@ class NotificationItem extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 5),
-                          Text(timeago.format(notification.createdAt!,
-                              locale: 'en')),
+                          Text(
+                            timeago.format(
+                              notification.createdAt!,
+                              locale:
+                                  '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
+                            ),
+                          ),
                         ],
                       )
                     : Text(
-                        timeago.format(notification.createdAt!, locale: 'en')),
+                        timeago.format(
+                          notification.createdAt!,
+                          locale:
+                              '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
+                        ),
+                      ),
                 trailing: !notification.isRead
                     ? Text(
                         '•',
