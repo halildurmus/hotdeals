@@ -15,6 +15,7 @@ import 'src/models/push_notification.dart';
 import 'src/models/stores.dart';
 import 'src/services/connection_service.dart';
 import 'src/services/firestore_service.dart';
+import 'src/services/firestore_service_impl.dart';
 import 'src/services/spring_service.dart';
 import 'src/services/spring_service_impl.dart';
 import 'src/services/sqlite_service.dart';
@@ -52,7 +53,7 @@ Future<void> main() async {
   getIt.registerSingleton<CurrentRoute>(CurrentRoute());
   getIt.registerSingleton<ConnectionService>(ConnectionService());
   getIt.registerSingleton<SQLiteService<PushNotification>>(SQLiteServiceImpl());
-  getIt.registerSingleton<FirestoreService>(FirestoreService());
+  getIt.registerSingleton<FirestoreService>(FirestoreServiceImpl());
   getIt.registerSingleton<SpringService>(SpringServiceImpl());
   getIt.registerSingleton<Categories>(Categories());
   getIt.registerSingleton<Stores>(Stores());
