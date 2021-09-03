@@ -8,20 +8,20 @@ class FirestoreService {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<String> createMessageDocument({
-    required String user1Id,
-    required String user2Id,
+    required String user1Uid,
+    required String user2Uid,
   }) async {
     final CollectionReference<Json> messagesRef =
         firestore.collection('messages');
     final String docId =
-        ChatUtil.getConversationID(userID: user1Id, peerID: user2Id);
+        ChatUtil.getConversationID(user1Uid: user1Uid, user2Uid: user2Uid);
     final List<String> usersArray =
-        ChatUtil.getUsersArray(userID: user1Id, peerID: user2Id);
+        ChatUtil.getUsersArray(user1Uid: user1Uid, user2Uid: user2Uid);
 
     messagesRef
         .doc(docId)
         .set(<String, dynamic>{
-          'isTyping': <String, bool>{user1Id: false, user2Id: false},
+          'isTyping': <String, bool>{user1Uid: false, user2Uid: false},
           'users': usersArray,
           'latestMessage': <String, dynamic>{},
         })

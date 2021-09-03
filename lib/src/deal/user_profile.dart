@@ -193,8 +193,8 @@ class _UserProfileState extends State<UserProfile> {
     }
 
     Widget buildButtons() {
-      final List<String> usersArray =
-          ChatUtil.getUsersArray(userID: loggedInUser!.uid, peerID: user.uid);
+      final List<String> usersArray = ChatUtil.getUsersArray(
+          user1Uid: loggedInUser!.uid, user2Uid: user.uid);
 
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -227,11 +227,11 @@ class _UserProfileState extends State<UserProfile> {
                 onTap = () async {
                   if (_items.isEmpty) {
                     await firestoreService.createMessageDocument(
-                        user1Id: loggedInUser!.uid, user2Id: user.uid);
+                        user1Uid: loggedInUser!.uid, user2Uid: user.uid);
                   }
 
                   final String conversationId = ChatUtil.getConversationID(
-                      userID: loggedInUser!.uid, peerID: user.uid);
+                      user1Uid: loggedInUser!.uid, user2Uid: user.uid);
 
                   Navigator.of(context).pushNamed(
                     MessageScreen.routeName,

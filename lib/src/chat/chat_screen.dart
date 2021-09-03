@@ -10,6 +10,7 @@ import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
+import '../utils/chat_util.dart';
 import 'blocked_users.dart';
 import 'message_arguments.dart';
 import 'message_screen.dart';
@@ -351,12 +352,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemCount: _items.length,
                   itemBuilder: (BuildContext context, int index) {
                     final String _docId = _items[index].id;
-                    String _user2Id;
-                    if (_user!.uid == _docId.split('_')[0]) {
-                      _user2Id = _docId.split('_')[1];
-                    } else {
-                      _user2Id = _docId.split('_')[0];
-                    }
+                    final String _user2Id = ChatUtil.getUser2Uid(
+                        docID: _docId, user1Uid: _user!.uid);
                     final Json _latestMessage =
                         _items[index].get('latestMessage') as Json;
 
