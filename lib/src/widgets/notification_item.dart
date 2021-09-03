@@ -77,8 +77,10 @@ class NotificationItem extends StatelessWidget {
                           Text(
                             timeago.format(
                               notification.createdAt!,
-                              locale:
-                                  '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
+                              locale: GetIt.I
+                                  .get<SettingsController>()
+                                  .locale
+                                  .languageCode,
                             ),
                           ),
                         ],
@@ -86,8 +88,10 @@ class NotificationItem extends StatelessWidget {
                     : Text(
                         timeago.format(
                           notification.createdAt!,
-                          locale:
-                              '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
+                          locale: GetIt.I
+                              .get<SettingsController>()
+                              .locale
+                              .languageCode,
                         ),
                       ),
                 trailing: !notification.isRead

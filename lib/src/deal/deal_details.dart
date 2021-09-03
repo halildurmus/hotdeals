@@ -414,7 +414,13 @@ class _DealDetailsState extends State<DealDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      timeago.format(_deal.createdAt!),
+                      timeago.format(
+                        _deal.createdAt!,
+                        locale: GetIt.I
+                            .get<SettingsController>()
+                            .locale
+                            .languageCode,
+                      ),
                       style: textTheme.bodyText2!.copyWith(
                         color: theme.brightness == Brightness.light
                             ? Colors.black54
