@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +54,6 @@ class _PostCommentState extends State<PostComment> {
 
       final Comment? postedComment =
           await GetIt.I.get<SpringService>().postComment(comment: comment);
-      print(postedComment);
 
       // Send push notification to the poster if the commentator is not
       // the poster.
@@ -66,14 +64,14 @@ class _PostCommentState extends State<PostComment> {
 
         final PushNotification notification = PushNotification(
           title:
-              '${poster.nickname} ${AppLocalizations.of(context)!.commentedOnYourPost}',
+              '${user!.nickname} ${AppLocalizations.of(context)!.commentedOnYourPost}',
           body: comment.message,
           actor: user!.id!,
           verb: 'comment',
           object: widget.deal.id!,
           message: comment.message,
           uid: poster.id,
-          avatar: poster.avatar,
+          avatar: user!.avatar,
         );
 
         final bool result = await GetIt.I

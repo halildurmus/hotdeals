@@ -93,17 +93,16 @@ class _MessageScreenState extends State<MessageScreen> {
     }
   }
 
-  Future<void> _sendPushNotification(String messageText) async {
+  Future<void> _sendPushNotification(MyUser user, String messageText) async {
     final PushNotification notification = PushNotification(
-      title:
-          '${widget.user2.nickname} ${AppLocalizations.of(context)!.sentYouMessage}',
+      title: '${user.nickname} ${AppLocalizations.of(context)!.sentYouMessage}',
       body: messageText,
-      actor: widget.user2.nickname!,
+      actor: user.id!,
       verb: 'message',
       object: widget.docId,
       message: messageText,
-      uid: FirebaseAuth.instance.currentUser?.uid,
-      avatar: widget.user2.avatar,
+      uid: widget.user2.uid,
+      avatar: user.avatar,
     );
 
     final bool result = await GetIt.I.get<SpringService>().sendPushNotification(
@@ -253,11 +252,13 @@ class _MessageScreenState extends State<MessageScreen> {
         _isAttachmentUploading = false;
       });
 
-      _sendPushNotification(fileMessage != null
-          ? 'Sent you a file'
-          : imageMessage != null
-              ? 'Sent you an image'
-              : textMessage!.text);
+      _sendPushNotification(
+          _user,
+          fileMessage != null
+              ? 'Sent you a file'
+              : imageMessage != null
+                  ? 'Sent you an image'
+                  : textMessage!.text);
     }
 
     void _handleSendPressed(types.PartialText message) {
