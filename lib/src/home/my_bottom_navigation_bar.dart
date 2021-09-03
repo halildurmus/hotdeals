@@ -10,6 +10,7 @@ import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller_impl.dart';
+import '../services/firestore_service.dart';
 import '../services/sqlite_service.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -141,10 +142,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
     Widget buildGNavWithStream() {
       return StreamBuilder<QuerySnapshot<Json>>(
-        stream: FirebaseFirestore.instance
-            .collection('messages')
-            .where('users', arrayContains: _user?.uid)
-            .snapshots(),
+        stream: GetIt.I.get<FirestoreService>().messagesStream(_user!.uid),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (snapshot.hasData) {

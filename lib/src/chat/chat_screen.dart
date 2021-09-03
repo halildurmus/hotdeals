@@ -9,6 +9,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
+import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../settings/settings_controller.dart';
 import '../utils/chat_util.dart';
@@ -41,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final double _width = MediaQuery.of(context).size.width;
+    final double width = MediaQuery.of(context).size.width;
 
     Future<void> _onRefresh() async {
       setState(() {});
@@ -151,7 +152,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           const SizedBox(width: 4.0),
           SizedBox(
-            width: _width / 1.8,
+            width: width / 1.8,
             child: Text(
               fileName,
               maxLines: 1,
@@ -186,7 +187,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildMessageText(String text) {
       return SizedBox(
-        width: _width / 1.8,
+        width: width / 1.8,
         child: Text(
           text,
           maxLines: 1,
@@ -206,7 +207,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildUserNickname(String nickname) {
       return SizedBox(
-        width: _width / 1.8,
+        width: width / 1.8,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -262,11 +263,11 @@ class _ChatScreenState extends State<ChatScreen> {
       final bool _lastMessageIsFile = lastMessage['type'] == 'file';
       final bool _lastMessageIsImage = lastMessage['type'] == 'image';
       final String _sentBy = lastMessage['author']['id'] as String;
-      bool _isRead;
+      bool _isMessageSeen;
       if (_sentBy != _user!.uid) {
-        _isRead = (lastMessage['status'] as String) == 'seen';
+        _isMessageSeen = (lastMessage['status'] as String) == 'seen';
       } else {
-        _isRead = true;
+        _isMessageSeen = true;
       }
       final bool _isUserBlocked = user.blockedUsers!.contains(user2.uid);
       final DateTime _createdAt = DateTime.fromMillisecondsSinceEpoch(
@@ -284,8 +285,9 @@ class _ChatScreenState extends State<ChatScreen> {
         highlightColor: theme.primaryColorLight.withOpacity(.1),
         splashColor: theme.primaryColorLight.withOpacity(.1),
         child: Container(
-          color:
-              _isRead ? Colors.transparent : theme.primaryColor.withOpacity(.2),
+          color: _isMessageSeen
+              ? Colors.transparent
+              : theme.primaryColor.withOpacity(.2),
           padding: const EdgeInsets.all(16.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,8 +317,8 @@ class _ChatScreenState extends State<ChatScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  _buildMessageTime(_createdAt, _isRead),
-                  if (!_isRead) _buildUnreadIndicator()
+                  _buildMessageTime(_createdAt, _isMessageSeen),
+                  if (!_isMessageSeen) _buildUnreadIndicator()
                 ],
               ),
             ],
@@ -327,11 +329,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildChats() {
       return StreamBuilder<QuerySnapshot<Json>>(
-        stream: FirebaseFirestore.instance
-            .collection('messages')
-            .where('users', arrayContains: _user!.uid)
-            .orderBy('latestMessage.createdAt', descending: true)
-            .snapshots(),
+        stream: GetIt.I.get<FirestoreService>().messagesStream(_user!.uid),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (snapshot.hasData) {
@@ -353,16 +351,16 @@ class _ChatScreenState extends State<ChatScreen> {
                 return ListView.separated(
                   itemCount: _items.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final String _docId = _items[index].id;
-                    final String _user2Id = ChatUtil.getUser2Uid(
-                        docID: _docId, user1Uid: _user!.uid);
+                    final String _docID = _items[index].id;
+                    final String _user2Uid = ChatUtil.getUser2Uid(
+                        docID: _docID, user1Uid: _user!.uid);
                     final Json _latestMessage =
                         _items[index].get('latestMessage') as Json;
 
                     return FutureBuilder<MyUser>(
                       future: GetIt.I
                           .get<SpringService>()
-                          .getUserByUid(uid: _user2Id),
+                          .getUserByUid(uid: _user2Uid),
                       builder: (BuildContext context,
                           AsyncSnapshot<MyUser> snapshot) {
                         switch (snapshot.connectionState) {
@@ -380,7 +378,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 final MyUser _user2 = snapshot.data!;
 
                                 return _buildMessage(
-                                    _docId, _latestMessage, user!, _user2);
+                                    _docID, _latestMessage, user!, _user2);
                               }
 
                               print(snapshot.error);

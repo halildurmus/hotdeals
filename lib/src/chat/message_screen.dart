@@ -5,7 +5,6 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +24,7 @@ import '../models/current_route.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller_impl.dart';
+import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../settings/locales.dart' as locales;
 import '../settings/settings_controller.dart';
@@ -49,48 +49,10 @@ class _MessageScreenState extends State<MessageScreen> {
   bool _isAttachmentUploading = false;
   final Uuid uuid = const Uuid();
 
-  Future<void> _setAsSeen() async {
-    final DocumentSnapshot<Json> _latestMessage = await FirebaseFirestore
-        .instance
-        .collection('messages')
-        .doc(widget.docId)
-        .get();
-
-    final bool isLatestMessageEmpty =
-        (_latestMessage.get('latestMessage') as Json).isEmpty;
-    final String latestMessageAuthorId =
-        _latestMessage.get('latestMessage')['author']['id'] as String;
-
-    if (!isLatestMessageEmpty && latestMessageAuthorId == widget.user2.uid) {
-      await FirebaseFirestore.instance
-          .collection('messages')
-          .doc(widget.docId)
-          .set(<String, dynamic>{
-        'latestMessage': <String, dynamic>{
-          'status': 'seen',
-        },
-      }, SetOptions(merge: true));
-    }
-
-    if (!isLatestMessageEmpty) {
-      final QuerySnapshot<Json> _doc = await FirebaseFirestore.instance
-          .collection('messages')
-          .doc(widget.docId)
-          .collection(widget.docId)
-          .get();
-
-      final Iterable<QueryDocumentSnapshot<Json>> _docs = _doc.docs.where(
-          (QueryDocumentSnapshot<Json> element) =>
-              element.data()['author']['id'] == widget.user2.uid);
-
-      if (_docs.isNotEmpty) {
-        _docs.forEach((QueryDocumentSnapshot<Json> doc) {
-          doc.reference.update(<String, dynamic>{
-            'status': 'seen',
-          });
-        });
-      }
-    }
+  Future<void> _markAsSeen() async {
+    await GetIt.I
+        .get<FirestoreService>()
+        .markMessagesAsSeen(docID: widget.docId, user2Uid: widget.user2.uid);
   }
 
   Future<void> _sendPushNotification(MyUser user, String messageText) async {
@@ -152,7 +114,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   @override
   void initState() {
-    _setAsSeen();
+    _markAsSeen();
     super.initState();
   }
 
