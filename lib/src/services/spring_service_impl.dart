@@ -137,6 +137,10 @@ class SpringServiceImpl implements SpringService {
     required PushNotification notification,
     required List<String> tokens,
   }) async {
+    if (tokens.isEmpty) {
+      return false;
+    }
+
     final String url = '$_baseUrl/notifications?tokens=${tokens.join(',')}';
 
     try {
