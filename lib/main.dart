@@ -22,7 +22,7 @@ import 'src/services/sqlite_service_impl.dart';
 import 'src/settings/settings.controller.impl.dart';
 import 'src/settings/settings.service.impl.dart';
 import 'src/settings/settings_controller.dart';
-import 'src/utils/tr_short_messages.dart';
+import 'src/utils/tr_messages.dart';
 import 'src/widgets/loading_dialog.dart';
 
 Future<void> main() async {
@@ -94,7 +94,8 @@ Future<void> main() async {
   // Loads the user's preferred settings.
   await getIt.get<SettingsController>().loadSettings();
 
-  // Registers Turkish short messages for timeago.
+  // Registers Turkish messages for timeago.
+  timeago.setLocaleMessages('tr', TrMessages());
   timeago.setLocaleMessages('tr_short', TrShortMessages());
 
   // Runs the app with MyApp attached to the screen.
