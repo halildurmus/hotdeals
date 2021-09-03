@@ -21,6 +21,16 @@ class AuthWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
+    Future<void> _saveFcmTokenToDatabase(String token) async {
+      final String userId = context.read<UserControllerImpl>().user!.id!;
+
+      await GetIt.I
+          .get<SpringService>()
+          .addFcmToken(userId: userId, fcmToken: token);
+
+      await context.read<UserControllerImpl>().getUser();
+    }
+
     Widget buildCircularProgressIndicator() {
       return Scaffold(
         body: Center(
@@ -40,52 +50,17 @@ class AuthWidget extends StatelessWidget {
           future: userFuture,
           builder: (BuildContext context, AsyncSnapshot<MyUser?> snapshot) {
             if (snapshot.hasData) {
-              final MyUser user = snapshot.data!;
+              // Gets the token each time the user logs in.
+              FirebaseMessaging.instance.getToken().then((String? token) async {
+                // Saves the initial token to the database.
+                await _saveFcmTokenToDatabase(token!);
 
-              // TODO(halildurmus): Get rid all of this once migrated to flutter_riverpod package.
-              return FutureBuilder<String?>(
-                future: FirebaseMessaging.instance.getToken(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String?> snapshot) {
-                  if (snapshot.hasData) {
-                    final String fcmToken = snapshot.data!;
+                // Any time the token refreshes, store this in the database too.
+                FirebaseMessaging.instance.onTokenRefresh
+                    .listen(_saveFcmTokenToDatabase);
+              });
 
-                    if (!user.fcmTokens!.contains(fcmToken)) {
-                      return FutureBuilder<bool>(
-                        future: GetIt.I
-                            .get<SpringService>()
-                            .addFcmToken(userId: user.id!, fcmToken: fcmToken),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<bool> snapshot) {
-                          if (snapshot.hasData) {
-                            Provider.of<UserControllerImpl>(context,
-                                    listen: false)
-                                .getUser();
-
-                            return const HomeScreen();
-                          } else if (snapshot.hasError) {
-                            print(snapshot.error);
-                            print(snapshot.stackTrace);
-
-                            return const HomeScreen();
-                          }
-
-                          return buildCircularProgressIndicator();
-                        },
-                      );
-                    }
-
-                    return const HomeScreen();
-                  } else if (snapshot.hasError) {
-                    print(snapshot.error);
-                    print(snapshot.stackTrace);
-
-                    return const HomeScreen();
-                  }
-
-                  return buildCircularProgressIndicator();
-                },
-              );
+              return const HomeScreen();
             } else if (snapshot.hasError) {
               print(snapshot.error);
               print(snapshot.stackTrace);
