@@ -60,9 +60,9 @@ class _MessageScreenState extends State<MessageScreen> {
     String messageText = '';
 
     if (message is types.FileMessage) {
-      messageText = 'Sent you a file';
+      messageText = AppLocalizations.of(context)!.file;
     } else if (message is types.ImageMessage) {
-      messageText = 'Sent you an image';
+      messageText = AppLocalizations.of(context)!.image;
     } else if (message is types.TextMessage) {
       messageText = message.text;
     }
