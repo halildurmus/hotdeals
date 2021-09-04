@@ -220,7 +220,6 @@ class _PostDealState extends State<PostDeal> {
 
       final Deal? postedDeal =
           await GetIt.I.get<SpringService>().postDeal(deal: deal);
-      print(postedDeal);
 
       // Pops the loading dialog.
       Navigator.of(context).pop();

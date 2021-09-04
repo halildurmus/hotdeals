@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -26,6 +24,7 @@ import '../models/push_notification.dart';
 import '../models/user_controller_impl.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
+import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
 import '../settings/locales.dart' as locales;
 import '../settings/settings_controller.dart';
@@ -223,12 +222,12 @@ class _MessageScreenState extends State<MessageScreen> {
     }
 
     Future<void> _handleImageSelection() async {
-      final ImagePicker picker = ImagePicker();
-      final XFile? pickedFile = await picker.pickImage(
-        imageQuality: 70,
-        maxWidth: 1440,
-        source: ImageSource.camera,
-      );
+      final XFile? pickedFile =
+          await GetIt.I.get<ImagePickerService>().pickImage(
+                imageQuality: 70,
+                maxWidth: 1440,
+                source: ImageSource.camera,
+              );
 
       setState(() {
         _isAttachmentUploading = true;

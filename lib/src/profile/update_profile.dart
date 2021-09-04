@@ -9,6 +9,7 @@ import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/firebase_storage_service.dart';
+import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
 import '../widgets/loading_dialog.dart';
 import '../widgets/settings_list_item.dart';
@@ -43,9 +44,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   Future<void> getImg(String userID, ImageSource imageSource) async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedFile =
-        await picker.pickImage(source: imageSource, maxWidth: 1000);
+    final XFile? pickedFile = await GetIt.I
+        .get<ImagePickerService>()
+        .pickImage(source: imageSource, maxWidth: 1000);
 
     showLoadingDialog();
 

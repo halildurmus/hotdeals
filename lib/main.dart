@@ -18,6 +18,8 @@ import 'src/services/firebase_storage_service.dart';
 import 'src/services/firebase_storage_service_impl.dart';
 import 'src/services/firestore_service.dart';
 import 'src/services/firestore_service_impl.dart';
+import 'src/services/image_picker_service.dart';
+import 'src/services/image_picker_service_impl.dart';
 import 'src/services/spring_service.dart';
 import 'src/services/spring_service_impl.dart';
 import 'src/services/sqlite_service.dart';
@@ -57,6 +59,7 @@ Future<void> main() async {
   getIt.registerSingleton<SQLiteService<PushNotification>>(SQLiteServiceImpl());
   getIt.registerSingleton<FirebaseStorageService>(FirebaseStorageServiceImpl());
   getIt.registerSingleton<FirestoreService>(FirestoreServiceImpl());
+  getIt.registerSingleton<ImagePickerService>(ImagePickerServiceImpl());
   getIt.registerSingleton<SpringService>(SpringServiceImpl());
   getIt.registerSingleton<Categories>(Categories());
   getIt.registerSingleton<Stores>(Stores());
