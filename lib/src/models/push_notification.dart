@@ -1,3 +1,5 @@
+import 'notification_verb.dart';
+
 typedef Json = Map<String, dynamic>;
 
 class PushNotification {
@@ -24,7 +26,7 @@ class PushNotification {
         title: map['title']! as String,
         body: map['body']! as String,
         actor: map['actor']! as String,
-        verb: map['verb']! as String,
+        verb: notificationVerbFromString(map['verb']! as String),
         object: map['object']! as String,
         message: map['message'] as String?,
         uid: map['uid'] as String?,
@@ -36,7 +38,7 @@ class PushNotification {
   final String title;
   final String body;
   final String actor;
-  final String verb;
+  final NotificationVerb verb;
   final String object;
   final String? avatar;
   final String? message;
@@ -51,7 +53,7 @@ class PushNotification {
         // 'image': null,
         'data': <String, dynamic>{
           'actor': actor,
-          'verb': verb,
+          'verb': verb.asString,
           'object': object,
           if (avatar != null) 'avatar': avatar,
           if (message != null) 'message': message,
@@ -66,7 +68,7 @@ class PushNotification {
         'title': title,
         'body': body,
         'actor': actor,
-        'verb': verb,
+        'verb': verb.asString,
         'object': object,
         'message': message,
         'uid': uid,

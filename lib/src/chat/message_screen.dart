@@ -20,6 +20,7 @@ import 'package:uuid/uuid.dart';
 import '../app_localizations.dart';
 import '../models/current_route.dart';
 import '../models/my_user.dart';
+import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller_impl.dart';
 import '../services/firebase_storage_service.dart';
@@ -71,7 +72,7 @@ class _MessageScreenState extends State<MessageScreen> {
       title: '${user.nickname} ${AppLocalizations.of(context)!.sentYouMessage}',
       body: messageText,
       actor: user.id!,
-      verb: 'message',
+      verb: NotificationVerb.message,
       object: widget.docId,
       message: messageText,
       uid: widget.user2.uid,

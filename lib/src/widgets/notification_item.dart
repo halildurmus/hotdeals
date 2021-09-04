@@ -4,6 +4,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../app_localizations.dart';
 import '../models/my_user.dart';
+import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../services/spring_service.dart';
 import '../settings/settings_controller.dart';
@@ -40,7 +41,7 @@ class NotificationItem extends StatelessWidget {
               highlightColor: theme.primaryColorLight.withOpacity(.1),
               splashColor: theme.primaryColorLight.withOpacity(.1),
               child: ListTile(
-                isThreeLine: notification.verb == 'comment',
+                isThreeLine: notification.verb == NotificationVerb.comment,
                 leading: CircleAvatar(
                   backgroundImage: NetworkImage(user.avatar!),
                 ),
@@ -53,7 +54,7 @@ class NotificationItem extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                       children: <TextSpan>[
-                        if (notification.verb == 'comment')
+                        if (notification.verb == NotificationVerb.comment)
                           TextSpan(
                             text: AppLocalizations.of(context)!
                                 .commentedOnYourPost,
@@ -63,7 +64,7 @@ class NotificationItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                subtitle: notification.verb == 'comment'
+                subtitle: notification.verb == NotificationVerb.comment
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[

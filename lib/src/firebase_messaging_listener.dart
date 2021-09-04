@@ -8,6 +8,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'chat/message_arguments.dart';
 import 'chat/message_screen.dart';
 import 'models/current_route.dart';
+import 'models/notification_verb.dart';
 import 'models/push_notification.dart';
 import 'services/sqlite_service.dart';
 import 'services/sqlite_service_impl.dart';
@@ -32,7 +33,7 @@ void subscribeToFCM() {
           title: message.notification!.title!,
           body: message.notification!.body!,
           actor: message.data['actor'] as String,
-          verb: message.data['verb'] as String,
+          verb: message.data['verb'] as NotificationVerb,
           object: message.data['object'] as String,
           avatar: message.data['avatar'] as String?,
           message: message.data['message'] as String?,
@@ -42,11 +43,11 @@ void subscribeToFCM() {
 
         // Saves the notification into the database if the notification's verb
         // equals to 'comment'.
-        if (notification.verb == 'comment') {
+        if (notification.verb == NotificationVerb.comment) {
           sqliteService
               .insert(notification)
               .then((value) => print('Notification saved into the db.'));
-        } else if (notification.verb == 'message') {
+        } else if (notification.verb == NotificationVerb.message) {
           final String currentRoute = GetIt.I.get<CurrentRoute>().routeName;
           final MessageArguments? messageArguments =
               GetIt.I.get<CurrentRoute>().messageArguments;
@@ -84,7 +85,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     title: message.notification!.title!,
     body: message.notification!.body!,
     actor: message.data['actor'] as String,
-    verb: message.data['verb'] as String,
+    verb: message.data['verb'] as NotificationVerb,
     object: message.data['object'] as String,
     message: message.data['message'] as String?,
     uid: FirebaseAuth.instance.currentUser?.uid,
@@ -93,7 +94,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
   // Saves the notification into the database if the notification's verb
   // equals to 'comment'.
-  if (notification.verb == 'comment') {
+  if (notification.verb == NotificationVerb.comment) {
     sqliteService
         .insert(notification)
         .then((value) => print('Background notification saved into the db.'));

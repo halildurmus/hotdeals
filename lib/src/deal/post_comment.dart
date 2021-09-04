@@ -6,6 +6,7 @@ import '../app_localizations.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
+import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
@@ -67,7 +68,7 @@ class _PostCommentState extends State<PostComment> {
               '${user!.nickname} ${AppLocalizations.of(context)!.commentedOnYourPost}',
           body: comment.message,
           actor: user!.id!,
-          verb: 'comment',
+          verb: NotificationVerb.comment,
           object: widget.deal.id!,
           message: comment.message,
           uid: poster.id,
