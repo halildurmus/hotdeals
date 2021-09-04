@@ -9,7 +9,7 @@ class FirestoreServiceImpl implements FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<String> createMessageDocument({
+  Future<void> createMessageDocument({
     required String user1Uid,
     required String user2Uid,
   }) async {
@@ -20,7 +20,7 @@ class FirestoreServiceImpl implements FirestoreService {
     final List<String> usersArray =
         ChatUtil.getUsersArray(user1Uid: user1Uid, user2Uid: user2Uid);
 
-    messagesRef
+    return messagesRef
         .doc(docId)
         .set(<String, dynamic>{
           'users': usersArray,
@@ -30,30 +30,37 @@ class FirestoreServiceImpl implements FirestoreService {
         .catchError(
           (dynamic error) => print('Failed to create document: $error'),
         );
-
-    return docId;
   }
 
   @override
-  Future<String> sendMessage({
-    required String docId,
-    required String sender,
-    required String message,
+  Future<void> sendMessage({
+    required String docID,
+    required Json message,
   }) async {
-    final CollectionReference<Json> messagesRef =
-        _firestore.collection('messages').doc(docId).collection(docId);
+    final DocumentReference<Json> documentReference = _firestore
+        .collection('messages')
+        .doc(docID)
+        .collection(docID)
+        .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
-    return messagesRef
-        .add(<String, dynamic>{
-          'isRead': false,
-          'sentAt': DateTime.now(),
-          'senderId': sender,
-          'message': message
-        })
-        .then((DocumentReference<Json> value) => value.id)
-        .catchError(
-          (dynamic error) => print('Failed to create document: $error'),
+    await _firestore.runTransaction(
+      (Transaction transaction) async {
+        transaction.set(documentReference, message);
+      },
+    );
+
+    final DocumentReference<Json> _latestMessage =
+        _firestore.collection('messages').doc(docID);
+
+    await _firestore.runTransaction(
+      (Transaction transaction) async {
+        transaction.set(
+          _latestMessage,
+          <String, dynamic>{'latestMessage': message},
+          SetOptions(merge: true),
         );
+      },
+    );
   }
 
   @override
@@ -63,48 +70,49 @@ class FirestoreServiceImpl implements FirestoreService {
   }) async {
     final DocumentSnapshot<Json> latestMessage =
         await _firestore.collection('messages').doc(docID).get();
-
     final bool isLatestMessageEmpty =
         (latestMessage.get('latestMessage') as Json).isEmpty;
+    if (isLatestMessageEmpty) {
+      return;
+    }
+
     final String latestMessageAuthorId =
         latestMessage.get('latestMessage')['author']['id'] as String;
 
-    if (!isLatestMessageEmpty) {
-      if (latestMessageAuthorId == user2Uid) {
-        _firestore
-            .collection('messages')
-            .doc(docID)
-            .set(<String, dynamic>{
-              'latestMessage': <String, dynamic>{
-                'status': 'seen',
-              },
-            }, SetOptions(merge: true))
-            .then((value) {})
-            .catchError(
-              (dynamic error) => print('Failed to update document: $error'),
-            );
-      }
-
-      final QuerySnapshot<Json> doc = await _firestore
+    if (latestMessageAuthorId == user2Uid) {
+      _firestore
           .collection('messages')
           .doc(docID)
-          .collection(docID)
-          .get();
+          .set(<String, dynamic>{
+            'latestMessage': <String, dynamic>{
+              'status': 'seen',
+            },
+          }, SetOptions(merge: true))
+          .then((value) {})
+          .catchError(
+            (dynamic error) => print('Failed to update document: $error'),
+          );
+    }
 
-      final Iterable<QueryDocumentSnapshot<Json>> docs =
-          doc.docs.where((QueryDocumentSnapshot<Json> element) {
-        final String messageAuthorId = element.data()['author']['id'] as String;
+    final QuerySnapshot<Json> doc = await _firestore
+        .collection('messages')
+        .doc(docID)
+        .collection(docID)
+        .get();
 
-        return messageAuthorId == user2Uid;
-      });
+    final Iterable<QueryDocumentSnapshot<Json>> docs =
+        doc.docs.where((QueryDocumentSnapshot<Json> element) {
+      final String messageAuthorId = element.data()['author']['id'] as String;
 
-      if (docs.isNotEmpty) {
-        docs.forEach((QueryDocumentSnapshot<Json> doc) {
-          doc.reference.update(<String, dynamic>{
-            'status': 'seen',
-          });
+      return messageAuthorId == user2Uid;
+    });
+
+    if (docs.isNotEmpty) {
+      docs.forEach((QueryDocumentSnapshot<Json> doc) {
+        doc.reference.update(<String, dynamic>{
+          'status': 'seen',
         });
-      }
+      });
     }
   }
 

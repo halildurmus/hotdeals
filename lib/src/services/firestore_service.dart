@@ -4,15 +4,14 @@ typedef Json = Map<String, dynamic>;
 
 /// An abstract class that used for communicating with the [FirebaseFirestore].
 abstract class FirestoreService {
-  Future<String> createMessageDocument({
+  Future<void> createMessageDocument({
     required String user1Uid,
     required String user2Uid,
   });
 
-  Future<String> sendMessage({
-    required String docId,
-    required String sender,
-    required String message,
+  Future<void> sendMessage({
+    required String docID,
+    required Json message,
   });
 
   Future<void> markMessagesAsSeen({

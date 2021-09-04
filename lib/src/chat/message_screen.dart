@@ -24,10 +24,12 @@ import '../models/current_route.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller_impl.dart';
+import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../settings/locales.dart' as locales;
 import '../settings/settings_controller.dart';
+import '../utils/chat_util.dart';
 import 'message_app_bar.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -55,7 +57,17 @@ class _MessageScreenState extends State<MessageScreen> {
         .markMessagesAsSeen(docID: widget.docId, user2Uid: widget.user2.uid);
   }
 
-  Future<void> _sendPushNotification(MyUser user, String messageText) async {
+  Future<void> _sendPushNotification(MyUser user, types.Message message) async {
+    String messageText = '';
+
+    if (message is types.FileMessage) {
+      messageText = 'Sent you a file';
+    } else if (message is types.ImageMessage) {
+      messageText = 'Sent you an image';
+    } else if (message is types.TextMessage) {
+      messageText = message.text;
+    }
+
     final PushNotification notification = PushNotification(
       title: '${user.nickname} ${AppLocalizations.of(context)!.sentYouMessage}',
       body: messageText,
@@ -149,78 +161,16 @@ class _MessageScreenState extends State<MessageScreen> {
       );
     }
 
-    Future<void> _sendMessage({
-      types.FileMessage? fileMessage,
-      types.ImageMessage? imageMessage,
-      types.TextMessage? textMessage,
-    }) async {
-      final DocumentReference<Json> documentReference = FirebaseFirestore
-          .instance
-          .collection('messages')
-          .doc(widget.docId)
-          .collection(widget.docId)
-          .doc(DateTime.now().millisecondsSinceEpoch.toString());
-
-      final Json message = <String, dynamic>{
-        'id': fileMessage?.id ?? imageMessage?.id ?? textMessage?.id,
-        'author': <String, dynamic>{
-          'id': fileMessage?.author.id ??
-              imageMessage?.author.id ??
-              textMessage?.author.id,
-        },
-        'createdAt': fileMessage?.createdAt ??
-            imageMessage?.createdAt ??
-            textMessage?.createdAt,
-        if (imageMessage != null) 'height': imageMessage.height,
-        if (fileMessage != null) 'mimeType': fileMessage.mimeType,
-        if (fileMessage != null || imageMessage != null)
-          'name': fileMessage?.name ?? imageMessage?.name,
-        if (fileMessage != null || imageMessage != null)
-          'size': fileMessage?.size ?? imageMessage?.size,
-        'status': fileMessage?.status.toString().split('.').last ??
-            imageMessage?.status.toString().split('.').last ??
-            textMessage?.status.toString().split('.').last,
-        if (textMessage != null) 'text': textMessage.text,
-        'type': fileMessage != null
-            ? 'file'
-            : imageMessage != null
-                ? 'image'
-                : 'text',
-        if (fileMessage != null || imageMessage != null)
-          'uri': fileMessage?.uri ?? imageMessage?.uri,
-        if (imageMessage != null) 'width': imageMessage.width,
-      };
-
-      await FirebaseFirestore.instance.runTransaction(
-        (Transaction transaction) async {
-          transaction.set(documentReference, message);
-        },
-      );
-
-      final DocumentReference<Json> _latestMessage =
-          FirebaseFirestore.instance.collection('messages').doc(widget.docId);
-
-      await FirebaseFirestore.instance.runTransaction(
-        (Transaction transaction) async {
-          transaction.set(
-            _latestMessage,
-            <String, dynamic>{'latestMessage': message},
-            SetOptions(merge: true),
-          );
-        },
-      );
+    Future<void> _sendMessage(types.Message message) async {
+      await GetIt.I.get<FirestoreService>().sendMessage(
+          docID: widget.docId,
+          message: ChatUtil.messageToJson(message: message));
 
       setState(() {
         _isAttachmentUploading = false;
       });
 
-      _sendPushNotification(
-          _user,
-          fileMessage != null
-              ? 'Sent you a file'
-              : imageMessage != null
-                  ? 'Sent you an image'
-                  : textMessage!.text);
+      _sendPushNotification(_user, message);
     }
 
     void _handleSendPressed(types.PartialText message) {
@@ -232,7 +182,7 @@ class _MessageScreenState extends State<MessageScreen> {
         text: message.text,
       );
 
-      _sendMessage(textMessage: textMessage);
+      _sendMessage(textMessage);
     }
 
     Future<void> _handleFileSelection() async {
@@ -245,18 +195,26 @@ class _MessageScreenState extends State<MessageScreen> {
       });
 
       if (result != null) {
-        final types.FileMessage message = types.FileMessage(
+        final PlatformFile pickedFile = result.files.single;
+        final String mimeType = lookupMimeType(pickedFile.path) ?? '';
+        final String url =
+            await GetIt.I.get<FirebaseStorageService>().uploadFile(
+                  filePath: pickedFile.path,
+                  mimeType: mimeType,
+                );
+
+        final types.FileMessage fileMessage = types.FileMessage(
           id: uuid.v4(),
           createdAt: DateTime.now().millisecondsSinceEpoch,
           status: types.Status.sent,
           author: types.User(id: _user.uid, imageUrl: _user.avatar),
-          mimeType: lookupMimeType(result.files.single.path),
-          name: result.files.single.name,
-          size: result.files.single.size,
-          uri: result.files.single.path,
+          mimeType: mimeType,
+          name: pickedFile.name,
+          size: pickedFile.size,
+          uri: url,
         );
 
-        _sendMessage(fileMessage: message);
+        _sendMessage(fileMessage);
       } else {
         setState(() {
           _isAttachmentUploading = false;
@@ -266,7 +224,6 @@ class _MessageScreenState extends State<MessageScreen> {
 
     Future<void> _handleImageSelection() async {
       final ImagePicker picker = ImagePicker();
-
       final XFile? pickedFile = await picker.pickImage(
         imageQuality: 70,
         maxWidth: 1440,
@@ -280,24 +237,15 @@ class _MessageScreenState extends State<MessageScreen> {
       if (pickedFile != null) {
         final Uint8List bytes = await pickedFile.readAsBytes();
         final image = await decodeImageFromList(bytes);
-
-        final Reference storageRef = FirebaseStorage.instance
-            .ref()
-            .child('chat_images')
-            .child(DateTime.now().toString());
-
-        final UploadTask uploadTask = storageRef.putFile(
-          File(pickedFile.path),
-          SettableMetadata(
-            contentType: 'image/jpg',
-          ),
-        );
-
-        final TaskSnapshot snapshot = await uploadTask;
-        final String url = await snapshot.ref.getDownloadURL();
+        final String mimeType = lookupMimeType(pickedFile.path) ?? '';
+        final String url =
+            await GetIt.I.get<FirebaseStorageService>().uploadFile(
+                  filePath: pickedFile.path,
+                  mimeType: mimeType,
+                );
 
         if (url != null) {
-          final types.ImageMessage message = types.ImageMessage(
+          final types.ImageMessage imageMessage = types.ImageMessage(
             id: uuid.v4(),
             createdAt: DateTime.now().millisecondsSinceEpoch,
             status: types.Status.sent,
@@ -309,7 +257,7 @@ class _MessageScreenState extends State<MessageScreen> {
             width: image.width.toDouble(),
           );
 
-          _sendMessage(imageMessage: message);
+          _sendMessage(imageMessage);
         } else {
           setState(() {
             _isAttachmentUploading = false;
