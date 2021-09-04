@@ -142,7 +142,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
     Widget buildGNavWithStream() {
       return StreamBuilder<QuerySnapshot<Json>>(
-        stream: GetIt.I.get<FirestoreService>().messagesStream(_user!.uid),
+        stream: GetIt.I
+            .get<FirestoreService>()
+            .messagesStreamByUserUid(userUid: _user!.uid),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (snapshot.hasData) {

@@ -214,10 +214,9 @@ class _UserProfileState extends State<UserProfile> {
             ),
           ),
           FutureBuilder<QuerySnapshot<Json>>(
-            future: FirebaseFirestore.instance
-                .collection('messages')
-                .where('users', isEqualTo: usersArray)
-                .get(),
+            future: GetIt.I
+                .get<FirestoreService>()
+                .getMessageDocument(usersArray: usersArray),
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
               void Function()? onTap;

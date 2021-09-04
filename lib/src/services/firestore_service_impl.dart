@@ -117,11 +117,51 @@ class FirestoreServiceImpl implements FirestoreService {
   }
 
   @override
-  Stream<QuerySnapshot<Json>> messagesStream(String userUid) {
+  Future<QuerySnapshot<Json>> getMessageDocument({
+    required List<String> usersArray,
+  }) {
+    return _firestore
+        .collection('messages')
+        .where('users', isEqualTo: usersArray)
+        .get();
+  }
+
+  @override
+  Stream<QuerySnapshot<Json>> messagesStreamByDocID({required String docID}) {
+    return _firestore
+        .collection('messages')
+        .doc(docID)
+        .collection(docID)
+        .snapshots();
+  }
+
+  @override
+  Stream<QuerySnapshot<Json>> messagesStreamByUserUid(
+      {required String userUid}) {
     return _firestore
         .collection('messages')
         .where('users', arrayContains: userUid)
         .orderBy('latestMessage.createdAt', descending: true)
         .snapshots();
+  }
+
+  @override
+  Future<void> updateMessagePreview({
+    required String docID,
+    required String messageID,
+    required Json previewData,
+  }) async {
+    final QuerySnapshot<Json> _doc = await FirebaseFirestore.instance
+        .collection('messages')
+        .doc(docID)
+        .collection(docID)
+        .where('id', isEqualTo: messageID)
+        .get();
+
+    if (_doc.docs.isNotEmpty) {
+      _doc.docs.first.reference.update(<String, dynamic>{
+        'previewData': previewData,
+      });
+    }
   }
 }

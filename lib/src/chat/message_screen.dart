@@ -331,9 +331,7 @@ class _MessageScreenState extends State<MessageScreen> {
             topRight: Radius.circular(24.0),
           ),
         ),
-        builder: (BuildContext context) {
-          return _buildAttachmentBottomSheet();
-        },
+        builder: (BuildContext context) => _buildAttachmentBottomSheet(),
       );
     }
 
@@ -341,18 +339,11 @@ class _MessageScreenState extends State<MessageScreen> {
       types.TextMessage message,
       types.PreviewData previewData,
     ) async {
-      final QuerySnapshot<Json> _doc = await FirebaseFirestore.instance
-          .collection('messages')
-          .doc(widget.docId)
-          .collection(widget.docId)
-          .where('id', isEqualTo: message.id)
-          .get();
-
-      if (_doc.docs.isNotEmpty) {
-        _doc.docs.first.reference.update(<String, dynamic>{
-          'previewData': previewData.toJson(),
-        });
-      }
+      await GetIt.I.get<FirestoreService>().updateMessagePreview(
+            docID: widget.docId,
+            messageID: message.id,
+            previewData: previewData.toJson(),
+          );
     }
 
     ChatTheme _chatTheme(ThemeData theme) {
@@ -385,11 +376,9 @@ class _MessageScreenState extends State<MessageScreen> {
         child: MessageAppBar(user2: widget.user2),
       ),
       body: StreamBuilder<QuerySnapshot<Json>>(
-        stream: FirebaseFirestore.instance
-            .collection('messages')
-            .doc(widget.docId)
-            .collection(widget.docId)
-            .snapshots(),
+        stream: GetIt.I
+            .get<FirestoreService>()
+            .messagesStreamByDocID(docID: widget.docId),
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (!snapshot.hasData) {

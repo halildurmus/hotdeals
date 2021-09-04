@@ -19,5 +19,18 @@ abstract class FirestoreService {
     required String user2Uid,
   });
 
-  Stream<QuerySnapshot<Json>> messagesStream(String userUid);
+  Future<QuerySnapshot<Json>> getMessageDocument({
+    required List<String> usersArray,
+  });
+
+  Stream<QuerySnapshot<Json>> messagesStreamByDocID({required String docID});
+
+  Stream<QuerySnapshot<Json>> messagesStreamByUserUid(
+      {required String userUid});
+
+  Future<void> updateMessagePreview({
+    required String docID,
+    required String messageID,
+    required Json previewData,
+  });
 }
