@@ -1,15 +1,14 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
+import '../services/firebase_storage_service.dart';
 import '../services/spring_service.dart';
 import '../widgets/loading_dialog.dart';
 import '../widgets/settings_list_item.dart';
@@ -43,7 +42,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     });
   }
 
-  Future<void> getImg(String userId, ImageSource imageSource) async {
+  Future<void> getImg(String userID, ImageSource imageSource) async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile =
         await picker.pickImage(source: imageSource, maxWidth: 1000);
@@ -51,23 +50,16 @@ class _UpdateProfileState extends State<UpdateProfile> {
     showLoadingDialog();
 
     if (pickedFile != null) {
-      final File image = File(pickedFile.path);
+      final String mimeType = lookupMimeType(pickedFile.path) ?? '';
+      final String avatarURL =
+          await GetIt.I.get<FirebaseStorageService>().uploadUserAvatar(
+                filePath: pickedFile.path,
+                mimeType: mimeType,
+                userID: userID,
+              );
 
-      final Reference storageRef =
-          FirebaseStorage.instance.ref().child('avatars').child(userId);
-
-      final UploadTask uploadTask = storageRef.putFile(
-        image,
-        SettableMetadata(
-          contentType: 'image/jpg',
-        ),
-      );
-
-      final TaskSnapshot snapshot = await uploadTask;
-      final String avatarUrl = await snapshot.ref.getDownloadURL();
-
-      if (avatarUrl != null) {
-        await updateUserAvatar(userId, avatarUrl);
+      if (avatarURL != null) {
+        await updateUserAvatar(userID, avatarURL);
         Provider.of<UserControllerImpl>(context, listen: false).getUser();
         Navigator.of(context).pop();
       }
@@ -76,7 +68,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     }
   }
 
-  void showImagePicker(String userId) {
+  void showImagePicker(String userID) {
     showModalBottomSheet<void>(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -121,7 +113,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               leading: const Icon(Icons.photo_camera),
               title: Text(AppLocalizations.of(context)!.camera),
               onTap: () async {
-                await getImg(userId, ImageSource.camera);
+                await getImg(userID, ImageSource.camera);
                 Navigator.of(context).pop();
               },
             ),
@@ -130,7 +122,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               leading: const Icon(Icons.photo_library),
               title: Text(AppLocalizations.of(context)!.gallery),
               onTap: () async {
-                await getImg(userId, ImageSource.gallery);
+                await getImg(userID, ImageSource.gallery);
                 Navigator.of(context).pop();
               },
             ),
