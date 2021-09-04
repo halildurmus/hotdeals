@@ -14,6 +14,8 @@ import 'src/models/current_route.dart';
 import 'src/models/push_notification.dart';
 import 'src/models/stores.dart';
 import 'src/services/connection_service.dart';
+import 'src/services/firebase_storage_service.dart';
+import 'src/services/firebase_storage_service_impl.dart';
 import 'src/services/firestore_service.dart';
 import 'src/services/firestore_service_impl.dart';
 import 'src/services/spring_service.dart';
@@ -53,6 +55,7 @@ Future<void> main() async {
   getIt.registerSingleton<CurrentRoute>(CurrentRoute());
   getIt.registerSingleton<ConnectionService>(ConnectionService());
   getIt.registerSingleton<SQLiteService<PushNotification>>(SQLiteServiceImpl());
+  getIt.registerSingleton<FirebaseStorageService>(FirebaseStorageServiceImpl());
   getIt.registerSingleton<FirestoreService>(FirestoreServiceImpl());
   getIt.registerSingleton<SpringService>(SpringServiceImpl());
   getIt.registerSingleton<Categories>(Categories());
