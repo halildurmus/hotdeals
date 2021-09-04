@@ -1,3 +1,7 @@
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
+typedef Json = Map<String, dynamic>;
+
 /// A static class that contains useful utility functions for chat functionality.
 class ChatUtil {
   /// Returns a conversation ID, calculated with the given parameters named
@@ -45,4 +49,39 @@ class ChatUtil {
       List<String>.of(user1Uid.hashCode <= user2Uid.hashCode
           ? <String>[user1Uid, user2Uid]
           : <String>[user2Uid, user1Uid]);
+
+  /// Constructs a [Json] from the given [message].
+  static Json messageToJson({required types.Message message}) {
+    final bool isFileMessage = message is types.FileMessage;
+    final bool isImageMessage = message is types.ImageMessage;
+    final bool isTextMessage = message is types.TextMessage;
+
+    return <String, dynamic>{
+      'id': message.id,
+      'author': <String, dynamic>{'id': message.author.id},
+      'createdAt': message.createdAt,
+      if (isImageMessage) 'height': message.height,
+      if (isFileMessage) 'mimeType': message.mimeType,
+      if (isFileMessage)
+        'name': message.name
+      else if (isImageMessage)
+        'name': message.name,
+      if (isFileMessage)
+        'size': message.size
+      else if (isImageMessage)
+        'size': message.size,
+      'status': message.status.toString().split('.').last,
+      if (isTextMessage) 'text': message.text,
+      'type': isFileMessage
+          ? 'file'
+          : isImageMessage
+              ? 'image'
+              : 'text',
+      if (isFileMessage)
+        'uri': message.uri
+      else if (isImageMessage)
+        'uri': message.uri,
+      if (isImageMessage) 'width': message.width,
+    };
+  }
 }
