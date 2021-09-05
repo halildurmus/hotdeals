@@ -389,7 +389,8 @@ class _UserProfileState extends State<UserProfile> {
               ],
             ),
             const SizedBox(height: 10),
-            if (loggedInUser != null) buildButtons(),
+            if (loggedInUser != null && loggedInUser?.id != user.id)
+              buildButtons(),
           ],
         ),
       );
