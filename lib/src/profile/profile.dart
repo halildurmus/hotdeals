@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 
@@ -33,44 +32,55 @@ class _ProfileState extends State<Profile> {
     final TextTheme textTheme = theme.textTheme;
     final MyUser? user = Provider.of<UserControllerImpl>(context).user;
 
+    Widget buildAvatar() {
+      return GestureDetector(
+        onTap: () {
+          NavigationUtil.navigate(
+            context,
+            AvatarFullScreen(avatarURL: user!.avatar!, heroTag: user.id!),
+          );
+        },
+        child: Hero(
+          tag: user!.id!,
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(user.avatar!),
+            radius: 50,
+          ),
+        ),
+      );
+    }
+
+    Widget buildUpdateProfileButton() {
+      return SizedBox(
+        width: 150.0,
+        child: OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+          ),
+          onPressed: () =>
+              NavigationUtil.navigate(context, const UpdateProfile()),
+          child: Text(AppLocalizations.of(context)!.updateProfile),
+        ),
+      );
+    }
+
     Widget buildProfileDetails() {
       return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: <Widget>[
-            GestureDetector(
-              onTap: () {
-                NavigationUtil.navigate(
-                  context,
-                  AvatarFullScreen(avatarURL: user!.avatar!),
-                );
-              },
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(user!.avatar!),
-                radius: 50,
-              ),
-            ),
+            buildAvatar(),
             const SizedBox(width: 20.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(user.nickname!, style: textTheme.headline6),
+                Text(user!.nickname!, style: textTheme.headline6),
                 const SizedBox(height: 5.0),
                 Text(user.email!, style: textTheme.caption),
                 const SizedBox(height: 5.0),
-                SizedBox(
-                  width: 150.0,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
-                    onPressed: () =>
-                        NavigationUtil.navigate(context, const UpdateProfile()),
-                    child: Text(AppLocalizations.of(context)!.updateProfile),
-                  ),
-                ),
+                buildUpdateProfileButton(),
               ],
             ),
           ],

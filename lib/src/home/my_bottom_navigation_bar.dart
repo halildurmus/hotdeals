@@ -102,8 +102,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                     leading: _isLoggedIn
                         ? widget.activeScreen == 3 || unreadNotifications == 0
                             ? CircleAvatar(
-                                radius: 12.0,
                                 backgroundImage: NetworkImage(user!.avatar!),
+                                radius: 12,
                               )
                             : Badge(
                                 badgeColor: theme.primaryColor.withOpacity(.3),
