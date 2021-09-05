@@ -420,8 +420,8 @@ class _MessageScreenState extends State<MessageScreen> {
                     return types.FileMessage(
                       id: id,
                       createdAt: createdAt,
-                      status: status,
                       author: author,
+                      status: status,
                       mimeType: messageData['mimeType'] as String,
                       name: messageData['name'] as String,
                       size: messageData['size'] as int,
@@ -431,18 +431,20 @@ class _MessageScreenState extends State<MessageScreen> {
                     return types.ImageMessage(
                       id: id,
                       createdAt: createdAt,
-                      status: status,
                       author: author,
-                      uri: messageData['uri'] as String,
+                      status: status,
+                      height: messageData['height'] as double,
                       name: messageData['name'] as String,
                       size: messageData['size'] as int,
+                      uri: messageData['uri'] as String,
+                      width: messageData['width'] as double,
                     );
                   } else {
                     return types.TextMessage(
                       id: id,
                       createdAt: createdAt,
-                      status: status,
                       author: author,
+                      status: status,
                       previewData: previewData,
                       text: messageData['text'] as String,
                     );
