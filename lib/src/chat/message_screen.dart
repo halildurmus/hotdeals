@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -110,19 +109,11 @@ class _MessageScreenState extends State<MessageScreen> {
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
-            body: CachedNetworkImage(
-              imageUrl: message.uri,
-              imageBuilder:
-                  (BuildContext ctx, ImageProvider<Object> imageProvider) {
-                return PhotoView(
-                  backgroundDecoration:
-                      BoxDecoration(color: Theme.of(ctx).backgroundColor),
-                  filterQuality: FilterQuality.low,
-                  imageProvider: imageProvider,
-                );
-              },
-              placeholder: (BuildContext context, String url) =>
-                  const Center(child: CircularProgressIndicator()),
+            body: PhotoView(
+              backgroundDecoration:
+                  BoxDecoration(color: Theme.of(context).backgroundColor),
+              filterQuality: FilterQuality.low,
+              imageProvider: NetworkImage(message.uri),
             ),
           );
         },
