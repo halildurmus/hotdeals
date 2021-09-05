@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -361,9 +362,13 @@ class _UserProfileState extends State<UserProfile> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(user.avatar!),
+                CachedNetworkImage(
+                  imageUrl: user.avatar!,
+                  imageBuilder: (BuildContext ctx,
+                          ImageProvider<Object> imageProvider) =>
+                      CircleAvatar(backgroundImage: imageProvider, radius: 30),
+                  placeholder: (BuildContext context, String url) =>
+                      const CircleAvatar(radius: 30),
                 ),
                 const SizedBox(width: 20),
                 Column(
