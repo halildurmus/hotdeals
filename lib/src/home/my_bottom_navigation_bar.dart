@@ -8,10 +8,9 @@ import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
 import '../models/my_user.dart';
-import '../models/push_notification.dart';
 import '../models/user_controller_impl.dart';
 import '../services/firestore_service.dart';
-import '../services/sqlite_service.dart';
+import '../services/push_notification_service.dart';
 
 typedef Json = Map<String, dynamic>;
 
@@ -33,12 +32,12 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   int unreadMessages = 0;
   int unreadNotifications = 0;
   late int activeScreen;
-  late SQLiteService<PushNotification> sqliteService;
+  late PushNotificationService pushNotificationService;
 
   @override
   void initState() {
     _user = context.read<UserControllerImpl>().user;
-    sqliteService = GetIt.I.get<SQLiteService<PushNotification>>();
+    pushNotificationService = GetIt.I.get<PushNotificationService>();
     activeScreen = widget.activeScreen;
     super.initState();
   }
@@ -57,9 +56,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
           final bool _isLoggedIn = _user != null;
 
           return AnimatedBuilder(
-            animation: sqliteService,
+            animation: pushNotificationService,
             builder: (BuildContext context, Widget? child) {
-              unreadNotifications = sqliteService.unreadNotifications;
+              unreadNotifications = pushNotificationService.unreadNotifications;
 
               return GNav(
                 gap: 8,

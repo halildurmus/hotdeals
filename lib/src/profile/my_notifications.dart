@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../app_localizations.dart';
 import '../models/push_notification.dart';
-import '../services/sqlite_service.dart';
+import '../services/push_notification_service.dart';
 import '../widgets/notification_item.dart';
 
 class MyNotifications extends StatefulWidget {
@@ -14,11 +14,11 @@ class MyNotifications extends StatefulWidget {
 }
 
 class _MyNotificationsState extends State<MyNotifications> {
-  late SQLiteService<PushNotification> sqliteService;
+  late PushNotificationService pushNotificationService;
 
   @override
   void initState() {
-    sqliteService = GetIt.I.get<SQLiteService<PushNotification>>();
+    pushNotificationService = GetIt.I.get<PushNotificationService>();
     super.initState();
   }
 
@@ -35,7 +35,7 @@ class _MyNotificationsState extends State<MyNotifications> {
           }
 
           notification.isRead = true;
-          await sqliteService.update(notification);
+          await pushNotificationService.update(notification);
         }
 
         return NotificationItem(onTap: onTap, notification: notification);
@@ -49,10 +49,10 @@ class _MyNotificationsState extends State<MyNotifications> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: sqliteService,
+      animation: pushNotificationService,
       builder: (BuildContext context, Widget? child) {
         return FutureBuilder<List<PushNotification>>(
-          future: sqliteService.getAll(),
+          future: pushNotificationService.getAll(),
           builder: (BuildContext context,
               AsyncSnapshot<List<PushNotification>> snapshot) {
             if (snapshot.hasData) {

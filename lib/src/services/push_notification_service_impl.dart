@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/push_notification.dart';
-import 'sqlite_service.dart';
+import '../services/push_notification_service.dart';
 
-/// An implementation of the [SQLiteService] that many Widgets
+/// An implementation of the [PushNotificationService] that many Widgets
 /// can interact with to create, read and update notifications.
-class SQLiteServiceImpl extends ChangeNotifier
-    implements SQLiteService<PushNotification> {
+class PushNotificationServiceImpl extends ChangeNotifier
+    implements PushNotificationService {
   late Database _db;
 
   @override

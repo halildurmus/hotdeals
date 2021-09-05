@@ -11,7 +11,6 @@ import 'src/config/environment.dart';
 import 'src/firebase_messaging_listener.dart';
 import 'src/models/categories.dart';
 import 'src/models/current_route.dart';
-import 'src/models/push_notification.dart';
 import 'src/models/stores.dart';
 import 'src/services/connection_service.dart';
 import 'src/services/firebase_storage_service.dart';
@@ -20,10 +19,10 @@ import 'src/services/firestore_service.dart';
 import 'src/services/firestore_service_impl.dart';
 import 'src/services/image_picker_service.dart';
 import 'src/services/image_picker_service_impl.dart';
+import 'src/services/push_notification_service.dart';
+import 'src/services/push_notification_service_impl.dart';
 import 'src/services/spring_service.dart';
 import 'src/services/spring_service_impl.dart';
-import 'src/services/sqlite_service.dart';
-import 'src/services/sqlite_service_impl.dart';
 import 'src/settings/settings.controller.impl.dart';
 import 'src/settings/settings.service.impl.dart';
 import 'src/settings/settings_controller.dart';
@@ -56,7 +55,8 @@ Future<void> main() async {
   final GetIt getIt = GetIt.I;
   getIt.registerSingleton<CurrentRoute>(CurrentRoute());
   getIt.registerSingleton<ConnectionService>(ConnectionService());
-  getIt.registerSingleton<SQLiteService<PushNotification>>(SQLiteServiceImpl());
+  getIt.registerSingleton<PushNotificationService>(
+      PushNotificationServiceImpl());
   getIt.registerSingleton<FirebaseStorageService>(FirebaseStorageServiceImpl());
   getIt.registerSingleton<FirestoreService>(FirestoreServiceImpl());
   getIt.registerSingleton<ImagePickerService>(ImagePickerServiceImpl());
@@ -82,13 +82,11 @@ Future<void> main() async {
   getIt.get<ConnectionService>().initialize();
 
   // Loads the sqlite database.
-  await getIt.get<SQLiteService<PushNotification>>().load();
+  await getIt.get<PushNotificationService>().load();
 
   // Calculates the unread notifications count if there is a signed in user.
   if (FirebaseAuth.instance.currentUser != null) {
-    await getIt
-        .get<SQLiteService<PushNotification>>()
-        .calculateUnreadNotifications();
+    await getIt.get<PushNotificationService>().calculateUnreadNotifications();
   }
 
   // Initializes a new SharedPreferences instance.

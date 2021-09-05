@@ -1,17 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart' show ChangeNotifier;
-
 /// An abstract class that many Widgets can interact with to create, read and
-/// update notifications.
-abstract class SQLiteService<T> extends ChangeNotifier {
-  int unreadNotifications = 0;
-
+/// update records.
+abstract class SQLiteService<T> {
   /// Opens the database and sets the database reference.
   Future<void> load();
-
-  /// Calculates the unread notifications count.
-  Future<int> calculateUnreadNotifications();
 
   /// Inserts the record into the database.
   Future<void> insert(T t);
