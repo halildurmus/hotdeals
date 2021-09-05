@@ -58,8 +58,9 @@ class ChatUtil {
 
     return <String, dynamic>{
       'id': message.id,
-      'author': <String, dynamic>{'id': message.author.id},
       'createdAt': message.createdAt,
+      'author': <String, dynamic>{'id': message.author.id},
+      'status': message.status.toString().split('.').last,
       if (isImageMessage) 'height': message.height,
       if (isFileMessage) 'mimeType': message.mimeType,
       if (isFileMessage)
@@ -70,7 +71,6 @@ class ChatUtil {
         'size': message.size
       else if (isImageMessage)
         'size': message.size,
-      'status': message.status.toString().split('.').last,
       if (isTextMessage) 'text': message.text,
       'type': isFileMessage
           ? 'file'
