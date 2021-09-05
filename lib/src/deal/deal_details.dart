@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -336,12 +337,22 @@ class _DealDetailsState extends State<DealDetails> {
           color: theme.brightness == Brightness.dark ? Colors.white : null,
         ),
         padding: theme.brightness == Brightness.dark
-            ? const EdgeInsets.all(4)
+            ? const EdgeInsets.all(3)
             : null,
-        child: Image.network(
-          _store.logo,
-          height: 40,
-          width: 40,
+        height: 45,
+        width: 45,
+        child: CachedNetworkImage(
+          imageUrl: _store.logo,
+          imageBuilder:
+              (BuildContext ctx, ImageProvider<Object> imageProvider) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                image: DecorationImage(image: imageProvider),
+              ),
+            );
+          },
+          placeholder: (BuildContext context, String url) =>
+              const SizedBox(height: 40, width: 40),
         ),
       );
     }
@@ -699,8 +710,13 @@ class _DealDetailsState extends State<DealDetails> {
               onTap: onTap,
               child: Row(
                 children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(avatar),
+                  CachedNetworkImage(
+                    imageUrl: avatar,
+                    imageBuilder: (BuildContext ctx,
+                            ImageProvider<Object> imageProvider) =>
+                        CircleAvatar(backgroundImage: imageProvider),
+                    placeholder: (BuildContext context, String url) =>
+                        const CircleAvatar(),
                   ),
                   const SizedBox(width: 8),
                   Column(
@@ -877,10 +893,18 @@ class _DealDetailsState extends State<DealDetails> {
                                       onTap: () => _userOnTap(snapshot.data!),
                                       child: Row(
                                         children: <Widget>[
-                                          CircleAvatar(
-                                            backgroundImage:
-                                                NetworkImage(avatar),
-                                            radius: 16,
+                                          CachedNetworkImage(
+                                            imageUrl: avatar,
+                                            imageBuilder: (BuildContext ctx,
+                                                    ImageProvider<Object>
+                                                        imageProvider) =>
+                                                CircleAvatar(
+                                                    backgroundImage:
+                                                        imageProvider,
+                                                    radius: 16),
+                                            placeholder: (BuildContext context,
+                                                    String url) =>
+                                                const CircleAvatar(radius: 16),
                                           ),
                                           const SizedBox(width: 8.0),
                                           Text(
