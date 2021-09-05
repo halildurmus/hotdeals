@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -42,8 +43,13 @@ class NotificationItem extends StatelessWidget {
               splashColor: theme.primaryColorLight.withOpacity(.1),
               child: ListTile(
                 isThreeLine: notification.verb == NotificationVerb.comment,
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(user.avatar!),
+                leading: CachedNetworkImage(
+                  imageUrl: user.avatar!,
+                  imageBuilder:
+                      (BuildContext ctx, ImageProvider<Object> imageProvider) =>
+                          CircleAvatar(backgroundImage: imageProvider),
+                  placeholder: (BuildContext context, String url) =>
+                      const CircleAvatar(),
                 ),
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 4),
