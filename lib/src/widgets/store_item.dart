@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -53,8 +54,25 @@ class _StoreItemState extends State<StoreItem> {
                     theme.brightness == Brightness.dark ? Colors.white : null,
                 padding: theme.brightness == Brightness.dark
                     ? const EdgeInsets.all(4)
-                    : null,
-                child: Image.network(widget.store.logo, height: 50, width: 50),
+                    : EdgeInsets.zero,
+                height: 55,
+                width: 55,
+                child: CachedNetworkImage(
+                  imageUrl: widget.store.logo,
+                  imageBuilder:
+                      (BuildContext ctx, ImageProvider<Object> imageProvider) {
+                    return Hero(
+                      tag: widget.store.id!,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(image: imageProvider),
+                        ),
+                      ),
+                    );
+                  },
+                  placeholder: (BuildContext context, String url) =>
+                      const SizedBox(height: 50, width: 50),
+                ),
               ),
               const SizedBox(height: 8),
               Text(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -29,6 +30,7 @@ class _DealsByStoreState extends State<DealsByStore> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final Store store = widget.store;
 
     Future<void> onRefresh() async {
@@ -75,12 +77,28 @@ class _DealsByStoreState extends State<DealsByStore> {
         child: AppBar(
           centerTitle: true,
           title: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              color: Colors.white,
+            color: theme.brightness == Brightness.dark ? Colors.white : null,
+            padding: theme.brightness == Brightness.dark
+                ? const EdgeInsets.all(4)
+                : EdgeInsets.zero,
+            height: 55,
+            width: 55,
+            child: CachedNetworkImage(
+              imageUrl: store.logo,
+              imageBuilder:
+                  (BuildContext ctx, ImageProvider<Object> imageProvider) {
+                return Hero(
+                  tag: store.id!,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(image: imageProvider),
+                    ),
+                  ),
+                );
+              },
+              placeholder: (BuildContext context, String url) =>
+                  const SizedBox(height: 50, width: 50),
             ),
-            padding: const EdgeInsets.all(8),
-            child: Image.network(store.logo, height: 70, width: 70),
           ),
         ),
       );
