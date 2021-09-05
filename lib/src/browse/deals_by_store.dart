@@ -79,7 +79,7 @@ class _DealsByStoreState extends State<DealsByStore> {
           title: Container(
             color: theme.brightness == Brightness.dark ? Colors.white : null,
             padding: theme.brightness == Brightness.dark
-                ? const EdgeInsets.all(4)
+                ? const EdgeInsets.all(3)
                 : EdgeInsets.zero,
             height: 55,
             width: 55,
