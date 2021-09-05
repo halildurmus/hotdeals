@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
@@ -29,7 +30,14 @@ class _BlockedUsersState extends State<BlockedUsers> {
         highlightColor: theme.primaryColorLight.withOpacity(.1),
         splashColor: theme.primaryColorLight.withOpacity(.1),
         child: ListTile(
-          leading: CircleAvatar(backgroundImage: NetworkImage(user.avatar!)),
+          leading: CachedNetworkImage(
+            imageUrl: user.avatar!,
+            imageBuilder:
+                (BuildContext ctx, ImageProvider<Object> imageProvider) =>
+                    CircleAvatar(backgroundImage: imageProvider, radius: 24),
+            placeholder: (BuildContext context, String url) =>
+                const CircleAvatar(),
+          ),
           title: Text(user.nickname!, style: theme.textTheme.bodyText1),
           trailing: OutlinedButton(
             onPressed: () => confirmUnblockUser(context, user.uid),

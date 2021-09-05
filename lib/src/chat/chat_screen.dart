@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -199,9 +200,12 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     Widget _buildUserAvatar(String avatarURL) {
-      return CircleAvatar(
-        radius: 24.0,
-        backgroundImage: NetworkImage(avatarURL),
+      return CachedNetworkImage(
+        imageUrl: avatarURL,
+        imageBuilder: (BuildContext ctx, ImageProvider<Object> imageProvider) =>
+            CircleAvatar(backgroundImage: imageProvider, radius: 24),
+        placeholder: (BuildContext context, String url) =>
+            const CircleAvatar(radius: 24),
       );
     }
 
