@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -13,6 +17,7 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -196,10 +201,11 @@ class _MessageScreenState extends State<MessageScreen> {
 
       if (result != null) {
         final PlatformFile pickedFile = result.files.single;
-        final String mimeType = lookupMimeType(pickedFile.path) ?? '';
+        final String mimeType = lookupMimeType(pickedFile.name) ?? '';
         final String url =
             await GetIt.I.get<FirebaseStorageService>().uploadFile(
                   filePath: pickedFile.path,
+                  fileName: pickedFile.name,
                   mimeType: mimeType,
                 );
 
@@ -237,10 +243,11 @@ class _MessageScreenState extends State<MessageScreen> {
       if (pickedFile != null) {
         final Uint8List bytes = await pickedFile.readAsBytes();
         final image = await decodeImageFromList(bytes);
-        final String mimeType = lookupMimeType(pickedFile.path) ?? '';
+        final String mimeType = lookupMimeType(pickedFile.name) ?? '';
         final String url =
             await GetIt.I.get<FirebaseStorageService>().uploadFile(
                   filePath: pickedFile.path,
+                  fileName: pickedFile.name,
                   mimeType: mimeType,
                 );
 

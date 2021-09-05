@@ -51,10 +51,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
     showLoadingDialog();
 
     if (pickedFile != null) {
-      final String mimeType = lookupMimeType(pickedFile.path) ?? '';
+      final String mimeType = lookupMimeType(pickedFile.name) ?? '';
       final String avatarURL =
           await GetIt.I.get<FirebaseStorageService>().uploadUserAvatar(
                 filePath: pickedFile.path,
+                fileName: pickedFile.name,
                 mimeType: mimeType,
                 userID: userID,
               );

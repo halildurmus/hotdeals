@@ -10,12 +10,20 @@ class FirebaseStorageServiceImpl implements FirebaseStorageService {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
+  Reference refFromURL({required String url}) {
+    return _storage.refFromURL(url);
+  }
+
+  @override
   Future<String> uploadFile({
     required String filePath,
+    required String fileName,
     required String mimeType,
   }) async {
-    final Reference storageRef =
-        _storage.ref().child('uploads').child(DateTime.now().toString());
+    final Reference storageRef = _storage
+        .ref()
+        .child('uploads')
+        .child('${DateTime.now().millisecondsSinceEpoch}-$fileName');
     final UploadTask uploadTask = storageRef.putFile(
       File(filePath),
       SettableMetadata(contentType: mimeType),
@@ -28,10 +36,12 @@ class FirebaseStorageServiceImpl implements FirebaseStorageService {
   @override
   Future<String> uploadUserAvatar({
     required String filePath,
+    required String fileName,
     required String mimeType,
     required String userID,
   }) async {
-    final Reference storageRef = _storage.ref().child('avatars').child(userID);
+    final Reference storageRef =
+        _storage.ref().child('avatars').child(userID + '-' + fileName);
     final UploadTask uploadTask = storageRef.putFile(
       File(filePath),
       SettableMetadata(contentType: mimeType),
