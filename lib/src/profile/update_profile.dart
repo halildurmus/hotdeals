@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
@@ -239,8 +240,13 @@ class _UpdateProfileState extends State<UpdateProfile> {
             ),
           ),
           SettingsListItem(
-            image: CircleAvatar(
-              backgroundImage: NetworkImage(user.avatar!),
+            image: CachedNetworkImage(
+              imageUrl: user.avatar!,
+              imageBuilder:
+                  (BuildContext ctx, ImageProvider<Object> imageProvider) =>
+                      CircleAvatar(backgroundImage: imageProvider),
+              placeholder: (BuildContext context, String url) =>
+                  const CircleAvatar(),
             ),
             title: AppLocalizations.of(context)!.avatar,
             onTap: () => showImagePicker(user.id!),

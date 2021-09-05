@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
@@ -318,9 +319,13 @@ class _MessageAppBarState extends State<MessageAppBar> {
         onTap: () {},
         child: Row(
           children: <Widget>[
-            CircleAvatar(
-              radius: 16.0,
-              backgroundImage: NetworkImage(widget.user2.avatar!),
+            CachedNetworkImage(
+              imageUrl: widget.user2.avatar!,
+              imageBuilder:
+                  (BuildContext ctx, ImageProvider<Object> imageProvider) =>
+                      CircleAvatar(backgroundImage: imageProvider, radius: 16),
+              placeholder: (BuildContext context, String url) =>
+                  const CircleAvatar(radius: 16),
             ),
             const SizedBox(width: 8),
             Text(

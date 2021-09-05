@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -38,8 +39,13 @@ class NotificationOverlayItem extends StatelessWidget {
         child: ListTile(
           onTap: () => _onTap(context),
           leading: notification.avatar != null
-              ? CircleAvatar(
-                  backgroundImage: NetworkImage(notification.avatar!),
+              ? CachedNetworkImage(
+                  imageUrl: notification.avatar!,
+                  imageBuilder:
+                      (BuildContext ctx, ImageProvider<Object> imageProvider) =>
+                          CircleAvatar(backgroundImage: imageProvider),
+                  placeholder: (BuildContext context, String url) =>
+                      const CircleAvatar(),
                 )
               : null,
           title: Text(notification.title),
