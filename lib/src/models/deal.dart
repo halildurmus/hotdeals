@@ -77,15 +77,15 @@ class Deal {
   Json toJson() {
     return <String, dynamic>{
       if (postedBy != null) 'postedBy': postedBy,
-      if (coverPhoto != null) 'coverPhoto': coverPhoto,
-      if (dealUrl != null) 'dealUrl': dealUrl,
+      'coverPhoto': coverPhoto,
+      'dealUrl': dealUrl,
       if (photos != null) 'photos': photos,
-      if (title != null) 'title': title,
-      if (description != null) 'description': description,
-      if (category != null) 'category': category,
-      if (store != null) 'store': store,
-      if (price != null) 'price': price,
-      if (discountPrice != null) 'discountPrice': discountPrice,
+      'title': title,
+      'description': description,
+      'category': category,
+      'store': store,
+      'price': price,
+      'discountPrice': discountPrice,
     };
   }
 

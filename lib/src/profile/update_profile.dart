@@ -61,11 +61,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 userID: userID,
               );
 
-      if (avatarURL != null) {
-        await updateUserAvatar(userID, avatarURL);
-        Provider.of<UserControllerImpl>(context, listen: false).getUser();
-        Navigator.of(context).pop();
-      }
+      await updateUserAvatar(userID, avatarURL);
+      Provider.of<UserControllerImpl>(context, listen: false).getUser();
+      Navigator.of(context).pop();
     } else {
       print('No image selected.');
     }

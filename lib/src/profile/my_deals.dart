@@ -29,7 +29,7 @@ class _MyDealsState extends State<MyDeals> {
 
   @override
   Widget build(BuildContext context) {
-    final MyUser user = Provider.of<UserControllerImpl>(context).user!;
+    Provider.of<UserControllerImpl>(context).user!;
 
     return FutureBuilder<List<Deal>?>(
       future: _myDealsFuture,

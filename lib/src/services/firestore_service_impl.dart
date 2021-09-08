@@ -90,7 +90,9 @@ class FirestoreServiceImpl implements FirestoreService {
           }, SetOptions(merge: true))
           .then((value) {})
           .catchError(
-            (dynamic error) => print('Failed to update document: $error'),
+            (dynamic error) {
+              print('Failed to update document: $error');
+            },
           );
     }
 
@@ -108,11 +110,11 @@ class FirestoreServiceImpl implements FirestoreService {
     });
 
     if (docs.isNotEmpty) {
-      docs.forEach((QueryDocumentSnapshot<Json> doc) {
+      for (QueryDocumentSnapshot<Json> doc in docs) {
         doc.reference.update(<String, dynamic>{
           'status': 'seen',
         });
-      });
+      }
     }
   }
 

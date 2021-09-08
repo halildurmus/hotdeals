@@ -39,10 +39,10 @@ class Report {
 
   Json toJson() {
     return <String, dynamic>{
-      if (reportedBy != null) 'reportedBy': reportedBy,
+      'reportedBy': reportedBy,
       if (reportedDeal != null) 'reportedDeal': reportedDeal,
       if (reportedUser != null) 'reportedUser': reportedUser,
-      if (reasons != null) 'reasons': reasons,
+      'reasons': reasons,
       if (message != null) 'message': message,
     };
   }

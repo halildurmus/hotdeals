@@ -53,11 +53,11 @@ class PushNotificationServiceImpl extends ChangeNotifier
   Future<int> calculateUnreadNotifications() async {
     final List<PushNotification> notifications = await getAll();
 
-    notifications.forEach((PushNotification e) {
+    for (PushNotification e in notifications) {
       if (!e.isRead) {
         unreadNotifications++;
       }
-    });
+    }
 
     return Future<int>.value(unreadNotifications);
   }

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
 import '../models/deal.dart';
-import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../widgets/deal_list_item_builder.dart';
@@ -19,7 +18,7 @@ class MyFavorites extends StatefulWidget {
 class _MyFavoritesState extends State<MyFavorites> {
   @override
   Widget build(BuildContext context) {
-    final MyUser user = Provider.of<UserControllerImpl>(context).user!;
+    Provider.of<UserControllerImpl>(context).user!;
 
     return FutureBuilder<List<Deal>?>(
       future: GetIt.I.get<SpringService>().getUserFavorites(),

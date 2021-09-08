@@ -47,9 +47,8 @@ class SettingsListItem extends StatelessWidget {
             style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w500),
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
-          trailing: hasNavigation != null && hasNavigation
-              ? const Icon(LineIcons.angleRight, size: 25)
-              : null,
+          trailing:
+              hasNavigation ? const Icon(LineIcons.angleRight, size: 25) : null,
         ),
       ),
     );

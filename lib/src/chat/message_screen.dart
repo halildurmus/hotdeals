@@ -251,25 +251,19 @@ class _MessageScreenState extends State<MessageScreen> {
                   mimeType: mimeType,
                 );
 
-        if (url != null) {
-          final types.ImageMessage imageMessage = types.ImageMessage(
-            id: uuid.v4(),
-            createdAt: DateTime.now().millisecondsSinceEpoch,
-            status: types.Status.sent,
-            author: types.User(id: _user.uid, imageUrl: _user.avatar),
-            height: image.height.toDouble(),
-            name: pickedFile.path.split('/').last,
-            size: bytes.length,
-            uri: url,
-            width: image.width.toDouble(),
-          );
+        final types.ImageMessage imageMessage = types.ImageMessage(
+          id: uuid.v4(),
+          createdAt: DateTime.now().millisecondsSinceEpoch,
+          status: types.Status.sent,
+          author: types.User(id: _user.uid, imageUrl: _user.avatar),
+          height: image.height.toDouble(),
+          name: pickedFile.path.split('/').last,
+          size: bytes.length,
+          uri: url,
+          width: image.width.toDouble(),
+        );
 
-          _sendMessage(imageMessage);
-        } else {
-          setState(() {
-            _isAttachmentUploading = false;
-          });
-        }
+        _sendMessage(imageMessage);
       } else {
         setState(() {
           _isAttachmentUploading = false;

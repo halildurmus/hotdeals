@@ -30,10 +30,10 @@ class Category {
   final CategoryIcon icon;
 
   Json toJson() => <String, dynamic>{
-        if (name != null) 'name': name,
-        if (parent != null) 'parent': parent,
-        if (category != null) 'category': category,
-        if (icon != null) 'icon': icon.toJson(),
+        'name': name,
+        'parent': parent,
+        'category': category,
+        'icon': icon.toJson(),
       };
 
   @override

@@ -211,14 +211,14 @@ class _DealsState extends State<Deals> {
       }
 
       searchResults.clear();
-      searchHits.forEach((SearchHit e) {
+      for (SearchHit e in searchHits) {
         searchResults.add(e.content.title);
         //   if (e.highlightFields.title != null) {
         //     _searchResults.add(e.highlightFields.title!.first);
         //   } else {
         //     _searchResults.add(e.content.title);
         //   }
-      });
+      }
 
       setState(() {
         searchErrorOccurred = false;

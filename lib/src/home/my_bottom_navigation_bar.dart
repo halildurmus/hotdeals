@@ -157,22 +157,20 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
               return buildGNav();
             }
 
-            items.forEach((DocumentSnapshot<Json> e) {
+            for (DocumentSnapshot e in items) {
               final Map<String, dynamic> latestMessage =
                   e.get('latestMessage') as Map<String, dynamic>;
 
-              if (e != null) {
-                final String senderId = latestMessage['author']['id'] as String;
-                if (senderId != _user?.uid) {
-                  final bool isRead =
-                      (latestMessage['status'] as String) == 'seen';
+              final String senderId = latestMessage['author']['id'] as String;
+              if (senderId != _user?.uid) {
+                final bool isRead =
+                    (latestMessage['status'] as String) == 'seen';
 
-                  if (!isRead) {
-                    unreadMessages++;
-                  }
+                if (!isRead) {
+                  unreadMessages++;
                 }
               }
-            });
+            }
 
             return buildGNav();
           }

@@ -34,9 +34,9 @@ class Comment {
 
   Json toJson() {
     return <String, dynamic>{
-      if (dealId != null) 'dealId': dealId,
-      if (postedBy != null) 'postedBy': postedBy,
-      if (message != null) 'message': message,
+      'dealId': dealId,
+      'postedBy': postedBy,
+      'message': message,
     };
   }
 

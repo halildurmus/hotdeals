@@ -10,6 +10,7 @@ class PushNotification {
     required this.actor,
     required this.verb,
     required this.object,
+    this.image,
     this.avatar,
     this.message,
     this.uid,
@@ -37,6 +38,7 @@ class PushNotification {
   final int? id;
   final String title;
   final String body;
+  final String? image;
   final String actor;
   final NotificationVerb verb;
   final String object;
@@ -50,7 +52,7 @@ class PushNotification {
   Json toJson() => <String, dynamic>{
         'title': title,
         'body': body,
-        // 'image': null,
+        if (image != null) 'image': image,
         'data': <String, dynamic>{
           'actor': actor,
           'verb': verb.asString,
@@ -78,6 +80,6 @@ class PushNotification {
 
   @override
   String toString() {
-    return 'PushNotification{id: $id, title: $title, body: $body, actor: $actor, verb: $verb, object: $object, avatar: $avatar, message: $message, uid: $uid, isRead: $isRead, createdAt: $createdAt}';
+    return 'PushNotification{id: $id, title: $title, body: $body, image: $image, actor: $actor, verb: $verb, object: $object, avatar: $avatar, message: $message, uid: $uid, isRead: $isRead, createdAt: $createdAt}';
   }
 }

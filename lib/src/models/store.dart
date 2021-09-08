@@ -31,8 +31,8 @@ class Store {
 
   Json toJson() {
     return <String, dynamic>{
-      if (name != null) 'name': name,
-      if (logo != null) 'logo': logo,
+      'name': name,
+      'logo': logo,
     };
   }
 
