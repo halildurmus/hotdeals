@@ -320,7 +320,7 @@ class _DealDetailsState extends State<DealDetails> {
     Widget buildDealDescription() {
       return Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
-        child: Text(
+        child: SelectableText(
           _deal.description,
           style: textTheme.bodyText2!.copyWith(
             color: theme.brightness == Brightness.dark ? Colors.grey : null,
@@ -930,7 +930,7 @@ class _DealDetailsState extends State<DealDetails> {
                               ],
                             ),
                             const SizedBox(height: 10),
-                            Text(comment.message)
+                            SelectableText(comment.message)
                           ],
                         ),
                       );
