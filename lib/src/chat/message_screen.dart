@@ -466,6 +466,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 onAttachmentPressed: _handleAttachmentPressed,
                 onMessageTap: _handleMessageTap,
                 onPreviewDataFetched: _handlePreviewDataFetched,
+                onTextFieldTap: () => _markAsSeen(),
                 onSendPressed: _handleSendPressed,
                 user: types.User(id: _user.uid, imageUrl: _user.avatar),
               ),
