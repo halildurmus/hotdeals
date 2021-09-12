@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
@@ -27,12 +28,14 @@ import 'src/services/spring_service_impl.dart';
 import 'src/settings/settings.controller.impl.dart';
 import 'src/settings/settings.service.impl.dart';
 import 'src/settings/settings_controller.dart';
+import 'src/utils/crashlytics_printer.dart';
 import 'src/utils/tr_messages.dart';
 import 'src/widgets/loading_dialog.dart';
 
 Future<void> main() async {
   Loggy.initLoggy(
-    logPrinter: const PrettyPrinter(),
+    logPrinter:
+        (kDebugMode) ? const PrettyPrinter() : const CrashlyticsPrinter(),
   );
 
   WidgetsFlutterBinding.ensureInitialized();
