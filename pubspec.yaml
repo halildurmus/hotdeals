@@ -37,6 +37,7 @@ dependencies:
   http: ^0.13.3
   image_picker: ^0.8.4
   line_icons: ^2.0.1
+  loggy: ^2.0.1
   material_floating_search_bar: ^0.3.4
   mime: ^1.0.0
   open_file: ^3.2.1
