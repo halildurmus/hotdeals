@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -30,6 +31,10 @@ import 'src/utils/tr_messages.dart';
 import 'src/widgets/loading_dialog.dart';
 
 Future<void> main() async {
+  Loggy.initLoggy(
+    logPrinter: const PrettyPrinter(),
+  );
+
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initializes a new Firebase App instance.
