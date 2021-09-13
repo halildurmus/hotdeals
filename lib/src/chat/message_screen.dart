@@ -37,6 +37,14 @@ import 'message_app_bar.dart';
 
 typedef Json = Map<String, dynamic>;
 
+const Map<String, types.Status> _statusEnumMap = {
+  'delivered': types.Status.delivered,
+  'error': types.Status.error,
+  'seen': types.Status.seen,
+  'sending': types.Status.sending,
+  'sent': types.Status.sent
+};
+
 class MessageScreen extends StatefulWidget {
   const MessageScreen({required this.docId, required this.user2, Key? key})
       : super(key: key);
@@ -393,9 +401,8 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                   final String id = messageData['id'] as String;
                   final int createdAt = messageData['createdAt'] as int;
                   final types.Status status =
-                      (messageData['status'] as String) == 'seen'
-                          ? types.Status.seen
-                          : types.Status.sent;
+                      _statusEnumMap[(messageData['status'] as String)] ??
+                          types.Status.sent;
                   final types.User author = types.User(
                     id: messageData['author']['id'] as String,
                     imageUrl: messageData['author']['id'] as String == _user.uid
@@ -456,7 +463,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                 isAttachmentUploading: _isAttachmentUploading,
                 dateLocale: Localizations.localeOf(context).languageCode,
                 disableImageGallery: true,
-                l10n: currentLocale == locales.tr_TR
+                l10n: currentLocale == locales.trTR
                     ? const ChatL10nTr()
                     : const ChatL10nEn(),
                 showUserAvatars: true,
