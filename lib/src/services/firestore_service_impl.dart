@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../utils/chat_util.dart';
 import 'firestore_service.dart';
 
 typedef Json = Map<String, dynamic>;
 
-class FirestoreServiceImpl implements FirestoreService {
+class FirestoreServiceImpl with NetworkLoggy implements FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
@@ -26,9 +27,9 @@ class FirestoreServiceImpl implements FirestoreService {
           'users': usersArray,
           'latestMessage': <String, dynamic>{},
         })
-        .then((value) => print('Document created'))
+        .then((value) => loggy.info('Document created'))
         .catchError(
-          (dynamic error) => print('Failed to create document: $error'),
+          (dynamic error) => loggy.error('Failed to create document: $error'),
         );
   }
 
@@ -91,7 +92,7 @@ class FirestoreServiceImpl implements FirestoreService {
           .then((value) {})
           .catchError(
             (dynamic error) {
-              print('Failed to update document: $error');
+              loggy.error('Failed to update document: $error');
             },
           );
     }

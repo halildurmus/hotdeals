@@ -6,14 +6,13 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:mime/mime.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -51,7 +50,7 @@ class MessageScreen extends StatefulWidget {
   _MessageScreenState createState() => _MessageScreenState();
 }
 
-class _MessageScreenState extends State<MessageScreen> {
+class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   bool _isAttachmentUploading = false;
   final Uuid uuid = const Uuid();
 
@@ -87,7 +86,7 @@ class _MessageScreenState extends State<MessageScreen> {
         notification: notification, tokens: widget.user2.fcmTokens!);
 
     if (result) {
-      print('Push notification sent to: ${widget.user2.nickname}');
+      loggy.info('Push notification sent to: ${widget.user2.nickname}');
     }
   }
 

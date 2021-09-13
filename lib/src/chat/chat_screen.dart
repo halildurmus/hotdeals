@@ -387,8 +387,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                     _docID, _latestMessage, user!, _user2);
                               }
 
-                              print(snapshot.error);
-
                               return Center(
                                 child: Text(AppLocalizations.of(context)!
                                     .anErrorOccurred),
@@ -410,8 +408,6 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             );
           } else if (snapshot.hasError) {
-            print(snapshot.error);
-
             return Text(snapshot.error.toString());
           } else {
             return const Center(

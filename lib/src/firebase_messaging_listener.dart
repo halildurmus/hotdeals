@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart' show logInfo;
 import 'package:overlay_support/overlay_support.dart';
 
 import 'chat/message_arguments.dart';
@@ -22,11 +23,12 @@ void subscribeToFCM() {
 
   FirebaseMessaging.onMessage.listen(
     (RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+      logInfo('Got a message whilst in the foreground!');
+      logInfo('Message data: ${message.data}');
 
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+        logInfo(
+            'Message also contained a notification: ${message.notification}');
 
         // Constructs a PushNotification from the RemoteMessage.
         final PushNotification notification = PushNotification(
@@ -46,7 +48,7 @@ void subscribeToFCM() {
         if (notification.verb == NotificationVerb.comment) {
           pushNotificationService
               .insert(notification)
-              .then((value) => print('Notification saved into the db.'));
+              .then((value) => logInfo('Notification saved into the db.'));
         } else if (notification.verb == NotificationVerb.message) {
           final String currentRoute = GetIt.I.get<CurrentRoute>().routeName;
           final MessageArguments? messageArguments =
@@ -73,7 +75,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // Initializes a new Firebase App instance.
   await Firebase.initializeApp();
 
-  print('Handling a background message: ${message.messageId}');
+  logInfo('Handling a background message: ${message.messageId}');
 
   // Creates a new PushNotificationServiceImpl instance.
   final PushNotificationService pushNotificationService =
@@ -97,6 +99,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (notification.verb == NotificationVerb.comment) {
     pushNotificationService
         .insert(notification)
-        .then((value) => print('Background notification saved into the db.'));
+        .then((value) => logInfo('Background notification saved into the db.'));
   }
 }

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
@@ -27,7 +28,7 @@ class UserProfile extends StatefulWidget {
   _UserProfileState createState() => _UserProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> {
+class _UserProfileState extends State<UserProfile> with UiLoggy {
   MyUser? loggedInUser;
   late FirestoreService firestoreService;
   late SpringService springService;
@@ -75,7 +76,7 @@ class _UserProfileState extends State<UserProfile> {
 
       final Report? sentReport =
           await GetIt.I.get<SpringService>().sendReport(report: report);
-      print(sentReport);
+      loggy.info(sentReport);
 
       // Pops the loading dialog.
       Navigator.of(context).pop();
@@ -300,8 +301,6 @@ class _UserProfileState extends State<UserProfile> {
 
               if (snapshot.hasData) {
                 postedDeals = snapshot.data!.toString();
-              } else if (snapshot.hasError) {
-                print(snapshot.error.toString());
               }
 
               return Text(
@@ -335,8 +334,6 @@ class _UserProfileState extends State<UserProfile> {
 
               if (snapshot.hasData) {
                 postedComments = snapshot.data!.toString();
-              } else if (snapshot.hasError) {
-                print(snapshot.error.toString());
               }
 
               return Text(

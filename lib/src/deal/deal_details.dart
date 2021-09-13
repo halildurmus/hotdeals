@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
@@ -40,7 +41,7 @@ class DealDetails extends StatefulWidget {
   _DealDetailsState createState() => _DealDetailsState();
 }
 
-class _DealDetailsState extends State<DealDetails> {
+class _DealDetailsState extends State<DealDetails> with UiLoggy {
   late Deal _deal;
   late List<String> _images;
   int currentIndex = 0;
@@ -143,7 +144,7 @@ class _DealDetailsState extends State<DealDetails> {
 
       final Report? sentReport =
           await GetIt.I.get<SpringService>().sendReport(report: report);
-      print(sentReport);
+      loggy.info(sentReport);
 
       // Pops the loading dialog.
       Navigator.of(context).pop();
@@ -369,8 +370,7 @@ class _DealDetailsState extends State<DealDetails> {
             elevation: 3,
             onPressed: () {
               if (_user == null) {
-                print('You need to log in!');
-
+                loggy.warning('You need to log in!');
                 return;
               }
 
@@ -382,9 +382,6 @@ class _DealDetailsState extends State<DealDetails> {
                   if (result) {
                     Provider.of<UserControllerImpl>(context, listen: false)
                         .getUser();
-                  } else {
-                    print(
-                        'An error occurred while adding this deal to your favorites.');
                   }
                 });
               } else {
@@ -395,9 +392,6 @@ class _DealDetailsState extends State<DealDetails> {
                   if (result) {
                     Provider.of<UserControllerImpl>(context, listen: false)
                         .getUser();
-                  } else {
-                    print(
-                        'An error occurred while removing this deal from your favorites.');
                   }
                 });
               }
@@ -593,7 +587,7 @@ class _DealDetailsState extends State<DealDetails> {
             GestureDetector(
               onTap: () async {
                 if (_user == null) {
-                  print('You need to log in!');
+                  loggy.warning('You need to log in!');
                   return;
                 }
 
@@ -629,7 +623,7 @@ class _DealDetailsState extends State<DealDetails> {
             GestureDetector(
               onTap: () async {
                 if (_user == null) {
-                  print('You need to log in!');
+                  loggy.warning('You need to log in!');
                   return;
                 }
 
@@ -702,7 +696,6 @@ class _DealDetailsState extends State<DealDetails> {
               avatar = snapshot.data!.avatar!;
               nickname = snapshot.data!.nickname!;
             } else if (snapshot.hasError) {
-              print(snapshot.error.toString());
               nickname = AppLocalizations.of(context)!.anErrorOccurred;
             }
 
@@ -758,7 +751,7 @@ class _DealDetailsState extends State<DealDetails> {
 
     void postCommentOnTap() {
       if (_user == null) {
-        print('You need to log in!');
+        loggy.warning('You need to log in!');
         return;
       }
 
@@ -884,7 +877,6 @@ class _DealDetailsState extends State<DealDetails> {
                                       avatar = snapshot.data!.avatar!;
                                       nickname = snapshot.data!.nickname!;
                                     } else if (snapshot.hasError) {
-                                      print(snapshot.error.toString());
                                       nickname = AppLocalizations.of(context)!
                                           .anErrorOccurred;
                                     }
@@ -942,8 +934,6 @@ class _DealDetailsState extends State<DealDetails> {
                 ],
               );
             } else if (snapshot.hasError) {
-              print(snapshot.error);
-
               return Text(snapshot.error.toString());
             } else {
               return const Center(

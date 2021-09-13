@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -11,7 +12,7 @@ import '../services/auth_service.dart';
 /// This src.widgets should live above the [MaterialApp].
 /// See [AuthWidget], a descendant widget that consumes the snapshot generated
 /// by this builder.
-class AuthWidgetBuilder extends StatelessWidget {
+class AuthWidgetBuilder extends StatelessWidget with UiLoggy {
   const AuthWidgetBuilder({Key? key, required this.builder}) : super(key: key);
 
   final Widget Function(BuildContext, AsyncSnapshot<MyUser?>) builder;
@@ -25,7 +26,7 @@ class AuthWidgetBuilder extends StatelessWidget {
       stream: authService.onAuthStateChanged,
       builder: (BuildContext context, AsyncSnapshot<MyUser?> snapshot) {
         final MyUser? user = snapshot.data;
-        print('user: $user');
+        loggy.info('User: $user');
 
         return MultiProvider(
           providers: <SingleChildStatelessWidget>[

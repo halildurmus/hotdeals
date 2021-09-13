@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:loggy/loggy.dart' show logError;
 
 abstract class StringValidator {
   bool isValid(String value);
@@ -23,7 +24,7 @@ class RegexValidator implements StringValidator {
 
       return false;
     } on Exception catch (e) {
-      print(e);
+      logError(e.toString());
       assert(false, e.toString());
       return true;
     }

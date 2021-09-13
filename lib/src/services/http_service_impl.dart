@@ -5,7 +5,7 @@ import 'package:http/http.dart';
 
 import 'http_service.dart';
 
-const Duration _timeout = Duration(seconds: 5);
+const Duration _timeoutDuration = Duration(seconds: 5);
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
 class HttpServiceImpl implements HttpService {
@@ -38,11 +38,11 @@ class HttpServiceImpl implements HttpService {
           'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json; charset=utf-8',
         },
-      ).timeout(_timeout, onTimeout: () {
-        throw Exception('Server timeout');
-      });
+      ).timeout(
+        _timeoutDuration,
+        onTimeout: () => throw Exception('Server timeout'),
+      );
     } on Exception catch (e) {
-      print(e);
       throw Exception(e);
     }
 
@@ -65,11 +65,11 @@ class HttpServiceImpl implements HttpService {
           if (auth) 'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json; charset=utf-8',
         },
-      ).timeout(_timeout, onTimeout: () {
-        throw Exception('Server timeout');
-      });
+      ).timeout(
+        _timeoutDuration,
+        onTimeout: () => throw Exception('Server timeout'),
+      );
     } on Exception catch (e) {
-      print(e);
       throw Exception(e);
     }
 
@@ -85,19 +85,19 @@ class HttpServiceImpl implements HttpService {
     try {
       response = await _client
           .patch(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Accept': 'application/json; charset=utf-8',
-          'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json-patch+json',
-        },
-        body: jsonEncode(data),
-      )
-          .timeout(_timeout, onTimeout: () {
-        throw Exception('Server timeout');
-      });
+            Uri.parse(url),
+            headers: <String, String>{
+              'Accept': 'application/json; charset=utf-8',
+              'Authorization': 'Bearer $idToken',
+              'Content-Type': 'application/json-patch+json',
+            },
+            body: jsonEncode(data),
+          )
+          .timeout(
+            _timeoutDuration,
+            onTimeout: () => throw Exception('Server timeout'),
+          );
     } on Exception catch (e) {
-      print(e);
       throw Exception(e);
     }
 
@@ -116,19 +116,19 @@ class HttpServiceImpl implements HttpService {
     try {
       response = await _client
           .post(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Accept': 'application/json; charset=utf-8',
-          if (auth) 'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-        body: jsonEncode(data),
-      )
-          .timeout(_timeout, onTimeout: () {
-        throw Exception('Server timeout');
-      });
+            Uri.parse(url),
+            headers: <String, String>{
+              'Accept': 'application/json; charset=utf-8',
+              if (auth) 'Authorization': 'Bearer $idToken',
+              'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: jsonEncode(data),
+          )
+          .timeout(
+            _timeoutDuration,
+            onTimeout: () => throw Exception('Server timeout'),
+          );
     } on Exception catch (e) {
-      print(e);
       throw Exception(e);
     }
 

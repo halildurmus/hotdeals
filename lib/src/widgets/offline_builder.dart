@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../services/connection_service.dart';
 import '../utils/offline_builder_util.dart';
@@ -47,7 +48,7 @@ class OfflineBuilder extends StatefulWidget {
   OfflineBuilderState createState() => OfflineBuilderState();
 }
 
-class OfflineBuilderState extends State<OfflineBuilder> {
+class OfflineBuilderState extends State<OfflineBuilder> with NetworkLoggy {
   late Stream<bool> _connectivityStream;
 
   @override
@@ -70,7 +71,7 @@ class OfflineBuilderState extends State<OfflineBuilder> {
         if (!snapshot.hasData && !snapshot.hasError) {
           return const SizedBox();
         } else if (snapshot.hasError) {
-          print(snapshot.error);
+          loggy.error(snapshot.error, snapshot.error);
           if (widget.errorBuilder != null) {
             return widget.errorBuilder!(context);
           }

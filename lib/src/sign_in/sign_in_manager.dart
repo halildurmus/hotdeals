@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../models/my_user.dart';
 import '../services/auth_service.dart';
 
-class SignInManager {
+class SignInManager with NetworkLoggy {
   SignInManager({required this.auth, required this.isLoading});
 
   final AuthService auth;
@@ -16,7 +17,7 @@ class SignInManager {
       isLoading.value = true;
       return await signInMethod();
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       isLoading.value = false;
       rethrow;
     }

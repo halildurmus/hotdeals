@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../app_localizations.dart';
@@ -10,7 +11,7 @@ import '../models/push_notification.dart';
 import '../services/spring_service.dart';
 import '../settings/settings_controller.dart';
 
-class NotificationItem extends StatelessWidget {
+class NotificationItem extends StatelessWidget with NetworkLoggy {
   const NotificationItem({
     Key? key,
     required this.onTap,
@@ -112,8 +113,7 @@ class NotificationItem extends StatelessWidget {
             ),
           );
         } else if (snapshot.hasError) {
-          print(snapshot.error);
-          print(snapshot.stackTrace);
+          loggy.error(snapshot.error, snapshot.error);
 
           return ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 16),

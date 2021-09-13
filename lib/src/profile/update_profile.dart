@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class UpdateProfile extends StatefulWidget {
   _UpdateProfileState createState() => _UpdateProfileState();
 }
 
-class _UpdateProfileState extends State<UpdateProfile> {
+class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   late TextEditingController nicknameController;
   late void Function() showLoadingDialog;
 
@@ -30,18 +31,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
     return GetIt.I
         .get<SpringService>()
         .updateUserAvatar(userId: userId, avatarUrl: avatarUrl)
-        .catchError((dynamic error) {
-      print(error);
-    });
+        .catchError((dynamic error) {});
   }
 
   Future<MyUser> updateNickname(String userId, String nickname) async {
     return GetIt.I
         .get<SpringService>()
         .updateUserNickname(userId: userId, nickname: nickname)
-        .catchError((dynamic error) {
-      print(error);
-    });
+        .catchError((dynamic error) {});
   }
 
   Future<void> getImg(String userID, ImageSource imageSource) async {
@@ -65,7 +62,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
       Provider.of<UserControllerImpl>(context, listen: false).getUser();
       Navigator.of(context).pop();
     } else {
-      print('No image selected.');
+      loggy.info('No image selected.');
     }
   }
 

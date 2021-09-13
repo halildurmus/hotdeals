@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../app_localizations.dart';
 import '../models/push_notification.dart';
@@ -13,7 +14,7 @@ class MyNotifications extends StatefulWidget {
   _MyNotificationsState createState() => _MyNotificationsState();
 }
 
-class _MyNotificationsState extends State<MyNotifications> {
+class _MyNotificationsState extends State<MyNotifications> with NetworkLoggy {
   late PushNotificationService pushNotificationService;
 
   @override
@@ -66,7 +67,7 @@ class _MyNotificationsState extends State<MyNotifications> {
 
               return buildNotifications(notifications);
             } else if (snapshot.hasError) {
-              print(snapshot.error);
+              loggy.error(snapshot.error, snapshot.error);
 
               return Center(
                 child: Text(AppLocalizations.of(context)!.anErrorOccurred),
