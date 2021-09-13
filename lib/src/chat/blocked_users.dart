@@ -179,8 +179,6 @@ class _BlockedUsersState extends State<BlockedUsers> {
               ),
             );
           } else if (snapshot.hasError) {
-            print(snapshot.error);
-
             return Text(snapshot.error.toString());
           } else {
             return const Center(child: CircularProgressIndicator());

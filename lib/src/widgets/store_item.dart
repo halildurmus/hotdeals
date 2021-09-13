@@ -90,8 +90,6 @@ class _StoreItemState extends State<StoreItem> {
 
                   if (snapshot.hasData) {
                     dealsText = snapshot.data!.toString();
-                  } else if (snapshot.hasError) {
-                    print(snapshot.error.toString());
                   }
 
                   return Text(

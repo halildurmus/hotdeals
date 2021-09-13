@@ -59,8 +59,6 @@ class _DealsByStoreState extends State<DealsByStore> {
 
             return DealListItemBuilder(deals: deals);
           } else if (snapshot.hasError) {
-            print(snapshot.error);
-
             return Center(
               child: Text(AppLocalizations.of(context)!.anErrorOccurred),
             );

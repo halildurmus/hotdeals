@@ -157,8 +157,6 @@ class _DealsState extends State<Deals> {
 
             return DealListItemBuilder(deals: deals);
           } else if (snapshot.hasError) {
-            print(snapshot.error);
-
             return ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 16),
               itemCount: 1,
@@ -201,8 +199,7 @@ class _DealsState extends State<Deals> {
       try {
         searchHits =
             await GetIt.I.get<SpringService>().searchDeals(keyword: keyword);
-      } on Exception catch (e) {
-        print(e);
+      } on Exception {
         setState(() {
           searchErrorOccurred = true;
           searchProgress = false;

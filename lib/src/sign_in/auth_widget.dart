@@ -62,9 +62,6 @@ class AuthWidget extends StatelessWidget {
 
               return const HomeScreen();
             } else if (snapshot.hasError) {
-              print(snapshot.error);
-              print(snapshot.stackTrace);
-
               return const HomeScreen();
             }
 
@@ -72,9 +69,6 @@ class AuthWidget extends StatelessWidget {
           },
         );
       } else if (userSnapshot.hasError) {
-        print(userSnapshot.error);
-        print(userSnapshot.stackTrace);
-
         return Scaffold(
           body: Center(
             child: Text(AppLocalizations.of(context)!.anErrorOccurred),

@@ -150,8 +150,6 @@ class _DealListItemState extends State<DealListItem> {
 
               if (snapshot.hasData) {
                 commentText = snapshot.data!.length.toString();
-              } else if (snapshot.hasError) {
-                print(snapshot.error);
               }
 
               return Text(

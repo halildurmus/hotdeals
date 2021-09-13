@@ -132,8 +132,6 @@ class _DealsByCategoryState extends State<DealsByCategory> {
 
             return DealListItemBuilder(deals: deals);
           } else if (snapshot.hasError) {
-            print(snapshot.error);
-
             return Center(
               child: Text(AppLocalizations.of(context)!.anErrorOccurred),
             );

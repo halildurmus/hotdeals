@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,11 +33,8 @@ class FirebaseAuthService implements AuthService {
 
       if (userCredential.additionalUserInfo!.isNewUser) {
         try {
-          print(userCredential.user);
           await _springService.createMongoUser(userCredential.user!);
-        } on Exception catch (e, stackTrace) {
-          print(e);
-          print(stackTrace);
+        } on Exception {
           throw PlatformException(
             code: 'MONGODB_CREATE_USER_ERROR',
             message: 'Could not create user on MongoDB',
@@ -85,8 +81,7 @@ class FirebaseAuthService implements AuthService {
         if (userCredential.additionalUserInfo!.isNewUser) {
           try {
             await _springService.createMongoUser(userCredential.user!);
-          } on Exception catch (e) {
-            print(e);
+          } on Exception {
             throw PlatformException(
               code: 'MONGODB_CREATE_USER_ERROR',
               message: 'Could not create user on MongoDB',
