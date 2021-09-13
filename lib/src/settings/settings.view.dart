@@ -72,7 +72,7 @@ class SettingsView extends StatelessWidget {
     }
 
     String getLanguageName(Locale locale) {
-      if (locale == locales.en_US) {
+      if (locale == locales.enUS) {
         return AppLocalizations.of(context)!.english;
       }
 
@@ -103,20 +103,20 @@ class SettingsView extends StatelessWidget {
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
                       onTap: () {
-                        controller.updateLocale(locales.en_US);
+                        controller.updateLocale(locales.enUS);
                       },
                       providerValue: controller.locale,
-                      radioValue: locales.en_US,
+                      radioValue: locales.enUS,
                       text: AppLocalizations.of(context)!.english,
                       iconPath: 'assets/icons/en-US.svg',
                     ),
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
                       onTap: () {
-                        controller.updateLocale(locales.tr_TR);
+                        controller.updateLocale(locales.trTR);
                       },
                       providerValue: controller.locale,
-                      radioValue: locales.tr_TR,
+                      radioValue: locales.trTR,
                       text: AppLocalizations.of(context)!.turkish,
                       iconPath: 'assets/icons/tr-TR.svg',
                     ),
