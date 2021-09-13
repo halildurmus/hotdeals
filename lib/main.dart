@@ -84,9 +84,8 @@ Future<void> main() async {
         getIt.get<Stores>().getStores(),
       ],
     );
-  } on Exception catch (e) {
-    print('Failed to fetch categories and stores in main!');
-    print(e);
+  } on Exception {
+    logError('Failed to fetch categories and stores!');
   }
 
   // Initializes the ConnectionService.
