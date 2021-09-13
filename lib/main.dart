@@ -29,13 +29,14 @@ import 'src/settings/settings.controller.impl.dart';
 import 'src/settings/settings.service.impl.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/utils/crashlytics_printer.dart';
+import 'src/utils/custom_loggy_printer.dart';
 import 'src/utils/tr_messages.dart';
 import 'src/widgets/loading_dialog.dart';
 
 Future<void> main() async {
   Loggy.initLoggy(
-    logPrinter:
-        (kDebugMode) ? const PrettyPrinter() : const CrashlyticsPrinter(),
+    logOptions: const LogOptions(LogLevel.all, stackTraceLevel: LogLevel.error),
+    logPrinter: kDebugMode ? CustomLoggyPrinter() : const CrashlyticsPrinter(),
   );
 
   WidgetsFlutterBinding.ensureInitialized();
