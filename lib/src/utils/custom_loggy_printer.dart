@@ -19,7 +19,6 @@ import 'package:loggy/loggy.dart';
 class CustomLoggyPrinter extends LoggyPrinter {
   CustomLoggyPrinter({
     this.stackTraceBeginIndex = 0,
-    this.methodCount = 2,
     this.errorMethodCount = 8,
     this.lineLength = 120,
     this.colors = true,
@@ -97,7 +96,6 @@ class CustomLoggyPrinter extends LoggyPrinter {
   /// This can be useful if, for instance, Logger is wrapped in another class
   /// and you wish to remove these wrapped calls from stack trace
   final int stackTraceBeginIndex;
-  final int methodCount;
   final int errorMethodCount;
   final int lineLength;
   final bool colors;
@@ -125,13 +123,11 @@ class CustomLoggyPrinter extends LoggyPrinter {
     var messageStr = _stringifyMessage(record.message);
 
     String? stackTraceStr;
-    if (record.stackTrace == null && methodCount > 0) {
-      stackTraceStr = _formatStackTrace(StackTrace.current, methodCount);
-    } else if (errorMethodCount > 0) {
+    if (record.stackTrace != null && errorMethodCount > 0) {
       stackTraceStr = _formatStackTrace(record.stackTrace, errorMethodCount);
     }
 
-    var errorStr = record.error?.toString();
+    var errorStr = '${record.loggerName} - ${record.error?.toString()}';
 
     String? timeStr;
     if (printTime) {
