@@ -48,6 +48,7 @@ The app's **Backend** can be found **[here](https://github.com/halildurmus/hotde
 - Notifications (using Firebase Cloud Messaging)
 - Localization (l10n)
 - Light and Dark theme
+- Logging using [loggy](https://github.com/infinum/floggy)
 
 ## Getting Started
 
