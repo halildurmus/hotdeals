@@ -36,7 +36,9 @@ import 'src/widgets/loading_dialog.dart';
 Future<void> main() async {
   Loggy.initLoggy(
     logOptions: const LogOptions(LogLevel.all, stackTraceLevel: LogLevel.error),
-    logPrinter: kDebugMode ? CustomLoggyPrinter() : const CrashlyticsPrinter(),
+    logPrinter: kDebugMode
+        ? CustomLoggyPrinter(printTime: true)
+        : const CrashlyticsPrinter(),
   );
 
   WidgetsFlutterBinding.ensureInitialized();
