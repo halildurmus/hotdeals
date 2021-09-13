@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
@@ -15,7 +16,7 @@ class MyFavorites extends StatefulWidget {
   _MyFavoritesState createState() => _MyFavoritesState();
 }
 
-class _MyFavoritesState extends State<MyFavorites> {
+class _MyFavoritesState extends State<MyFavorites> with NetworkLoggy {
   @override
   Widget build(BuildContext context) {
     Provider.of<UserControllerImpl>(context).user!;
@@ -35,7 +36,7 @@ class _MyFavoritesState extends State<MyFavorites> {
 
           return DealListItemBuilder(deals: deals);
         } else if (snapshot.hasError) {
-          print(snapshot.error);
+          loggy.error(snapshot.error, snapshot.error);
 
           return Center(
             child: Text(AppLocalizations.of(context)!.anErrorOccurred),

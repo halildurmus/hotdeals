@@ -2,6 +2,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with NetworkLoggy {
   final FlexScheme usedFlexScheme = FlexScheme.deepBlue;
   late SettingsController settingsController;
   late List<Category>? categories;
@@ -99,9 +100,8 @@ class _MyAppState extends State<MyApp> {
                   .then<void>((List<Store> value) => stores = value),
             ],
           );
-        } on Exception catch (e) {
-          print('Failed to fetch categories and stores!');
-          print(e);
+        } on Exception {
+          loggy.error('Failed to fetch categories and stores!');
         } finally {
           if (categories != null && stores != null) {
             setState(() {});

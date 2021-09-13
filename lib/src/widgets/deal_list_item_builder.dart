@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
@@ -21,7 +22,8 @@ class DealListItemBuilder extends StatefulWidget {
   _DealListItemBuilderState createState() => _DealListItemBuilderState();
 }
 
-class _DealListItemBuilderState extends State<DealListItemBuilder> {
+class _DealListItemBuilderState extends State<DealListItemBuilder>
+    with UiLoggy {
   Widget _getFavoritesButton(
       VoidCallback onFavoritesClick, bool isFavorited, int index) {
     final ThemeData theme = Theme.of(context);
@@ -56,7 +58,7 @@ class _DealListItemBuilderState extends State<DealListItemBuilder> {
           deal: deal,
           bottomRoundButton: _getFavoritesButton(() {
             if (user == null) {
-              print('You need to log in!');
+              loggy.warning('You need to log in!');
 
               return;
             }
@@ -69,9 +71,6 @@ class _DealListItemBuilderState extends State<DealListItemBuilder> {
                 if (result) {
                   Provider.of<UserControllerImpl>(context, listen: false)
                       .getUser();
-                } else {
-                  print(
-                      'An error occurred while adding this deal to your favorites.');
                 }
               });
             } else {
@@ -82,9 +81,6 @@ class _DealListItemBuilderState extends State<DealListItemBuilder> {
                 if (result) {
                   Provider.of<UserControllerImpl>(context, listen: false)
                       .getUser();
-                } else {
-                  print(
-                      'An error occurred while removing this deal from your favorites.');
                 }
               });
             }

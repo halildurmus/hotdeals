@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
-import 'package:loggy/loggy.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../config/environment.dart';
 import '../models/category.dart';
@@ -313,10 +313,10 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
         return _myUser;
       }
 
-      throw Exception('An error occurred while creating the user!');
+      throw Exception('Failed to create the user!');
     } on Exception catch (e) {
       loggy.error(e, e);
-      throw Exception('An error occurred while creating the user!');
+      throw Exception('Failed to create the user!');
     }
   }
 
@@ -453,10 +453,10 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
         return _myUser;
       }
 
-      throw Exception('An error occurred while updating user avatar!');
+      throw Exception("Failed to update the user's avatar!");
     } on Exception catch (e) {
       loggy.error(e, e);
-      throw Exception('An error occurred while updating user avatar!');
+      throw Exception("Failed to update the user's avatar!");
     }
   }
 
@@ -481,10 +481,10 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
         throw Exception('This nickname already being used by another user!');
       }
 
-      throw Exception('An error occurred while updating user nickname!');
+      throw Exception("Failed to update the user's nickname!");
     } on Exception catch (e) {
       loggy.error(e, e);
-      throw Exception('An error occurred while updating user nickname!');
+      throw Exception("Failed to update the user's nickname!");
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
@@ -16,7 +17,7 @@ class MyDeals extends StatefulWidget {
   _MyDealsState createState() => _MyDealsState();
 }
 
-class _MyDealsState extends State<MyDeals> {
+class _MyDealsState extends State<MyDeals> with NetworkLoggy {
   late Future<List<Deal>?> _myDealsFuture;
 
   @override
@@ -46,7 +47,7 @@ class _MyDealsState extends State<MyDeals> {
 
           return DealListItemBuilder(deals: deals);
         } else if (snapshot.hasError) {
-          print(snapshot.error);
+          loggy.error(snapshot.error, snapshot.error);
 
           return Center(
             child: Text(AppLocalizations.of(context)!.anErrorOccurred),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 
 import '../app_localizations.dart';
@@ -21,7 +22,7 @@ class PostComment extends StatefulWidget {
   _PostCommentState createState() => _PostCommentState();
 }
 
-class _PostCommentState extends State<PostComment> {
+class _PostCommentState extends State<PostComment> with UiLoggy {
   late MyUser? user;
   late TextEditingController commentController;
 
@@ -81,7 +82,7 @@ class _PostCommentState extends State<PostComment> {
                 notification: notification, tokens: poster.fcmTokens!);
 
         if (result) {
-          print('Push notification sent to: ${poster.nickname}');
+          loggy.info('Push notification sent to: ${poster.nickname}');
         }
       }
 
