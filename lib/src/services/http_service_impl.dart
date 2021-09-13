@@ -2,14 +2,13 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
-import 'package:loggy/loggy.dart';
 
 import 'http_service.dart';
 
 const Duration _timeoutDuration = Duration(seconds: 5);
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-class HttpServiceImpl with NetworkLoggy implements HttpService {
+class HttpServiceImpl implements HttpService {
   /// Creates an instance of [HttpServiceImpl] with given HTTP [client].
   /// If no [client] is given, automatically initializes a new HTTP [client].
   factory HttpServiceImpl({Client? client}) {
@@ -39,12 +38,11 @@ class HttpServiceImpl with NetworkLoggy implements HttpService {
           'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json; charset=utf-8',
         },
-      ).timeout(_timeoutDuration, onTimeout: () {
-        loggy.error('Server timeout');
-        throw Exception('Server timeout');
-      });
+      ).timeout(
+        _timeoutDuration,
+        onTimeout: () => throw Exception('Server timeout'),
+      );
     } on Exception catch (e) {
-      loggy.error(e);
       throw Exception(e);
     }
 
@@ -67,12 +65,11 @@ class HttpServiceImpl with NetworkLoggy implements HttpService {
           if (auth) 'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json; charset=utf-8',
         },
-      ).timeout(_timeoutDuration, onTimeout: () {
-        loggy.error('Server timeout');
-        throw Exception('Server timeout');
-      });
+      ).timeout(
+        _timeoutDuration,
+        onTimeout: () => throw Exception('Server timeout'),
+      );
     } on Exception catch (e) {
-      loggy.error(e);
       throw Exception(e);
     }
 
@@ -88,20 +85,19 @@ class HttpServiceImpl with NetworkLoggy implements HttpService {
     try {
       response = await _client
           .patch(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Accept': 'application/json; charset=utf-8',
-          'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json-patch+json',
-        },
-        body: jsonEncode(data),
-      )
-          .timeout(_timeoutDuration, onTimeout: () {
-        loggy.error('Server timeout');
-        throw Exception('Server timeout');
-      });
+            Uri.parse(url),
+            headers: <String, String>{
+              'Accept': 'application/json; charset=utf-8',
+              'Authorization': 'Bearer $idToken',
+              'Content-Type': 'application/json-patch+json',
+            },
+            body: jsonEncode(data),
+          )
+          .timeout(
+            _timeoutDuration,
+            onTimeout: () => throw Exception('Server timeout'),
+          );
     } on Exception catch (e) {
-      loggy.error(e);
       throw Exception(e);
     }
 
@@ -120,20 +116,19 @@ class HttpServiceImpl with NetworkLoggy implements HttpService {
     try {
       response = await _client
           .post(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Accept': 'application/json; charset=utf-8',
-          if (auth) 'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-        body: jsonEncode(data),
-      )
-          .timeout(_timeoutDuration, onTimeout: () {
-        loggy.error('Server timeout');
-        throw Exception('Server timeout');
-      });
+            Uri.parse(url),
+            headers: <String, String>{
+              'Accept': 'application/json; charset=utf-8',
+              if (auth) 'Authorization': 'Bearer $idToken',
+              'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: jsonEncode(data),
+          )
+          .timeout(
+            _timeoutDuration,
+            onTimeout: () => throw Exception('Server timeout'),
+          );
     } on Exception catch (e) {
-      loggy.error(e);
       throw Exception(e);
     }
 
