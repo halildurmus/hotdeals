@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
+import 'package:loggy/loggy.dart';
 
 import '../config/environment.dart';
 import '../models/category.dart';
@@ -26,7 +27,7 @@ final String _baseUrl = GetIt.I.get<Environment>().config.apiBaseUrl;
 
 /// An implementation of the [SpringService] that used for communicating with
 /// the backend.
-class SpringServiceImpl implements SpringService {
+class SpringServiceImpl with NetworkLoggy implements SpringService {
   /// Creates an instance of [SpringServiceImpl] with given [httpService].
   /// If no [httpService] is given, automatically creates a new [httpService].
   factory SpringServiceImpl({HttpService? httpService}) {
@@ -52,7 +53,7 @@ class SpringServiceImpl implements SpringService {
 
       return response.statusCode == 200;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return false;
     }
   }
@@ -66,7 +67,7 @@ class SpringServiceImpl implements SpringService {
 
       return response.statusCode == 200;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return false;
     }
   }
@@ -80,7 +81,7 @@ class SpringServiceImpl implements SpringService {
 
       return response.statusCode == 200;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return false;
     }
   }
@@ -94,7 +95,7 @@ class SpringServiceImpl implements SpringService {
 
       return response.statusCode == 200;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return false;
     }
   }
@@ -113,7 +114,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -127,7 +128,7 @@ class SpringServiceImpl implements SpringService {
 
       return response.statusCode == 200;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return false;
     }
   }
@@ -149,7 +150,7 @@ class SpringServiceImpl implements SpringService {
 
       return response.statusCode == 200;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return false;
     }
   }
@@ -169,7 +170,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -188,7 +189,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -208,7 +209,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -225,10 +226,10 @@ class SpringServiceImpl implements SpringService {
         return _categories;
       }
 
-      throw Exception('An error occurred while fetching categories!');
+      throw Exception('Failed to fetch categories!');
     } on Exception catch (e) {
-      print(e);
-      throw Exception('An error occurred while fetching categories!');
+      loggy.error(e, e);
+      throw Exception('Failed to fetch categories!');
     }
   }
 
@@ -247,7 +248,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -266,7 +267,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -283,10 +284,10 @@ class SpringServiceImpl implements SpringService {
         return _stores;
       }
 
-      throw Exception('An error occurred while fetching stores!');
+      throw Exception('Failed to fetch stores!');
     } on Exception catch (e) {
-      print(e);
-      throw Exception('An error occurred while fetching stores!');
+      loggy.error(e, e);
+      throw Exception('Failed to fetch stores!');
     }
   }
 
@@ -313,9 +314,8 @@ class SpringServiceImpl implements SpringService {
       }
 
       throw Exception('An error occurred while creating the user!');
-    } on Exception catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
+    } on Exception catch (e) {
+      loggy.error(e, e);
       throw Exception('An error occurred while creating the user!');
     }
   }
@@ -334,10 +334,8 @@ class SpringServiceImpl implements SpringService {
       }
 
       return null;
-    } on Exception catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
-
+    } on Exception catch (e) {
+      loggy.error(e, e);
       return null;
     }
   }
@@ -357,10 +355,8 @@ class SpringServiceImpl implements SpringService {
       }
 
       return null;
-    } on Exception catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
-
+    } on Exception catch (e) {
+      loggy.error(e, e);
       return null;
     }
   }
@@ -380,7 +376,7 @@ class SpringServiceImpl implements SpringService {
 
       throw Exception('User not found!');
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       throw Exception('User not found!');
     }
   }
@@ -400,7 +396,7 @@ class SpringServiceImpl implements SpringService {
 
       throw Exception('User not found!');
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       throw Exception('User not found!');
     }
   }
@@ -417,9 +413,8 @@ class SpringServiceImpl implements SpringService {
       final Response response = await _httpService.post(url, data);
 
       return response.statusCode == 200;
-    } on Exception catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
+    } on Exception catch (e) {
+      loggy.error(e);
       throw Exception('An error occurred while adding fcm token!');
     }
   }
@@ -433,9 +428,8 @@ class SpringServiceImpl implements SpringService {
       final Response response = await _httpService.post(url, data);
 
       return response.statusCode == 200;
-    } on Exception catch (e, stackTrace) {
-      print(e);
-      print(stackTrace);
+    } on Exception catch (e) {
+      loggy.error(e, e);
       throw Exception('An error occurred while logging out!');
     }
   }
@@ -461,7 +455,7 @@ class SpringServiceImpl implements SpringService {
 
       throw Exception('An error occurred while updating user avatar!');
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       throw Exception('An error occurred while updating user avatar!');
     }
   }
@@ -489,7 +483,7 @@ class SpringServiceImpl implements SpringService {
 
       throw Exception('An error occurred while updating user nickname!');
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       throw Exception('An error occurred while updating user nickname!');
     }
   }
@@ -508,7 +502,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -528,7 +522,7 @@ class SpringServiceImpl implements SpringService {
 
       throw Exception('An error occurred while searching deals!');
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       throw Exception('An error occurred while searching deals!');
     }
   }
@@ -548,7 +542,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -568,7 +562,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -587,7 +581,7 @@ class SpringServiceImpl implements SpringService {
 
       throw Exception('Could not get deals by keyword!');
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       throw Exception('Could not get deals by keyword!');
     }
   }
@@ -606,7 +600,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -625,7 +619,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -644,7 +638,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -662,7 +656,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -680,7 +674,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -698,7 +692,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -717,7 +711,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -737,7 +731,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
@@ -763,7 +757,7 @@ class SpringServiceImpl implements SpringService {
 
       return null;
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e, e);
       return null;
     }
   }
