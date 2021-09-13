@@ -120,14 +120,15 @@ class CustomLoggyPrinter extends LoggyPrinter {
 
   @override
   void onLog(LogRecord record) {
-    var messageStr = _stringifyMessage(record.message);
+    var messageStr =
+        record.loggerName + ' - ' + _stringifyMessage(record.message);
 
     String? stackTraceStr;
     if (record.stackTrace != null && errorMethodCount > 0) {
       stackTraceStr = _formatStackTrace(record.stackTrace, errorMethodCount);
     }
 
-    var errorStr = '${record.loggerName} - ${record.error?.toString()}';
+    var errorStr = record.error?.toString();
 
     String? timeStr;
     if (printTime) {
