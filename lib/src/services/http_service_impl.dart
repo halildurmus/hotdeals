@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
+import 'package:loggy/loggy.dart';
 
 import 'http_service.dart';
 
-const Duration _timeout = Duration(seconds: 5);
+const Duration _timeoutDuration = Duration(seconds: 5);
 final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-class HttpServiceImpl implements HttpService {
+class HttpServiceImpl with NetworkLoggy implements HttpService {
   /// Creates an instance of [HttpServiceImpl] with given HTTP [client].
   /// If no [client] is given, automatically initializes a new HTTP [client].
   factory HttpServiceImpl({Client? client}) {
@@ -38,11 +39,12 @@ class HttpServiceImpl implements HttpService {
           'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json; charset=utf-8',
         },
-      ).timeout(_timeout, onTimeout: () {
+      ).timeout(_timeoutDuration, onTimeout: () {
+        loggy.error('Server timeout');
         throw Exception('Server timeout');
       });
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e);
       throw Exception(e);
     }
 
@@ -65,11 +67,12 @@ class HttpServiceImpl implements HttpService {
           if (auth) 'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json; charset=utf-8',
         },
-      ).timeout(_timeout, onTimeout: () {
+      ).timeout(_timeoutDuration, onTimeout: () {
+        loggy.error('Server timeout');
         throw Exception('Server timeout');
       });
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e);
       throw Exception(e);
     }
 
@@ -93,11 +96,12 @@ class HttpServiceImpl implements HttpService {
         },
         body: jsonEncode(data),
       )
-          .timeout(_timeout, onTimeout: () {
+          .timeout(_timeoutDuration, onTimeout: () {
+        loggy.error('Server timeout');
         throw Exception('Server timeout');
       });
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e);
       throw Exception(e);
     }
 
@@ -124,11 +128,12 @@ class HttpServiceImpl implements HttpService {
         },
         body: jsonEncode(data),
       )
-          .timeout(_timeout, onTimeout: () {
+          .timeout(_timeoutDuration, onTimeout: () {
+        loggy.error('Server timeout');
         throw Exception('Server timeout');
       });
     } on Exception catch (e) {
-      print(e);
+      loggy.error(e);
       throw Exception(e);
     }
 
