@@ -167,7 +167,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
 
     PreferredSizeWidget buildAppBar() {
       return PreferredSize(
-        preferredSize: const Size.fromHeight(55),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
           centerTitle: true,
           title: Text(_deal.title),

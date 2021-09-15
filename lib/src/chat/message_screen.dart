@@ -381,7 +381,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(55),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
         child: MessageAppBar(user2: widget.user2),
       ),
       body: StreamBuilder<QuerySnapshot<Json>>(
