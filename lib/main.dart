@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +49,17 @@ Future<void> main() async {
   // Initializes a new Firebase App instance.
   await Firebase.initializeApp();
 
+    if (kDebugMode) {
+      // Disable Crashlytics collection while doing every day development.
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+    }
+    FlutterError.onError = (errorDetails) async {
+      logError(errorDetails.toString());
+      if (!kDebugMode) {
+        // Pass all uncaught errors from the framework to Crashlytics.
+        await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+      }
+    };
   // Fetches the default FCM token for this device.
   await FirebaseMessaging.instance.getToken();
 
