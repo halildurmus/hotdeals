@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:isolate';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -54,13 +55,27 @@ Future<void> main() async {
       // Disable Crashlytics collection while doing every day development.
       await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
     }
+
     FlutterError.onError = (errorDetails) async {
       logError(errorDetails.toString());
-      if (!kDebugMode) {
+      if (kReleaseMode) {
         // Pass all uncaught errors from the framework to Crashlytics.
         await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
       }
     };
+
+    if (kReleaseMode) {
+      // Pass all uncaught errors outside of the Flutter context to Crashlytics.
+      Isolate.current.addErrorListener(RawReceivePort((pair) async {
+        final List<dynamic> errorAndStacktrace = pair;
+        logError(
+            'Caught error outside of isolate: ${errorAndStacktrace.first}');
+        await FirebaseCrashlytics.instance.recordError(
+          errorAndStacktrace.first,
+          errorAndStacktrace.last,
+        );
+      }).sendPort);
+    }
 
     // Fetches the default FCM token for this device.
     await FirebaseMessaging.instance.getToken();
