@@ -37,17 +37,18 @@ import 'src/utils/tr_messages.dart';
 import 'src/widgets/loading_dialog.dart';
 
 Future<void> main() async {
-  Loggy.initLoggy(
-    logOptions: const LogOptions(LogLevel.all, stackTraceLevel: LogLevel.error),
-    logPrinter: kDebugMode
-        ? CustomLoggyPrinter(printTime: true)
-        : const CrashlyticsPrinter(),
-  );
+  runZonedGuarded<Future<void>>(() async {
+    Loggy.initLoggy(
+      logOptions:
+          const LogOptions(LogLevel.all, stackTraceLevel: LogLevel.error),
+      logPrinter: kDebugMode
+          ? CustomLoggyPrinter(printTime: true)
+          : const CrashlyticsPrinter(),
+    );
 
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Initializes a new Firebase App instance.
-  await Firebase.initializeApp();
+    WidgetsFlutterBinding.ensureInitialized();
+    // Initializes a new Firebase App instance.
+    await Firebase.initializeApp();
 
     if (kDebugMode) {
       // Disable Crashlytics collection while doing every day development.
@@ -60,73 +61,80 @@ Future<void> main() async {
         await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
       }
     };
-  // Fetches the default FCM token for this device.
-  await FirebaseMessaging.instance.getToken();
 
-  // Sets a message handler function which is called when the app is in the
-  // background or terminated.
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    // Fetches the default FCM token for this device.
+    await FirebaseMessaging.instance.getToken();
 
-  GetIt.I.registerSingleton<Environment>(Environment());
-  // Reads the environment value.
-  const String environment = String.fromEnvironment(
-    'ENV',
-    defaultValue: Environment.dev,
-  );
-  // Initializes the Environment configuration.
-  GetIt.I.get<Environment>().initialize(environment);
+    // Sets a message handler function which is called when the app is in the
+    // background or terminated.
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  // Registers Singleton classes.
-  final GetIt getIt = GetIt.I;
-  getIt.registerSingleton<CurrentRoute>(CurrentRoute());
-  getIt.registerSingleton<ConnectionService>(ConnectionService());
-  getIt.registerSingleton<PushNotificationService>(
-      PushNotificationServiceImpl());
-  getIt.registerSingleton<FirebaseStorageService>(FirebaseStorageServiceImpl());
-  getIt.registerSingleton<FirestoreService>(FirestoreServiceImpl());
-  getIt.registerSingleton<ImagePickerService>(ImagePickerServiceImpl());
-  getIt.registerSingleton<SpringService>(SpringServiceImpl());
-  getIt.registerSingleton<Categories>(Categories());
-  getIt.registerSingleton<Stores>(Stores());
-  getIt.registerSingleton<LoadingDialog>(const LoadingDialog());
-
-  // Fetches categories and stores.
-  try {
-    await Future.wait<dynamic>(
-      <Future<dynamic>>[
-        getIt.get<Categories>().getCategories(),
-        getIt.get<Stores>().getStores(),
-      ],
+    GetIt.I.registerSingleton<Environment>(Environment());
+    // Reads the environment value.
+    const String environment = String.fromEnvironment(
+      'ENV',
+      defaultValue: Environment.dev,
     );
-  } on Exception {
-    logError('Failed to fetch categories and stores!');
-  }
+    // Initializes the Environment configuration.
+    GetIt.I.get<Environment>().initialize(environment);
 
-  // Initializes the ConnectionService.
-  getIt.get<ConnectionService>().initialize();
+    // Registers Singleton classes.
+    final GetIt getIt = GetIt.I;
+    getIt.registerSingleton<CurrentRoute>(CurrentRoute());
+    getIt.registerSingleton<ConnectionService>(ConnectionService());
+    getIt.registerSingleton<PushNotificationService>(
+        PushNotificationServiceImpl());
+    getIt.registerSingleton<FirebaseStorageService>(
+        FirebaseStorageServiceImpl());
+    getIt.registerSingleton<FirestoreService>(FirestoreServiceImpl());
+    getIt.registerSingleton<ImagePickerService>(ImagePickerServiceImpl());
+    getIt.registerSingleton<SpringService>(SpringServiceImpl());
+    getIt.registerSingleton<Categories>(Categories());
+    getIt.registerSingleton<Stores>(Stores());
+    getIt.registerSingleton<LoadingDialog>(const LoadingDialog());
 
-  // Loads the sqlite database.
-  await getIt.get<PushNotificationService>().load();
+    // Fetches categories and stores.
+    try {
+      await Future.wait<dynamic>(
+        <Future<dynamic>>[
+          getIt.get<Categories>().getCategories(),
+          getIt.get<Stores>().getStores(),
+        ],
+      );
+    } on Exception catch (e, stack) {
+      logError('Failed to fetch categories and stores!');
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
 
-  // Calculates the unread notifications count if there is a signed in user.
-  if (FirebaseAuth.instance.currentUser != null) {
-    await getIt.get<PushNotificationService>().calculateUnreadNotifications();
-  }
+    // Initializes the ConnectionService.
+    getIt.get<ConnectionService>().initialize();
 
-  // Initializes a new SharedPreferences instance.
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Loads the sqlite database.
+    await getIt.get<PushNotificationService>().load();
 
-  // Sets up the SettingsController, and registers it as a Singleton class.
-  getIt.registerSingleton<SettingsController>(
-      SettingsControllerImpl(SettingsServiceImpl(prefs)));
+    // Calculates the unread notifications count if there is a signed in user.
+    if (FirebaseAuth.instance.currentUser != null) {
+      await getIt.get<PushNotificationService>().calculateUnreadNotifications();
+    }
 
-  // Loads the user's preferred settings.
-  await getIt.get<SettingsController>().loadSettings();
+    // Initializes a new SharedPreferences instance.
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  // Registers Turkish messages for timeago.
-  timeago.setLocaleMessages('tr', TrMessages());
-  timeago.setLocaleMessages('tr_short', TrShortMessages());
+    // Sets up the SettingsController, and registers it as a Singleton class.
+    getIt.registerSingleton<SettingsController>(
+        SettingsControllerImpl(SettingsServiceImpl(prefs)));
 
-  // Runs the app with MyApp attached to the screen.
-  runApp(const MyApp());
+    // Loads the user's preferred settings.
+    await getIt.get<SettingsController>().loadSettings();
+
+    // Registers Turkish messages for timeago.
+    timeago.setLocaleMessages('tr', TrMessages());
+    timeago.setLocaleMessages('tr_short', TrShortMessages());
+
+    // Runs the app with MyApp attached to the screen.
+    runApp(const MyApp());
+  }, (error, stack) {
+    logError(error.toString());
+    FirebaseCrashlytics.instance.recordError(error, stack);
+  });
 }
