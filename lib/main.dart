@@ -37,7 +37,7 @@ import 'src/utils/custom_loggy_printer.dart';
 import 'src/utils/tr_messages.dart';
 import 'src/widgets/loading_dialog.dart';
 
-Future<void> main() async {
+void main() async {
   runZonedGuarded<Future<void>>(() async {
     Loggy.initLoggy(
       logOptions:
@@ -56,11 +56,14 @@ Future<void> main() async {
       await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
     }
 
+    Function originalOnError = FlutterError.onError!;
     FlutterError.onError = (errorDetails) async {
       logError(errorDetails.toString());
       if (kReleaseMode) {
         // Pass all uncaught errors from the framework to Crashlytics.
         await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+        // Forward to original handler.
+        originalOnError(errorDetails);
       }
     };
 
@@ -116,9 +119,8 @@ Future<void> main() async {
           getIt.get<Stores>().getStores(),
         ],
       );
-    } on Exception catch (e, stack) {
+    } on Exception {
       logError('Failed to fetch categories and stores!');
-      FirebaseCrashlytics.instance.recordError(e, stack);
     }
 
     // Initializes the ConnectionService.
