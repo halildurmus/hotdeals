@@ -1,6 +1,8 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
+
 class ExpandableText extends StatelessWidget {
   const ExpandableText({
     Key? key,
@@ -62,7 +64,10 @@ class ExpandableText extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('Read more', style: expandTextStyle),
+                          Text(
+                            AppLocalizations.of(context)!.readMore,
+                            style: expandTextStyle,
+                          ),
                           Icon(Icons.expand_more, color: theme.primaryColor),
                         ],
                       ),
@@ -77,7 +82,10 @@ class ExpandableText extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('Read less', style: expandTextStyle),
+                          Text(
+                            AppLocalizations.of(context)!.readLess,
+                            style: expandTextStyle,
+                          ),
                           Icon(Icons.expand_less, color: theme.primaryColor),
                         ],
                       ),

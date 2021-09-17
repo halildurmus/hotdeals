@@ -290,6 +290,20 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "readLess": "Read less",
+  "@readLess": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "readMore": "Read more",
+  "@readMore": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "camera": "Camera",
   "@camera": {
     "description": "",

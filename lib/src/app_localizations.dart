@@ -350,6 +350,20 @@ class AppLocalizations {
         locale: localeName,
       );
 
+  String get readLess => Intl.message(
+        'Read less',
+        name: 'readLess',
+        desc: '',
+        locale: localeName,
+      );
+
+  String get readMore => Intl.message(
+        'Read more',
+        name: 'readMore',
+        desc: '',
+        locale: localeName,
+      );
+
   String get camera => Intl.message(
         'Camera',
         name: 'camera',

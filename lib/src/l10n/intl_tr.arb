@@ -290,6 +290,20 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "readLess": "Daha az gör",
+  "@readLess": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "readMore": "Daha fazla gör",
+  "@readMore": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "camera": "Kamera",
   "@camera": {
     "description": "",
