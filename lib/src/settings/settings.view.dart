@@ -2,11 +2,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-import '../app_localizations.dart';
+import '../constants.dart';
 import '../models/user_controller_impl.dart';
 import '../services/auth_service.dart';
 import '../services/spring_service.dart';
@@ -15,7 +16,6 @@ import '../widgets/exception_alert_dialog.dart';
 import '../widgets/radio_item.dart';
 import '../widgets/settings_dialog.dart';
 import '../widgets/settings_list_item.dart';
-import 'locales.dart' as locales;
 import 'settings_controller.dart';
 
 class SettingsView extends StatelessWidget {
@@ -68,11 +68,18 @@ class SettingsView extends StatelessWidget {
     final TextTheme textTheme = theme.textTheme;
 
     Widget getLanguageImage(Locale locale) {
-      return SvgPicture.asset('assets/icons/${locale.toLanguageTag()}.svg');
+      late String svgLocation;
+      if (locale == kLocaleTurkish) {
+        svgLocation = kTurkishSvg;
+      } else {
+        svgLocation = kEnglishSvg;
+      }
+
+      return SvgPicture.asset(svgLocation);
     }
 
     String getLanguageName(Locale locale) {
-      if (locale == locales.enUS) {
+      if (locale == kLocaleEnglish) {
         return AppLocalizations.of(context)!.english;
       }
 
@@ -102,23 +109,19 @@ class SettingsView extends StatelessWidget {
                   children: <Widget>[
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
-                      onTap: () {
-                        controller.updateLocale(locales.enUS);
-                      },
+                      onTap: () => controller.updateLocale(kLocaleEnglish),
                       providerValue: controller.locale,
-                      radioValue: locales.enUS,
+                      radioValue: kLocaleEnglish,
                       text: AppLocalizations.of(context)!.english,
-                      iconPath: 'assets/icons/en-US.svg',
+                      iconPath: 'assets/icons/en.svg',
                     ),
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
-                      onTap: () {
-                        controller.updateLocale(locales.trTR);
-                      },
+                      onTap: () => controller.updateLocale(kLocaleTurkish),
                       providerValue: controller.locale,
-                      radioValue: locales.trTR,
+                      radioValue: kLocaleTurkish,
                       text: AppLocalizations.of(context)!.turkish,
-                      iconPath: 'assets/icons/tr-TR.svg',
+                      iconPath: 'assets/icons/tr.svg',
                     ),
                     const SizedBox(height: 15.0),
                     SizedBox(

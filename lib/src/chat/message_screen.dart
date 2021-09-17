@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,7 +21,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-import '../app_localizations.dart';
+import '../constants.dart';
 import '../models/current_route.dart';
 import '../models/my_user.dart';
 import '../models/notification_verb.dart';
@@ -30,7 +31,6 @@ import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
 import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
-import '../settings/locales.dart' as locales;
 import '../settings/settings_controller.dart';
 import '../utils/chat_util.dart';
 import 'message_app_bar.dart';
@@ -355,6 +355,12 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
           );
     }
 
+    ChatL10n _getChatL10n() {
+      return currentLocale == kLocaleTurkish
+          ? const ChatL10nTr()
+          : const ChatL10nEn();
+    }
+
     ChatTheme _chatTheme(ThemeData theme) {
       return DefaultChatTheme(
         backgroundColor: theme.backgroundColor,
@@ -463,9 +469,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                 isAttachmentUploading: _isAttachmentUploading,
                 dateLocale: Localizations.localeOf(context).languageCode,
                 disableImageGallery: true,
-                l10n: currentLocale == locales.trTR
-                    ? const ChatL10nTr()
-                    : const ChatL10nEn(),
+                l10n: _getChatL10n(),
                 showUserAvatars: true,
                 theme: _chatTheme(theme),
                 messages: messages,

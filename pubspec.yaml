@@ -62,6 +62,7 @@ dev_dependencies:
   intl_generator: ^0.2.0+0
 
 flutter:
+  generate: true
   assets:
     - assets/icons/
   uses-material-design: true

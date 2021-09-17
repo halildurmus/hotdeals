@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 
-import '../app_localizations.dart';
 import '../chat/message_arguments.dart';
 import '../chat/message_screen.dart';
 import '../models/my_user.dart';

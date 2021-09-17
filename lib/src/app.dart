@@ -1,12 +1,12 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
-import 'app_localizations.dart';
 import 'error_screen.dart';
 import 'firebase_messaging_listener.dart';
 import 'models/categories.dart';
@@ -16,7 +16,6 @@ import 'models/store.dart';
 import 'models/stores.dart';
 import 'offline_builder.dart';
 import 'routing/app_router.dart';
-import 'settings/locales.dart' as locales;
 import 'settings/settings_controller.dart';
 import 'sign_in/auth_widget.dart';
 import 'sign_in/auth_widget_builder.dart';
@@ -44,12 +43,12 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
         debugShowCheckedModeBanner: false,
         locale: settingsController.locale,
         localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-          AppLocalizationsDelegate(),
+          AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: locales.supportedLocales,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: FlexColorScheme.light(
           scheme: usedFlexScheme,
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
