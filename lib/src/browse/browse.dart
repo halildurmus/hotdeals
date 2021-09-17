@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../app_localizations.dart';
 import 'browse_categories.dart';
 import 'browse_stores.dart';
 
@@ -23,9 +23,9 @@ class _BrowseState extends State<Browse> with SingleTickerProviderStateMixin {
   PreferredSizeWidget buildAppBar() {
     return AppBar(
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(0.0),
+        preferredSize: const Size.fromHeight(0),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 2.0),
+          padding: const EdgeInsets.only(bottom: 2),
           child: TabBar(
             controller: tabController,
             isScrollable: true,

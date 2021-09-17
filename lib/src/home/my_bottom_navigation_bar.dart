@@ -1,12 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/firestore_service.dart';

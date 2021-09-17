@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 
-import '../app_localizations.dart';
 import '../services/auth_service.dart';
 import '../settings/settings.view.dart';
 import '../widgets/exception_alert_dialog.dart';

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,7 +8,6 @@ import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 
-import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/firebase_storage_service.dart';

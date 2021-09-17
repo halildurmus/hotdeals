@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
-import '../app_localizations.dart';
 import '../models/push_notification.dart';
 import '../services/push_notification_service.dart';
 import '../widgets/notification_item.dart';

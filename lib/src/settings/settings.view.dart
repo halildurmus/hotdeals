@@ -2,11 +2,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
-import '../app_localizations.dart';
 import '../models/user_controller_impl.dart';
 import '../services/auth_service.dart';
 import '../services/spring_service.dart';

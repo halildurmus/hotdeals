@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
-import '../app_localizations.dart';
 import '../models/my_user.dart';
 import '../models/report.dart';
 import '../models/user_controller_impl.dart';
