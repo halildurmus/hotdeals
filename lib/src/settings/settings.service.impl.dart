@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Locale, ThemeMode;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'locales.dart' as locales;
 import 'settings_service.dart';
 
 /// An implementation of the [SettingsService] used for storing and retrieving
@@ -24,10 +23,10 @@ class SettingsServiceImpl implements SettingsService {
   /// If the preferred language is not found then [Platform.localeName] is used.
   @override
   Future<Locale> locale() async {
-    final String languageTag = prefs.getString(_languageKey) ??
-        Platform.localeName.replaceFirst('_', '-');
+    final String languageTag =
+        prefs.getString(_languageKey) ?? Platform.localeName.split('_')[0];
 
-    return locales.getLocale(languageTag);
+    return Locale(languageTag);
   }
 
   /// Persists the user's preferred language to local storage.

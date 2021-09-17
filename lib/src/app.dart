@@ -16,7 +16,6 @@ import 'models/store.dart';
 import 'models/stores.dart';
 import 'offline_builder.dart';
 import 'routing/app_router.dart';
-import 'settings/locales.dart' as locales;
 import 'settings/settings_controller.dart';
 import 'sign_in/auth_widget.dart';
 import 'sign_in/auth_widget_builder.dart';
@@ -49,7 +48,7 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: locales.supportedLocales,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: FlexColorScheme.light(
           scheme: usedFlexScheme,
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
