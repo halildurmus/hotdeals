@@ -26,6 +26,7 @@ import '../services/spring_service.dart';
 import '../settings/settings_controller.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/deal_score_box.dart';
+import '../widgets/expandable_text.dart';
 import '../widgets/loading_dialog.dart';
 import '../widgets/slider_indicator.dart';
 import 'image_fullscreen.dart';
@@ -319,15 +320,9 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
     }
 
     Widget buildDealDescription() {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
-        child: SelectableText(
-          _deal.description,
-          style: textTheme.bodyText2!.copyWith(
-            color: theme.brightness == Brightness.dark ? Colors.grey : null,
-            fontSize: 15,
-          ),
-        ),
+      return Card(
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 30),
+        child: ExpandableText(text: _deal.description),
       );
     }
 
