@@ -25,29 +25,6 @@ class _BrowseCategoriesState extends State<BrowseCategories> {
 
   @override
   Widget build(BuildContext context) {
-    // return Column(
-    //   children: <Widget>[
-    //     ElevatedButton(
-    //       onPressed: () async {
-    //         final Category category = Category(
-    //           category: '/computers/cpus',
-    //           name: 'CPUs',
-    //           parent: '/computers',
-    //           icon: CategoryIcon(
-    //             codePoint: Icons.computer.codePoint,
-    //             fontFamily: Icons.computer.fontFamily!,
-    //           ),
-    //         );
-    //         await GetIt.I
-    //             .get<SpringService>()
-    //             .createCategory(category: category);
-    //
-    //         await GetIt.I.get<Categories>().getCategories();
-    //       },
-    //       child: const Text('Create'),
-    //     ),
-    //   ],
-    // );
     Widget buildCategories() {
       return ListView.builder(
         itemCount: categories.length,
