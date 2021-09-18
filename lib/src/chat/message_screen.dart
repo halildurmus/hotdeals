@@ -211,7 +211,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         final String mimeType = lookupMimeType(pickedFile.name) ?? '';
         final String url =
             await GetIt.I.get<FirebaseStorageService>().uploadFile(
-                  filePath: pickedFile.path,
+                  filePath: pickedFile.path!,
                   fileName: pickedFile.name,
                   mimeType: mimeType,
                 );
