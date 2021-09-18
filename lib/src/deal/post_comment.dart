@@ -46,6 +46,10 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
     final double deviceWidth = MediaQuery.of(context).size.width;
 
     Future<void> onPressed() async {
+      if (commentController.text.isEmpty) {
+        return;
+      }
+
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
       final Comment comment = Comment(
