@@ -12,7 +12,8 @@ class Category {
     required this.name,
     required this.parent,
     required this.category,
-    required this.icon,
+    required this.iconLigature,
+    required this.iconFontFamily,
   });
 
   factory Category.fromJson(Json json) => Category(
@@ -20,49 +21,28 @@ class Category {
         name: json['name'] as String,
         parent: json['parent'] as String,
         category: json['category'] as String,
-        icon: CategoryIcon.fromJson(json['icon'] as Json),
+        iconLigature: json['iconLigature'] as String,
+        iconFontFamily: json['iconFontFamily'] as String,
       );
 
   final String? id;
   final String name;
   final String parent;
   final String category;
-  final CategoryIcon icon;
+  final String iconLigature;
+  final String iconFontFamily;
 
   Json toJson() => <String, dynamic>{
         'name': name,
         'parent': parent,
         'category': category,
-        'icon': icon.toJson(),
+        'iconLigature': iconLigature,
+        'iconFontFamily': iconFontFamily,
       };
 
   @override
   String toString() {
-    return 'Category{id: $id, name: $name, parent: $parent, category: $category, icon: $icon}';
-  }
-}
-
-class CategoryIcon {
-  CategoryIcon({
-    required this.ligature,
-    required this.fontFamily,
-  });
-
-  factory CategoryIcon.fromJson(Json json) => CategoryIcon(
-        ligature: json['ligature'] as String,
-        fontFamily: json['fontFamily'] as String,
-      );
-
-  final String ligature;
-  final String fontFamily;
-
-  Json toJson() => <String, dynamic>{
-        'ligature': ligature,
-        'fontFamily': fontFamily,
-      };
-
-  @override
-  String toString() {
-    return 'CategoryIcon{ligature: $ligature, fontFamily: $fontFamily}';
+    return 'Category{id: $id, name: $name, parent: $parent, category: $category, '
+        'iconLigature: $iconLigature, iconFontFamily: $iconFontFamily}';
   }
 }

@@ -28,10 +28,10 @@ class CategoryItem extends StatelessWidget {
         child: ListTile(
           horizontalTitleGap: 0,
           leading: Text(
-            category.icon.ligature,
+            category.iconLigature,
             style: TextStyle(
               color: theme.primaryColorLight,
-              fontFamily: category.icon.fontFamily,
+              fontFamily: category.iconFontFamily,
               fontSize: 24,
             ),
           ),

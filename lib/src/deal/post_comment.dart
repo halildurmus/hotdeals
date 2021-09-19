@@ -54,7 +54,6 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
 
       final Comment comment = Comment(
         dealId: widget.deal.id!,
-        postedBy: user!.id!,
         message: commentController.text,
       );
 

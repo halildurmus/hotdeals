@@ -171,7 +171,6 @@ class _MessageAppBarState extends State<MessageAppBar> {
     GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
     final Report report = Report(
-      reportedBy: userId,
       reportedUser: widget.user2.id,
       reasons: <String>[
         if (_harassingCheckbox) 'Harassing',

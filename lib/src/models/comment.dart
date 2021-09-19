@@ -10,7 +10,7 @@ class Comment {
   const Comment({
     this.id,
     required this.dealId,
-    required this.postedBy,
+    this.postedBy,
     required this.message,
     this.createdAt,
     this.updatedAt,
@@ -27,7 +27,7 @@ class Comment {
 
   final String? id;
   final String dealId;
-  final String postedBy;
+  final String? postedBy;
   final String message;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -35,7 +35,7 @@ class Comment {
   Json toJson() {
     return <String, dynamic>{
       'dealId': dealId,
-      'postedBy': postedBy,
+      if (postedBy != null) 'postedBy': postedBy,
       'message': message,
     };
   }

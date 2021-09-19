@@ -17,8 +17,8 @@ class Deal {
     required this.coverPhoto,
     required this.dealUrl,
     this.photos,
-    this.upVoters,
-    this.downVoters,
+    this.upvoters,
+    this.downvoters,
     required this.title,
     required this.description,
     this.dealScore,
@@ -38,8 +38,8 @@ class Deal {
         coverPhoto: json['coverPhoto'] as String,
         dealUrl: json['dealUrl'] as String,
         photos: List<String>.from(json['photos'] as List<dynamic>),
-        upVoters: List<String>.from(json['upVoters'] as List<dynamic>),
-        downVoters: List<String>.from(json['downVoters'] as List<dynamic>),
+        upvoters: List<String>.from(json['upvoters'] as List<dynamic>),
+        downvoters: List<String>.from(json['downvoters'] as List<dynamic>),
         title: json['title'] as String,
         description: json['description'] as String,
         category: json['category'] as String,
@@ -60,8 +60,8 @@ class Deal {
   final String coverPhoto;
   final String dealUrl;
   final List<String>? photos;
-  final List<String>? upVoters;
-  final List<String>? downVoters;
+  final List<String>? upvoters;
+  final List<String>? downvoters;
   final String title;
   final String description;
   final int? dealScore;

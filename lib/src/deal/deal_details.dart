@@ -72,8 +72,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
     _store = stores.findByStoreId(_deal.store);
     _user = context.read<UserControllerImpl>().user;
     if (_user != null) {
-      isUpVoted = _deal.upVoters!.contains(_user!.id);
-      isDownVoted = _deal.downVoters!.contains(_user!.id);
+      isUpVoted = _deal.upvoters!.contains(_user!.id);
+      isDownVoted = _deal.downvoters!.contains(_user!.id);
       GetIt.I
           .get<SpringService>()
           .incrementViewsCounter(dealId: _deal.id!)
@@ -132,7 +132,6 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
       final Report report = Report(
-        reportedBy: _user!.id!,
         reportedDeal: _deal.id,
         reasons: <String>[
           if (repostCheckbox) 'Repost',
@@ -588,7 +587,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
 
                 final Deal? deal = await GetIt.I
                     .get<SpringService>()
-                    .voteDeal(dealId: _deal.id!, voteType: VoteType.upVote);
+                    .voteDeal(dealId: _deal.id!, voteType: VoteType.upvote);
 
                 setState(() {
                   if (deal != null) {
@@ -624,7 +623,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
 
                 final Deal? deal = await GetIt.I
                     .get<SpringService>()
-                    .voteDeal(dealId: _deal.id!, voteType: VoteType.downVote);
+                    .voteDeal(dealId: _deal.id!, voteType: VoteType.downvote);
 
                 setState(() {
                   if (deal != null) {
@@ -861,7 +860,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                                 FutureBuilder<MyUser>(
                                   future: GetIt.I
                                       .get<SpringService>()
-                                      .getUserById(id: comment.postedBy),
+                                      .getUserById(id: comment.postedBy!),
                                   builder: (BuildContext context,
                                       AsyncSnapshot<MyUser> snapshot) {
                                     String avatar =

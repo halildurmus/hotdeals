@@ -3,7 +3,7 @@ typedef Json = Map<String, dynamic>;
 class Report {
   const Report({
     this.id,
-    required this.reportedBy,
+    this.reportedBy,
     this.reportedDeal,
     this.reportedUser,
     required this.reasons,
@@ -29,7 +29,7 @@ class Report {
       );
 
   final String? id;
-  final String reportedBy;
+  final String? reportedBy;
   final String? reportedDeal;
   final String? reportedUser;
   final List<String> reasons;
@@ -39,7 +39,7 @@ class Report {
 
   Json toJson() {
     return <String, dynamic>{
-      'reportedBy': reportedBy,
+      if (reportedBy != null) 'reportedBy': reportedBy,
       if (reportedDeal != null) 'reportedDeal': reportedDeal,
       if (reportedUser != null) 'reportedUser': reportedUser,
       'reasons': reasons,
