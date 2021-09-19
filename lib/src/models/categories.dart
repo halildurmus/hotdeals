@@ -28,6 +28,7 @@ class Categories {
         .toList();
   }
 
+  /// Returns the localized category name.
   String getCategoryNameFromCategory({
     required String category,
     required Locale locale,
