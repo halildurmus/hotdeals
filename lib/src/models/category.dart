@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui' show Locale;
 
 typedef Json = Map<String, dynamic>;
 
@@ -42,32 +43,14 @@ class Category {
 
   @override
   String toString() {
-    return 'Category{id: $id, names: $names, parent: $parent, category: $category, '
-        'iconLigature: $iconLigature, iconFontFamily: $iconFontFamily}';
+    return 'Category{id: $id, names: $names, parent: $parent, '
+        'category: $category, iconLigature: $iconLigature, '
+        'iconFontFamily: $iconFontFamily}';
   }
 }
 
-// class _Names {
-//   _Names({
-//     required this.en,
-//     required this.tr,
-//   });
-//
-//   final String en;
-//   final String tr;
-//
-//   factory _Names.fromJson(Json json) => _Names(
-//         en: json['en'],
-//         tr: json['tr'],
-//       );
-//
-//   Json toJson() => {
-//         'en': en,
-//         'tr': tr,
-//       };
-//
-//   @override
-//   String toString() {
-//     return 'Names{en: $en, tr: $tr}';
-//   }
-// }
+extension LocalizedName on Category {
+  String localizedName(Locale locale) {
+    return names[locale.languageCode] ?? names['en'];
+  }
+}

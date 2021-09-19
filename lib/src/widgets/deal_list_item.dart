@@ -83,8 +83,12 @@ class _DealListItemState extends State<DealListItem> {
 
     Widget buildDealCategory() {
       return Text(
-        AppLocalizations.of(context)!.atCategory(_categories.getCategoryName(
-            category: deal.category, locale: Localizations.localeOf(context))),
+        AppLocalizations.of(context)!.atCategory(
+          _categories.getCategoryNameFromCategory(
+            category: deal.category,
+            locale: Localizations.localeOf(context),
+          ),
+        ),
         style: textTheme.subtitle1!.copyWith(
           fontSize: 13,
           fontStyle: FontStyle.italic,

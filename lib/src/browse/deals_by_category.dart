@@ -88,9 +88,9 @@ class _DealsByCategoryState extends State<DealsByCategory> {
               pressElevation: 0.0,
               elevation: selectedFilter == index ? 4 : 0,
               backgroundColor: theme.backgroundColor,
-              label: Text(subcategory
-                      .names[Localizations.localeOf(context).languageCode] ??
-                  subcategory.names['en']),
+              label: Text(
+                subcategory.localizedName(Localizations.localeOf(context)),
+              ),
               selectedColor: theme.primaryColor,
               selected: selectedFilter == index,
               onSelected: (bool selected) {
@@ -148,10 +148,9 @@ class _DealsByCategoryState extends State<DealsByCategory> {
       return PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
-            centerTitle: true,
-            title: Text(
-                category.names[Localizations.localeOf(context).languageCode] ??
-                    category.names['en'])),
+          centerTitle: true,
+          title: Text(category.localizedName(Localizations.localeOf(context))),
+        ),
       );
     }
 

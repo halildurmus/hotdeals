@@ -36,8 +36,7 @@ class CategoryItem extends StatelessWidget {
             ),
           ),
           title: Text(
-            category.names[Localizations.localeOf(context).languageCode] ??
-                category.names['en'],
+            category.localizedName(Localizations.localeOf(context)),
             style: textTheme.headline6!.copyWith(
               color: theme.primaryColor,
               fontSize: 18,

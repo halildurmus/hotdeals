@@ -28,11 +28,12 @@ class Categories {
         .toList();
   }
 
-  String getCategoryName({required String category, required Locale locale}) {
-    final foundCategory =
-        _categories!.singleWhere((Category e) => e.category == category);
-
-    return foundCategory.names[locale.languageCode] ??
-        foundCategory.names['en'];
+  String getCategoryNameFromCategory({
+    required String category,
+    required Locale locale,
+  }) {
+    return _categories!
+        .singleWhere((Category e) => e.category == category)
+        .localizedName(locale);
   }
 }
