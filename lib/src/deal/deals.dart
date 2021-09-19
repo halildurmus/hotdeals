@@ -177,7 +177,7 @@ class _DealsState extends State<Deals> {
     Widget buildBody() {
       return Column(
         children: <Widget>[
-          const SizedBox(height: 120),
+          const SizedBox(height: 100),
           buildChoiceChips(),
           Expanded(
             child: RefreshIndicator(
