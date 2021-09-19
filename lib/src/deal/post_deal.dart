@@ -112,7 +112,9 @@ class _PostDealState extends State<PostDeal> {
         },
         selectedItemBuilder: (BuildContext context) {
           return categories.map<Widget>((Category item) {
-            return Text(item.name);
+            return Text(
+                item.names[Localizations.localeOf(context).languageCode] ??
+                    item.names['en']);
           }).toList();
         },
         items: categories.map((Category value) {
@@ -125,7 +127,9 @@ class _PostDealState extends State<PostDeal> {
                 else
                   const SizedBox(width: 24),
                 const SizedBox(width: 10),
-                Text(value.name),
+                Text(
+                    value.names[Localizations.localeOf(context).languageCode] ??
+                        value.names['en']),
               ],
             ),
           );

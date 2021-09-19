@@ -526,7 +526,9 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      _categories.getCategoryName(category: _deal.category),
+                      _categories.getCategoryName(
+                          category: _deal.category,
+                          locale: Localizations.localeOf(context)),
                       style: textTheme.bodyText2!.copyWith(
                         color: theme.brightness == Brightness.light
                             ? Colors.black54

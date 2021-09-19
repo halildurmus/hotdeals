@@ -9,7 +9,7 @@ List<Category> categoryFromJson(String str) => List<Category>.from(
 class Category {
   Category({
     this.id,
-    required this.name,
+    required this.names,
     required this.parent,
     required this.category,
     required this.iconLigature,
@@ -18,7 +18,7 @@ class Category {
 
   factory Category.fromJson(Json json) => Category(
         id: json['id'] as String,
-        name: json['name'] as String,
+        names: json['names'] as Json,
         parent: json['parent'] as String,
         category: json['category'] as String,
         iconLigature: json['iconLigature'] as String,
@@ -26,14 +26,14 @@ class Category {
       );
 
   final String? id;
-  final String name;
+  final Json names;
   final String parent;
   final String category;
   final String iconLigature;
   final String iconFontFamily;
 
   Json toJson() => <String, dynamic>{
-        'name': name,
+        'names': names,
         'parent': parent,
         'category': category,
         'iconLigature': iconLigature,
@@ -42,7 +42,32 @@ class Category {
 
   @override
   String toString() {
-    return 'Category{id: $id, name: $name, parent: $parent, category: $category, '
+    return 'Category{id: $id, names: $names, parent: $parent, category: $category, '
         'iconLigature: $iconLigature, iconFontFamily: $iconFontFamily}';
   }
 }
+
+// class _Names {
+//   _Names({
+//     required this.en,
+//     required this.tr,
+//   });
+//
+//   final String en;
+//   final String tr;
+//
+//   factory _Names.fromJson(Json json) => _Names(
+//         en: json['en'],
+//         tr: json['tr'],
+//       );
+//
+//   Json toJson() => {
+//         'en': en,
+//         'tr': tr,
+//       };
+//
+//   @override
+//   String toString() {
+//     return 'Names{en: $en, tr: $tr}';
+//   }
+// }
