@@ -41,40 +41,42 @@ class AuthWidget extends StatelessWidget {
       );
     }
 
-    if (userSnapshot.connectionState == ConnectionState.active) {
-      if (userSnapshot.hasData) {
-        final Future<MyUser?> userFuture =
-            Provider.of<UserControllerImpl>(context, listen: false).getUser();
+    Widget buildErrorWidget() {
+      return Scaffold(
+        body: Center(
+          child: Text(AppLocalizations.of(context)!.anErrorOccurred),
+        ),
+      );
+    }
 
-        return FutureBuilder<MyUser?>(
-          future: userFuture,
-          builder: (BuildContext context, AsyncSnapshot<MyUser?> snapshot) {
-            if (snapshot.hasData) {
-              // Gets the token each time the user logs in.
-              FirebaseMessaging.instance.getToken().then((String? token) async {
-                // Saves the initial token to the database.
-                await _saveFcmTokenToDatabase(token!);
+    if (userSnapshot.hasData) {
+      final Future<MyUser?> userFuture =
+          Provider.of<UserControllerImpl>(context, listen: false).getUser();
 
-                // Any time the token refreshes, store this in the database too.
-                FirebaseMessaging.instance.onTokenRefresh
-                    .listen(_saveFcmTokenToDatabase);
-              });
+      return FutureBuilder<MyUser?>(
+        future: userFuture,
+        builder: (BuildContext context, AsyncSnapshot<MyUser?> snapshot) {
+          if (snapshot.hasData) {
+            // Gets the token each time the user logs in.
+            FirebaseMessaging.instance.getToken().then((String? token) async {
+              // Saves the initial token to the database.
+              await _saveFcmTokenToDatabase(token!);
 
-              return const HomeScreen();
-            } else if (snapshot.hasError) {
-              return const HomeScreen();
-            }
+              // Any time the token refreshes, store this in the database too.
+              FirebaseMessaging.instance.onTokenRefresh
+                  .listen(_saveFcmTokenToDatabase);
+            });
 
-            return buildCircularProgressIndicator();
-          },
-        );
-      } else if (userSnapshot.hasError) {
-        return Scaffold(
-          body: Center(
-            child: Text(AppLocalizations.of(context)!.anErrorOccurred),
-          ),
-        );
-      }
+            return const HomeScreen();
+          } else if (snapshot.hasError) {
+            return const HomeScreen();
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return buildErrorWidget();
+          }
+
+          return buildCircularProgressIndicator();
+        },
+      );
     }
 
     return const HomeScreen();
