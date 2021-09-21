@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 import '../chat/message_arguments.dart';
 import '../chat/message_screen.dart';
 import '../models/my_user.dart';
-import '../models/report.dart';
 import '../models/user_controller_impl.dart';
+import '../models/user_report.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
@@ -62,9 +62,9 @@ class _UserProfileState extends State<UserProfile> with UiLoggy {
     Future<void> sendReport(BuildContext context) async {
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
-      final Report report = Report(
+      final UserReport report = UserReport(
         reportedBy: loggedInUser!.id!,
-        reportedUser: user.id,
+        reportedUser: user.id!,
         reasons: <String>[
           if (harassingCheckbox) 'Harassing',
           if (spamCheckbox) 'Spam',
@@ -74,8 +74,8 @@ class _UserProfileState extends State<UserProfile> with UiLoggy {
             messageController.text.isNotEmpty ? messageController.text : null,
       );
 
-      final Report? sentReport =
-          await GetIt.I.get<SpringService>().sendReport(report: report);
+      final UserReport? sentReport =
+          await GetIt.I.get<SpringService>().sendUserReport(report: report);
       loggy.info(sentReport);
 
       // Pops the loading dialog.

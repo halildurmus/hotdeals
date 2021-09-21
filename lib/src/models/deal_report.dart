@@ -1,27 +1,20 @@
 typedef Json = Map<String, dynamic>;
 
-class Report {
-  const Report({
+class DealReport {
+  const DealReport({
     this.id,
     this.reportedBy,
-    this.reportedDeal,
-    this.reportedUser,
+    required this.reportedDeal,
     required this.reasons,
     this.message,
     this.createdAt,
     this.updatedAt,
-  }) : assert(reportedDeal != null || reportedUser != null,
-            'You need to specify the reportedDeal or the reportedUser!');
+  });
 
-  factory Report.fromJson(Json json) => Report(
+  factory DealReport.fromJson(Json json) => DealReport(
         id: json['id'] as String,
         reportedBy: json['reportedBy'] as String,
-        reportedDeal: json['reportedDeal'] != null
-            ? json['reportedDeal'] as String
-            : null,
-        reportedUser: json['reportedUser'] != null
-            ? json['reportedUser'] as String
-            : null,
+        reportedDeal: json['reportedDeal'] as String,
         reasons: List<String>.from(json['reasons'] as List<dynamic>),
         message: json['message'] != null ? json['message'] as String : null,
         createdAt: DateTime.parse(json['createdAt'] as String),
@@ -30,8 +23,7 @@ class Report {
 
   final String? id;
   final String? reportedBy;
-  final String? reportedDeal;
-  final String? reportedUser;
+  final String reportedDeal;
   final List<String> reasons;
   final String? message;
   final DateTime? createdAt;
@@ -40,8 +32,7 @@ class Report {
   Json toJson() {
     return <String, dynamic>{
       if (reportedBy != null) 'reportedBy': reportedBy,
-      if (reportedDeal != null) 'reportedDeal': reportedDeal,
-      if (reportedUser != null) 'reportedUser': reportedUser,
+      'reportedDeal': reportedDeal,
       'reasons': reasons,
       if (message != null) 'message': message,
     };
@@ -49,6 +40,6 @@ class Report {
 
   @override
   String toString() {
-    return 'Report{id: $id, reportedBy: $reportedBy, reportedDeal: $reportedDeal, reportedUser: $reportedUser, reasons: $reasons, message: $message, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'DealReport{id: $id, reportedBy: $reportedBy, reportedDeal: $reportedDeal, reasons: $reasons, message: $message, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }

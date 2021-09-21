@@ -7,8 +7,8 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
-import '../models/report.dart';
 import '../models/user_controller_impl.dart';
+import '../models/user_report.dart';
 import '../services/spring_service.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/loading_dialog.dart';
@@ -170,8 +170,8 @@ class _MessageAppBarState extends State<MessageAppBar> {
   Future<void> _sendReport(BuildContext context, String userId) async {
     GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
-    final Report report = Report(
-      reportedUser: widget.user2.id,
+    final UserReport report = UserReport(
+      reportedUser: widget.user2.id!,
       reasons: <String>[
         if (_harassingCheckbox) 'Harassing',
         if (_spamCheckbox) 'Spam',
@@ -181,8 +181,8 @@ class _MessageAppBarState extends State<MessageAppBar> {
           _messageController.text.isNotEmpty ? _messageController.text : null,
     );
 
-    final Report? sentReport =
-        await GetIt.I.get<SpringService>().sendReport(report: report);
+    final UserReport? sentReport =
+        await GetIt.I.get<SpringService>().sendUserReport(report: report);
 
     // Pops the loading dialog.
     Navigator.of(context).pop();

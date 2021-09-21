@@ -10,11 +10,12 @@ import '../config/environment.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
+import '../models/deal_report.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
-import '../models/report.dart';
 import '../models/search_hit.dart';
 import '../models/store.dart';
+import '../models/user_report.dart';
 import '../models/vote_type.dart';
 import 'http_service.dart';
 import 'http_service_impl.dart';
@@ -156,14 +157,34 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<Report?> sendReport({required Report report}) async {
-    final String url = '$_baseUrl/reports';
+  Future<DealReport?> sendDealReport({required DealReport report}) async {
+    final String url = '$_baseUrl/deal-reports';
 
     try {
       final Response response = await _httpService.post(url, report.toJson());
       if (response.statusCode == 201) {
-        final Report _report =
-            Report.fromJson(jsonDecode(response.body) as Json);
+        final DealReport _report =
+            DealReport.fromJson(jsonDecode(response.body) as Json);
+
+        return _report;
+      }
+
+      return null;
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      return null;
+    }
+  }
+
+  @override
+  Future<UserReport?> sendUserReport({required UserReport report}) async {
+    final String url = '$_baseUrl/user-reports';
+
+    try {
+      final Response response = await _httpService.post(url, report.toJson());
+      if (response.statusCode == 201) {
+        final UserReport _report =
+            UserReport.fromJson(jsonDecode(response.body) as Json);
 
         return _report;
       }

@@ -16,8 +16,8 @@ import '../deal/user_profile.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
+import '../models/deal_report.dart';
 import '../models/my_user.dart';
-import '../models/report.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
 import '../models/user_controller_impl.dart';
@@ -131,8 +131,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
     Future<void> sendReport() async {
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
-      final Report report = Report(
-        reportedDeal: _deal.id,
+      final DealReport report = DealReport(
+        reportedDeal: _deal.id!,
         reasons: <String>[
           if (repostCheckbox) 'Repost',
           if (spamCheckbox) 'Spam',
@@ -142,8 +142,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
             messageController.text.isNotEmpty ? messageController.text : null,
       );
 
-      final Report? sentReport =
-          await GetIt.I.get<SpringService>().sendReport(report: report);
+      final DealReport? sentReport =
+          await GetIt.I.get<SpringService>().sendDealReport(report: report);
       loggy.info(sentReport);
 
       // Pops the loading dialog.

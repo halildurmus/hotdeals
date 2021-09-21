@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
+import '../models/deal_report.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
-import '../models/report.dart';
 import '../models/search_hit.dart';
 import '../models/store.dart';
+import '../models/user_report.dart';
 import '../models/vote_type.dart';
 
 /// An abstract class that used for communicating with the backend.
@@ -29,7 +30,9 @@ abstract class SpringService {
     required List<String> tokens,
   });
 
-  Future<Report?> sendReport({required Report report});
+  Future<DealReport?> sendDealReport({required DealReport report});
+
+  Future<UserReport?> sendUserReport({required UserReport report});
 
   Future<List<Comment>?> getComments(String dealId);
 
