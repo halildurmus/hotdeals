@@ -106,7 +106,7 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
 
     try {
       final Response response = await _httpService.post(url, deal.toJson());
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         final Deal _deal = Deal.fromJson(jsonDecode(response.body) as Json);
 
         return _deal;
@@ -718,7 +718,7 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
 
   @override
   Future<Deal?> incrementViewsCounter({required String dealId}) async {
-    final String url = '$_baseUrl/deals/$dealId/incrementViewsCounter';
+    final String url = '$_baseUrl/deals/$dealId/increment-views-counter';
 
     try {
       final Response response =
