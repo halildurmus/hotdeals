@@ -362,12 +362,13 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     }
 
     ChatTheme _chatTheme(ThemeData theme) {
+      const defaultChatTheme = DefaultChatTheme();
+
       return DefaultChatTheme(
         backgroundColor: theme.backgroundColor,
-        inputTextDecoration:
-            const DefaultChatTheme().inputTextDecoration.copyWith(
-                  fillColor: Colors.transparent,
-                ),
+        inputTextDecoration: defaultChatTheme.inputTextDecoration.copyWith(
+          fillColor: Colors.transparent,
+        ),
         primaryColor: theme.brightness == Brightness.light
             ? theme.primaryColor
             : theme.primaryColorDark,
@@ -376,11 +377,21 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
             : theme.primaryColorLight.withOpacity(.1),
         receivedMessageBodyTextStyle: theme.textTheme.bodyText2!.copyWith(
           color: theme.brightness == Brightness.light ? null : Colors.white,
-          fontSize: 15.0,
+          height: 1.3,
+          fontSize: 15,
+        ),
+        receivedMessageLinkDescriptionTextStyle:
+            defaultChatTheme.receivedMessageLinkDescriptionTextStyle.copyWith(
+          color: theme.brightness == Brightness.light ? null : Colors.white,
+        ),
+        receivedMessageLinkTitleTextStyle:
+            defaultChatTheme.receivedMessageLinkTitleTextStyle.copyWith(
+          color: theme.brightness == Brightness.light ? null : Colors.white,
         ),
         sentMessageBodyTextStyle: theme.textTheme.bodyText2!.copyWith(
           color: Colors.white,
-          fontSize: 15.0,
+          height: 1.3,
+          fontSize: 15,
         ),
       );
     }
