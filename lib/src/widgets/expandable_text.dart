@@ -61,7 +61,7 @@ class ExpandableText extends StatelessWidget {
                     const SizedBox(height: 10),
                     ExpandableButton(
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             AppLocalizations.of(context)!.readMore,
@@ -79,7 +79,7 @@ class ExpandableText extends StatelessWidget {
                     const SizedBox(height: 10),
                     ExpandableButton(
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             AppLocalizations.of(context)!.readLess,
