@@ -1,3 +1,5 @@
+import '../models/deal_report_reason.dart';
+
 typedef Json = Map<String, dynamic>;
 
 class DealReport {
@@ -15,7 +17,9 @@ class DealReport {
         id: json['id'] as String,
         reportedBy: json['reportedBy'] as String,
         reportedDeal: json['reportedDeal'] as String,
-        reasons: List<String>.from(json['reasons'] as List<dynamic>),
+        reasons: (json['reasons'] as List<dynamic>)
+            .map((e) => dealReportReasonFromString(e))
+            .toList(),
         message: json['message'] != null ? json['message'] as String : null,
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
@@ -24,7 +28,7 @@ class DealReport {
   final String? id;
   final String? reportedBy;
   final String reportedDeal;
-  final List<String> reasons;
+  final List<DealReportReason> reasons;
   final String? message;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -33,7 +37,7 @@ class DealReport {
     return <String, dynamic>{
       if (reportedBy != null) 'reportedBy': reportedBy,
       'reportedDeal': reportedDeal,
-      'reasons': reasons,
+      'reasons': reasons.map((e) => e.asString).toList(),
       if (message != null) 'message': message,
     };
   }

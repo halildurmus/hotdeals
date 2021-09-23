@@ -17,6 +17,7 @@ import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
+import '../models/deal_report_reason.dart';
 import '../models/my_user.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
@@ -133,10 +134,10 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
 
       final DealReport report = DealReport(
         reportedDeal: _deal.id!,
-        reasons: <String>[
-          if (repostCheckbox) 'Repost',
-          if (spamCheckbox) 'Spam',
-          if (otherCheckbox) 'Other'
+        reasons: [
+          if (repostCheckbox) DealReportReason.repost,
+          if (spamCheckbox) DealReportReason.spam,
+          if (otherCheckbox) DealReportReason.other,
         ],
         message:
             messageController.text.isNotEmpty ? messageController.text : null,
@@ -149,14 +150,15 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
       // Pops the loading dialog.
       Navigator.of(context).pop();
       if (sentReport != null) {
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content:
                 Text(AppLocalizations.of(context)!.successfullyReportedDeal),
           ),
         );
-        Navigator.of(context).pop();
       } else {
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.anErrorOccurred),

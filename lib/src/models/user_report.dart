@@ -1,3 +1,5 @@
+import '../models/user_report_reason.dart';
+
 typedef Json = Map<String, dynamic>;
 
 class UserReport {
@@ -15,7 +17,9 @@ class UserReport {
         id: json['id'] as String,
         reportedBy: json['reportedBy'] as String,
         reportedUser: json['reportedUser'] as String,
-        reasons: List<String>.from(json['reasons'] as List<dynamic>),
+        reasons: (json['reasons'] as List<dynamic>)
+            .map((e) => userReportReasonFromString(e))
+            .toList(),
         message: json['message'] != null ? json['message'] as String : null,
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
@@ -24,7 +28,7 @@ class UserReport {
   final String? id;
   final String? reportedBy;
   final String reportedUser;
-  final List<String> reasons;
+  final List<UserReportReason> reasons;
   final String? message;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -33,7 +37,7 @@ class UserReport {
     return <String, dynamic>{
       if (reportedBy != null) 'reportedBy': reportedBy,
       'reportedUser': reportedUser,
-      'reasons': reasons,
+      'reasons': reasons.map((e) => e.asString).toList(),
       if (message != null) 'message': message,
     };
   }

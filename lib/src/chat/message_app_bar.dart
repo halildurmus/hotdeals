@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../models/user_report.dart';
+import '../models/user_report_reason.dart';
 import '../services/spring_service.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/loading_dialog.dart';
@@ -172,10 +173,10 @@ class _MessageAppBarState extends State<MessageAppBar> {
 
     final UserReport report = UserReport(
       reportedUser: widget.user2.id!,
-      reasons: <String>[
-        if (_harassingCheckbox) 'Harassing',
-        if (_spamCheckbox) 'Spam',
-        if (_otherCheckbox) 'Other'
+      reasons: [
+        if (_harassingCheckbox) UserReportReason.harassing,
+        if (_spamCheckbox) UserReportReason.spam,
+        if (_otherCheckbox) UserReportReason.other,
       ],
       message:
           _messageController.text.isNotEmpty ? _messageController.text : null,
@@ -194,6 +195,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
                 Text(AppLocalizations.of(context)!.successfullyReportedUser)),
       );
     } else {
+      Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.anErrorOccurred),

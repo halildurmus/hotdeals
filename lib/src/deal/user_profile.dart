@@ -12,6 +12,7 @@ import '../chat/message_screen.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../models/user_report.dart';
+import '../models/user_report_reason.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
@@ -65,10 +66,10 @@ class _UserProfileState extends State<UserProfile> with UiLoggy {
       final UserReport report = UserReport(
         reportedBy: loggedInUser!.id!,
         reportedUser: user.id!,
-        reasons: <String>[
-          if (harassingCheckbox) 'Harassing',
-          if (spamCheckbox) 'Spam',
-          if (otherCheckbox) 'Other'
+        reasons: [
+          if (harassingCheckbox) UserReportReason.harassing,
+          if (spamCheckbox) UserReportReason.spam,
+          if (otherCheckbox) UserReportReason.other,
         ],
         message:
             messageController.text.isNotEmpty ? messageController.text : null,
@@ -89,6 +90,7 @@ class _UserProfileState extends State<UserProfile> with UiLoggy {
         );
         Navigator.of(context).pop();
       } else {
+        Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.anErrorOccurred),
@@ -98,7 +100,7 @@ class _UserProfileState extends State<UserProfile> with UiLoggy {
     }
 
     Future<void> onPressedReport() async {
-      showDialog<void>(
+      return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return Dialog(
