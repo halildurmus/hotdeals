@@ -16,8 +16,8 @@ class LoadingDialog extends StatelessWidget {
     );
   }
 
-  void showLoadingDialog(BuildContext context) {
-    showDialog<void>(
+  Future<void> showLoadingDialog(BuildContext context) {
+    return showDialog<void>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext ctx) => _buildAlertDialog(ctx),
