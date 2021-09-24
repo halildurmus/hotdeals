@@ -157,7 +157,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
     final bool _isUserBlocked = _user.blockedUsers!.contains(widget.user2.uid);
 
     Future<void> _onPressedReport() async {
-      showDialog<void>(
+      return showDialog<void>(
         context: context,
         builder: (BuildContext context) => ReportUserDialog(
           loggedInUserId: _user.id!,
