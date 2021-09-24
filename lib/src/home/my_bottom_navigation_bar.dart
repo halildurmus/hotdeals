@@ -27,7 +27,7 @@ class MyBottomNavigationBar extends StatefulWidget {
 }
 
 class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
-  late MyUser? _user;
+  MyUser? _user;
   bool isLoggedIn = false;
   int unreadMessages = 0;
   int unreadNotifications = 0;
@@ -36,7 +36,6 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   @override
   void initState() {
-    _user = context.read<UserControllerImpl>().user;
     pushNotificationService = GetIt.I.get<PushNotificationService>();
     activeScreen = widget.activeScreen;
     super.initState();
@@ -46,93 +45,85 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
+    _user = Provider.of<UserControllerImpl>(context).user;
     isLoggedIn = _user != null;
 
     Widget buildGNav() {
-      return Consumer<UserControllerImpl>(
-        builder: (BuildContext context, UserControllerImpl mongoUser,
-            Widget? child) {
-          final MyUser? user = mongoUser.user;
-          final bool _isLoggedIn = _user != null;
+      return AnimatedBuilder(
+        animation: pushNotificationService,
+        builder: (BuildContext context, Widget? child) {
+          unreadNotifications = pushNotificationService.unreadNotifications;
 
-          return AnimatedBuilder(
-            animation: pushNotificationService,
-            builder: (BuildContext context, Widget? child) {
-              unreadNotifications = pushNotificationService.unreadNotifications;
-
-              return GNav(
-                gap: 8,
-                color: theme.primaryColorLight,
-                activeColor: Colors.white,
-                textStyle: textTheme.bodyText2!.copyWith(color: Colors.white),
-                tabBackgroundColor: theme.primaryColor,
-                padding: const EdgeInsets.all(16),
-                tabs: <GButton>[
-                  GButton(
-                    icon: LineIcons.tag,
-                    text: AppLocalizations.of(context)!.deals,
-                  ),
-                  GButton(
-                    icon: LineIcons.compass,
-                    text: AppLocalizations.of(context)!.browse,
-                  ),
-                  GButton(
-                    icon: LineIcons.facebookMessenger,
-                    leading: widget.activeScreen == 2 || unreadMessages == 0
-                        ? null
+          return GNav(
+            gap: 8,
+            color: theme.primaryColorLight,
+            activeColor: Colors.white,
+            textStyle: textTheme.bodyText2!.copyWith(color: Colors.white),
+            tabBackgroundColor: theme.primaryColor,
+            padding: const EdgeInsets.all(16),
+            tabs: <GButton>[
+              GButton(
+                icon: LineIcons.tag,
+                text: AppLocalizations.of(context)!.deals,
+              ),
+              GButton(
+                icon: LineIcons.compass,
+                text: AppLocalizations.of(context)!.browse,
+              ),
+              GButton(
+                icon: LineIcons.facebookMessenger,
+                leading: widget.activeScreen == 2 || unreadMessages == 0
+                    ? null
+                    : Badge(
+                        badgeColor: theme.primaryColor.withOpacity(.3),
+                        elevation: 0,
+                        position: BadgePosition.topEnd(top: -12, end: -12),
+                        badgeContent: Text(
+                          unreadMessages.toString(),
+                          style: TextStyle(
+                            color: theme.primaryColor.withOpacity(.9),
+                          ),
+                        ),
+                        child: Icon(
+                          LineIcons.facebookMessenger,
+                          color: theme.primaryColorLight,
+                        ),
+                      ),
+                text: AppLocalizations.of(context)!.chats,
+              ),
+              GButton(
+                icon: LineIcons.user,
+                leading: isLoggedIn
+                    ? widget.activeScreen == 3 || unreadNotifications == 0
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(_user!.avatar!),
+                            radius: 12,
+                          )
                         : Badge(
                             badgeColor: theme.primaryColor.withOpacity(.3),
-                            elevation: 0,
-                            position: BadgePosition.topEnd(top: -12, end: -12),
                             badgeContent: Text(
-                              unreadMessages.toString(),
+                              unreadNotifications.toString(),
                               style: TextStyle(
                                 color: theme.primaryColor.withOpacity(.9),
                               ),
                             ),
-                            child: Icon(
-                              LineIcons.facebookMessenger,
-                              color: theme.primaryColorLight,
+                            elevation: 0,
+                            position: BadgePosition.topEnd(top: -12, end: -12),
+                            child: CircleAvatar(
+                              radius: 12.0,
+                              backgroundImage: NetworkImage(_user!.avatar!),
                             ),
-                          ),
-                    text: AppLocalizations.of(context)!.chats,
-                  ),
-                  GButton(
-                    icon: LineIcons.user,
-                    leading: _isLoggedIn
-                        ? widget.activeScreen == 3 || unreadNotifications == 0
-                            ? CircleAvatar(
-                                backgroundImage: NetworkImage(user!.avatar!),
-                                radius: 12,
-                              )
-                            : Badge(
-                                badgeColor: theme.primaryColor.withOpacity(.3),
-                                badgeContent: Text(
-                                  unreadNotifications.toString(),
-                                  style: TextStyle(
-                                    color: theme.primaryColor.withOpacity(.9),
-                                  ),
-                                ),
-                                elevation: 0,
-                                position:
-                                    BadgePosition.topEnd(top: -12, end: -12),
-                                child: CircleAvatar(
-                                  radius: 12.0,
-                                  backgroundImage: NetworkImage(user!.avatar!),
-                                ),
-                              )
-                        : null,
-                    text: AppLocalizations.of(context)!.profile,
-                  ),
-                ],
-                selectedIndex: activeScreen,
-                onTabChange: (int index) {
-                  setState(() {
-                    activeScreen = index;
-                    widget.activeScreenOnChanged(activeScreen);
-                  });
-                },
-              );
+                          )
+                    : null,
+                text: AppLocalizations.of(context)!.profile,
+              ),
+            ],
+            selectedIndex: activeScreen,
+            onTabChange: (int index) {
+              setState(() {
+                activeScreen = index;
+                widget.activeScreenOnChanged(activeScreen);
+              });
             },
           );
         },
