@@ -151,8 +151,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     final TextTheme textTheme = theme.textTheme;
     final MyUser user = Provider.of<UserControllerImpl>(context).user!;
 
-    void nicknameOnTap() {
-      showDialog<dynamic>(
+    Future<void> nicknameOnTap() {
+      return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
@@ -184,12 +184,6 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                         height: 45,
                         width: double.infinity,
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: theme.colorScheme.secondary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                          ),
                           onPressed: nicknameController.text.isEmpty ||
                                   nicknameController.text == user.nickname
                               ? null
@@ -203,10 +197,14 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                                       .getUser();
                                   Navigator.of(context).pop();
                                 },
+                          style: ElevatedButton.styleFrom(
+                            primary: theme.colorScheme.secondary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                          ),
                           child: Text(
                             AppLocalizations.of(context)!.updateNickname,
-                            style: textTheme.bodyText1!
-                                .copyWith(color: Colors.white),
                           ),
                         ),
                       ),
@@ -221,9 +219,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.updateProfile),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.updateProfile)),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
