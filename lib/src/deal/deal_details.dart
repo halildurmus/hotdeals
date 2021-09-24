@@ -664,7 +664,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
     }
 
     Future<void> _userOnTap(MyUser user) async {
-      return showDialog<dynamic>(
+      return showDialog<void>(
         context: context,
         builder: (BuildContext context) => UserProfileDialog(user: user),
       );
@@ -744,7 +744,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
         return;
       }
 
-      showDialog<dynamic>(
+      showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return Dialog(
@@ -756,7 +756,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
             child: PostComment(deal: _deal),
           );
         },
-      ).then((dynamic value) {
+      ).then((_) {
         setState(() {
           _commentsFuture = GetIt.I.get<SpringService>().getComments(_deal.id!);
         });
@@ -816,9 +816,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                       ),
                       const SizedBox(width: 10.0),
                       TextButton(
-                        onPressed: () {
-                          postCommentOnTap();
-                        },
+                        onPressed: () => postCommentOnTap(),
                         child: Text(
                           AppLocalizations.of(context)!.postComment,
                           style: textTheme.subtitle2!.copyWith(
@@ -937,9 +935,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
     Widget buildPostCommentButton() {
       return Center(
         child: ElevatedButton(
-          onPressed: () {
-            postCommentOnTap();
-          },
+          onPressed: () => postCommentOnTap(),
           child: Text(AppLocalizations.of(context)!.postAComment),
         ),
       );
