@@ -9,13 +9,9 @@ import '../services/spring_service.dart';
 import '../widgets/loading_dialog.dart';
 
 class ReportUserDialog extends StatefulWidget {
-  const ReportUserDialog({
-    Key? key,
-    required this.loggedInUserId,
-    required this.reportedUserId,
-  }) : super(key: key);
+  const ReportUserDialog({Key? key, required this.reportedUserId})
+      : super(key: key);
 
-  final String loggedInUserId;
   final String reportedUserId;
 
   @override
@@ -52,7 +48,6 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
       GetIt.I.get<LoadingDialog>().showLoadingDialog(ctx);
 
       final UserReport report = UserReport(
-        reportedBy: widget.loggedInUserId,
         reportedUser: widget.reportedUserId,
         reasons: [
           if (harassingCheckbox) UserReportReason.harassing,

@@ -49,10 +49,8 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
     Future<void> onPressedReport() async {
       return showDialog<void>(
         context: context,
-        builder: (BuildContext context) => ReportUserDialog(
-          loggedInUserId: loggedInUser!.id!,
-          reportedUserId: user.id!,
-        ),
+        builder: (BuildContext context) =>
+            ReportUserDialog(reportedUserId: user.id!),
       ).then((_) => Navigator.of(context).pop());
     }
 

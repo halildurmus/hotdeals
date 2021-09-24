@@ -159,10 +159,8 @@ class _MessageAppBarState extends State<MessageAppBar> {
     Future<void> _onPressedReport() async {
       return showDialog<void>(
         context: context,
-        builder: (BuildContext context) => ReportUserDialog(
-          loggedInUserId: _user.id!,
-          reportedUserId: widget.user2.id!,
-        ),
+        builder: (BuildContext context) =>
+            ReportUserDialog(reportedUserId: widget.user2.id!),
       );
     }
 
