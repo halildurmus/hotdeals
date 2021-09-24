@@ -3,12 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../models/my_user.dart';
 import 'auth_service.dart';
 import 'spring_service.dart';
 
-class FirebaseAuthService implements AuthService {
+class FirebaseAuthService with NetworkLoggy implements AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final SpringService _springService = GetIt.I.get<SpringService>();
 
@@ -33,8 +34,11 @@ class FirebaseAuthService implements AuthService {
 
       if (userCredential.additionalUserInfo!.isNewUser) {
         try {
-          await _springService.createMongoUser(userCredential.user!);
+          final user =
+              await _springService.createMongoUser(userCredential.user!);
+          loggy.info('User created on mongodb\n$user');
         } on Exception {
+          await _firebaseAuth.currentUser!.delete();
           throw PlatformException(
             code: 'MONGODB_CREATE_USER_ERROR',
             message: 'Could not create user on MongoDB',
@@ -80,8 +84,11 @@ class FirebaseAuthService implements AuthService {
 
         if (userCredential.additionalUserInfo!.isNewUser) {
           try {
-            await _springService.createMongoUser(userCredential.user!);
+            final user =
+                await _springService.createMongoUser(userCredential.user!);
+            loggy.info('User created on mongodb\n$user');
           } on Exception {
+            await _firebaseAuth.currentUser!.delete();
             throw PlatformException(
               code: 'MONGODB_CREATE_USER_ERROR',
               message: 'Could not create user on MongoDB',
