@@ -321,7 +321,7 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
       'email': user.email,
       'avatar': user.photoURL ??
           'https://ui-avatars.com/api/?length=1&background=008080&rounded=true&name=',
-      'fcmTokens': [fcmToken!],
+      'fcmTokens': [fcmToken],
     };
 
     try {
