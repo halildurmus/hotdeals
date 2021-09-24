@@ -49,8 +49,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
   late Store _store;
   late MyUser? _user;
   late Future<List<Comment>?> _commentsFuture;
-  bool isUpVoted = false;
-  bool isDownVoted = false;
+  bool isUpvoted = false;
+  bool isDownvoted = false;
 
   @override
   void initState() {
@@ -67,8 +67,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
     _store = stores.findByStoreId(_deal.store);
     _user = context.read<UserControllerImpl>().user;
     if (_user != null) {
-      isUpVoted = _deal.upvoters!.contains(_user!.id);
-      isDownVoted = _deal.downvoters!.contains(_user!.id);
+      isUpvoted = _deal.upvoters!.contains(_user!.id);
+      isDownvoted = _deal.downvoters!.contains(_user!.id);
       GetIt.I
           .get<SpringService>()
           .incrementViewsCounter(dealId: _deal.id!)
@@ -441,29 +441,39 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
             ),
             const SizedBox(width: 20),
             GestureDetector(
-              onTap: () async {
-                if (_user == null) {
-                  loggy.warning('You need to log in!');
-                  return;
-                }
+              onTap: isUpvoted
+                  ? null
+                  : () async {
+                      if (_user == null) {
+                        loggy.warning('You need to log in!');
+                        return;
+                      }
 
-                final Deal? deal = await GetIt.I
-                    .get<SpringService>()
-                    .voteDeal(dealId: _deal.id!, voteType: VoteType.upvote);
+                      final Deal? deal = await GetIt.I
+                          .get<SpringService>()
+                          .voteDeal(
+                              dealId: _deal.id!, voteType: VoteType.upvote);
 
-                setState(() {
-                  if (deal != null) {
-                    _deal = deal;
-                  }
-
-                  isUpVoted = true;
-                  isDownVoted = false;
-                });
-              },
+                      if (deal == null) {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                AppLocalizations.of(context)!.anErrorOccurred),
+                          ),
+                        );
+                      } else {
+                        setState(() {
+                          _deal = deal;
+                          isUpvoted = true;
+                          isDownvoted = false;
+                        });
+                      }
+                    },
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: isUpVoted ? Colors.green : Colors.transparent,
+                      color: isUpvoted ? Colors.green : Colors.transparent,
                       width: 1.5),
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                   color: theme.brightness == Brightness.light
@@ -472,34 +482,44 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                 ),
                 padding: const EdgeInsets.all(12),
                 child: Icon(FontAwesomeIcons.solidThumbsUp,
-                    color: isUpVoted ? Colors.green : Colors.grey, size: 16),
+                    color: isUpvoted ? Colors.green : Colors.grey, size: 16),
               ),
             ),
             const SizedBox(width: 20),
             GestureDetector(
-              onTap: () async {
-                if (_user == null) {
-                  loggy.warning('You need to log in!');
-                  return;
-                }
+              onTap: isDownvoted
+                  ? null
+                  : () async {
+                      if (_user == null) {
+                        loggy.warning('You need to log in!');
+                        return;
+                      }
 
-                final Deal? deal = await GetIt.I
-                    .get<SpringService>()
-                    .voteDeal(dealId: _deal.id!, voteType: VoteType.downvote);
+                      final Deal? deal = await GetIt.I
+                          .get<SpringService>()
+                          .voteDeal(
+                              dealId: _deal.id!, voteType: VoteType.downvote);
 
-                setState(() {
-                  if (deal != null) {
-                    _deal = deal;
-                  }
-
-                  isDownVoted = true;
-                  isUpVoted = false;
-                });
-              },
+                      if (deal == null) {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                AppLocalizations.of(context)!.anErrorOccurred),
+                          ),
+                        );
+                      } else {
+                        setState(() {
+                          _deal = deal;
+                          isDownvoted = true;
+                          isUpvoted = false;
+                        });
+                      }
+                    },
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: isDownVoted
+                      color: isDownvoted
                           ? Colors.pinkAccent.shade100
                           : Colors.transparent,
                       width: 1.5),
@@ -511,7 +531,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                 padding: const EdgeInsets.all(12),
                 child: Icon(FontAwesomeIcons.solidThumbsDown,
                     color:
-                        isDownVoted ? Colors.pinkAccent.shade100 : Colors.grey,
+                        isDownvoted ? Colors.pinkAccent.shade100 : Colors.grey,
                     size: 16),
               ),
             ),
