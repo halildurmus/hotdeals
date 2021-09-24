@@ -12,7 +12,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../deal/post_comment.dart';
-import '../deal/user_profile.dart';
+import '../deal/user_profile_dialog.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
@@ -663,20 +663,10 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
       );
     }
 
-    void _userOnTap(MyUser user) {
-      showDialog<dynamic>(
+    Future<void> _userOnTap(MyUser user) async {
+      return showDialog<dynamic>(
         context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            insetPadding: const EdgeInsets.symmetric(horizontal: 16),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-            child: UserProfile(user: user),
-          );
-        },
+        builder: (BuildContext context) => UserProfileDialog(user: user),
       );
     }
 

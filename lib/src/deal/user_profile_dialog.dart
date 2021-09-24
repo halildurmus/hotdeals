@@ -4,53 +4,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 
 import '../chat/message_arguments.dart';
 import '../chat/message_screen.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
-import '../models/user_report.dart';
-import '../models/user_report_reason.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
-import '../widgets/loading_dialog.dart';
+import 'report_user_dialog.dart';
 
 typedef Json = Map<String, dynamic>;
 
-class UserProfile extends StatefulWidget {
-  const UserProfile({Key? key, required this.user}) : super(key: key);
+class UserProfileDialog extends StatefulWidget {
+  const UserProfileDialog({Key? key, required this.user}) : super(key: key);
 
   final MyUser user;
 
   @override
-  _UserProfileState createState() => _UserProfileState();
+  _UserProfileDialogState createState() => _UserProfileDialogState();
 }
 
-class _UserProfileState extends State<UserProfile> with UiLoggy {
+class _UserProfileDialogState extends State<UserProfileDialog> {
   MyUser? loggedInUser;
-  late FirestoreService firestoreService;
-  late SpringService springService;
-  late TextEditingController messageController;
-  bool harassingCheckbox = false;
-  bool spamCheckbox = false;
-  bool otherCheckbox = false;
+  late final FirestoreService firestoreService;
+  late final SpringService springService;
 
   @override
   void initState() {
     firestoreService = GetIt.I.get<FirestoreService>();
     springService = GetIt.I.get<SpringService>();
     loggedInUser = context.read<UserControllerImpl>().user;
-    messageController = TextEditingController();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    messageController.dispose();
-    super.dispose();
   }
 
   @override
@@ -60,140 +46,14 @@ class _UserProfileState extends State<UserProfile> with UiLoggy {
     final TextTheme textTheme = theme.textTheme;
     final MyUser user = widget.user;
 
-    Future<void> sendReport(BuildContext context) async {
-      GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
-
-      final UserReport report = UserReport(
-        reportedBy: loggedInUser!.id!,
-        reportedUser: user.id!,
-        reasons: [
-          if (harassingCheckbox) UserReportReason.harassing,
-          if (spamCheckbox) UserReportReason.spam,
-          if (otherCheckbox) UserReportReason.other,
-        ],
-        message:
-            messageController.text.isNotEmpty ? messageController.text : null,
-      );
-
-      final UserReport? sentReport =
-          await GetIt.I.get<SpringService>().sendUserReport(report: report);
-      loggy.info(sentReport);
-
-      // Pops the loading dialog.
-      Navigator.of(context).pop();
-      if (sentReport != null) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content:
-                  Text(AppLocalizations.of(context)!.successfullyReportedUser)),
-        );
-        Navigator.of(context).pop();
-      } else {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
-          ),
-        );
-      }
-    }
-
     Future<void> onPressedReport() async {
       return showDialog<void>(
         context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(20.0),
-              ),
-            ),
-            child: StatefulBuilder(
-              builder: (BuildContext context,
-                  void Function(void Function()) setState) {
-                return Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context)!.reportUser,
-                        style: textTheme.headline6,
-                      ),
-                      const SizedBox(height: 10),
-                      CheckboxListTile(
-                        title: Text(AppLocalizations.of(context)!.harassing),
-                        value: harassingCheckbox,
-                        onChanged: (bool? newValue) {
-                          setState(() {
-                            harassingCheckbox = newValue!;
-                          });
-                        },
-                      ),
-                      CheckboxListTile(
-                        title: Text(AppLocalizations.of(context)!.spam),
-                        value: spamCheckbox,
-                        onChanged: (bool? newValue) {
-                          setState(() {
-                            spamCheckbox = newValue!;
-                          });
-                        },
-                      ),
-                      CheckboxListTile(
-                        title: Text(AppLocalizations.of(context)!.other),
-                        value: otherCheckbox,
-                        onChanged: (bool? newValue) {
-                          setState(() {
-                            otherCheckbox = newValue!;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      TextField(
-                        controller: messageController,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintStyle: textTheme.bodyText2!.copyWith(
-                              color: theme.brightness == Brightness.light
-                                  ? Colors.black54
-                                  : Colors.grey),
-                          hintText: AppLocalizations.of(context)!
-                              .enterSomeDetailsAboutReport,
-                        ),
-                        minLines: 1,
-                        maxLines: 10,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        width: deviceWidth,
-                        child: SizedBox(
-                          height: 45,
-                          child: ElevatedButton(
-                            onPressed: harassingCheckbox ||
-                                    spamCheckbox ||
-                                    otherCheckbox
-                                ? () => sendReport(context)
-                                : null,
-                            style: ElevatedButton.styleFrom(
-                              primary: theme.colorScheme.secondary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                            ),
-                            child:
-                                Text(AppLocalizations.of(context)!.reportUser),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          );
-        },
-      );
+        builder: (BuildContext context) => ReportUserDialog(
+          loggedInUserId: loggedInUser!.id!,
+          reportedUserId: user.id!,
+        ),
+      ).then((_) => Navigator.of(context).pop());
     }
 
     Widget buildButtons() {
@@ -395,20 +255,28 @@ class _UserProfileState extends State<UserProfile> with UiLoggy {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            AppLocalizations.of(context)!.aboutUser,
-            style: textTheme.headline6!.copyWith(fontSize: 16),
-          ),
-          const Divider(),
-          const SizedBox(height: 10),
-          buildContent(),
-        ],
+    return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              AppLocalizations.of(context)!.aboutUser,
+              style: textTheme.headline6!.copyWith(fontSize: 16),
+            ),
+            const Divider(),
+            const SizedBox(height: 10),
+            buildContent(),
+          ],
+        ),
       ),
     );
   }
