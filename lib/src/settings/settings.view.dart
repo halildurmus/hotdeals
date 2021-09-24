@@ -96,8 +96,8 @@ class SettingsView extends StatelessWidget {
       return AppLocalizations.of(context)!.dark;
     }
 
-    void changeLanguage() {
-      showDialog<void>(
+    Future<void> changeLanguage() {
+      return showDialog<void>(
         context: context,
         builder: (BuildContext ctx) {
           return StatefulBuilder(
@@ -150,8 +150,8 @@ class SettingsView extends StatelessWidget {
       );
     }
 
-    void changeAppTheme() {
-      showDialog<void>(
+    Future<void> changeAppTheme() {
+      return showDialog<void>(
         context: context,
         builder: (BuildContext ctx) {
           return SettingsDialog(
@@ -213,9 +213,7 @@ class SettingsView extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.settings),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
       body: Column(
         children: <Widget>[
           SettingsListItem(
