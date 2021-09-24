@@ -321,7 +321,7 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
       'email': user.email,
       'avatar': user.photoURL ??
           'https://ui-avatars.com/api/?length=1&background=008080&rounded=true&name=',
-      'fcmTokens': <String>[fcmToken!],
+      'fcmTokens': [fcmToken!],
     };
 
     try {
@@ -461,7 +461,7 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
     required String avatarUrl,
   }) async {
     final String url = '$_baseUrl/users/$userId';
-    final List<Json> data = <Json>[
+    final List<Json> data = [
       <String, dynamic>{'op': 'replace', 'path': '/avatar', 'value': avatarUrl}
     ];
 
@@ -487,7 +487,7 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
     required String nickname,
   }) async {
     final String url = '$_baseUrl/users/$userId';
-    final List<Json> data = <Json>[
+    final List<Json> data = [
       <String, dynamic>{'op': 'replace', 'path': '/nickname', 'value': nickname}
     ];
 
