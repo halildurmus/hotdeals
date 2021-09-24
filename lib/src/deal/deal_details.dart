@@ -16,8 +16,6 @@ import '../deal/user_profile_dialog.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
-import '../models/deal_report.dart';
-import '../models/deal_report_reason.dart';
 import '../models/my_user.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
@@ -28,9 +26,9 @@ import '../settings/settings_controller.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/deal_score_box.dart';
 import '../widgets/expandable_text.dart';
-import '../widgets/loading_dialog.dart';
 import '../widgets/slider_indicator.dart';
 import 'image_fullscreen.dart';
+import 'report_deal_dialog.dart';
 
 enum _DealPopup { reportDeal }
 
@@ -53,10 +51,6 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
   late Future<List<Comment>?> _commentsFuture;
   bool isUpVoted = false;
   bool isDownVoted = false;
-  bool repostCheckbox = false;
-  bool spamCheckbox = false;
-  bool otherCheckbox = false;
-  late TextEditingController messageController;
 
   @override
   void initState() {
@@ -90,14 +84,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
     }
 
     _commentsFuture = GetIt.I.get<SpringService>().getComments(_deal.id!);
-    messageController = TextEditingController();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    messageController.dispose();
-    super.dispose();
   }
 
   @override
@@ -129,42 +116,12 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
       );
     }).toList();
 
-    Future<void> sendReport() async {
-      GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
-
-      final DealReport report = DealReport(
-        reportedDeal: _deal.id!,
-        reasons: [
-          if (repostCheckbox) DealReportReason.repost,
-          if (spamCheckbox) DealReportReason.spam,
-          if (otherCheckbox) DealReportReason.other,
-        ],
-        message:
-            messageController.text.isNotEmpty ? messageController.text : null,
+    Future<void> _onPressedReport() async {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) =>
+            ReportDealDialog(reportedDealId: _deal.id!),
       );
-
-      final DealReport? sentReport =
-          await GetIt.I.get<SpringService>().sendDealReport(report: report);
-      loggy.info(sentReport);
-
-      // Pops the loading dialog.
-      Navigator.of(context).pop();
-      if (sentReport != null) {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text(AppLocalizations.of(context)!.successfullyReportedDeal),
-          ),
-        );
-      } else {
-        Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
-          ),
-        );
-      }
     }
 
     PreferredSizeWidget buildAppBar() {
@@ -181,107 +138,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
               ),
               onSelected: (_DealPopup result) {
                 if (result == _DealPopup.reportDeal) {
-                  showDialog<void>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20.0),
-                          ),
-                        ),
-                        child: StatefulBuilder(
-                          builder: (BuildContext context,
-                              void Function(void Function()) setState) {
-                            return Padding(
-                              padding: const EdgeInsets.all(24),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text(
-                                    AppLocalizations.of(context)!.reportDeal,
-                                    style: textTheme.headline6,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  CheckboxListTile(
-                                    title: Text(
-                                        AppLocalizations.of(context)!.repost),
-                                    value: repostCheckbox,
-                                    onChanged: (bool? newValue) {
-                                      setState(() {
-                                        repostCheckbox = newValue!;
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: Text(
-                                        AppLocalizations.of(context)!.spam),
-                                    value: spamCheckbox,
-                                    onChanged: (bool? newValue) {
-                                      setState(() {
-                                        spamCheckbox = newValue!;
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: Text(
-                                        AppLocalizations.of(context)!.other),
-                                    value: otherCheckbox,
-                                    onChanged: (bool? newValue) {
-                                      setState(() {
-                                        otherCheckbox = newValue!;
-                                      });
-                                    },
-                                  ),
-                                  const SizedBox(height: 10),
-                                  TextField(
-                                    controller: messageController,
-                                    decoration: InputDecoration(
-                                      border: const OutlineInputBorder(),
-                                      hintStyle: textTheme.bodyText2!.copyWith(
-                                          color: theme.brightness ==
-                                                  Brightness.light
-                                              ? Colors.black54
-                                              : Colors.grey),
-                                      hintText: AppLocalizations.of(context)!
-                                          .enterSomeDetailsAboutReport,
-                                    ),
-                                    minLines: 1,
-                                    maxLines: 10,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                    width: deviceWidth,
-                                    child: SizedBox(
-                                      height: 45,
-                                      child: ElevatedButton(
-                                        onPressed: repostCheckbox ||
-                                                spamCheckbox ||
-                                                otherCheckbox
-                                            ? sendReport
-                                            : null,
-                                        style: ElevatedButton.styleFrom(
-                                          primary: theme.colorScheme.secondary,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30.0),
-                                          ),
-                                        ),
-                                        child: Text(
-                                            AppLocalizations.of(context)!
-                                                .reportDeal),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  );
+                  _onPressedReport();
                 }
               },
               itemBuilder: (BuildContext context) =>
