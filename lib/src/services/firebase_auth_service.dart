@@ -16,6 +16,13 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   final _springService = GetIt.I.get<SpringService>();
   final _authStateController = StreamController<User?>();
 
+  FirebaseAuthService() {
+    final User? _currentUser = _firebaseAuth.currentUser;
+    if (_currentUser != null) {
+      _authStateController.add(_currentUser);
+    }
+  }
+
   MyUser? _userFromFirebase(User? user) =>
       user != null ? MyUser(uid: user.uid) : null;
 
