@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -10,15 +12,16 @@ import 'auth_service.dart';
 import 'spring_service.dart';
 
 class FirebaseAuthService with NetworkLoggy implements AuthService {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final SpringService _springService = GetIt.I.get<SpringService>();
+  final _firebaseAuth = FirebaseAuth.instance;
+  final _springService = GetIt.I.get<SpringService>();
+  final _authStateController = StreamController<User?>();
 
   MyUser? _userFromFirebase(User? user) =>
       user != null ? MyUser(uid: user.uid) : null;
 
   @override
   Stream<MyUser?> get onAuthStateChanged =>
-      _firebaseAuth.authStateChanges().map(_userFromFirebase);
+      _authStateController.stream.map(_userFromFirebase);
 
   @override
   Future<MyUser> signInWithFacebook() async {
@@ -39,12 +42,15 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
           loggy.info('User created on mongodb\n$user');
         } on Exception {
           await _firebaseAuth.currentUser!.delete();
+          loggy.info('Deleted the Firebase user');
           throw PlatformException(
             code: 'MONGODB_CREATE_USER_ERROR',
             message: 'Could not create user on MongoDB',
           );
         }
       }
+
+      _authStateController.add(userCredential.user);
 
       return _userFromFirebase(userCredential.user)!;
     } else if (loginResult.status == LoginStatus.operationInProgress) {
@@ -89,12 +95,15 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
             loggy.info('User created on mongodb\n$user');
           } on Exception {
             await _firebaseAuth.currentUser!.delete();
+            loggy.info('Deleted the Firebase user');
             throw PlatformException(
               code: 'MONGODB_CREATE_USER_ERROR',
               message: 'Could not create user on MongoDB',
             );
           }
         }
+
+        _authStateController.add(userCredential.user);
 
         return _userFromFirebase(userCredential.user)!;
       } else {
@@ -118,8 +127,9 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
 
   @override
   Future<void> signOut() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
+    // await FacebookAuth.instance.logOut();
+    await GoogleSignIn().signOut();
+    _authStateController.add(null);
 
     return _firebaseAuth.signOut();
   }
