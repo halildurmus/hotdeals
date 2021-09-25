@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
@@ -29,7 +28,7 @@ class AuthWidgetBuilder extends StatelessWidget with UiLoggy {
         loggy.info('User: $user');
 
         return MultiProvider(
-          providers: <SingleChildStatelessWidget>[
+          providers: [
             Provider<MyUser?>.value(value: user),
             ChangeNotifierProvider<UserControllerImpl>(
               create: (_) => UserControllerImpl(),

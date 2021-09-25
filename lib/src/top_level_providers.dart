@@ -5,7 +5,7 @@ import 'services/auth_service.dart';
 import 'services/auth_service_adapter.dart';
 
 List<SingleChildStatelessWidget> buildTopLevelProviders() {
-  return <SingleChildStatelessWidget>[
+  return [
     Provider<AuthService>(
       create: (_) => AuthServiceAdapter(),
       dispose: (_, AuthService authService) => authService.dispose(),
