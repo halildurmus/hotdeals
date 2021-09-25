@@ -8,8 +8,8 @@ import '../models/user_controller_impl.dart';
 import '../services/auth_service.dart';
 
 /// Used to create user-dependent objects that need to be accessible by all
-/// src.widgets.
-/// This src.widgets should live above the [MaterialApp].
+/// widgets.
+/// This widgets should live above the [MaterialApp].
 /// See [AuthWidget], a descendant widget that consumes the snapshot generated
 /// by this builder.
 class AuthWidgetBuilder extends StatelessWidget with UiLoggy {
