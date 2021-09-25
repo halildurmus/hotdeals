@@ -33,7 +33,7 @@ class AuthServiceAdapter implements AuthService {
       _onAuthStateChangedController.stream;
 
   @override
-  Future<MyUser> currentUser() => _firebaseAuthService.currentUser();
+  Future<MyUser?> currentUser() => _firebaseAuthService.currentUser();
 
   @override
   Future<MyUser> signInWithFacebook() =>

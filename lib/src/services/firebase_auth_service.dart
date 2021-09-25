@@ -17,10 +17,7 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   final _authStateController = StreamController<User?>();
 
   FirebaseAuthService() {
-    final User? _currentUser = _firebaseAuth.currentUser;
-    if (_currentUser != null) {
-      _authStateController.add(_currentUser);
-    }
+    _authStateController.add(_firebaseAuth.currentUser);
   }
 
   MyUser? _userFromFirebase(User? user) =>
@@ -34,9 +31,8 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   Future<MyUser> signInWithFacebook() async {
     // Trigger the sign-in flow
     final LoginResult loginResult = await FacebookAuth.instance.login();
-
     if (loginResult.status == LoginStatus.success) {
-      // Create a credential from the access token
+      // Create an user credential from the access token
       final UserCredential userCredential =
           await _firebaseAuth.signInWithCredential(
         FacebookAuthProvider.credential(loginResult.accessToken!.token),
@@ -80,13 +76,13 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
 
   @override
   Future<MyUser> signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
+    // Trigger the sign-in flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     if (googleUser != null) {
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
       if (googleAuth.accessToken != null && googleAuth.idToken != null) {
+        // Create an user credential from the access token
         final UserCredential userCredential =
             await _firebaseAuth.signInWithCredential(
           GoogleAuthProvider.credential(
@@ -126,11 +122,8 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   }
 
   @override
-  Future<MyUser> currentUser() async {
-    final User? user = _firebaseAuth.currentUser;
-
-    return _userFromFirebase(user)!;
-  }
+  Future<MyUser?> currentUser() async =>
+      _userFromFirebase(_firebaseAuth.currentUser);
 
   @override
   Future<void> signOut() async {
@@ -142,5 +135,7 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   }
 
   @override
-  void dispose() {}
+  void dispose() {
+    _authStateController.close();
+  }
 }

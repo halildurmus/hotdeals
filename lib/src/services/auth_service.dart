@@ -3,7 +3,7 @@ import 'dart:async';
 import '../models/my_user.dart';
 
 abstract class AuthService {
-  Future<MyUser> currentUser();
+  Future<MyUser?> currentUser();
 
   Future<MyUser> signInWithFacebook();
 
