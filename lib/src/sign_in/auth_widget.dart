@@ -50,15 +50,8 @@ class AuthWidget extends StatelessWidget {
     }
 
     if (userSnapshot.hasData) {
-      // final Future<MyUser?> userFuture =
-      //     Provider.of<UserControllerImpl>(context, listen: false).getUser();
-
-      // Temporarily workaround for an authentication issue.
       final Future<MyUser?> userFuture =
-          Future.delayed(const Duration(milliseconds: 500), () {
-        return Provider.of<UserControllerImpl>(context, listen: false)
-            .getUser();
-      });
+          Provider.of<UserControllerImpl>(context, listen: false).getUser();
 
       return FutureBuilder<MyUser?>(
         future: userFuture,
