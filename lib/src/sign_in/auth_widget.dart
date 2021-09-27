@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
 
 import '../home/home.dart';
@@ -12,7 +13,7 @@ import '../services/spring_service.dart';
 /// Builds the signed-in or non signed-in UI, depending on the user snapshot.
 /// This widget should be below the [MaterialApp].
 /// An [AuthWidgetBuilder] ancestor is required for this widget to work.
-class AuthWidget extends StatelessWidget {
+class AuthWidget extends StatelessWidget with UiLoggy {
   const AuthWidget({Key? key, required this.userSnapshot}) : super(key: key);
 
   final AsyncSnapshot<MyUser?> userSnapshot;
@@ -57,6 +58,7 @@ class AuthWidget extends StatelessWidget {
         future: userFuture,
         builder: (BuildContext context, AsyncSnapshot<MyUser?> snapshot) {
           if (snapshot.hasData) {
+            loggy.info(snapshot.data);
             // Gets the token each time the user logs in.
             FirebaseMessaging.instance.getToken().then((String? token) async {
               // Saves the initial token to the database.
