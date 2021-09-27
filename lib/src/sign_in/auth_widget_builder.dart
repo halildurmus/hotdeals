@@ -25,11 +25,10 @@ class AuthWidgetBuilder extends StatelessWidget with UiLoggy {
       stream: authService.onAuthStateChanged,
       builder: (BuildContext context, AsyncSnapshot<MyUser?> snapshot) {
         final MyUser? user = snapshot.data;
-        loggy.info('User: $user');
+        loggy.info('User uid: ${user?.uid}');
 
         return MultiProvider(
           providers: [
-            Provider<MyUser?>.value(value: user),
             ChangeNotifierProvider<UserControllerImpl>(
               create: (_) => UserControllerImpl(),
             ),
