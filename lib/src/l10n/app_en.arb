@@ -7,6 +7,34 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "somethingWentWrong": "Something went wrong. Tap to try again.",
+  "@somethingWentWrong": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noFavoritesYetDescription": "Tap the ♡ button on any deal to add it to your favorites.",
+  "@noFavoritesYetDescription": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noFavoritesYet": "No favorites yet",
+  "@noFavoritesYet": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noPostsYet": "No posts yet",
+  "@noPostsYet": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "english": "English",
   "@english": {
     "description": "",

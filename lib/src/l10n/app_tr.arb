@@ -7,6 +7,34 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "somethingWentWrong": "Bir hata oluştu. Tekrar denemek için dokunun.",
+  "@somethingWentWrong": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noFavoritesYetDescription": "Fırsat üzerindeki ♡ butonuna basarak fırsatı favorilerine ekle.",
+  "@noFavoritesYetDescription": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noFavoritesYet": "Henüz favorilerin yok",
+  "@noFavoritesYet": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noPostsYet": "Henüz paylaşımın yok",
+  "@noPostsYet": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "english": "İngilizce",
   "@english": {
     "description": "",
