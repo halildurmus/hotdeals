@@ -35,7 +35,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "checkYourInternet": "Lütfen internet bağlantınızı kontrol edin",
+  "checkYourInternet": "Lütfen internet bağlantınızı kontrol edin ve tekrar deneyin.",
   "@checkYourInternet": {
     "description": "",
     "type": "text",
@@ -51,6 +51,13 @@
   },
   "anErrorOccurredWhile": "Bazı veriler çekilirken bir hata oluştu.",
   "@anErrorOccurredWhile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noConnection": "İnternet bağlantısı yok",
+  "@noConnection": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

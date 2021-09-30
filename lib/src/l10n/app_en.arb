@@ -35,7 +35,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "checkYourInternet": "Please check your internet connection",
+  "checkYourInternet": "Please check your internet connection and try again.",
   "@checkYourInternet": {
     "description": "",
     "type": "text",
@@ -51,6 +51,13 @@
   },
   "anErrorOccurredWhile": "An error occurred while fetching some data.",
   "@anErrorOccurredWhile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noConnection": "No connection",
+  "@noConnection": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
