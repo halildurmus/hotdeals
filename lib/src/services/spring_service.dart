@@ -73,11 +73,11 @@ abstract class SpringService {
     required String nickname,
   });
 
-  Future<List<Deal>?> getUserFavorites();
+  Future<List<Deal>?> getUserFavorites({int? page, int? size});
 
   Future<List<SearchHit>> searchDeals({required String keyword});
 
-  Future<List<Deal>?> getDealsByPostedBy({required String postedBy});
+  Future<List<Deal>?> getUserDeals({int? page, int? size});
 
   Future<List<Deal>?> getDealsByCategory({required String category});
 

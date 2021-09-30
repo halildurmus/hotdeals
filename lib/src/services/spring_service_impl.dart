@@ -362,11 +362,11 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<MyUser>?> getBlockedUsers(
-      {required List<String> userUids}) async {
+  Future<List<MyUser>?> getBlockedUsers({
+    required List<String> userUids,
+  }) async {
     final String url =
         '$_baseUrl/users/search/findAllByUidIn?userUids=${userUids.join(',')}';
-
     try {
       final Response response = await _httpService.get(url);
       if (response.statusCode == 200) {
@@ -510,14 +510,13 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getUserFavorites() async {
-    final String url = '$_baseUrl/users/favorites';
+  Future<List<Deal>?> getUserFavorites({int? page, int? size}) async {
+    final String url = '$_baseUrl/users/favorites?page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final List<Deal> _deals = favoritedDealsFromJson(response.body);
-
+        final List<Deal> _deals = userDealsFromJson(response.body);
         return _deals;
       }
 
@@ -549,14 +548,13 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getDealsByPostedBy({required String postedBy}) async {
-    final String url =
-        '$_baseUrl/deals/search/findAllByPostedBy?postedBy=$postedBy';
+  Future<List<Deal>?> getUserDeals({int? page, int? size}) async {
+    final String url = '$_baseUrl/users/deals?page=$page&size=$size';
 
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final Response response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final List<Deal> _deals = dealFromJson(response.body);
+        final List<Deal> _deals = userDealsFromJson(response.body);
 
         return _deals;
       }

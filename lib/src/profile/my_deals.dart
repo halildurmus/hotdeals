@@ -1,61 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:loggy/loggy.dart' show NetworkLoggy;
-import 'package:provider/provider.dart';
 
 import '../models/deal.dart';
-import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
-import '../widgets/deal_list_item_builder.dart';
+import '../widgets/deal_paged_listview.dart';
+import '../widgets/error_indicator.dart';
 
-class MyDeals extends StatefulWidget {
+class MyDeals extends StatelessWidget {
   const MyDeals({Key? key}) : super(key: key);
 
-  @override
-  _MyDealsState createState() => _MyDealsState();
-}
-
-class _MyDealsState extends State<MyDeals> with NetworkLoggy {
-  late Future<List<Deal>?> _myDealsFuture;
-
-  @override
-  void initState() {
-    final MyUser user = context.read<UserControllerImpl>().user!;
-    _myDealsFuture =
-        GetIt.I.get<SpringService>().getDealsByPostedBy(postedBy: user.id!);
-    super.initState();
+  Widget buildNoDealsFound(BuildContext context) {
+    return ErrorIndicator(
+      icon: Icons.local_offer,
+      title: AppLocalizations.of(context)!.noPostsYet,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<UserControllerImpl>(context).user!;
+    Future<List<Deal>?> _dealFuture(int page, int size) =>
+        GetIt.I.get<SpringService>().getUserDeals(page: page, size: size);
 
-    return FutureBuilder<List<Deal>?>(
-      future: _myDealsFuture,
-      builder: (BuildContext context, AsyncSnapshot<List<Deal>?> snapshot) {
-        if (snapshot.hasData) {
-          final List<Deal> deals = snapshot.data!;
-
-          if (deals.isEmpty) {
-            return Center(
-              child:
-                  Text(AppLocalizations.of(context)!.youHaveNotPostedAnyDeal),
-            );
-          }
-
-          return DealListItemBuilder(deals: deals);
-        } else if (snapshot.hasError) {
-          loggy.error(snapshot.error, snapshot.error);
-
-          return Center(
-            child: Text(AppLocalizations.of(context)!.anErrorOccurred),
-          );
-        }
-
-        return const Center(child: CircularProgressIndicator());
-      },
+    return DealPagedListView(
+      dealFuture: _dealFuture,
+      noDealsFound: buildNoDealsFound(context),
+      pageSize: 8,
     );
   }
 }

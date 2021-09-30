@@ -1,29 +1,32 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 
+import '../deal/deal_details.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
+import '../utils/navigation_util.dart';
 
 class DealListItem extends StatefulWidget {
   const DealListItem({
     Key? key,
-    required this.onTap,
-    this.inactiveMessage,
-    this.bottomRoundButton,
-    this.specialMark,
+    this.onTap,
     required this.deal,
+    this.inactiveMessage,
+    required this.index,
+    required this.isFavorited,
+    required this.onFavoriteButtonPressed,
   }) : super(key: key);
 
   final VoidCallback? onTap;
-  final String? inactiveMessage;
-  final Widget? bottomRoundButton;
-  final String? specialMark;
   final Deal deal;
+  final String? inactiveMessage;
+  final int index;
+  final bool isFavorited;
+  final VoidCallback onFavoriteButtonPressed;
 
   @override
   _DealListItemState createState() => _DealListItemState();
@@ -207,11 +210,23 @@ class _DealListItemState extends State<DealListItem> {
       );
     }
 
-    Widget buildBottomRoundButton() {
+    Widget buildFavoriteButton() {
       return Positioned(
         top: 88,
         right: 0,
-        child: widget.bottomRoundButton!,
+        child: FloatingActionButton(
+          heroTag: 'btn${widget.index}',
+          mini: true,
+          backgroundColor: theme.backgroundColor,
+          onPressed: widget.onFavoriteButtonPressed,
+          child: Icon(
+            widget.isFavorited
+                ? FontAwesomeIcons.solidHeart
+                : FontAwesomeIcons.heart,
+            color: theme.primaryColor,
+            size: 18,
+          ),
+        ),
       );
     }
 
@@ -234,7 +249,7 @@ class _DealListItemState extends State<DealListItem> {
             color: theme.primaryColor,
           ),
           child: Text(
-            widget.specialMark!,
+            AppLocalizations.of(context)!.newMark,
             style: textTheme.bodyText2!
                 .copyWith(color: Colors.white, fontSize: 11),
           ),
@@ -257,7 +272,9 @@ class _DealListItemState extends State<DealListItem> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: InkWell(
-                  onTap: widget.onTap,
+                  onTap: widget.onTap ??
+                      () => NavigationUtil.navigate(
+                          context, DealDetails(deal: deal)),
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
                   highlightColor: theme.primaryColorLight.withOpacity(.1),
                   splashColor: theme.primaryColorLight.withOpacity(.1),
@@ -270,9 +287,9 @@ class _DealListItemState extends State<DealListItem> {
                 ),
               ),
             ),
-            if (widget.bottomRoundButton != null) buildBottomRoundButton(),
+            buildFavoriteButton(),
             if (widget.inactiveMessage != null) buildInactiveMessage(),
-            if (widget.specialMark != null) buildSpecialMark()
+            if (deal.isNew!) buildSpecialMark()
           ],
         ),
       ),
