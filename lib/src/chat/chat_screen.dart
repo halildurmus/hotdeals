@@ -421,25 +421,28 @@ class _ChatScreenState extends State<ChatScreen> {
     PreferredSizeWidget _buildAppBar() {
       return AppBar(
         title: Text(AppLocalizations.of(context)!.chats),
-        actions: <Widget>[
-          PopupMenuButton<_ChatPopup>(
-            icon: const Icon(
-              FontAwesomeIcons.ellipsisV,
-              size: 20.0,
-            ),
-            onSelected: (_ChatPopup result) {
-              if (result == _ChatPopup.blockedUsers) {
-                Navigator.of(context).pushNamed(BlockedUsers.routeName);
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<_ChatPopup>>[
-              PopupMenuItem<_ChatPopup>(
-                value: _ChatPopup.blockedUsers,
-                child: Text(AppLocalizations.of(context)!.blockedUsers),
-              ),
-            ],
-          ),
-        ],
+        actions: _user == null
+            ? null
+            : [
+                PopupMenuButton<_ChatPopup>(
+                  icon: const Icon(
+                    FontAwesomeIcons.ellipsisV,
+                    size: 20.0,
+                  ),
+                  onSelected: (_ChatPopup result) {
+                    if (result == _ChatPopup.blockedUsers) {
+                      Navigator.of(context).pushNamed(BlockedUsers.routeName);
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      <PopupMenuEntry<_ChatPopup>>[
+                    PopupMenuItem<_ChatPopup>(
+                      value: _ChatPopup.blockedUsers,
+                      child: Text(AppLocalizations.of(context)!.blockedUsers),
+                    ),
+                  ],
+                ),
+              ],
       );
     }
 
