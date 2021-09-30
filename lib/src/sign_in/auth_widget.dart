@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hotdeals/src/widgets/error_indicator.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
 
@@ -44,8 +45,11 @@ class AuthWidget extends StatelessWidget with UiLoggy {
 
     Widget buildErrorWidget() {
       return Scaffold(
-        body: Center(
-          child: Text(AppLocalizations.of(context)!.anErrorOccurred),
+        body: ErrorIndicator(
+          icon: Icons.wifi,
+          title: AppLocalizations.of(context)!.noConnection,
+          message: AppLocalizations.of(context)!.checkYourInternet,
+          onTryAgain: () => build(context),
         ),
       );
     }
