@@ -5,7 +5,7 @@ class ErrorIndicator extends StatelessWidget {
   const ErrorIndicator({
     this.icon,
     this.iconColor,
-    this.iconSize = 150,
+    this.iconSize = 120,
     this.message,
     this.onTryAgain,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
