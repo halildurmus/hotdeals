@@ -14,7 +14,7 @@ class SettingsListItem extends StatelessWidget {
             'You need to specify either an icon or an image!'),
         super(key: key);
 
-  final void Function() onTap;
+  final VoidCallback onTap;
   final IconData? icon;
   final Widget? image;
   final String title;

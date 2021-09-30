@@ -11,7 +11,7 @@ class CategoryItem extends StatelessWidget {
   }) : super(key: key);
 
   final Category category;
-  final void Function() onTap;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {

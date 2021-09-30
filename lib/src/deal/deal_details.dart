@@ -555,7 +555,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
           builder: (BuildContext context, AsyncSnapshot<MyUser> snapshot) {
             String avatar = 'http://www.gravatar.com/avatar';
             String nickname = '...';
-            void Function()? onTap;
+            VoidCallback? onTap;
 
             if (snapshot.hasData) {
               onTap = () => _userOnTap(snapshot.data!);

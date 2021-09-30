@@ -14,7 +14,7 @@ class RadioItem<V> extends StatelessWidget {
   }) : super(key: key);
 
   final void Function(V? value) onChanged;
-  final void Function() onTap;
+  final VoidCallback onTap;
   final IconData? icon;
   final String? iconPath;
   final V providerValue;

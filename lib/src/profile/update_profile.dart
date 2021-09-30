@@ -25,7 +25,7 @@ class UpdateProfile extends StatefulWidget {
 
 class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   late TextEditingController nicknameController;
-  late void Function() showLoadingDialog;
+  late VoidCallback showLoadingDialog;
 
   Future<MyUser> updateUserAvatar(String userId, String avatarUrl) async {
     return GetIt.I

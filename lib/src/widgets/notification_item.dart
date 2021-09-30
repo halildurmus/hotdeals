@@ -18,7 +18,7 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
     required this.notification,
   }) : super(key: key);
 
-  final void Function() onTap;
+  final VoidCallback onTap;
   final PushNotification notification;
 
   @override

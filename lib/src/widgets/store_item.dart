@@ -15,7 +15,7 @@ class StoreItem extends StatefulWidget {
 
   final Store store;
 
-  final void Function() onTap;
+  final VoidCallback onTap;
 
   @override
   _StoreItemState createState() => _StoreItemState();

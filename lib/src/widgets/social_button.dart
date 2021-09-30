@@ -64,7 +64,7 @@ class SocialButton extends StatelessWidget {
   final String? text;
   final double? fontSize;
   final Color? textColor, iconColor, backgroundColor, splashColor;
-  final void Function() onPressed;
+  final VoidCallback onPressed;
   final EdgeInsets padding, innerPadding;
   final ShapeBorder shape;
   final double elevation;

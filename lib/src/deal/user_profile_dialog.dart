@@ -81,7 +81,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
                 .getMessageDocument(usersArray: usersArray),
             builder: (BuildContext context,
                 AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
-              void Function()? onTap;
+              VoidCallback? onTap;
 
               if (snapshot.hasData) {
                 final List<DocumentSnapshot<Json>> _items = snapshot.data!.docs;

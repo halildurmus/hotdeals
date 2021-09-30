@@ -101,8 +101,8 @@ class SettingsView extends StatelessWidget {
         context: context,
         builder: (BuildContext ctx) {
           return StatefulBuilder(
-            builder: (BuildContext context,
-                void Function(void Function()) setState) {
+            builder:
+                (BuildContext context, void Function(VoidCallback) setState) {
               return SettingsDialog(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
