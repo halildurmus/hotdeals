@@ -97,17 +97,17 @@ abstract class SpringService {
     int? size,
   });
 
-  Future<List<Deal>?> getDealsSortedByCreatedAt();
-
-  Future<List<Deal>?> getDealsSortedByDealScore();
+  Future<List<Deal>?> getDealsSortedBy({
+    required String sortType,
+    int? page,
+    int? size,
+  });
 
   Future<int?> getNumberOfCommentsPostedByUser({required String userId});
 
   Future<int?> getNumberOfDealsByStore({required String storeId});
 
   Future<int?> getNumberOfDealsPostedByUser({required String userId});
-
-  Future<List<Deal>?> getDealsSortedByPrice();
 
   Future<Deal?> incrementViewsCounter({required String dealId});
 

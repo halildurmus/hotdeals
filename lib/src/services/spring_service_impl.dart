@@ -636,27 +636,19 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getDealsSortedByCreatedAt() async {
-    final String url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
-
-    try {
-      final Response response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        final List<Deal> _deals = dealFromJson(response.body);
-
-        return _deals;
-      }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
+  Future<List<Deal>?> getDealsSortedBy({
+    required String sortType,
+    int? page,
+    int? size,
+  }) async {
+    late String url;
+    if (sortType == 'createdAt') {
+      url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
+    } else if (sortType == 'dealScore') {
+      url = '$_baseUrl/deals/search/findAllByOrderByDealScoreDesc';
+    } else if (sortType == 'price') {
+      url = '$_baseUrl/deals/search/findAllByOrderByDiscountPrice';
     }
-  }
-
-  @override
-  Future<List<Deal>?> getDealsSortedByDealScore() async {
-    final String url = '$_baseUrl/deals/search/findAllByOrderByDealScoreDesc';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -718,25 +710,6 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return int.parse(response.body);
-      }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
-    }
-  }
-
-  @override
-  Future<List<Deal>?> getDealsSortedByPrice() async {
-    final String url = '$_baseUrl/deals/search/findAllByOrderByDiscountPrice';
-
-    try {
-      final Response response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        final List<Deal> deals = dealFromJson(response.body);
-
-        return deals;
       }
 
       return null;
