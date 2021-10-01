@@ -1,20 +1,20 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
+    show PagingController;
 import 'package:line_icons/line_icons.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
-import '../settings/settings_controller.dart';
+import '../widgets/error_indicator.dart';
+import 'comment_paged_listview.dart';
 import 'post_comment.dart';
-import 'user_profile_dialog.dart';
 
 class DealComments extends StatefulWidget {
   const DealComments({Key? key, required this.deal}) : super(key: key);
@@ -26,53 +26,38 @@ class DealComments extends StatefulWidget {
 }
 
 class _DealCommentsState extends State<DealComments> with UiLoggy {
-  late Future<List<Comment>?> _commentsFuture;
+  int commentsCount = -1;
   late MyUser? _user;
+  late PagingController<int, Comment> _pagingController;
 
   @override
   void initState() {
-    _commentsFuture =
-        GetIt.I.get<SpringService>().getComments(dealId: widget.deal.id!);
     _user = context.read<UserControllerImpl>().user;
+    _pagingController = PagingController<int, Comment>(firstPageKey: 0);
+    updateCommentsCount();
     super.initState();
   }
 
-  Widget _buildNoComments() {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        children: [
-          Icon(
-            LineIcons.comments,
-            color: theme.primaryColor,
-            size: 100.0,
-          ),
-          const SizedBox(height: 16.0),
-          Text(
-            AppLocalizations.of(context)!.noComments,
-            style: textTheme.headline6,
-          ),
-          const SizedBox(height: 10.0),
-          Text(
-            AppLocalizations.of(context)!.startTheConversation,
-            style: textTheme.bodyText2!.copyWith(fontSize: 15),
-          ),
-        ],
-      ),
-    );
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 
-  // Widget buildPostCommentButton() {
-  //   return Center(
-  //     child: ElevatedButton(
-  //       onPressed: () => postCommentOnTap(),
-  //       child: Text(AppLocalizations.of(context)!.postAComment),
-  //     ),
-  //   );
-  // }
+  void updateCommentsCount() {
+    GetIt.I
+        .get<SpringService>()
+        .getComments(dealId: widget.deal.id!)
+        .then((List<Comment>? comments) {
+      if (comments != null) {
+        WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+          setState(() {
+            commentsCount = comments.length;
+          });
+        });
+      }
+    });
+  }
 
   void onPostCommentTap() {
     if (_user == null) {
@@ -91,17 +76,23 @@ class _DealCommentsState extends State<DealComments> with UiLoggy {
         );
       },
     ).then((_) {
-      setState(() {
-        _commentsFuture =
-            GetIt.I.get<SpringService>().getComments(dealId: widget.deal.id!);
-      });
+      updateCommentsCount();
+      _pagingController.refresh();
     });
   }
 
-  Future<void> _onUserTap(MyUser user) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => UserProfileDialog(user: user),
+  Future<List<Comment>?> _commentFuture(int page, int size) =>
+      GetIt.I.get<SpringService>().getComments(
+            dealId: widget.deal.id!,
+            page: page,
+            size: size,
+          );
+
+  Widget buildNoCommentsFound() {
+    return ErrorIndicator(
+      icon: LineIcons.comments,
+      title: AppLocalizations.of(context)!.noComments,
+      message: AppLocalizations.of(context)!.startTheConversation,
     );
   }
 
@@ -112,143 +103,38 @@ class _DealCommentsState extends State<DealComments> with UiLoggy {
 
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: FutureBuilder<List<Comment>?>(
-        future: _commentsFuture,
-        builder:
-            (BuildContext context, AsyncSnapshot<List<Comment>?> snapshot) {
-          if (snapshot.hasData) {
-            final List<Comment> comments = snapshot.data!;
-
-            if (comments.isEmpty) {
-              return _buildNoComments();
-            }
-
-            return Column(
-              children: <Widget>[
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      AppLocalizations.of(context)!
-                          .commentCount(comments.length),
-                      style: textTheme.subtitle1!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(width: 10.0),
-                    TextButton(
-                      onPressed: () => onPostCommentTap(),
-                      child: Text(
-                        AppLocalizations.of(context)!.postComment,
-                        style: textTheme.subtitle2!.copyWith(
-                            color: theme.brightness == Brightness.light
-                                ? theme.primaryColor
-                                : theme.primaryColorLight),
-                      ),
-                    )
-                  ],
+      child: Column(
+        children: [
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.commentCount(commentsCount),
+                style:
+                    textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 10.0),
+              TextButton(
+                onPressed: () => onPostCommentTap(),
+                child: Text(
+                  AppLocalizations.of(context)!.postComment,
+                  style: textTheme.subtitle2!.copyWith(
+                      color: theme.brightness == Brightness.light
+                          ? theme.primaryColor
+                          : theme.primaryColorLight),
                 ),
-                const Divider(),
-                const SizedBox(height: 10),
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: comments.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final Comment comment = comments.elementAt(index);
-
-                    return Container(
-                      padding: const EdgeInsets.all(25),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: theme.brightness == Brightness.light
-                            ? Colors.grey.shade200
-                            : Colors.black26,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              FutureBuilder<MyUser>(
-                                future: GetIt.I
-                                    .get<SpringService>()
-                                    .getUserById(id: comment.postedBy!),
-                                builder: (BuildContext context,
-                                    AsyncSnapshot<MyUser> snapshot) {
-                                  String avatar =
-                                      'http://www.gravatar.com/avatar';
-                                  String nickname = '...';
-
-                                  if (snapshot.hasData) {
-                                    avatar = snapshot.data!.avatar!;
-                                    nickname = snapshot.data!.nickname!;
-                                  } else if (snapshot.hasError) {
-                                    nickname = AppLocalizations.of(context)!
-                                        .anErrorOccurred;
-                                  }
-
-                                  return GestureDetector(
-                                    onTap: () => _onUserTap(snapshot.data!),
-                                    child: Row(
-                                      children: <Widget>[
-                                        CachedNetworkImage(
-                                          imageUrl: avatar,
-                                          imageBuilder: (BuildContext ctx,
-                                                  ImageProvider<Object>
-                                                      imageProvider) =>
-                                              CircleAvatar(
-                                                  backgroundImage:
-                                                      imageProvider,
-                                                  radius: 16),
-                                          placeholder: (BuildContext context,
-                                                  String url) =>
-                                              const CircleAvatar(radius: 16),
-                                        ),
-                                        const SizedBox(width: 8.0),
-                                        Text(
-                                          nickname,
-                                          style: textTheme.subtitle2,
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                              Text(
-                                timeago.format(
-                                  comment.createdAt!,
-                                  locale:
-                                      '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
-                                ),
-                                style: textTheme.bodyText2!.copyWith(
-                                  color: Colors.grey.shade600,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          SelectableText(comment.message)
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 10);
-                  },
-                ),
-              ],
-            );
-          } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+              )
+            ],
+          ),
+          const Divider(),
+          const SizedBox(height: 10),
+          CommentPagedListView(
+            commentFuture: _commentFuture,
+            noCommentsFound: buildNoCommentsFound(),
+            pagingController: _pagingController,
+          )
+        ],
       ),
     );
   }
