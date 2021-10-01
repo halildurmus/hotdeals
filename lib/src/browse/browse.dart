@@ -30,10 +30,10 @@ class _BrowseState extends State<Browse> with SingleTickerProviderStateMixin {
             controller: tabController,
             isScrollable: true,
             labelStyle: const TextStyle(
-              fontSize: 16.0,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            tabs: <Tab>[
+            tabs: [
               Tab(text: AppLocalizations.of(context)!.categories),
               Tab(text: AppLocalizations.of(context)!.stores),
             ],
@@ -46,18 +46,12 @@ class _BrowseState extends State<Browse> with SingleTickerProviderStateMixin {
   Widget buildBody() {
     return TabBarView(
       controller: tabController,
-      children: const <Widget>[
-        BrowseCategories(),
-        BrowseStores(),
-      ],
+      children: const [BrowseCategories(), BrowseStores()],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(),
-      body: buildBody(),
-    );
+    return Scaffold(appBar: buildAppBar(), body: buildBody());
   }
 }
