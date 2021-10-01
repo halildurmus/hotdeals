@@ -102,9 +102,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         if (result) {
           Provider.of<UserControllerImpl>(context, listen: false).getUser();
           if (widget.removeDealWhenUnfavorited) {
-            final tempList = _pagingController.itemList;
-            tempList!.removeWhere((e) => e.id == dealId);
-            _pagingController.itemList = tempList;
+            _pagingController.itemList!.removeWhere((e) => e.id == dealId);
           }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
