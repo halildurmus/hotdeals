@@ -44,6 +44,7 @@ The app's **Backend** can be found **[here](https://github.com/halildurmus/hotde
 - Social sign in with Facebook and Google (using Firebase Authentication)
 - State management using [Provider](https://github.com/rrousselGit/provider)
 - Service Locator using [get_it](https://github.com/fluttercommunity/get_it)
+- Infinite scrolling pagination using [infinite_scroll_pagination](https://github.com/EdsonBueno/infinite_scroll_pagination)
 - In-app messaging
 - Notifications (using Firebase Cloud Messaging)
 - Localization (l10n)
