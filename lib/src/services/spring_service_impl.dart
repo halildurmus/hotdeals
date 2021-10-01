@@ -567,9 +567,13 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getDealsByCategory({required String category}) async {
+  Future<List<Deal>?> getDealsByCategory({
+    required String category,
+    int? page,
+    int? size,
+  }) async {
     final String url =
-        '$_baseUrl/deals/search/findAllByCategoryStartsWith?category=$category';
+        '$_baseUrl/deals/search/findAllByCategoryStartsWith?category=$category&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);

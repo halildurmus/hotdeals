@@ -18,6 +18,7 @@ class DealPagedListView extends StatefulWidget {
     required this.dealFuture,
     required this.noDealsFound,
     this.pageSize = 20,
+    this.pagingController,
     this.removeDealWhenUnfavorited = false,
     this.useRefreshIndicator = true,
   }) : super(key: key);
@@ -25,6 +26,7 @@ class DealPagedListView extends StatefulWidget {
   final Future<List<Deal>?> Function(int page, int size) dealFuture;
   final Widget noDealsFound;
   final int pageSize;
+  final PagingController<int, Deal>? pagingController;
   final bool removeDealWhenUnfavorited;
   final bool useRefreshIndicator;
 
@@ -34,14 +36,24 @@ class DealPagedListView extends StatefulWidget {
 
 class _DealPagedListViewState extends State<DealPagedListView>
     with NetworkLoggy {
-  final _pagingController = PagingController<int, Deal>(firstPageKey: 0);
+  late PagingController<int, Deal> _pagingController;
 
   @override
   void initState() {
+    _pagingController =
+        widget.pagingController ?? PagingController<int, Deal>(firstPageKey: 0);
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (widget.pagingController == null) {
+      _pagingController.dispose();
+    }
+    super.dispose();
   }
 
   Future<void> _fetchPage(int pageKey) async {
@@ -58,12 +70,6 @@ class _DealPagedListViewState extends State<DealPagedListView>
       loggy.error(error);
       _pagingController.error = error;
     }
-  }
-
-  @override
-  void dispose() {
-    _pagingController.dispose();
-    super.dispose();
   }
 
   void onFavoriteButtonPressed(MyUser? user, String dealId, bool isFavorited) {
