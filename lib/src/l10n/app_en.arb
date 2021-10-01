@@ -430,7 +430,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "couldNotFindAnyDeal": "Couldn't found any deal",
+  "couldNotFindAnyDeal": "Couldn't find any deal",
   "@couldNotFindAnyDeal": {
     "description": "",
     "type": "text",
