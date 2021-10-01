@@ -9,8 +9,8 @@ import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
+import '../utils/error_indicator_util.dart';
 import '../widgets/deal_list_item.dart';
-import 'error_indicator.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({
@@ -115,35 +115,6 @@ class _DealPagedListViewState extends State<DealPagedListView>
     }
   }
 
-  Widget buildFirstPageError({required VoidCallback onTryAgain}) {
-    return ErrorIndicator(
-      icon: Icons.wifi,
-      title: AppLocalizations.of(context)!.noConnection,
-      message: AppLocalizations.of(context)!.checkYourInternet,
-      onTryAgain: onTryAgain,
-    );
-  }
-
-  Widget buildNewPageError({required VoidCallback onTryAgain}) {
-    return InkWell(
-      onTap: onTryAgain,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              AppLocalizations.of(context)!.somethingWentWrong,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            const Icon(Icons.refresh, size: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final MyUser? user = Provider.of<UserControllerImpl>(context).user;
@@ -165,10 +136,14 @@ class _DealPagedListViewState extends State<DealPagedListView>
                   onFavoriteButtonPressed(user, deal.id!, isFavorited),
             );
           },
-          firstPageErrorIndicatorBuilder: (context) => buildFirstPageError(
+          firstPageErrorIndicatorBuilder: (context) =>
+              ErrorIndicatorUtil.buildFirstPageError(
+            context,
             onTryAgain: () => _pagingController.refresh(),
           ),
-          newPageErrorIndicatorBuilder: (context) => buildNewPageError(
+          newPageErrorIndicatorBuilder: (context) =>
+              ErrorIndicatorUtil.buildNewPageError(
+            context,
             onTryAgain: () => _pagingController.refresh(),
           ),
           noItemsFoundIndicatorBuilder: (context) => widget.noDealsFound,
