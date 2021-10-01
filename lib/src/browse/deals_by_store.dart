@@ -16,6 +16,7 @@ class DealsByStore extends StatelessWidget {
 
   PreferredSizeWidget buildAppBar(BuildContext context) {
     final theme = Theme.of(context);
+
     return PreferredSize(
       preferredSize: const Size.fromHeight(70),
       child: AppBar(

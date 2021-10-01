@@ -24,8 +24,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  bool isFavorited = false;
-
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
