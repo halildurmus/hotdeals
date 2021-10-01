@@ -39,7 +39,8 @@ class _DealListItemState extends State<DealListItem> {
   @override
   void initState() {
     _categories = GetIt.I.get<Categories>();
-    _commentsFuture = GetIt.I.get<SpringService>().getComments(widget.deal.id!);
+    _commentsFuture =
+        GetIt.I.get<SpringService>().getComments(dealId: widget.deal.id!);
     super.initState();
   }
 

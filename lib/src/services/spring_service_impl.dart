@@ -198,8 +198,13 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Comment>?> getComments(String dealId) async {
-    final String url = '$_baseUrl/comments/search/findByDealId?dealId=$dealId';
+  Future<List<Comment>?> getComments({
+    required String dealId,
+    int? page,
+    int? size,
+  }) async {
+    final String url =
+        '$_baseUrl/comments/search/findByDealId?dealId=$dealId&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);

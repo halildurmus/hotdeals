@@ -31,7 +31,8 @@ class _DealCommentsState extends State<DealComments> with UiLoggy {
 
   @override
   void initState() {
-    _commentsFuture = GetIt.I.get<SpringService>().getComments(widget.deal.id!);
+    _commentsFuture =
+        GetIt.I.get<SpringService>().getComments(dealId: widget.deal.id!);
     _user = context.read<UserControllerImpl>().user;
     super.initState();
   }
@@ -92,7 +93,7 @@ class _DealCommentsState extends State<DealComments> with UiLoggy {
     ).then((_) {
       setState(() {
         _commentsFuture =
-            GetIt.I.get<SpringService>().getComments(widget.deal.id!);
+            GetIt.I.get<SpringService>().getComments(dealId: widget.deal.id!);
       });
     });
   }

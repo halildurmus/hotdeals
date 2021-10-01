@@ -35,7 +35,7 @@ abstract class SpringService {
 
   Future<UserReport?> sendUserReport({required UserReport report});
 
-  Future<List<Comment>?> getComments(String dealId);
+  Future<List<Comment>?> getComments({required String dealId, int? page, int? size,});
 
   Future<Comment?> postComment({required Comment comment});
 

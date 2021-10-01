@@ -83,7 +83,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
         }
       });
     }
-    _commentsFuture = GetIt.I.get<SpringService>().getComments(_deal.id!);
+    _commentsFuture =
+        GetIt.I.get<SpringService>().getComments(dealId: _deal.id!);
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
