@@ -204,7 +204,7 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
     int? size,
   }) async {
     final String url =
-        '$_baseUrl/comments/search/findByDealId?dealId=$dealId&page=$page&size=$size';
+        '$_baseUrl/comments/search/findByDealIdOrderByCreatedAtDesc?dealId=$dealId&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -655,6 +655,7 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
     } else if (dealSortBy == DealSortBy.price) {
       url = '$_baseUrl/deals/search/findAllByOrderByDiscountPrice';
     }
+    url += '?page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
