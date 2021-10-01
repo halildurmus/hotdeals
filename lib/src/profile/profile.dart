@@ -98,10 +98,10 @@ class _ProfileState extends State<Profile> {
             labelColor: theme.primaryColor,
             unselectedLabelColor: theme.primaryColorLight,
             labelStyle: textTheme.bodyText2!.copyWith(
-              fontSize: 16.0,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
-            tabs: <Tab>[
+            tabs: [
               Tab(text: AppLocalizations.of(context)!.notifications),
               Tab(text: AppLocalizations.of(context)!.posts),
               Tab(text: AppLocalizations.of(context)!.favorites),
@@ -113,11 +113,7 @@ class _ProfileState extends State<Profile> {
 
     Widget buildTabBarView() {
       return const TabBarView(
-        children: <Widget>[
-          MyNotifications(),
-          MyDeals(),
-          MyFavorites(),
-        ],
+        children: [MyNotifications(), MyDeals(), MyFavorites()],
       );
     }
 

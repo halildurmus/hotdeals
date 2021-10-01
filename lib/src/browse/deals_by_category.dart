@@ -77,8 +77,8 @@ class _DealsByCategoryState extends State<DealsByCategory> {
     Widget buildPagedListView() {
       return DealPagedListView(
         dealFuture: _dealFuture,
-        pagingController: _pagingController,
         noDealsFound: buildNoDealsFound(context),
+        pagingController: _pagingController,
       );
     }
 
