@@ -27,6 +27,7 @@ class MyFavorites extends StatelessWidget {
       dealFuture: _dealFuture,
       noDealsFound: buildNoDealsFound(context),
       pageSize: 8,
+      removeDealWhenUnfavorited: true,
     );
   }
 }

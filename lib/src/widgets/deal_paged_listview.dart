@@ -18,12 +18,14 @@ class DealPagedListView extends StatefulWidget {
     required this.dealFuture,
     required this.noDealsFound,
     this.pageSize = 20,
+    this.removeDealWhenUnfavorited = false,
     this.useRefreshIndicator = true,
   }) : super(key: key);
 
   final Future<List<Deal>?> Function(int page, int size) dealFuture;
   final Widget noDealsFound;
   final int pageSize;
+  final bool removeDealWhenUnfavorited;
   final bool useRefreshIndicator;
 
   @override
@@ -78,7 +80,12 @@ class _DealPagedListViewState extends State<DealPagedListView>
           .then((bool result) {
         if (result) {
           Provider.of<UserControllerImpl>(context, listen: false).getUser();
-          _pagingController.refresh();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.favoriteDealError),
+            ),
+          );
         }
       });
     } else {
@@ -88,7 +95,17 @@ class _DealPagedListViewState extends State<DealPagedListView>
           .then((bool result) {
         if (result) {
           Provider.of<UserControllerImpl>(context, listen: false).getUser();
-          _pagingController.refresh();
+          if (widget.removeDealWhenUnfavorited) {
+            final tempList = _pagingController.itemList;
+            tempList!.removeWhere((e) => e.id == dealId);
+            _pagingController.itemList = tempList;
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.unfavoriteDealError),
+            ),
+          );
         }
       });
     }
@@ -128,7 +145,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
     final MyUser? user = Provider.of<UserControllerImpl>(context).user;
 
     Widget buildPagedListView() {
-      return PagedListView.separated(
+      return PagedListView(
         pagingController: _pagingController,
         padding: const EdgeInsets.symmetric(vertical: 16),
         builderDelegate: PagedChildBuilderDelegate<Deal>(
@@ -152,7 +169,6 @@ class _DealPagedListViewState extends State<DealPagedListView>
           ),
           noItemsFoundIndicatorBuilder: (context) => widget.noDealsFound,
         ),
-        separatorBuilder: (context, index) => const SizedBox(),
       );
     }
 
