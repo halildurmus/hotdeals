@@ -4,91 +4,43 @@ import 'package:get_it/get_it.dart';
 
 import '../models/deal.dart';
 import '../services/spring_service.dart';
-import '../widgets/deal_list_item_builder.dart';
+import '../widgets/deal_paged_listview.dart';
+import '../widgets/error_indicator.dart';
 
-class SearchDeals extends StatefulWidget {
+class SearchDeals extends StatelessWidget {
   const SearchDeals({Key? key, required this.keyword}) : super(key: key);
 
   final String keyword;
 
-  @override
-  _SearchDealsState createState() => _SearchDealsState();
-}
+  PreferredSizeWidget buildAppBar() {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(70),
+      child: AppBar(centerTitle: true, title: Text('"$keyword"')),
+    );
+  }
 
-class _SearchDealsState extends State<SearchDeals> {
-  late Future<List<Deal>?> dealsFuture;
-  bool isFavorited = false;
+  Future<List<Deal>?> _dealFuture(int page, int size) =>
+      GetIt.I.get<SpringService>().getDealsByKeyword(
+            keyword: keyword,
+            page: page,
+            size: size,
+          );
 
-  @override
-  void initState() {
-    dealsFuture =
-        GetIt.I.get<SpringService>().getDealsByKeyword(keyword: widget.keyword);
-    super.initState();
+  Widget buildNoDealsFound(BuildContext context) {
+    return ErrorIndicator(
+      icon: Icons.local_offer,
+      title: AppLocalizations.of(context)!.couldNotFindAnyDeal,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<void> onRefresh() async {
-      dealsFuture = GetIt.I
-          .get<SpringService>()
-          .getDealsByKeyword(keyword: widget.keyword);
-      setState(() {});
-
-      if (mounted) {
-        setState(() {});
-      }
-    }
-
-    Widget buildFutureBuilder() {
-      return FutureBuilder<List<Deal>?>(
-        future: dealsFuture,
-        builder: (BuildContext context, AsyncSnapshot<List<Deal>?> snapshot) {
-          if (snapshot.hasData) {
-            final List<Deal> deals = snapshot.data!;
-
-            if (deals.isEmpty) {
-              return Center(
-                child: Text(
-                  AppLocalizations.of(context)!
-                      .couldNotFindAnyResultFor(widget.keyword),
-                ),
-              );
-            }
-
-            return DealListItemBuilder(deals: deals);
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text(AppLocalizations.of(context)!.anErrorOccurred),
-            );
-          }
-
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
-    }
-
-    PreferredSizeWidget buildAppBar() {
-      return PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: AppBar(centerTitle: true, title: Text('"${widget.keyword}"')),
-      );
-    }
-
-    Widget buildBody() {
-      return RefreshIndicator(
-        onRefresh: onRefresh,
-        child: Column(
-          children: <Widget>[
-            // _buildSortChips(),
-            Expanded(child: buildFutureBuilder()),
-          ],
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: buildAppBar(),
-      body: buildBody(),
+      body: DealPagedListView(
+        dealFuture: _dealFuture,
+        noDealsFound: buildNoDealsFound(context),
+      ),
     );
   }
 }

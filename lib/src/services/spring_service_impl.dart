@@ -591,8 +591,10 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>> getDealsByKeyword({required String keyword}) async {
-    final String url = '$_baseUrl/deals/search/queryDeals?keyword=$keyword';
+  Future<List<Deal>> getDealsByKeyword(
+      {required String keyword, int? page, int? size}) async {
+    final String url =
+        '$_baseUrl/deals/search/queryDeals?keyword=$keyword&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
