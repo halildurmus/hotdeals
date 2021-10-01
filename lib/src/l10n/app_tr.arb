@@ -7,6 +7,20 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "favoriteDealError": "Fırsat, favorilerine eklenemedi.",
+  "@favoriteDealError": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unfavoriteDealError": "Fırsat, favorilerinden silinemedi.",
+  "@unfavoriteDealError": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "somethingWentWrong": "Bir hata oluştu. Tekrar denemek için dokunun.",
   "@somethingWentWrong": {
     "description": "",

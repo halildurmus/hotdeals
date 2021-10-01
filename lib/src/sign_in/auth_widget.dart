@@ -49,7 +49,7 @@ class AuthWidget extends StatelessWidget with UiLoggy {
           icon: Icons.wifi,
           title: AppLocalizations.of(context)!.noConnection,
           message: AppLocalizations.of(context)!.checkYourInternet,
-          onTryAgain: () => build(context),
+          onTryAgain: () => (context as Element).markNeedsBuild(),
         ),
       );
     }

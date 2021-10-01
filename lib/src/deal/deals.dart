@@ -3,17 +3,21 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
+    show PagingController;
 import 'package:line_icons/line_icons.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/deal.dart';
+import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/search_hit.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
-import '../widgets/deal_list_item_builder.dart';
+import '../widgets/deal_paged_listview.dart';
+import '../widgets/error_indicator.dart';
 import 'post_deal.dart';
 import 'search_deals.dart';
 
@@ -25,36 +29,52 @@ class Deals extends StatefulWidget {
 }
 
 class _DealsState extends State<Deals> {
-  final GlobalKey<RefreshIndicatorState> _refreshKey =
-      GlobalKey<RefreshIndicatorState>();
-  late Future<List<Deal>?> dealsFuture;
+  late DealSortBy _dealSortBy;
+  late PagingController<int, Deal> _pagingController;
   int _selectedFilter = 0;
-  late FloatingSearchBarController floatingSearchBarController;
+  late FloatingSearchBarController _searchBarController;
   bool searchErrorOccurred = false;
   bool searchProgress = false;
   final List<String> searchResults = <String>[];
 
-  void _sortDeals(int index) {
-    if (index == 0) {
-      dealsFuture = GetIt.I.get<SpringService>().getDealsSortedByCreatedAt();
-    } else if (index == 1) {
-      dealsFuture = GetIt.I.get<SpringService>().getDealsSortedByDealScore();
-    } else if (index == 2) {
-      dealsFuture = GetIt.I.get<SpringService>().getDealsSortedByPrice();
-    }
-  }
-
   @override
   void initState() {
-    floatingSearchBarController = FloatingSearchBarController();
-    dealsFuture = GetIt.I.get<SpringService>().getDealsSortedByCreatedAt();
+    _dealSortBy = DealSortBy.createdAt;
+    _searchBarController = FloatingSearchBarController();
+    _pagingController = PagingController<int, Deal>(firstPageKey: 0);
     super.initState();
   }
 
   @override
   void dispose() {
-    floatingSearchBarController.dispose();
+    _searchBarController.dispose();
+    _pagingController.dispose();
     super.dispose();
+  }
+
+  void _sortDeals(int index) {
+    if (index == 0) {
+      _dealSortBy = DealSortBy.createdAt;
+    } else if (index == 1) {
+      _dealSortBy = DealSortBy.dealScore;
+    } else if (index == 2) {
+      _dealSortBy = DealSortBy.price;
+    }
+    _pagingController.refresh();
+  }
+
+  Future<List<Deal>?> _dealFuture(int page, int size) =>
+      GetIt.I.get<SpringService>().getDealsSortedBy(
+            dealSortBy: _dealSortBy,
+            page: page,
+            size: size,
+          );
+
+  Widget buildNoDealsFound(BuildContext context) {
+    return ErrorIndicator(
+      icon: Icons.local_offer,
+      title: AppLocalizations.of(context)!.couldNotFindAnyDeal,
+    );
   }
 
   @override
@@ -62,7 +82,7 @@ class _DealsState extends State<Deals> {
     final ThemeData theme = Theme.of(context);
     final MyUser? user = Provider.of<UserControllerImpl>(context).user;
 
-    final List<String> _filterChoices = <String>[
+    final List<String> _filterChoices = [
       AppLocalizations.of(context)!.newest,
       AppLocalizations.of(context)!.mostLiked,
       AppLocalizations.of(context)!.cheapest,
@@ -72,7 +92,7 @@ class _DealsState extends State<Deals> {
       return Container(
         height: 65,
         decoration: BoxDecoration(
-          boxShadow: <BoxShadow>[
+          boxShadow: [
             BoxShadow(
               color: theme.shadowColor.withOpacity(.2),
               blurRadius: 7,
@@ -109,8 +129,8 @@ class _DealsState extends State<Deals> {
               onSelected: (bool selected) {
                 if (_selectedFilter != index) {
                   _selectedFilter = index;
-                  _sortDeals(_selectedFilter);
                   setState(() {});
+                  _sortDeals(_selectedFilter);
                 }
               },
             );
@@ -122,70 +142,20 @@ class _DealsState extends State<Deals> {
       );
     }
 
-    Future<void> onRefresh() async {
-      dealsFuture = GetIt.I.get<SpringService>().getDealsSortedByCreatedAt();
-      setState(() {});
-
-      if (mounted) {
-        setState(() {});
-      }
-    }
-
-    Widget buildNoDealFound() {
-      return ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        itemCount: 1,
-        itemBuilder: (BuildContext context, int index) {
-          return Text(
-            AppLocalizations.of(context)!.couldNotFindAnyDeal,
-            textAlign: TextAlign.center,
-          );
-        },
-      );
-    }
-
-    Widget buildFutureBuilder() {
-      return FutureBuilder<List<Deal>?>(
-        future: dealsFuture,
-        builder: (BuildContext context, AsyncSnapshot<List<Deal>?> snapshot) {
-          if (snapshot.hasData) {
-            final List<Deal> deals = snapshot.data!;
-
-            if (deals.isEmpty) {
-              return buildNoDealFound();
-            }
-
-            return DealListItemBuilder(deals: deals);
-          } else if (snapshot.hasError) {
-            return ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              itemCount: 1,
-              itemBuilder: (BuildContext context, int index) {
-                return Text(
-                  AppLocalizations.of(context)!.anErrorOccurred,
-                  textAlign: TextAlign.center,
-                );
-              },
-            );
-          }
-
-          return const Center(child: CircularProgressIndicator());
-        },
+    Widget buildPagedListView() {
+      return DealPagedListView(
+        dealFuture: _dealFuture,
+        pagingController: _pagingController,
+        noDealsFound: buildNoDealsFound(context),
       );
     }
 
     Widget buildBody() {
       return Column(
-        children: <Widget>[
+        children: [
           const SizedBox(height: 100),
           buildChoiceChips(),
-          Expanded(
-            child: RefreshIndicator(
-              key: _refreshKey,
-              onRefresh: onRefresh,
-              child: buildFutureBuilder(),
-            ),
-          ),
+          Expanded(child: buildPagedListView()),
         ],
       );
     }
@@ -281,7 +251,7 @@ class _DealsState extends State<Deals> {
           ),
           child: searchErrorOccurred
               ? buildSearchError()
-              : floatingSearchBarController.query.isEmpty
+              : _searchBarController.query.isEmpty
                   ? buildPlaceHolder()
                   : searchResults.isEmpty
                       ? buildNoResults()
@@ -293,7 +263,7 @@ class _DealsState extends State<Deals> {
           MediaQuery.of(context).orientation == Orientation.portrait;
 
       return FloatingSearchBar(
-        controller: floatingSearchBarController,
+        controller: _searchBarController,
         progress: searchProgress,
         hint: AppLocalizations.of(context)!.search,
         scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
@@ -329,10 +299,7 @@ class _DealsState extends State<Deals> {
         onPressed: () {
           NavigationUtil.navigate(context, const PostDeal())
               .then((dynamic value) {
-            setState(() {
-              dealsFuture =
-                  GetIt.I.get<SpringService>().getDealsSortedByCreatedAt();
-            });
+            _pagingController.refresh();
           });
         },
         elevation: 3,
@@ -344,10 +311,7 @@ class _DealsState extends State<Deals> {
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
-        children: <Widget>[
-          buildBody(),
-          buildFloatingSearchBar(),
-        ],
+        children: [buildBody(), buildFloatingSearchBar()],
       ),
       floatingActionButton: user != null ? buildFAB() : null,
       resizeToAvoidBottomInset: false,

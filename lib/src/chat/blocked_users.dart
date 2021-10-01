@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../widgets/custom_alert_dialog.dart';
+import '../widgets/error_indicator.dart';
 
 class BlockedUsers extends StatefulWidget {
   const BlockedUsers({Key? key}) : super(key: key);
@@ -21,7 +21,16 @@ class BlockedUsers extends StatefulWidget {
 }
 
 class _BlockedUsersState extends State<BlockedUsers> {
-  Card buildCard(ThemeData theme, MyUser user, BuildContext context) {
+  Widget buildNoBlockedUsersFound(BuildContext context) {
+    return ErrorIndicator(
+      icon: Icons.person_outline,
+      title: AppLocalizations.of(context)!.noBlockedUsers,
+    );
+  }
+
+  Widget buildCard(MyUser user, BuildContext context) {
+    final theme = Theme.of(context);
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: InkWell(
@@ -121,7 +130,6 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     final MyUser user = Provider.of<UserControllerImpl>(context).user!;
 
     Future<void> onRefresh() async {
@@ -131,31 +139,6 @@ class _BlockedUsersState extends State<BlockedUsers> {
       if (mounted) {
         setState(() {});
       }
-    }
-
-    Widget buildNoBlockedUsers() {
-      return Center(
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            children: <Widget>[
-              Icon(
-                LineIcons.user,
-                color: theme.primaryColor,
-                size: 150.0,
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                AppLocalizations.of(context)!.noBlockedUsers,
-                style: const TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
     }
 
     Widget buildBlockedUsers() {
@@ -174,15 +157,20 @@ class _BlockedUsersState extends State<BlockedUsers> {
                 itemBuilder: (BuildContext context, int index) {
                   final MyUser user = users.elementAt(index);
 
-                  return buildCard(theme, user, context);
+                  return buildCard(user, context);
                 },
               ),
             );
           } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          } else {
-            return const Center(child: CircularProgressIndicator());
+            return ErrorIndicator(
+              icon: Icons.wifi,
+              title: AppLocalizations.of(context)!.noConnection,
+              message: AppLocalizations.of(context)!.checkYourInternet,
+              onTryAgain: () => setState(() {}),
+            );
           }
+
+          return const Center(child: CircularProgressIndicator());
         },
       );
     }
@@ -194,7 +182,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
       body: RefreshIndicator(
         onRefresh: onRefresh,
         child: user.blockedUsers!.isEmpty
-            ? buildNoBlockedUsers()
+            ? buildNoBlockedUsersFound(context)
             : buildBlockedUsers(),
       ),
     );

@@ -7,6 +7,20 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "favoriteDealError": "Could not add the deal to your favorites.",
+  "@favoriteDealError": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unfavoriteDealError": "Could not remove the deal from your favorites.",
+  "@unfavoriteDealError": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "somethingWentWrong": "Something went wrong. Tap to try again.",
   "@somethingWentWrong": {
     "description": "",
@@ -416,7 +430,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "couldNotFindAnyDeal": "Couldn't found any deal",
+  "couldNotFindAnyDeal": "Couldn't find any deal",
   "@couldNotFindAnyDeal": {
     "description": "",
     "type": "text",

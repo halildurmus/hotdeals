@@ -4,6 +4,7 @@ import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
+import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/search_hit.dart';
@@ -34,7 +35,7 @@ abstract class SpringService {
 
   Future<UserReport?> sendUserReport({required UserReport report});
 
-  Future<List<Comment>?> getComments(String dealId);
+  Future<List<Comment>?> getComments({required String dealId, int? page, int? size,});
 
   Future<Comment?> postComment({required Comment comment});
 
@@ -73,29 +74,41 @@ abstract class SpringService {
     required String nickname,
   });
 
-  Future<List<Deal>?> getUserFavorites();
+  Future<List<Deal>?> getUserFavorites({int? page, int? size});
 
   Future<List<SearchHit>> searchDeals({required String keyword});
 
-  Future<List<Deal>?> getDealsByPostedBy({required String postedBy});
+  Future<List<Deal>?> getUserDeals({int? page, int? size});
 
-  Future<List<Deal>?> getDealsByCategory({required String category});
+  Future<List<Deal>?> getDealsByCategory({
+    required String category,
+    int? page,
+    int? size,
+  });
 
-  Future<List<Deal>> getDealsByKeyword({required String keyword});
+  Future<List<Deal>> getDealsByKeyword({
+    required String keyword,
+    int? page,
+    int? size,
+  });
 
-  Future<List<Deal>?> getDealsByStore({required String storeId});
+  Future<List<Deal>?> getDealsByStore({
+    required String storeId,
+    int? page,
+    int? size,
+  });
 
-  Future<List<Deal>?> getDealsSortedByCreatedAt();
-
-  Future<List<Deal>?> getDealsSortedByDealScore();
+  Future<List<Deal>?> getDealsSortedBy({
+    required DealSortBy dealSortBy,
+    int? page,
+    int? size,
+  });
 
   Future<int?> getNumberOfCommentsPostedByUser({required String userId});
 
   Future<int?> getNumberOfDealsByStore({required String storeId});
 
   Future<int?> getNumberOfDealsPostedByUser({required String userId});
-
-  Future<List<Deal>?> getDealsSortedByPrice();
 
   Future<Deal?> incrementViewsCounter({required String dealId});
 

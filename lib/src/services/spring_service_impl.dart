@@ -11,6 +11,7 @@ import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
+import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/search_hit.dart';
@@ -197,8 +198,13 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Comment>?> getComments(String dealId) async {
-    final String url = '$_baseUrl/comments/search/findByDealId?dealId=$dealId';
+  Future<List<Comment>?> getComments({
+    required String dealId,
+    int? page,
+    int? size,
+  }) async {
+    final String url =
+        '$_baseUrl/comments/search/findByDealIdOrderByCreatedAtDesc?dealId=$dealId&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -362,11 +368,11 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<MyUser>?> getBlockedUsers(
-      {required List<String> userUids}) async {
+  Future<List<MyUser>?> getBlockedUsers({
+    required List<String> userUids,
+  }) async {
     final String url =
         '$_baseUrl/users/search/findAllByUidIn?userUids=${userUids.join(',')}';
-
     try {
       final Response response = await _httpService.get(url);
       if (response.statusCode == 200) {
@@ -510,14 +516,13 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getUserFavorites() async {
-    final String url = '$_baseUrl/users/favorites';
+  Future<List<Deal>?> getUserFavorites({int? page, int? size}) async {
+    final String url = '$_baseUrl/users/favorites?page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final List<Deal> _deals = favoritedDealsFromJson(response.body);
-
+        final List<Deal> _deals = userDealsFromJson(response.body);
         return _deals;
       }
 
@@ -549,9 +554,32 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getDealsByPostedBy({required String postedBy}) async {
+  Future<List<Deal>?> getUserDeals({int? page, int? size}) async {
+    final String url = '$_baseUrl/users/deals?page=$page&size=$size';
+
+    try {
+      final Response response = await _httpService.get(url);
+      if (response.statusCode == 200) {
+        final List<Deal> _deals = userDealsFromJson(response.body);
+
+        return _deals;
+      }
+
+      return null;
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      return null;
+    }
+  }
+
+  @override
+  Future<List<Deal>?> getDealsByCategory({
+    required String category,
+    int? page,
+    int? size,
+  }) async {
     final String url =
-        '$_baseUrl/deals/search/findAllByPostedBy?postedBy=$postedBy';
+        '$_baseUrl/deals/search/findAllByCategoryStartsWith?category=$category&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -569,28 +597,10 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getDealsByCategory({required String category}) async {
+  Future<List<Deal>> getDealsByKeyword(
+      {required String keyword, int? page, int? size}) async {
     final String url =
-        '$_baseUrl/deals/search/findAllByCategoryStartsWith?category=$category';
-
-    try {
-      final Response response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        final List<Deal> _deals = dealFromJson(response.body);
-
-        return _deals;
-      }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
-    }
-  }
-
-  @override
-  Future<List<Deal>> getDealsByKeyword({required String keyword}) async {
-    final String url = '$_baseUrl/deals/search/queryDeals?keyword=$keyword';
+        '$_baseUrl/deals/search/queryDeals?keyword=$keyword&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -608,8 +618,13 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getDealsByStore({required String storeId}) async {
-    final String url = '$_baseUrl/deals/search/findAllByStore?storeId=$storeId';
+  Future<List<Deal>?> getDealsByStore({
+    required String storeId,
+    int? page,
+    int? size,
+  }) async {
+    final String url =
+        '$_baseUrl/deals/search/findAllByStore?storeId=$storeId&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -627,27 +642,20 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getDealsSortedByCreatedAt() async {
-    final String url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
-
-    try {
-      final Response response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        final List<Deal> _deals = dealFromJson(response.body);
-
-        return _deals;
-      }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
+  Future<List<Deal>?> getDealsSortedBy({
+    required DealSortBy dealSortBy,
+    int? page,
+    int? size,
+  }) async {
+    late String url;
+    if (dealSortBy == DealSortBy.createdAt) {
+      url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
+    } else if (dealSortBy == DealSortBy.dealScore) {
+      url = '$_baseUrl/deals/search/findAllByOrderByDealScoreDesc';
+    } else if (dealSortBy == DealSortBy.price) {
+      url = '$_baseUrl/deals/search/findAllByOrderByDiscountPrice';
     }
-  }
-
-  @override
-  Future<List<Deal>?> getDealsSortedByDealScore() async {
-    final String url = '$_baseUrl/deals/search/findAllByOrderByDealScoreDesc';
+    url += '?page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
@@ -709,25 +717,6 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return int.parse(response.body);
-      }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
-    }
-  }
-
-  @override
-  Future<List<Deal>?> getDealsSortedByPrice() async {
-    final String url = '$_baseUrl/deals/search/findAllByOrderByDiscountPrice';
-
-    try {
-      final Response response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        final List<Deal> deals = dealFromJson(response.body);
-
-        return deals;
       }
 
       return null;

@@ -5,13 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
-import '../deal/post_comment.dart';
 import '../deal/user_profile_dialog.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
@@ -27,6 +25,7 @@ import '../utils/navigation_util.dart';
 import '../widgets/deal_score_box.dart';
 import '../widgets/expandable_text.dart';
 import '../widgets/slider_indicator.dart';
+import 'deal_comments.dart';
 import 'image_fullscreen.dart';
 import 'report_deal_dialog.dart';
 
@@ -43,14 +42,16 @@ class DealDetails extends StatefulWidget {
 
 class _DealDetailsState extends State<DealDetails> with UiLoggy {
   late Deal _deal;
+  late Future<List<Comment>?> _commentsFuture;
   late List<String> _images;
   int currentIndex = 0;
   late Categories _categories;
   late Store _store;
   late MyUser? _user;
-  late Future<List<Comment>?> _commentsFuture;
   bool isUpvoted = false;
   bool isDownvoted = false;
+  bool _showBackToTopButton = false;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
@@ -82,9 +83,33 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
         }
       });
     }
-
-    _commentsFuture = GetIt.I.get<SpringService>().getComments(_deal.id!);
+    _commentsFuture =
+        GetIt.I.get<SpringService>().getComments(dealId: _deal.id!);
+    _scrollController = ScrollController()
+      ..addListener(() {
+        setState(() {
+          if (_scrollController.offset >= 1000) {
+            _showBackToTopButton = true;
+          } else {
+            _showBackToTopButton = false;
+          }
+        });
+      });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.decelerate,
+    );
   }
 
   @override
@@ -219,6 +244,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
           final bool isFavorited = user?.favorites![widget.deal.id!] == true;
 
           return FloatingActionButton(
+            heroTag: 'favoriteFAB',
             backgroundColor: theme.backgroundColor,
             elevation: 3,
             onPressed: () {
@@ -320,7 +346,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                             if (snapshot.hasData) {
                               comments = snapshot.data;
                             } else {
-                              comments = <Comment>[];
+                              comments = [];
                             }
 
                             return Text(
@@ -540,7 +566,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
       );
     }
 
-    Future<void> _userOnTap(MyUser user) async {
+    Future<void> _onUserTap(MyUser user) async {
       return showDialog<void>(
         context: context,
         builder: (BuildContext context) => UserProfileDialog(user: user),
@@ -558,7 +584,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
             VoidCallback? onTap;
 
             if (snapshot.hasData) {
-              onTap = () => _userOnTap(snapshot.data!);
+              onTap = () => _onUserTap(snapshot.data!);
               avatar = snapshot.data!.avatar!;
               nickname = snapshot.data!.nickname!;
             } else if (snapshot.hasError) {
@@ -615,225 +641,38 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
       );
     }
 
-    void postCommentOnTap() {
-      if (_user == null) {
-        loggy.warning('You need to log in!');
-        return;
-      }
-
-      showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-            child: PostComment(deal: _deal),
-          );
-        },
-      ).then((_) {
-        setState(() {
-          _commentsFuture = GetIt.I.get<SpringService>().getComments(_deal.id!);
-        });
-      });
-    }
-
-    Widget _buildNoComments() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          children: <Widget>[
-            Icon(
-              LineIcons.comments,
-              color: theme.primaryColor,
-              size: 100.0,
-            ),
-            const SizedBox(height: 16.0),
-            Text(
-              AppLocalizations.of(context)!.noComments,
-              style: textTheme.headline6,
-            ),
-            const SizedBox(height: 10.0),
-            Text(
-              AppLocalizations.of(context)!.startTheConversation,
-              style: textTheme.bodyText2!.copyWith(fontSize: 15),
-            ),
-          ],
-        ),
-      );
-    }
-
     Widget buildComments() {
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: FutureBuilder<List<Comment>?>(
-          future: _commentsFuture,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<Comment>?> snapshot) {
-            if (snapshot.hasData) {
-              final List<Comment> comments = snapshot.data!;
-
-              if (comments.isEmpty) {
-                return _buildNoComments();
-              }
-
-              return Column(
-                children: <Widget>[
-                  const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        AppLocalizations.of(context)!
-                            .commentCount(comments.length),
-                        style: textTheme.subtitle1!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 10.0),
-                      TextButton(
-                        onPressed: () => postCommentOnTap(),
-                        child: Text(
-                          AppLocalizations.of(context)!.postComment,
-                          style: textTheme.subtitle2!.copyWith(
-                              color: theme.brightness == Brightness.light
-                                  ? theme.primaryColor
-                                  : theme.primaryColorLight),
-                        ),
-                      )
-                    ],
-                  ),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: comments.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Comment comment = comments.elementAt(index);
-
-                      return Container(
-                        padding: const EdgeInsets.all(25),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color: theme.brightness == Brightness.light
-                              ? Colors.grey.shade200
-                              : Colors.black26,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                FutureBuilder<MyUser>(
-                                  future: GetIt.I
-                                      .get<SpringService>()
-                                      .getUserById(id: comment.postedBy!),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<MyUser> snapshot) {
-                                    String avatar =
-                                        'http://www.gravatar.com/avatar';
-                                    String nickname = '...';
-
-                                    if (snapshot.hasData) {
-                                      avatar = snapshot.data!.avatar!;
-                                      nickname = snapshot.data!.nickname!;
-                                    } else if (snapshot.hasError) {
-                                      nickname = AppLocalizations.of(context)!
-                                          .anErrorOccurred;
-                                    }
-
-                                    return GestureDetector(
-                                      onTap: () => _userOnTap(snapshot.data!),
-                                      child: Row(
-                                        children: <Widget>[
-                                          CachedNetworkImage(
-                                            imageUrl: avatar,
-                                            imageBuilder: (BuildContext ctx,
-                                                    ImageProvider<Object>
-                                                        imageProvider) =>
-                                                CircleAvatar(
-                                                    backgroundImage:
-                                                        imageProvider,
-                                                    radius: 16),
-                                            placeholder: (BuildContext context,
-                                                    String url) =>
-                                                const CircleAvatar(radius: 16),
-                                          ),
-                                          const SizedBox(width: 8.0),
-                                          Text(
-                                            nickname,
-                                            style: textTheme.subtitle2,
-                                          )
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
-                                Text(
-                                  timeago.format(
-                                    comment.createdAt!,
-                                    locale:
-                                        '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
-                                  ),
-                                  style: textTheme.bodyText2!.copyWith(
-                                    color: Colors.grey.shade600,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            SelectableText(comment.message)
-                          ],
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(height: 10);
-                    },
-                  ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
-      );
-    }
-
-    Widget buildPostCommentButton() {
-      return Center(
-        child: ElevatedButton(
-          onPressed: () => postCommentOnTap(),
-          child: Text(AppLocalizations.of(context)!.postAComment),
-        ),
-      );
+      return DealComments(deal: _deal);
     }
 
     Widget buildMainContent() {
       return Expanded(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              buildDealImages(),
-              buildDealDetails(),
-              buildRateDeal(),
-              const Padding(padding: EdgeInsets.all(16), child: Divider()),
-              buildUserDetails(),
-              buildComments(),
-              buildPostCommentButton(),
-              const SizedBox(height: 20),
-            ],
-          ),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  buildDealImages(),
+                  buildDealDetails(),
+                  buildRateDeal(),
+                  const Padding(padding: EdgeInsets.all(16), child: Divider()),
+                  buildUserDetails(),
+                  buildComments(),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+            if (_showBackToTopButton)
+              Align(
+                alignment: Alignment.bottomRight,
+                child: FloatingActionButton(
+                  onPressed: _scrollToTop,
+                  child: const Icon(Icons.arrow_upward),
+                ),
+              ),
+          ],
         ),
       );
     }
@@ -864,7 +703,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
     return Scaffold(
       appBar: buildAppBar(),
       body: Column(
-        children: <Widget>[
+        children: [
           buildMainContent(),
           buildSeeDealButton(),
         ],

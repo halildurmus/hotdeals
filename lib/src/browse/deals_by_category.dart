@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
+    show PagingController;
 
-import '../models/categories.dart';
 import '../models/category.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
-import '../widgets/deal_list_item_builder.dart';
+import '../widgets/deal_paged_listview.dart';
+import '../widgets/error_indicator.dart';
+import 'filter_chips.dart';
 
 class DealsByCategory extends StatefulWidget {
   const DealsByCategory({Key? key, required this.category}) : super(key: key);
@@ -19,156 +22,74 @@ class DealsByCategory extends StatefulWidget {
 
 class _DealsByCategoryState extends State<DealsByCategory> {
   late Category category;
-  late List<Category> subcategories;
-  late Future<List<Deal>?> dealsFuture;
-  int selectedFilter = -1;
-  bool isFavorited = false;
+  late PagingController<int, Deal> _pagingController;
 
   @override
   void initState() {
     category = widget.category;
-    subcategories =
-        GetIt.I.get<Categories>().getSubcategories(category: category);
-    dealsFuture = GetIt.I
-        .get<SpringService>()
-        .getDealsByCategory(category: category.category);
+    _pagingController = PagingController<int, Deal>(firstPageKey: 0);
     super.initState();
   }
 
   @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
+
+  PreferredSizeWidget buildAppBar() {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(70),
+      child: AppBar(
+        centerTitle: true,
+        title: Text(category.localizedName(Localizations.localeOf(context))),
+      ),
+    );
+  }
+
+  Future<List<Deal>?> _dealFuture(int page, int size) =>
+      GetIt.I.get<SpringService>().getDealsByCategory(
+            category: category.category,
+            page: page,
+            size: size,
+          );
+
+  Widget buildFilterChips() {
+    return FilterChips(
+        category: widget.category,
+        onFilterChange: (newCategory) {
+          setState(() {
+            category = newCategory;
+            _pagingController.refresh();
+          });
+        });
+  }
+
+  Widget buildNoDealsFound(BuildContext context) {
+    return ErrorIndicator(
+      icon: Icons.local_offer,
+      title: AppLocalizations.of(context)!.couldNotFindAnyDeal,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
-    Future<void> onRefresh() async {
-      dealsFuture = GetIt.I
-          .get<SpringService>()
-          .getDealsByCategory(category: category.category);
-      setState(() {});
-
-      if (mounted) {
-        setState(() {});
-      }
-    }
-
-    Widget buildFilterChips() {
-      return Container(
-        height: 65,
-        decoration: BoxDecoration(
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: theme.shadowColor.withOpacity(.2),
-              blurRadius: 7,
-              offset: const Offset(0, 3),
-            ),
-          ],
-          color: theme.backgroundColor,
-        ),
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          scrollDirection: Axis.horizontal,
-          itemCount: subcategories.length,
-          itemBuilder: (BuildContext context, int index) {
-            final Category subcategory = subcategories.elementAt(index);
-
-            return FilterChip(
-              checkmarkColor: Colors.white,
-              labelStyle: TextStyle(
-                color: selectedFilter == index
-                    ? Colors.white
-                    : theme.primaryColorLight,
-                fontWeight: FontWeight.bold,
-              ),
-              labelPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-              side: BorderSide(
-                color: selectedFilter == index
-                    ? Colors.transparent
-                    : theme.primaryColor,
-              ),
-              pressElevation: 0.0,
-              elevation: selectedFilter == index ? 4 : 0,
-              backgroundColor: theme.backgroundColor,
-              label: Text(
-                subcategory.localizedName(Localizations.localeOf(context)),
-              ),
-              selectedColor: theme.primaryColor,
-              selected: selectedFilter == index,
-              onSelected: (bool selected) {
-                if (selected) {
-                  selectedFilter = index;
-                  category = subcategory;
-                  dealsFuture = GetIt.I
-                      .get<SpringService>()
-                      .getDealsByCategory(category: category.category);
-                  setState(() {});
-                } else {
-                  selectedFilter = -1;
-                  category = widget.category;
-                  dealsFuture = GetIt.I
-                      .get<SpringService>()
-                      .getDealsByCategory(category: widget.category.category);
-                  setState(() {});
-                }
-              },
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(width: 8);
-          },
-        ),
-      );
-    }
-
-    Widget buildFutureBuilder() {
-      return FutureBuilder<List<Deal>?>(
-        future: dealsFuture,
-        builder: (BuildContext context, AsyncSnapshot<List<Deal>?> snapshot) {
-          if (snapshot.hasData) {
-            final List<Deal> deals = snapshot.data!;
-
-            if (deals.isEmpty) {
-              return Center(
-                child: Text(AppLocalizations.of(context)!.couldNotFindAnyDeal),
-              );
-            }
-
-            return DealListItemBuilder(deals: deals);
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text(AppLocalizations.of(context)!.anErrorOccurred),
-            );
-          }
-
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
-    }
-
-    PreferredSizeWidget buildAppBar() {
-      return PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: AppBar(
-          centerTitle: true,
-          title: Text(category.localizedName(Localizations.localeOf(context))),
-        ),
-      );
-    }
-
-    Widget buildBody() {
-      return RefreshIndicator(
-        onRefresh: onRefresh,
-        child: Column(
-          children: <Widget>[
-            if (subcategories.isNotEmpty) buildFilterChips(),
-            Expanded(child: buildFutureBuilder()),
-          ],
-        ),
+    Widget buildPagedListView() {
+      return DealPagedListView(
+        dealFuture: _dealFuture,
+        noDealsFound: buildNoDealsFound(context),
+        pagingController: _pagingController,
       );
     }
 
     return Scaffold(
       appBar: buildAppBar(),
-      body: buildBody(),
+      body: Column(
+        children: [
+          buildFilterChips(),
+          Expanded(child: buildPagedListView()),
+        ],
+      ),
     );
   }
 }
