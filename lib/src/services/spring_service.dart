@@ -4,6 +4,7 @@ import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
+import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/search_hit.dart';
@@ -98,7 +99,7 @@ abstract class SpringService {
   });
 
   Future<List<Deal>?> getDealsSortedBy({
-    required String sortType,
+    required DealSortBy dealSortBy,
     int? page,
     int? size,
   });

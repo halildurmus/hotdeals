@@ -10,6 +10,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/deal.dart';
+import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/search_hit.dart';
 import '../models/user_controller_impl.dart';
@@ -28,7 +29,7 @@ class Deals extends StatefulWidget {
 }
 
 class _DealsState extends State<Deals> {
-  late String _sortType;
+  late DealSortBy _dealSortBy;
   late PagingController<int, Deal> _pagingController;
   int _selectedFilter = 0;
   late FloatingSearchBarController _searchBarController;
@@ -38,7 +39,7 @@ class _DealsState extends State<Deals> {
 
   @override
   void initState() {
-    _sortType = 'createdAt';
+    _dealSortBy = DealSortBy.createdAt;
     _searchBarController = FloatingSearchBarController();
     _pagingController = PagingController<int, Deal>(firstPageKey: 0);
     super.initState();
@@ -53,18 +54,18 @@ class _DealsState extends State<Deals> {
 
   void _sortDeals(int index) {
     if (index == 0) {
-      _sortType = 'createdAt';
+      _dealSortBy = DealSortBy.createdAt;
     } else if (index == 1) {
-      _sortType = 'dealScore';
+      _dealSortBy = DealSortBy.dealScore;
     } else if (index == 2) {
-      _sortType = 'price';
+      _dealSortBy = DealSortBy.price;
     }
     _pagingController.refresh();
   }
 
   Future<List<Deal>?> _dealFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getDealsSortedBy(
-            sortType: _sortType,
+            dealSortBy: _dealSortBy,
             page: page,
             size: size,
           );

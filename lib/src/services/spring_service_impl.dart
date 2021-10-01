@@ -11,6 +11,7 @@ import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
+import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/search_hit.dart';
@@ -637,16 +638,16 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
 
   @override
   Future<List<Deal>?> getDealsSortedBy({
-    required String sortType,
+    required DealSortBy dealSortBy,
     int? page,
     int? size,
   }) async {
     late String url;
-    if (sortType == 'createdAt') {
+    if (dealSortBy == DealSortBy.createdAt) {
       url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
-    } else if (sortType == 'dealScore') {
+    } else if (dealSortBy == DealSortBy.dealScore) {
       url = '$_baseUrl/deals/search/findAllByOrderByDealScoreDesc';
-    } else if (sortType == 'price') {
+    } else if (dealSortBy == DealSortBy.price) {
       url = '$_baseUrl/deals/search/findAllByOrderByDiscountPrice';
     }
 
