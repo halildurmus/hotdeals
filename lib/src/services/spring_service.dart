@@ -83,7 +83,11 @@ abstract class SpringService {
 
   Future<List<Deal>> getDealsByKeyword({required String keyword});
 
-  Future<List<Deal>?> getDealsByStore({required String storeId});
+  Future<List<Deal>?> getDealsByStore({
+    required String storeId,
+    int? page,
+    int? size,
+  });
 
   Future<List<Deal>?> getDealsSortedByCreatedAt();
 

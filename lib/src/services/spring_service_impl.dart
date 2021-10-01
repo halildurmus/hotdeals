@@ -606,8 +606,13 @@ class SpringServiceImpl with NetworkLoggy implements SpringService {
   }
 
   @override
-  Future<List<Deal>?> getDealsByStore({required String storeId}) async {
-    final String url = '$_baseUrl/deals/search/findAllByStore?storeId=$storeId';
+  Future<List<Deal>?> getDealsByStore({
+    required String storeId,
+    int? page,
+    int? size,
+  }) async {
+    final String url =
+        '$_baseUrl/deals/search/findAllByStore?storeId=$storeId&page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
