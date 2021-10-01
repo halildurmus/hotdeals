@@ -10,6 +10,9 @@ import '../widgets/error_indicator.dart';
 class MyDeals extends StatelessWidget {
   const MyDeals({Key? key}) : super(key: key);
 
+  Future<List<Deal>?> _dealFuture(int page, int size) =>
+      GetIt.I.get<SpringService>().getUserDeals(page: page, size: size);
+
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.local_offer,
@@ -19,9 +22,6 @@ class MyDeals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Deal>?> _dealFuture(int page, int size) =>
-        GetIt.I.get<SpringService>().getUserDeals(page: page, size: size);
-
     return DealPagedListView(
       dealFuture: _dealFuture,
       noDealsFound: buildNoDealsFound(context),

@@ -48,6 +48,13 @@ class DealsByStore extends StatelessWidget {
     );
   }
 
+  Future<List<Deal>?> _dealFuture(int page, int size) =>
+      GetIt.I.get<SpringService>().getDealsByStore(
+            storeId: store.id!,
+            page: page,
+            size: size,
+          );
+
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.local_offer,
@@ -57,20 +64,12 @@ class DealsByStore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Deal>?> _dealFuture(int page, int size) =>
-        GetIt.I.get<SpringService>().getDealsByStore(
-              storeId: store.id!,
-              page: page,
-              size: size,
-            );
-
-    Widget buildBody() {
-      return DealPagedListView(
+    return Scaffold(
+      appBar: buildAppBar(context),
+      body: DealPagedListView(
         dealFuture: _dealFuture,
         noDealsFound: buildNoDealsFound(context),
-      );
-    }
-
-    return Scaffold(appBar: buildAppBar(context), body: buildBody());
+      ),
+    );
   }
 }
