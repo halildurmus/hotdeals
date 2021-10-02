@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
-import 'widgets/error_indicator.dart';
+import 'utils/error_indicator_util.dart';
 import 'widgets/loading_dialog.dart';
 
 class ErrorScreen extends StatelessWidget {
@@ -14,10 +14,8 @@ class ErrorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.appTitle)),
-      body: ErrorIndicator(
-        icon: Icons.wifi,
-        title: AppLocalizations.of(context)!.noConnection,
-        message: AppLocalizations.of(context)!.checkYourInternet,
+      body: ErrorIndicatorUtil.buildFirstPageError(
+        context,
         onTryAgain: () async {
           GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
           await onTap();

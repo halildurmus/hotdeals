@@ -14,6 +14,7 @@ import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../settings/settings_controller.dart';
 import '../utils/chat_util.dart';
+import '../utils/error_indicator_util.dart';
 import 'blocked_users.dart';
 import 'message_arguments.dart';
 import 'message_screen.dart';
@@ -38,6 +39,13 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     _user = Provider.of<UserControllerImpl>(context, listen: false).user;
     super.initState();
+  }
+
+  Widget buildErrorWidget() {
+    return ErrorIndicatorUtil.buildFirstPageError(
+      context,
+      onTryAgain: () => setState(() {}),
+    );
   }
 
   @override
@@ -408,12 +416,10 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             );
           } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return buildErrorWidget();
           }
+
+          return const Center(child: CircularProgressIndicator());
         },
       );
     }

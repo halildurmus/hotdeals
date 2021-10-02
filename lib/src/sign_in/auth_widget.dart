@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +8,7 @@ import '../home/home.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
-import '../widgets/error_indicator.dart';
+import '../utils/error_indicator_util.dart';
 
 /// Builds the signed-in or non signed-in UI, depending on the user snapshot.
 /// This widget should be below the [MaterialApp].
@@ -45,10 +44,8 @@ class AuthWidget extends StatelessWidget with UiLoggy {
 
     Widget buildErrorWidget() {
       return Scaffold(
-        body: ErrorIndicator(
-          icon: Icons.wifi,
-          title: AppLocalizations.of(context)!.noConnection,
-          message: AppLocalizations.of(context)!.checkYourInternet,
+        body: ErrorIndicatorUtil.buildFirstPageError(
+          context,
           onTryAgain: () => (context as Element).markNeedsBuild(),
         ),
       );

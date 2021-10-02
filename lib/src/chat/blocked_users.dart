@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
+import '../utils/error_indicator_util.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/error_indicator.dart';
 
@@ -25,6 +26,13 @@ class _BlockedUsersState extends State<BlockedUsers> {
     return ErrorIndicator(
       icon: Icons.person_outline,
       title: AppLocalizations.of(context)!.noBlockedUsers,
+    );
+  }
+
+  Widget buildErrorWidget() {
+    return ErrorIndicatorUtil.buildFirstPageError(
+      context,
+      onTryAgain: () => setState(() {}),
     );
   }
 
@@ -162,12 +170,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
               ),
             );
           } else if (snapshot.hasError) {
-            return ErrorIndicator(
-              icon: Icons.wifi,
-              title: AppLocalizations.of(context)!.noConnection,
-              message: AppLocalizations.of(context)!.checkYourInternet,
-              onTryAgain: () => setState(() {}),
-            );
+            return buildErrorWidget();
           }
 
           return const Center(child: CircularProgressIndicator());
