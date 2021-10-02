@@ -1,19 +1,10 @@
-import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../models/comment.dart';
-import '../models/my_user.dart';
-import '../services/spring_service.dart';
-import '../settings/settings_controller.dart';
 import '../utils/error_indicator_util.dart';
-import 'user_profile_dialog.dart';
+import 'comment_item.dart';
 
 class CommentPagedListView extends StatefulWidget {
   const CommentPagedListView({
@@ -55,13 +46,6 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
     super.dispose();
   }
 
-  Future<void> _onUserTap(MyUser user) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) => UserProfileDialog(user: user),
-    );
-  }
-
   Future<void> _fetchPage(int pageKey) async {
     try {
       final newItems = await widget.commentFuture(pageKey, widget.pageSize);
@@ -78,83 +62,6 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
     }
   }
 
-  Widget buildComment(Comment comment) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
-    return Container(
-      padding: const EdgeInsets.all(25),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: theme.brightness == Brightness.light
-            ? Colors.grey.shade200
-            : Colors.black26,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FutureBuilder<MyUser>(
-                future: GetIt.I
-                    .get<SpringService>()
-                    .getUserById(id: comment.postedBy!),
-                builder:
-                    (BuildContext context, AsyncSnapshot<MyUser> snapshot) {
-                  String avatar = 'http://www.gravatar.com/avatar';
-                  String nickname = '...';
-
-                  if (snapshot.hasData) {
-                    avatar = snapshot.data!.avatar!;
-                    nickname = snapshot.data!.nickname!;
-                  } else if (snapshot.hasError) {
-                    nickname = AppLocalizations.of(context)!.anErrorOccurred;
-                  }
-
-                  return GestureDetector(
-                    onTap: () => _onUserTap(snapshot.data!),
-                    child: Row(
-                      children: <Widget>[
-                        CachedNetworkImage(
-                          imageUrl: avatar,
-                          imageBuilder: (BuildContext ctx,
-                                  ImageProvider<Object> imageProvider) =>
-                              CircleAvatar(
-                                  backgroundImage: imageProvider, radius: 16),
-                          placeholder: (BuildContext context, String url) =>
-                              const CircleAvatar(radius: 16),
-                        ),
-                        const SizedBox(width: 8.0),
-                        Text(
-                          nickname,
-                          style: textTheme.subtitle2,
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-              Text(
-                timeago.format(
-                  comment.createdAt!,
-                  locale:
-                      '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
-                ),
-                style: textTheme.bodyText2!.copyWith(
-                  color: Colors.grey.shade600,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          SelectableText(comment.message)
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return PagedListView(
@@ -164,7 +71,7 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
       shrinkWrap: true,
       builderDelegate: PagedChildBuilderDelegate<Comment>(
         animateTransitions: true,
-        itemBuilder: (context, comment, index) => buildComment(comment),
+        itemBuilder: (context, comment, index) => CommentItem(comment: comment),
         firstPageErrorIndicatorBuilder: (context) =>
             ErrorIndicatorUtil.buildFirstPageError(
           context,
