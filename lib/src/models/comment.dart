@@ -1,36 +1,40 @@
 import 'dart:convert';
 
+import 'my_user.dart';
+
 typedef Json = Map<String, dynamic>;
 
-List<Comment> commentFromJson(String str) => List<Comment>.from(
-    (json.decode(str)['_embedded']['comments'] as List<dynamic>)
-        .map<dynamic>((dynamic e) => Comment.fromJson(e as Json)));
+List<Comment> commentFromJson(String str) => List.from(
+    (json.decode(str) as List).map((e) => Comment.fromJson(e as Json)));
 
 class Comment {
   const Comment({
     this.id,
     required this.dealId,
     this.postedBy,
+    this.poster,
     required this.message,
     this.createdAt,
-    this.updatedAt,
   });
 
   factory Comment.fromJson(Json json) => Comment(
         id: json['id'] as String,
         dealId: json['dealId'] as String,
-        postedBy: json['postedBy'] as String,
+        postedBy:
+            (json['postedBy'] is String) ? json['postedBy'] as String : null,
+        poster: (json['postedBy'] is Json)
+            ? MyUser.fromJsonDTO(json['postedBy'] as Json)
+            : null,
         message: json['message'] as String,
         createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
   final String? id;
   final String dealId;
   final String? postedBy;
+  final MyUser? poster;
   final String message;
   final DateTime? createdAt;
-  final DateTime? updatedAt;
 
   Json toJson() {
     return <String, dynamic>{
@@ -42,6 +46,6 @@ class Comment {
 
   @override
   String toString() {
-    return 'Comment{id: $id, dealId: $dealId, postedBy: $postedBy, message: $message, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'Comment{id: $id, dealId: $dealId, postedBy: $postedBy, poster: $poster, message: $message, createdAt: $createdAt}';
   }
 }
