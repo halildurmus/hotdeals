@@ -96,11 +96,33 @@ class _DealCommentsState extends State<DealComments> with UiLoggy {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget buildCommentCounts() {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Text(
+      AppLocalizations.of(context)!.commentCount(commentsCount),
+      style: textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget buildPostCommentButton() {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
+    return TextButton(
+      onPressed: () => onPostCommentTap(),
+      child: Text(
+        AppLocalizations.of(context)!.postComment,
+        style: textTheme.subtitle2!.copyWith(
+            color: theme.brightness == Brightness.light
+                ? theme.primaryColor
+                : theme.primaryColorLight),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -109,22 +131,9 @@ class _DealCommentsState extends State<DealComments> with UiLoggy {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                AppLocalizations.of(context)!.commentCount(commentsCount),
-                style:
-                    textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
-              ),
+              buildCommentCounts(),
               const SizedBox(width: 10.0),
-              TextButton(
-                onPressed: () => onPostCommentTap(),
-                child: Text(
-                  AppLocalizations.of(context)!.postComment,
-                  style: textTheme.subtitle2!.copyWith(
-                      color: theme.brightness == Brightness.light
-                          ? theme.primaryColor
-                          : theme.primaryColorLight),
-                ),
-              )
+              buildPostCommentButton(),
             ],
           ),
           const Divider(),
