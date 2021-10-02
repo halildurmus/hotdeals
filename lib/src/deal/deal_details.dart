@@ -566,10 +566,10 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
       );
     }
 
-    Future<void> _onUserTap(MyUser user) async {
+    Future<void> _onUserTap(String userId) async {
       return showDialog<void>(
         context: context,
-        builder: (BuildContext context) => UserProfileDialog(user: user),
+        builder: (BuildContext context) => UserProfileDialog(userId: userId),
       );
     }
 
@@ -584,7 +584,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
             VoidCallback? onTap;
 
             if (snapshot.hasData) {
-              onTap = () => _onUserTap(snapshot.data!);
+              onTap = () => _onUserTap(snapshot.data!.id!);
               avatar = snapshot.data!.avatar!;
               nickname = snapshot.data!.nickname!;
             } else if (snapshot.hasError) {
@@ -592,7 +592,7 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
             }
 
             return GestureDetector(
-              onTap: onTap,
+              onTap: _user == null ? null : onTap,
               child: Row(
                 children: <Widget>[
                   CachedNetworkImage(

@@ -13,14 +13,15 @@ import '../models/user_controller_impl.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
+import '../utils/error_indicator_util.dart';
 import 'report_user_dialog.dart';
 
 typedef Json = Map<String, dynamic>;
 
 class UserProfileDialog extends StatefulWidget {
-  const UserProfileDialog({Key? key, required this.user}) : super(key: key);
+  const UserProfileDialog({Key? key, required this.userId}) : super(key: key);
 
-  final MyUser user;
+  final String userId;
 
   @override
   _UserProfileDialogState createState() => _UserProfileDialogState();
@@ -30,13 +31,55 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
   MyUser? loggedInUser;
   late final FirestoreService firestoreService;
   late final SpringService springService;
+  late final Future<MyUser> userFuture;
+  late final Future<int?> postedCommentsFuture;
+  late final Future<int?> postedDealsFuture;
+  late MyUser user;
+  late int postedCommentsCount;
+  late int postedDealsCount;
 
   @override
   void initState() {
+    loggedInUser = context.read<UserControllerImpl>().user;
     firestoreService = GetIt.I.get<FirestoreService>();
     springService = GetIt.I.get<SpringService>();
-    loggedInUser = context.read<UserControllerImpl>().user;
+    userFuture = springService.getUserById(id: widget.userId);
+    postedCommentsFuture =
+        springService.getNumberOfCommentsPostedByUser(userId: widget.userId);
+    postedDealsFuture =
+        springService.getNumberOfDealsPostedByUser(userId: widget.userId);
     super.initState();
+  }
+
+  Future<void> onPressedReport() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) =>
+          ReportUserDialog(reportedUserId: user.id!),
+    ).then((_) => Navigator.of(context).pop());
+  }
+
+  Widget buildCircularProgressIndicator() {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      height: 100,
+      child: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
+        ),
+      ),
+    );
+  }
+
+  Widget buildErrorWidget() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: ErrorIndicatorUtil.buildFirstPageError(
+        context,
+        onTryAgain: () => setState(() {}),
+      ),
+    );
   }
 
   @override
@@ -44,15 +87,6 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
-    final MyUser user = widget.user;
-
-    Future<void> onPressedReport() async {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) =>
-            ReportUserDialog(reportedUserId: user.id!),
-      ).then((_) => Navigator.of(context).pop());
-    }
 
     Widget buildButtons() {
       final List<String> usersArray = ChatUtil.getUsersArray(
@@ -60,7 +94,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
 
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
+        children: [
           Container(
             padding: const EdgeInsets.only(top: 16, bottom: 8),
             width: deviceWidth / 2.8,
@@ -153,25 +187,11 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
                   : theme.primaryColor,
               size: 18),
           const SizedBox(width: 6),
-          FutureBuilder<int?>(
-            future:
-                springService.getNumberOfDealsPostedByUser(userId: user.id!),
-            builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
-              String postedDeals = '...';
-
-              if (snapshot.hasData) {
-                postedDeals = snapshot.data!.toString();
-              }
-
-              return Text(
-                '$postedDeals ${AppLocalizations.of(context)!.dealsPosted}',
-                style: textTheme.bodyText2!.copyWith(
-                    color: theme.brightness == Brightness.dark
-                        ? Colors.grey
-                        : null,
-                    fontSize: 13),
-              );
-            },
+          Text(
+            '$postedDealsCount ${AppLocalizations.of(context)!.dealsPosted}',
+            style: textTheme.bodyText2!.copyWith(
+                color: theme.brightness == Brightness.dark ? Colors.grey : null,
+                fontSize: 13),
           ),
         ],
       );
@@ -179,46 +199,32 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
 
     Widget buildNumberOfPostedCommentsSection() {
       return Row(
-        children: <Widget>[
+        children: [
           Icon(Icons.chat,
               color: theme.brightness == Brightness.dark
                   ? Colors.grey
                   : theme.primaryColor,
               size: 18),
           const SizedBox(width: 6),
-          FutureBuilder<int?>(
-            future:
-                springService.getNumberOfCommentsPostedByUser(userId: user.id!),
-            builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
-              String postedComments = '...';
-
-              if (snapshot.hasData) {
-                postedComments = snapshot.data!.toString();
-              }
-
-              return Text(
-                '$postedComments ${AppLocalizations.of(context)!.commentsPosted}',
-                style: textTheme.bodyText2!.copyWith(
-                    color: theme.brightness == Brightness.dark
-                        ? Colors.grey
-                        : null,
-                    fontSize: 13),
-              );
-            },
+          Text(
+            '$postedCommentsCount ${AppLocalizations.of(context)!.commentsPosted}',
+            style: textTheme.bodyText2!.copyWith(
+                color: theme.brightness == Brightness.dark ? Colors.grey : null,
+                fontSize: 13),
           ),
         ],
       );
     }
 
-    Widget buildContent() {
+    Widget buildUserDetails() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+              children: [
                 CachedNetworkImage(
                   imageUrl: user.avatar!,
                   imageBuilder: (BuildContext ctx,
@@ -230,7 +236,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
                 const SizedBox(width: 20),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Text(
                       user.nickname!,
                       style: textTheme.headline6!.copyWith(fontSize: 18),
@@ -253,26 +259,45 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
       );
     }
 
+    Widget buildFutureBuilder() {
+      return FutureBuilder<dynamic>(
+        future: Future.wait<dynamic>(
+          [userFuture, postedCommentsFuture, postedDealsFuture],
+        ),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasData) {
+            user = snapshot.data![0];
+            postedCommentsCount = snapshot.data![1];
+            postedDealsCount = snapshot.data![2];
+
+            return buildUserDetails();
+          } else if (snapshot.hasError) {
+            return buildErrorWidget();
+          }
+
+          return buildCircularProgressIndicator();
+        },
+      );
+    }
+
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: [
             Text(
               AppLocalizations.of(context)!.aboutUser,
               style: textTheme.headline6!.copyWith(fontSize: 16),
             ),
             const Divider(),
             const SizedBox(height: 10),
-            buildContent(),
+            buildFutureBuilder(),
           ],
         ),
       ),

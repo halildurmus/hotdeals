@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../models/comment.dart';
 import '../models/my_user.dart';
-import '../services/spring_service.dart';
+import '../models/user_controller_impl.dart';
 import '../settings/settings_controller.dart';
 import 'user_profile_dialog.dart';
 
@@ -15,12 +16,9 @@ class CommentItem extends StatelessWidget {
   final Comment comment;
 
   Future<void> _onUserTap(BuildContext context, String userId) async {
-    final MyUser user =
-        await GetIt.I.get<SpringService>().getUserById(id: userId);
-
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) => UserProfileDialog(user: user),
+      builder: (BuildContext context) => UserProfileDialog(userId: userId),
     );
   }
 
@@ -29,10 +27,11 @@ class CommentItem extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final poster = comment.poster!;
+    final MyUser? user = context.read<UserControllerImpl>().user;
 
     Widget buildUserDetails() {
       return GestureDetector(
-        onTap: () => _onUserTap(context, poster.id!),
+        onTap: user == null ? null : () => _onUserTap(context, poster.id!),
         child: Row(
           children: [
             CachedNetworkImage(
