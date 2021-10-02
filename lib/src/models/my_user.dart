@@ -20,6 +20,13 @@ class MyUser {
     this.updatedAt,
   });
 
+  factory MyUser.fromJsonDTO(Json json) => MyUser(
+        id: json['id'] as String,
+        uid: json['uid'] as String,
+        avatar: json['avatar'] as String,
+        nickname: json['nickname'] as String,
+      );
+
   factory MyUser.fromJson(Json json) => MyUser(
         id: json['id'] as String,
         uid: json['uid'] as String,
