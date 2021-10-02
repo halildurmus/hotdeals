@@ -147,7 +147,7 @@ class _DealItemState extends State<DealItem> {
 
     Widget buildCommentsCount() {
       return Row(
-        children: <Widget>[
+        children: [
           const Icon(FontAwesomeIcons.comment, size: 14),
           const SizedBox(width: 4),
           FutureBuilder<List<Comment>?>(
@@ -155,7 +155,6 @@ class _DealItemState extends State<DealItem> {
             builder:
                 (BuildContext context, AsyncSnapshot<List<Comment>?> snapshot) {
               String commentText = '...';
-
               if (snapshot.hasData) {
                 commentText = snapshot.data!.length.toString();
               }
@@ -172,7 +171,7 @@ class _DealItemState extends State<DealItem> {
 
     Widget buildViewsCount() {
       return Row(
-        children: <Widget>[
+        children: [
           const Icon(FontAwesomeIcons.solidEye, size: 14),
           const SizedBox(width: 4),
           Text(
