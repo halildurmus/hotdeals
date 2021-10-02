@@ -10,7 +10,7 @@ import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
-import '../widgets/deal_list_item.dart';
+import '../widgets/deal_item.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({
@@ -128,7 +128,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
           itemBuilder: (context, deal, index) {
             final bool isFavorited = user?.favorites![deal.id!] == true;
 
-            return DealListItem(
+            return DealItem(
               deal: deal,
               index: index,
               isFavorited: isFavorited,

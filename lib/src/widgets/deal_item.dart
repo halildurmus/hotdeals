@@ -10,8 +10,8 @@ import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
 
-class DealListItem extends StatefulWidget {
-  const DealListItem({
+class DealItem extends StatefulWidget {
+  const DealItem({
     Key? key,
     this.onTap,
     required this.deal,
@@ -29,10 +29,10 @@ class DealListItem extends StatefulWidget {
   final VoidCallback onFavoriteButtonPressed;
 
   @override
-  _DealListItemState createState() => _DealListItemState();
+  _DealItemState createState() => _DealItemState();
 }
 
-class _DealListItemState extends State<DealListItem> {
+class _DealItemState extends State<DealItem> {
   late Categories _categories;
   late Future<List<Comment>?> _commentsFuture;
 
