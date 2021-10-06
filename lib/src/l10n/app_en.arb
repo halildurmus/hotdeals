@@ -7,6 +7,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "youNeedToSignInToPerform": "You need to sign in to perform this action.",
+  "@youNeedToSignInToPerform": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "favoriteDealError": "Could not add the deal to your favorites.",
   "@favoriteDealError": {
     "description": "",

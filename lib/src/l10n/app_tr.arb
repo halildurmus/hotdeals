@@ -7,6 +7,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "youNeedToSignInToPerform": "Bu işlemi gerçekleştirmek için giriş yapman gerekli.",
+  "@youNeedToSignInToPerform": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "favoriteDealError": "Fırsat, favorilerine eklenemedi.",
   "@favoriteDealError": {
     "description": "",
