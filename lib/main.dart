@@ -80,7 +80,7 @@ void main() async {
       }).sendPort);
     }
 
-    // Fetches the default FCM token for this device.
+    // See https://github.com/FirebaseExtended/flutterfire/issues/6011
     await FirebaseMessaging.instance.getToken();
 
     // Sets a message handler function which is called when the app is in the
