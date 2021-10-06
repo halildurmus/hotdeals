@@ -1,13 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../models/comment.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
-import '../settings/settings_controller.dart';
+import '../utils/date_time_util.dart';
 import 'user_profile_dialog.dart';
 
 class CommentItem extends StatelessWidget {
@@ -51,11 +49,7 @@ class CommentItem extends StatelessWidget {
 
     Widget buildCommentDateTime() {
       return Text(
-        timeago.format(
-          comment.createdAt!,
-          locale:
-              '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
-        ),
+        DateTimeUtil.formatDateTime(comment.createdAt!),
         style: textTheme.bodyText2!.copyWith(
           color: Colors.grey.shade600,
           fontSize: 12,

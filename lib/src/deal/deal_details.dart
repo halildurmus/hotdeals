@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../deal/user_profile_dialog.dart';
@@ -20,7 +19,7 @@ import '../models/stores.dart';
 import '../models/user_controller_impl.dart';
 import '../models/vote_type.dart';
 import '../services/spring_service.dart';
-import '../settings/settings_controller.dart';
+import '../utils/date_time_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/deal_score_box.dart';
 import '../widgets/expandable_text.dart';
@@ -298,13 +297,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      timeago.format(
-                        _deal.createdAt!,
-                        locale: GetIt.I
-                            .get<SettingsController>()
-                            .locale
-                            .languageCode,
-                      ),
+                      DateTimeUtil.formatDateTime(_deal.createdAt!,
+                          useShortMessages: false),
                       style: textTheme.bodyText2!.copyWith(
                         color: theme.brightness == Brightness.light
                             ? Colors.black54

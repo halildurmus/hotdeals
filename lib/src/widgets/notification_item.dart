@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../models/my_user.dart';
 import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../services/spring_service.dart';
-import '../settings/settings_controller.dart';
+import '../utils/date_time_util.dart';
 
 class NotificationItem extends StatelessWidget with NetworkLoggy {
   const NotificationItem({
@@ -83,23 +82,17 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            timeago.format(
+                            DateTimeUtil.formatDateTime(
                               notification.createdAt!,
-                              locale: GetIt.I
-                                  .get<SettingsController>()
-                                  .locale
-                                  .languageCode,
+                              useShortMessages: false,
                             ),
                           ),
                         ],
                       )
                     : Text(
-                        timeago.format(
+                        DateTimeUtil.formatDateTime(
                           notification.createdAt!,
-                          locale: GetIt.I
-                              .get<SettingsController>()
-                              .locale
-                              .languageCode,
+                          useShortMessages: false,
                         ),
                       ),
                 trailing: !notification.isRead

@@ -6,14 +6,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
-import '../settings/settings_controller.dart';
 import '../utils/chat_util.dart';
+import '../utils/date_time_util.dart';
 import '../utils/error_indicator_util.dart';
 import 'blocked_users.dart';
 import 'message_arguments.dart';
@@ -240,11 +239,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildMessageTime(DateTime createdAt, bool isRead) {
       return Text(
-        timeago.format(
-          createdAt,
-          locale:
-              '${GetIt.I.get<SettingsController>().locale.languageCode}_short',
-        ),
+        DateTimeUtil.formatDateTime(createdAt),
         style: TextStyle(
           color: isRead ? Colors.grey : theme.primaryColor,
           fontWeight: FontWeight.w500,
