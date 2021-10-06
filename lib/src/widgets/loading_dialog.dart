@@ -7,7 +7,7 @@ class LoadingDialog extends StatelessWidget {
   Widget _buildAlertDialog(BuildContext context) {
     return AlertDialog(
       content: Row(
-        children: <Widget>[
+        children: [
           const CircularProgressIndicator(),
           const SizedBox(width: 16),
           Text(AppLocalizations.of(context)!.loading),

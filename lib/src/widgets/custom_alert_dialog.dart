@@ -28,14 +28,14 @@ class CustomAlertDialog extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final TextTheme textTheme = theme.textTheme;
     final double width = MediaQuery.of(context).size.width;
-    final double buttonWidth = (width - 32.0 - 48.0) / 2 - 8.0;
+    final double buttonWidth = (width - 32 - 48) / 2 - 8;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
+      children: [
         if (content != null)
           Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Text(
               content!,
               textAlign: TextAlign.center,
@@ -44,22 +44,22 @@ class CustomAlertDialog extends StatelessWidget {
           ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
+          children: [
             if (cancelActionText != null)
               Padding(
-                padding: const EdgeInsets.only(right: 8.0),
+                padding: const EdgeInsets.only(right: 8),
                 child: SizedBox(
                   width: buttonWidth,
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                       side: BorderSide(color: theme.primaryColor),
                     ),
                     onPressed: () => Navigator.of(context).pop(false),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 11.0),
+                      padding: const EdgeInsets.symmetric(vertical: 11),
                       child: Text(
                         cancelActionText!,
                         style: textTheme.bodyText1!.copyWith(
@@ -73,21 +73,20 @@ class CustomAlertDialog extends StatelessWidget {
                 ),
               ),
             Padding(
-              padding:
-                  EdgeInsets.only(left: cancelActionText != null ? 8.0 : 0.0),
+              padding: EdgeInsets.only(left: cancelActionText != null ? 8 : 0),
               child: SizedBox(
                 width: buttonWidth,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     backgroundColor: theme.primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     side: BorderSide(color: theme.primaryColor),
                   ),
                   onPressed: () => Navigator.of(context).pop(true),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 11.0),
+                    padding: const EdgeInsets.symmetric(vertical: 11),
                     child: Text(
                       defaultActionText ?? AppLocalizations.of(context)!.ok,
                       style: textTheme.bodyText1!.copyWith(
@@ -108,17 +107,14 @@ class CustomAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(
-        insetPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20.0),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         title: Text(
           title,
