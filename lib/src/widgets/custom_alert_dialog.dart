@@ -43,7 +43,9 @@ class CustomAlertDialog extends StatelessWidget {
             ),
           ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: cancelActionText == null
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.spaceBetween,
           children: [
             if (cancelActionText != null)
               Padding(
