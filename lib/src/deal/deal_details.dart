@@ -5,7 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,6 +22,7 @@ import '../utils/date_time_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/deal_score_box.dart';
 import '../widgets/expandable_text.dart';
+import '../widgets/sign_in_dialog.dart';
 import '../widgets/slider_indicator.dart';
 import 'deal_comments.dart';
 import 'image_fullscreen.dart';
@@ -39,7 +39,7 @@ class DealDetails extends StatefulWidget {
   _DealDetailsState createState() => _DealDetailsState();
 }
 
-class _DealDetailsState extends State<DealDetails> with UiLoggy {
+class _DealDetailsState extends State<DealDetails> {
   late Deal _deal;
   late Future<List<Comment>?> _commentsFuture;
   late List<String> _images;
@@ -248,7 +248,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
             elevation: 3,
             onPressed: () {
               if (_user == null) {
-                loggy.warning('You need to log in!');
+                GetIt.I.get<SignInDialog>().showSignInDialog(context);
+
                 return;
               }
 
@@ -465,7 +466,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                   ? null
                   : () async {
                       if (_user == null) {
-                        loggy.warning('You need to log in!');
+                        GetIt.I.get<SignInDialog>().showSignInDialog(context);
+
                         return;
                       }
 
@@ -511,7 +513,8 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
                   ? null
                   : () async {
                       if (_user == null) {
-                        loggy.warning('You need to log in!');
+                        GetIt.I.get<SignInDialog>().showSignInDialog(context);
+
                         return;
                       }
 
@@ -586,7 +589,9 @@ class _DealDetailsState extends State<DealDetails> with UiLoggy {
             }
 
             return GestureDetector(
-              onTap: _user == null ? null : onTap,
+              onTap: _user == null
+                  ? () => GetIt.I.get<SignInDialog>().showSignInDialog(context)
+                  : onTap,
               child: Row(
                 children: <Widget>[
                   CachedNetworkImage(

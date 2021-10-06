@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
 import 'package:line_icons/line_icons.dart';
-import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 
 import '../models/comment.dart';
@@ -13,6 +12,7 @@ import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../widgets/error_indicator.dart';
+import '../widgets/sign_in_dialog.dart';
 import 'comment_paged_listview.dart';
 import 'post_comment.dart';
 
@@ -25,7 +25,7 @@ class DealComments extends StatefulWidget {
   _DealCommentsState createState() => _DealCommentsState();
 }
 
-class _DealCommentsState extends State<DealComments> with UiLoggy {
+class _DealCommentsState extends State<DealComments> {
   int commentsCount = -1;
   late MyUser? _user;
   late PagingController<int, Comment> _pagingController;
@@ -61,7 +61,8 @@ class _DealCommentsState extends State<DealComments> with UiLoggy {
 
   void onPostCommentTap() {
     if (_user == null) {
-      loggy.warning('You need to log in!');
+      GetIt.I.get<SignInDialog>().showSignInDialog(context);
+
       return;
     }
 

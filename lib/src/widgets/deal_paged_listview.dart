@@ -11,6 +11,7 @@ import '../models/user_controller_impl.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../widgets/deal_item.dart';
+import '../widgets/sign_in_dialog.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({
@@ -74,7 +75,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
 
   void onFavoriteButtonPressed(MyUser? user, String dealId, bool isFavorited) {
     if (user == null) {
-      loggy.warning('You need to log in!');
+      GetIt.I.get<SignInDialog>().showSignInDialog(context);
 
       return;
     }

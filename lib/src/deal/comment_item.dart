@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../models/comment.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../utils/date_time_util.dart';
+import '../widgets/sign_in_dialog.dart';
 import 'user_profile_dialog.dart';
 
 class CommentItem extends StatelessWidget {
@@ -29,7 +31,9 @@ class CommentItem extends StatelessWidget {
 
     Widget buildUserDetails() {
       return GestureDetector(
-        onTap: user == null ? null : () => _onUserTap(context, poster.id!),
+        onTap: () => user == null
+            ? GetIt.I.get<SignInDialog>().showSignInDialog(context)
+            : _onUserTap(context, poster.id!),
         child: Row(
           children: [
             CachedNetworkImage(
