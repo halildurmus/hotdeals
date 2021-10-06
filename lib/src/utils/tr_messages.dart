@@ -1,4 +1,4 @@
-import 'package:timeago/timeago.dart';
+import 'package:timeago/timeago.dart' show LookupMessages;
 
 /// Turkish messages for [timeago].
 class TrMessages implements LookupMessages {
