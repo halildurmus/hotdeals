@@ -36,6 +36,7 @@ import 'src/utils/crashlytics_printer.dart';
 import 'src/utils/custom_loggy_printer.dart';
 import 'src/utils/tr_messages.dart';
 import 'src/widgets/loading_dialog.dart';
+import 'src/widgets/sign_in_dialog.dart';
 
 void main() async {
   runZonedGuarded<Future<void>>(() async {
@@ -110,6 +111,7 @@ void main() async {
     getIt.registerSingleton<Categories>(Categories());
     getIt.registerSingleton<Stores>(Stores());
     getIt.registerSingleton<LoadingDialog>(const LoadingDialog());
+    getIt.registerSingleton<SignInDialog>(const SignInDialog());
 
     // Fetches categories and stores.
     try {
