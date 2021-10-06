@@ -49,8 +49,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final double width = MediaQuery.of(context).size.width;
+    final theme = Theme.of(context);
+    final width = MediaQuery.of(context).size.width;
 
     Future<void> _onRefresh() async {
       setState(() {});
@@ -65,22 +65,22 @@ class _ChatScreenState extends State<ChatScreen> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
-            children: <Widget>[
+            children: [
               Icon(
                 LineIcons.facebookMessenger,
                 color: theme.primaryColor,
-                size: 150.0,
+                size: 150,
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.youNeedToSignIn,
                 style: const TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Text(
                   AppLocalizations.of(context)!.youNeedToSignInToSee,
                   textAlign: TextAlign.center,
@@ -98,22 +98,22 @@ class _ChatScreenState extends State<ChatScreen> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
-            children: <Widget>[
+            children: [
               Icon(
                 LineIcons.facebookMessenger,
                 color: theme.primaryColor,
-                size: 150.0,
+                size: 150,
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 16),
               Text(
                 AppLocalizations.of(context)!.noChats,
                 style: const TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Text(
                   AppLocalizations.of(context)!.noActiveConversations,
                   textAlign: TextAlign.center,
@@ -128,21 +128,21 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget buildCircularProgressIndicator() {
       return const Padding(
-        padding: EdgeInsets.only(top: 16.0),
+        padding: EdgeInsets.only(top: 16),
         child: Center(child: CircularProgressIndicator()),
       );
     }
 
     Widget _buildBlockedText() {
       return Row(
-        children: <Widget>[
-          Icon(LineIcons.ban, size: 18.0, color: theme.errorColor),
-          const SizedBox(width: 4.0),
+        children: [
+          Icon(LineIcons.ban, size: 18, color: theme.errorColor),
+          const SizedBox(width: 4),
           Text(
             AppLocalizations.of(context)!.youCannotChatWithThisUser,
             style: TextStyle(
               color: theme.errorColor,
-              fontSize: 15.0,
+              fontSize: 15,
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -156,9 +156,9 @@ class _ChatScreenState extends State<ChatScreen> {
           const Icon(
             Icons.description,
             color: Color.fromRGBO(117, 117, 117, 1),
-            size: 18.0,
+            size: 18,
           ),
-          const SizedBox(width: 4.0),
+          const SizedBox(width: 4),
           SizedBox(
             width: width / 1.8,
             child: Text(
@@ -167,7 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
               softWrap: false,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 15.0,
+                fontSize: 15,
                 fontWeight: FontWeight.w300,
               ),
             ),
@@ -178,16 +178,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildImageText() {
       return Row(
-        children: <Widget>[
+        children: [
           const Icon(
             FontAwesomeIcons.solidImage,
             color: Color.fromRGBO(117, 117, 117, 1),
-            size: 16.0,
+            size: 16,
           ),
-          const SizedBox(width: 4.0),
+          const SizedBox(width: 4),
           Text(
             AppLocalizations.of(context)!.image,
-            style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
           ),
         ],
       );
@@ -201,7 +201,7 @@ class _ChatScreenState extends State<ChatScreen> {
           maxLines: 1,
           softWrap: false,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w300),
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
         ),
       );
     }
@@ -219,20 +219,12 @@ class _ChatScreenState extends State<ChatScreen> {
     Widget _buildUserNickname(String nickname) {
       return SizedBox(
         width: width / 1.8,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              nickname,
-              maxLines: 1,
-              softWrap: false,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        child: Text(
+          nickname,
+          maxLines: 1,
+          softWrap: false,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
       );
     }
@@ -249,27 +241,21 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildUnreadIndicator() {
       return Padding(
-        padding: const EdgeInsets.only(top: 8.0),
+        padding: const EdgeInsets.only(top: 8),
         child: CircleAvatar(
-          radius: 12.0,
-          backgroundColor: theme.primaryColor,
-          child: const Text(
-            '1',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 13.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          backgroundColor: theme.brightness == Brightness.dark
+              ? theme.primaryColor
+              : theme.primaryColorLight,
+          radius: 6,
         ),
       );
     }
 
     Widget _buildMessage(
         String docId, Json lastMessage, MyUser user, MyUser user2) {
-      final bool _lastMessageIsFile = lastMessage['type'] == 'file';
-      final bool _lastMessageIsImage = lastMessage['type'] == 'image';
-      final String _sentBy = lastMessage['author']['id'] as String;
+      final _lastMessageIsFile = lastMessage['type'] == 'file';
+      final _lastMessageIsImage = lastMessage['type'] == 'image';
+      final _sentBy = lastMessage['author']['id'] as String;
       bool _isMessageSeen;
       if (_sentBy != _user!.uid) {
         _isMessageSeen = (lastMessage['status'] as String) == 'seen';
@@ -295,20 +281,20 @@ class _ChatScreenState extends State<ChatScreen> {
           color: _isMessageSeen
               ? Colors.transparent
               : theme.primaryColor.withOpacity(.2),
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
+            children: [
               Row(
-                children: <Widget>[
+                children: [
                   _buildUserAvatar(user2.avatar!),
-                  const SizedBox(width: 10.0),
+                  const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+                    children: [
                       _buildUserNickname(user2.nickname!),
-                      const SizedBox(height: 4.0),
+                      const SizedBox(height: 4),
                       if (_isUserBlocked)
                         _buildBlockedText()
                       else if (_lastMessageIsFile)
@@ -323,7 +309,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
+                children: [
                   _buildMessageTime(_createdAt, _isMessageSeen),
                   if (!_isMessageSeen) _buildUnreadIndicator()
                 ],
@@ -342,11 +328,10 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (BuildContext context,
             AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (snapshot.hasData) {
-            final List<DocumentSnapshot<Json>> _items = snapshot.data!.docs;
+            final _items = snapshot.data!.docs;
 
             // Removes empty message docs.
-            _items.removeWhere((DocumentSnapshot<Json> e) =>
-                (e.get('latestMessage') as Json).isEmpty);
+            _items.removeWhere((e) => (e.get('latestMessage') as Json).isEmpty);
 
             if (_items.isEmpty) {
               return _buildNoChats();
@@ -363,7 +348,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     final String _docID = _items[index].id;
                     final String _user2Uid = ChatUtil.getUser2Uid(
                         docID: _docID, user1Uid: _user!.uid);
-                    final Json _latestMessage =
+                    final _latestMessage =
                         _items[index].get('latestMessage') as Json;
 
                     return FutureBuilder<MyUser>(
@@ -403,8 +388,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   },
                   separatorBuilder: (BuildContext context, int index) {
                     return const Padding(
-                      padding: EdgeInsets.only(left: 100.0, right: 16.0),
-                      child: Divider(height: 0.0),
+                      padding: EdgeInsets.only(left: 100, right: 16),
+                      child: Divider(height: 0),
                     );
                   },
                 );
@@ -426,17 +411,13 @@ class _ChatScreenState extends State<ChatScreen> {
             ? null
             : [
                 PopupMenuButton<_ChatPopup>(
-                  icon: const Icon(
-                    FontAwesomeIcons.ellipsisV,
-                    size: 20.0,
-                  ),
+                  icon: const Icon(FontAwesomeIcons.ellipsisV, size: 20),
                   onSelected: (_ChatPopup result) {
                     if (result == _ChatPopup.blockedUsers) {
                       Navigator.of(context).pushNamed(BlockedUsers.routeName);
                     }
                   },
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<_ChatPopup>>[
+                  itemBuilder: (BuildContext context) => [
                     PopupMenuItem<_ChatPopup>(
                       value: _ChatPopup.blockedUsers,
                       child: Text(AppLocalizations.of(context)!.blockedUsers),
