@@ -1,8 +1,6 @@
 import 'dart:async';
 
-StreamTransformer<bool, bool> debounce(
-  Duration debounceDuration,
-) {
+StreamTransformer<bool, bool> debounce(Duration debounceDuration) {
   bool _seenFirstData = false;
   Timer? _debounceTimer;
 
@@ -23,14 +21,9 @@ StreamTransformer<bool, bool> debounce(
   );
 }
 
-StreamTransformer<bool, bool> startsWith(
-  bool data,
-) {
+StreamTransformer<bool, bool> startsWith(bool data) {
   return StreamTransformer<bool, bool>(
-    (
-      Stream<bool> input,
-      bool cancelOnError,
-    ) {
+    (Stream<bool> input, bool cancelOnError) {
       StreamController<bool>? controller;
       late StreamSubscription<bool> subscription;
 
