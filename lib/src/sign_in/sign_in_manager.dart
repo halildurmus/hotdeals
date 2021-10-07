@@ -23,11 +23,7 @@ class SignInManager with NetworkLoggy {
     }
   }
 
-  Future<MyUser> signInWithFacebook() async {
-    return _signIn(auth.signInWithFacebook);
-  }
+  Future<MyUser> signInWithFacebook() async => _signIn(auth.signInWithFacebook);
 
-  Future<MyUser> signInWithGoogle() async {
-    return _signIn(auth.signInWithGoogle);
-  }
+  Future<MyUser> signInWithGoogle() async => _signIn(auth.signInWithGoogle);
 }

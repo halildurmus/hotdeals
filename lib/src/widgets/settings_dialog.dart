@@ -8,12 +8,10 @@ class SettingsDialog extends StatelessWidget {
   Widget _buildDialog() {
     return Dialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(20.0),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24),
         child: child,
       ),
     );

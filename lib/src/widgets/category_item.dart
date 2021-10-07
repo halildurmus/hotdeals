@@ -15,8 +15,8 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -44,8 +44,8 @@ class CategoryItem extends StatelessWidget {
           ),
           trailing: Icon(
             FontAwesomeIcons.chevronRight,
-            size: 20,
             color: theme.primaryColorLight,
+            size: 20,
           ),
         ),
       ),

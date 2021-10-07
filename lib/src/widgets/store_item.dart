@@ -32,10 +32,72 @@ class _StoreItemState extends State<StoreItem> {
     super.initState();
   }
 
+  Widget buildStoreLogo() {
+    final theme = Theme.of(context);
+
+    return Container(
+      color: theme.brightness == Brightness.dark ? Colors.white : null,
+      padding: theme.brightness == Brightness.dark
+          ? const EdgeInsets.all(3)
+          : EdgeInsets.zero,
+      height: 55,
+      width: 55,
+      child: CachedNetworkImage(
+        imageUrl: widget.store.logo,
+        imageBuilder: (BuildContext ctx, ImageProvider<Object> imageProvider) {
+          return Hero(
+            tag: widget.store.id!,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                image: DecorationImage(image: imageProvider),
+              ),
+            ),
+          );
+        },
+        placeholder: (BuildContext context, String url) =>
+            const SizedBox.square(dimension: 50),
+      ),
+    );
+  }
+
+  Widget buildStoreName() {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return Text(
+      widget.store.name,
+      style: textTheme.headline6!.copyWith(
+        color: theme.primaryColor,
+        fontSize: 18,
+      ),
+    );
+  }
+
+  Widget buildNumberOfDeals() {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return FutureBuilder<int?>(
+      future: numberOfDealsFuture,
+      builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
+        String dealsText = '...';
+
+        if (snapshot.hasData) {
+          dealsText = snapshot.data!.toString();
+        }
+
+        return Text(
+          AppLocalizations.of(context)!
+              .dealCount(dealsText == '...' ? 0 : int.parse(dealsText)),
+          style: textTheme.subtitle2!.copyWith(color: theme.primaryColorLight),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
 
     return Material(
       color: theme.backgroundColor,
@@ -48,58 +110,12 @@ class _StoreItemState extends State<StoreItem> {
           splashColor: theme.primaryColorLight.withOpacity(.1),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                color:
-                    theme.brightness == Brightness.dark ? Colors.white : null,
-                padding: theme.brightness == Brightness.dark
-                    ? const EdgeInsets.all(3)
-                    : EdgeInsets.zero,
-                height: 55,
-                width: 55,
-                child: CachedNetworkImage(
-                  imageUrl: widget.store.logo,
-                  imageBuilder:
-                      (BuildContext ctx, ImageProvider<Object> imageProvider) {
-                    return Hero(
-                      tag: widget.store.id!,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(image: imageProvider),
-                        ),
-                      ),
-                    );
-                  },
-                  placeholder: (BuildContext context, String url) =>
-                      const SizedBox(height: 50, width: 50),
-                ),
-              ),
+            children: [
+              buildStoreLogo(),
               const SizedBox(height: 8),
-              Text(
-                widget.store.name,
-                style: textTheme.headline6!.copyWith(
-                  color: theme.primaryColor,
-                  fontSize: 18,
-                ),
-              ),
+              buildStoreName(),
               const SizedBox(height: 8),
-              FutureBuilder<int?>(
-                future: numberOfDealsFuture,
-                builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
-                  String dealsText = '...';
-
-                  if (snapshot.hasData) {
-                    dealsText = snapshot.data!.toString();
-                  }
-
-                  return Text(
-                    AppLocalizations.of(context)!.dealCount(
-                        dealsText == '...' ? 0 : int.parse(dealsText)),
-                    style: textTheme.subtitle2!
-                        .copyWith(color: theme.primaryColorLight),
-                  );
-                },
-              ),
+              buildNumberOfDeals(),
             ],
           ),
         ),

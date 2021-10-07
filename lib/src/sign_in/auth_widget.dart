@@ -18,10 +18,29 @@ class AuthWidget extends StatelessWidget with UiLoggy {
 
   final AsyncSnapshot<MyUser?> userSnapshot;
 
+  Widget buildCircularProgressIndicator(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
+        ),
+      ),
+    );
+  }
+
+  Widget buildErrorWidget(BuildContext context) {
+    return Scaffold(
+      body: ErrorIndicatorUtil.buildFirstPageError(
+        context,
+        onTryAgain: () => (context as Element).markNeedsBuild(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
     Future<void> _saveFcmTokenToDatabase(String token) async {
       final String userId = context.read<UserControllerImpl>().user!.id!;
 
@@ -32,27 +51,8 @@ class AuthWidget extends StatelessWidget with UiLoggy {
       await context.read<UserControllerImpl>().getUser();
     }
 
-    Widget buildCircularProgressIndicator() {
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
-          ),
-        ),
-      );
-    }
-
-    Widget buildErrorWidget() {
-      return Scaffold(
-        body: ErrorIndicatorUtil.buildFirstPageError(
-          context,
-          onTryAgain: () => (context as Element).markNeedsBuild(),
-        ),
-      );
-    }
-
     if (userSnapshot.hasData) {
-      final Future<MyUser?> userFuture =
+      final userFuture =
           Provider.of<UserControllerImpl>(context, listen: false).getUser();
 
       return FutureBuilder<MyUser?>(
@@ -74,10 +74,10 @@ class AuthWidget extends StatelessWidget with UiLoggy {
           } else if (snapshot.hasError) {
             return const HomeScreen();
           } else if (snapshot.connectionState == ConnectionState.done) {
-            return buildErrorWidget();
+            return buildErrorWidget(context);
           }
 
-          return buildCircularProgressIndicator();
+          return buildCircularProgressIndicator(context);
         },
       );
     }

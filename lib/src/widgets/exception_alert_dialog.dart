@@ -6,12 +6,12 @@ import 'custom_alert_dialog.dart';
 class ExceptionAlertDialog extends CustomAlertDialog {
   ExceptionAlertDialog({
     Key? key,
-    required String title,
     required PlatformException exception,
+    required String title,
   }) : super(
           key: key,
-          title: title,
           content: message(exception) ?? '',
+          title: title,
         );
 
   static String? message(PlatformException exception) {

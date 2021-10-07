@@ -4,27 +4,27 @@ import 'package:line_icons/line_icons.dart';
 class SettingsListItem extends StatelessWidget {
   const SettingsListItem({
     Key? key,
-    required this.onTap,
-    required this.title,
-    this.subtitle,
     this.hasNavigation = true,
     this.icon,
     this.image,
+    required this.onTap,
+    this.subtitle,
+    required this.title,
   })  : assert(icon != null || image != null,
             'You need to specify either an icon or an image!'),
         super(key: key);
 
-  final VoidCallback onTap;
+  final bool hasNavigation;
   final IconData? icon;
   final Widget? image;
-  final String title;
+  final VoidCallback onTap;
   final String? subtitle;
-  final bool hasNavigation;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     return Card(
       child: InkWell(

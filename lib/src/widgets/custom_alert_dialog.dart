@@ -6,16 +6,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
     Key? key,
-    required this.title,
-    this.content,
     this.cancelActionText,
+    this.content,
     this.defaultActionText,
+    required this.title,
   }) : super(key: key);
 
-  final String title;
-  final String? content;
   final String? cancelActionText;
+  final String? content;
   final String? defaultActionText;
+  final String title;
 
   Future<bool?> show(BuildContext context) async {
     return showDialog<bool>(
@@ -25,10 +25,10 @@ class CustomAlertDialog extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
-    final double width = MediaQuery.of(context).size.width;
-    final double buttonWidth = (width - 32 - 48) / 2 - 8;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final width = MediaQuery.of(context).size.width;
+    final buttonWidth = (width - 32 - 48) / 2 - 8;
 
     return Column(
       mainAxisSize: MainAxisSize.min,

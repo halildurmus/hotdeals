@@ -18,8 +18,7 @@ class AuthWidgetBuilder extends StatelessWidget with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService =
-        Provider.of<AuthService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     return StreamBuilder<MyUser?>(
       stream: authService.onAuthStateChanged,

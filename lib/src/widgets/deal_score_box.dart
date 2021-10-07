@@ -10,25 +10,18 @@ class DealScoreBox extends StatelessWidget {
       return Colors.red;
     } else if (dealScore == 0) {
       return Colors.grey;
-    } else {
-      return const Color(0xFF006400).withOpacity(.8);
-    }
-  }
-
-  String _getDealScore(int dealScore) {
-    String str = '';
-
-    if (dealScore > 0) {
-      str = '+';
     }
 
-    return str + dealScore.toString();
+    return const Color(0xFF006400).withOpacity(.8);
   }
+
+  String _getDealScore() =>
+      dealScore > 0 ? '+$dealScore' : dealScore.toString();
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     return Container(
       decoration: BoxDecoration(
@@ -37,10 +30,8 @@ class DealScoreBox extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       child: Text(
-        _getDealScore(dealScore),
-        style: textTheme.bodyText2!.copyWith(
-          color: Colors.green.shade50,
-        ),
+        _getDealScore(),
+        style: textTheme.bodyText2!.copyWith(color: Colors.green.shade50),
       ),
     );
   }

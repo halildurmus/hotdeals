@@ -46,9 +46,9 @@ class _DealItemState extends State<DealItem> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
-    final double deviceWidth = MediaQuery.of(context).size.width;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final deviceWidth = MediaQuery.of(context).size.width;
     final Deal deal = widget.deal;
 
     Widget buildDealCoverPhoto() {
@@ -61,9 +61,7 @@ class _DealItemState extends State<DealItem> {
         margin: const EdgeInsets.only(left: 12, right: 4),
         decoration: BoxDecoration(
           color: theme.brightness == Brightness.dark ? Colors.white : null,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(4),
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),
         child: Hero(
           tag: deal.id!,
@@ -102,7 +100,7 @@ class _DealItemState extends State<DealItem> {
 
     Widget buildDealPrice() {
       return Row(
-        children: <Widget>[
+        children: [
           Text(
             '\$${deal.discountPrice.toStringAsFixed(0)}',
             style: textTheme.headline5!.copyWith(
@@ -114,9 +112,10 @@ class _DealItemState extends State<DealItem> {
           Text(
             '\$${deal.price.toStringAsFixed(0)}',
             style: textTheme.subtitle2!.copyWith(
-                color: theme.errorColor,
-                decoration: TextDecoration.lineThrough,
-                fontSize: 12),
+              color: theme.errorColor,
+              decoration: TextDecoration.lineThrough,
+              fontSize: 12,
+            ),
           ),
         ],
       );
@@ -124,7 +123,7 @@ class _DealItemState extends State<DealItem> {
 
     Widget buildDealScore() {
       return Row(
-        children: <Widget>[
+        children: [
           const Icon(FontAwesomeIcons.thumbsUp, size: 14),
           const SizedBox(width: 4),
           Text(
@@ -188,7 +187,7 @@ class _DealItemState extends State<DealItem> {
           padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               buildDealTitle(),
               const SizedBox(height: 3),
               buildDealCategory(),
@@ -196,7 +195,7 @@ class _DealItemState extends State<DealItem> {
               buildDealPrice(),
               const SizedBox(height: 10),
               Row(
-                children: <Widget>[
+                children: [
                   buildDealScore(),
                   buildSeparator(),
                   buildCommentsCount(),
@@ -212,13 +211,13 @@ class _DealItemState extends State<DealItem> {
 
     Widget buildFavoriteButton() {
       return Positioned(
-        top: 88,
         right: 0,
+        top: 88,
         child: FloatingActionButton(
+          onPressed: widget.onFavoriteButtonPressed,
+          backgroundColor: theme.backgroundColor,
           heroTag: 'btn${widget.index}',
           mini: true,
-          backgroundColor: theme.backgroundColor,
-          onPressed: widget.onFavoriteButtonPressed,
           child: Icon(
             widget.isFavorited
                 ? FontAwesomeIcons.solidHeart
@@ -232,8 +231,8 @@ class _DealItemState extends State<DealItem> {
 
     Widget buildInactiveMessage() {
       return Positioned(
-        top: 124,
         left: 0,
+        top: 124,
         child: Text(widget.inactiveMessage!),
       );
     }
@@ -264,7 +263,7 @@ class _DealItemState extends State<DealItem> {
       child: Opacity(
         opacity: widget.inactiveMessage == null ? 1 : .6,
         child: Stack(
-          children: <Widget>[
+          children: [
             SizedBox(
               height: 120,
               child: Card(
@@ -279,10 +278,7 @@ class _DealItemState extends State<DealItem> {
                   highlightColor: theme.primaryColorLight.withOpacity(.1),
                   splashColor: theme.primaryColorLight.withOpacity(.1),
                   child: Row(
-                    children: <Widget>[
-                      buildDealCoverPhoto(),
-                      buildDealDetails(),
-                    ],
+                    children: [buildDealCoverPhoto(), buildDealDetails()],
                   ),
                 ),
               ),
