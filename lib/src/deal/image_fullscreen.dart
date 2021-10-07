@@ -32,7 +32,7 @@ class _MyImageScreen extends State<ImageFullScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     final List<Widget> items = widget.images.map((String item) {
       return PhotoView(
         imageProvider: NetworkImage(item),
@@ -57,7 +57,7 @@ class _MyImageScreen extends State<ImageFullScreen> {
       return CarouselSlider(
         items: items,
         options: CarouselOptions(
-          viewportFraction: 1.0,
+          viewportFraction: 1,
           height: double.infinity,
           enlargeCenterPage: true,
           initialPage: currentIndex,
@@ -77,10 +77,10 @@ class _MyImageScreen extends State<ImageFullScreen> {
     Widget buildBody() {
       return Stack(
         alignment: Alignment.topLeft,
-        children: <Widget>[
+        children: [
           Stack(
             alignment: Alignment.bottomCenter,
-            children: <Widget>[
+            children: [
               buildSlider(),
               if (images.length > 1) buildSliderIndicator(),
             ],

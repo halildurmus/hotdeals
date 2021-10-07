@@ -108,7 +108,7 @@ class _DealItemState extends State<DealItem> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(width: 4.0),
+          const SizedBox(width: 4),
           Text(
             '\$${deal.price.toStringAsFixed(0)}',
             style: textTheme.subtitle2!.copyWith(
@@ -136,7 +136,7 @@ class _DealItemState extends State<DealItem> {
 
     Widget buildSeparator() {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Text(
           '|',
           style: textTheme.subtitle2!.copyWith(fontWeight: FontWeight.w300),

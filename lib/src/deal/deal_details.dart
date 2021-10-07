@@ -55,7 +55,7 @@ class _DealDetailsState extends State<DealDetails> {
   @override
   void initState() {
     _deal = widget.deal;
-    _images = <String>[_deal.coverPhoto, ..._deal.photos!];
+    _images = [_deal.coverPhoto, ..._deal.photos!];
     // Prefetch and caches the images.
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       for (final String image in _images) {
@@ -113,8 +113,8 @@ class _DealDetailsState extends State<DealDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double deviceHeight = MediaQuery.of(context).size.height;
 
@@ -154,19 +154,15 @@ class _DealDetailsState extends State<DealDetails> {
         child: AppBar(
           centerTitle: true,
           title: Text(_deal.title),
-          actions: <PopupMenuButton<_DealPopup>>[
+          actions: [
             PopupMenuButton<_DealPopup>(
-              icon: const Icon(
-                FontAwesomeIcons.ellipsisV,
-                size: 20.0,
-              ),
+              icon: const Icon(FontAwesomeIcons.ellipsisV, size: 20),
               onSelected: (_DealPopup result) {
                 if (result == _DealPopup.reportDeal) {
                   _onPressedReport();
                 }
               },
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<_DealPopup>>[
+              itemBuilder: (BuildContext context) => [
                 PopupMenuItem<_DealPopup>(
                   value: _DealPopup.reportDeal,
                   child: Text(AppLocalizations.of(context)!.reportDeal),
@@ -181,11 +177,11 @@ class _DealDetailsState extends State<DealDetails> {
     Widget buildDealImages() {
       return Stack(
         alignment: Alignment.bottomCenter,
-        children: <Widget>[
+        children: [
           CarouselSlider(
             items: carouselItems,
             options: CarouselOptions(
-              viewportFraction: 1.0,
+              viewportFraction: 1,
               height: deviceHeight / 2,
               enlargeCenterPage: true,
               onPageChanged: (int i, CarouselPageChangedReason reason) {
@@ -230,7 +226,7 @@ class _DealDetailsState extends State<DealDetails> {
             );
           },
           placeholder: (BuildContext context, String url) =>
-              const SizedBox(height: 40, width: 40),
+              const SizedBox.square(dimension: 40),
         ),
       );
     }
@@ -288,15 +284,15 @@ class _DealDetailsState extends State<DealDetails> {
 
     Widget buildDealDetails() {
       return Column(
-        children: <Widget>[
+        children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
+              children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Text(
                       DateTimeUtil.formatDateTime(_deal.createdAt!,
                           useShortMessages: false),
@@ -309,7 +305,7 @@ class _DealDetailsState extends State<DealDetails> {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      children: <Widget>[
+                      children: [
                         DealScoreBox(dealScore: _deal.dealScore!),
                         const SizedBox(width: 5),
                         Text(
@@ -322,7 +318,7 @@ class _DealDetailsState extends State<DealDetails> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
                             '•',
                             style: textTheme.bodyText2!.copyWith(
@@ -355,7 +351,7 @@ class _DealDetailsState extends State<DealDetails> {
                           },
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
                             '•',
                             style: textTheme.bodyText2!.copyWith(
@@ -390,10 +386,10 @@ class _DealDetailsState extends State<DealDetails> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
+              children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     SizedBox(
                       width: deviceWidth * .7,
                       child: Text(
@@ -418,14 +414,14 @@ class _DealDetailsState extends State<DealDetails> {
                     ),
                     const SizedBox(height: 5),
                     Row(
-                      children: <Widget>[
+                      children: [
                         Text(
                           r'$' + _deal.discountPrice.toStringAsFixed(0),
                           style: textTheme.headline5!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(width: 8.0),
+                        const SizedBox(width: 8),
                         Text(
                           r'$' + _deal.price.toStringAsFixed(0),
                           style: textTheme.subtitle2!.copyWith(
@@ -451,7 +447,7 @@ class _DealDetailsState extends State<DealDetails> {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          children: <Widget>[
+          children: [
             Text(
               AppLocalizations.of(context)!.didYouLikeTheDeal,
               style: textTheme.bodyText2!.copyWith(
@@ -572,7 +568,7 @@ class _DealDetailsState extends State<DealDetails> {
 
     Widget buildUserDetails() {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: FutureBuilder<MyUser>(
           future: GetIt.I.get<SpringService>().getUserById(id: _deal.postedBy!),
           builder: (BuildContext context, AsyncSnapshot<MyUser> snapshot) {
@@ -593,7 +589,7 @@ class _DealDetailsState extends State<DealDetails> {
                   ? () => GetIt.I.get<SignInDialog>().showSignInDialog(context)
                   : onTap,
               child: Row(
-                children: <Widget>[
+                children: [
                   CachedNetworkImage(
                     imageUrl: avatar,
                     imageBuilder: (BuildContext ctx,
@@ -605,7 +601,7 @@ class _DealDetailsState extends State<DealDetails> {
                   const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+                    children: [
                       Container(
                         decoration: BoxDecoration(
                           borderRadius:
@@ -652,7 +648,7 @@ class _DealDetailsState extends State<DealDetails> {
               controller: _scrollController,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
+                children: [
                   buildDealImages(),
                   buildDealDetails(),
                   buildRateDeal(),

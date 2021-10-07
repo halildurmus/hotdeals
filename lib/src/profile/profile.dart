@@ -26,8 +26,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final MyUser? user = Provider.of<UserControllerImpl>(context).user;
 
     Widget buildAvatar() {
@@ -50,11 +50,11 @@ class _ProfileState extends State<Profile> {
 
     Widget buildUpdateProfileButton() {
       return SizedBox(
-        width: 150.0,
+        width: 150,
         child: OutlinedButton(
           style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
+              borderRadius: BorderRadius.circular(30),
             ),
           ),
           onPressed: () =>
@@ -66,18 +66,18 @@ class _ProfileState extends State<Profile> {
 
     Widget buildProfileDetails() {
       return Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Row(
-          children: <Widget>[
+          children: [
             buildAvatar(),
-            const SizedBox(width: 20.0),
+            const SizedBox(width: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+              children: [
                 Text(user!.nickname!, style: textTheme.headline6),
-                const SizedBox(height: 5.0),
+                const SizedBox(height: 5),
                 Text(user.email!, style: textTheme.caption),
-                const SizedBox(height: 5.0),
+                const SizedBox(height: 5),
                 buildUpdateProfileButton(),
               ],
             ),
@@ -121,11 +121,10 @@ class _ProfileState extends State<Profile> {
       return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.profile),
-          actions: <IconButton>[
+          actions: [
             IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(SettingsView.routeName);
-              },
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(SettingsView.routeName),
               icon: LineIcon.cog(),
             ),
           ],
@@ -134,7 +133,7 @@ class _ProfileState extends State<Profile> {
           length: 3,
           child: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool value) {
-              return <SliverToBoxAdapter>[
+              return [
                 SliverToBoxAdapter(child: buildProfileDetails()),
                 SliverToBoxAdapter(child: buildTabBar()),
               ];

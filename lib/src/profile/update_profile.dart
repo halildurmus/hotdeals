@@ -71,26 +71,26 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24.0),
-          topRight: Radius.circular(24.0),
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
         ),
       ),
       builder: (BuildContext ctx) {
-        final TextTheme textTheme = Theme.of(ctx).textTheme;
+        final textTheme = Theme.of(ctx).textTheme;
 
         return Wrap(
-          children: <Widget>[
+          children: [
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
+                children: [
                   GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: const Icon(
                       FontAwesomeIcons.times,
                       color: Color.fromRGBO(148, 148, 148, 1),
-                      size: 20.0,
+                      size: 20,
                     ),
                   ),
                   Padding(
@@ -147,8 +147,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final MyUser user = Provider.of<UserControllerImpl>(context).user!;
 
     Future<void> nicknameOnTap() {
@@ -160,15 +160,15 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
               return Dialog(
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(20.0),
+                    Radius.circular(20),
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
+                    children: [
                       TextFormField(
                         controller: nicknameController,
                         onChanged: (String? text) {
@@ -200,7 +200,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                           style: ElevatedButton.styleFrom(
                             primary: theme.colorScheme.secondary,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                              borderRadius: BorderRadius.circular(30),
                             ),
                           ),
                           child: Text(
@@ -222,7 +222,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.updateProfile)),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Text(

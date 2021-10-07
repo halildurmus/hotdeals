@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         locale: settingsController.locale,
-        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
       Future<void> onTap() async {
         try {
           await Future.wait<dynamic>(
-            <Future<dynamic>>[
+            [
               GetIt.I
                   .get<Categories>()
                   .getCategories()

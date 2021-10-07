@@ -31,7 +31,7 @@ class _PostDealState extends State<PostDeal> {
   late TextEditingController priceController;
   late TextEditingController discountPriceController;
   late TextEditingController descriptionController;
-  List<UploadJob> dealImages = <UploadJob>[];
+  List<UploadJob> dealImages = [];
 
   void dealImageCallback({
     required List<UploadJob> uploadJobs,
@@ -66,8 +66,8 @@ class _PostDealState extends State<PostDeal> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final double deviceWidth = MediaQuery.of(context).size.width;
 
     Widget buildPictureUpload() {
@@ -119,7 +119,7 @@ class _PostDealState extends State<PostDeal> {
           return DropdownMenuItem<Category>(
             value: value,
             child: Row(
-              children: <Widget>[
+              children: [
                 if (selectedCategory == value)
                   Icon(LineIcons.check, color: theme.primaryColor)
                 else
@@ -154,7 +154,7 @@ class _PostDealState extends State<PostDeal> {
           return DropdownMenuItem<Store>(
             value: value,
             child: Row(
-              children: <Widget>[
+              children: [
                 if (selectedStore == value)
                   Icon(LineIcons.check, color: theme.primaryColor)
                 else
@@ -201,7 +201,7 @@ class _PostDealState extends State<PostDeal> {
 
       final String coverPhoto =
           await dealImages.first.storageReference!.getDownloadURL();
-      final List<String> photos = <String>[];
+      final List<String> photos = [];
       for (int i = 1; i < dealImages.length - 1; i++) {
         photos.add(await dealImages[i].storageReference!.getDownloadURL());
       }
@@ -272,7 +272,7 @@ class _PostDealState extends State<PostDeal> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
+            children: [
               const SizedBox(height: 5),
               buildPictureUpload(),
               const SizedBox(height: 20),
@@ -394,7 +394,7 @@ class _PostDealState extends State<PostDeal> {
     Widget buildBody() {
       return SingleChildScrollView(
         child: Column(
-          children: <Widget>[
+          children: [
             buildForm(),
           ],
         ),

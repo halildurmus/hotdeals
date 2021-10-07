@@ -38,8 +38,8 @@ class _NoInternetState extends State<NoInternet> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     Widget buildHeader() {
       return Positioned(
@@ -52,7 +52,7 @@ class _NoInternetState extends State<NoInternet> {
               isConnected ? const Color(0xFF00EE44) : const Color(0xFFEE4400),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               Text(
                 isConnected
                     ? AppLocalizations.of(context)!.online
@@ -80,7 +80,7 @@ class _NoInternetState extends State<NoInternet> {
             ? const CircularProgressIndicator()
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: [
                   Icon(
                     FontAwesomeIcons.wifi,
                     color: theme.primaryColorLight,
@@ -103,7 +103,7 @@ class _NoInternetState extends State<NoInternet> {
       ),
       body: Stack(
         fit: StackFit.expand,
-        children: <Widget>[
+        children: [
           buildHeader(),
           buildBody(),
         ],

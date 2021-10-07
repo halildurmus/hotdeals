@@ -41,8 +41,8 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
   @override
   Widget build(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     Future<void> sendReport() async {
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
@@ -84,7 +84,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
 
     return Dialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: StatefulBuilder(
         builder: (BuildContext context, void Function(VoidCallback) setState) {
@@ -92,7 +92,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
             padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
+              children: [
                 Text(
                   AppLocalizations.of(context)!.reportDeal,
                   style: textTheme.headline6,
@@ -152,7 +152,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                       style: ElevatedButton.styleFrom(
                         primary: theme.colorScheme.secondary,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                       child: Text(AppLocalizations.of(context)!.reportDeal),

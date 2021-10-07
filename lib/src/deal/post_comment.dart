@@ -41,8 +41,8 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final double deviceWidth = MediaQuery.of(context).size.width;
 
     Future<void> onPressed() async {
@@ -118,7 +118,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
             style: ElevatedButton.styleFrom(
               primary: theme.colorScheme.secondary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(30),
               ),
             ),
             child: Text(AppLocalizations.of(context)!.postComment),
@@ -132,7 +132,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+          children: [
             TextField(
               controller: commentController,
               onChanged: (String? text) {
@@ -160,7 +160,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+        children: [
           Text(AppLocalizations.of(context)!.postAComment,
               style: textTheme.headline6),
           const SizedBox(height: 20),

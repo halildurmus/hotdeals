@@ -60,7 +60,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
             onPressed: () => confirmUnblockUser(context, user.uid),
             style: OutlinedButton.styleFrom(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.circular(30),
               ),
               side: BorderSide(color: theme.errorColor),
             ),
@@ -94,11 +94,11 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
         final SnackBar snackBar = SnackBar(
           content: Row(
-            children: <Widget>[
-              const Icon(FontAwesomeIcons.checkCircle, size: 20.0),
+            children: [
+              const Icon(FontAwesomeIcons.checkCircle, size: 20),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     AppLocalizations.of(context)!.successfullyUnblocked,
                     overflow: TextOverflow.ellipsis,
@@ -115,11 +115,11 @@ class _BlockedUsersState extends State<BlockedUsers> {
       } else {
         final SnackBar snackBar = SnackBar(
           content: Row(
-            children: <Widget>[
-              const Icon(FontAwesomeIcons.exclamationCircle, size: 20.0),
+            children: [
+              const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     AppLocalizations.of(context)!
                         .anErrorOccurredWhileUnblocking,

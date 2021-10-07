@@ -133,7 +133,7 @@ class _DealCommentsState extends State<DealComments> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               buildCommentCounts(),
-              const SizedBox(width: 10.0),
+              const SizedBox(width: 10),
               buildPostCommentButton(),
             ],
           ),

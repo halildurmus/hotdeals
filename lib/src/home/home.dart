@@ -18,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int activeScreen = 0;
 
-  final List<Widget> screens = <Widget>[
+  final List<Widget> screens = [
     const Deals(),
     const Browse(),
     const ChatScreen(),

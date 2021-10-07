@@ -35,7 +35,7 @@ class _DealsState extends State<Deals> {
   late FloatingSearchBarController _searchBarController;
   bool searchErrorOccurred = false;
   bool searchProgress = false;
-  final List<String> searchResults = <String>[];
+  final List<String> searchResults = [];
 
   @override
   void initState() {
@@ -79,7 +79,7 @@ class _DealsState extends State<Deals> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     final MyUser? user = Provider.of<UserControllerImpl>(context).user;
 
     final List<String> _filterChoices = [
@@ -120,7 +120,7 @@ class _DealsState extends State<Deals> {
                     ? Colors.transparent
                     : theme.primaryColor,
               ),
-              pressElevation: 0.0,
+              pressElevation: 0,
               elevation: _selectedFilter == index ? 4 : 0,
               backgroundColor: theme.backgroundColor,
               selectedColor: theme.primaryColor,
@@ -279,10 +279,8 @@ class _DealsState extends State<Deals> {
         },
         onQueryChanged: (String query) => searchDeals(query),
         transition: CircularFloatingSearchBarTransition(),
-        actions: <Widget>[
-          FloatingSearchBarAction.searchToClear(showIfClosed: false)
-        ],
-        leadingActions: <Widget>[
+        actions: [FloatingSearchBarAction.searchToClear(showIfClosed: false)],
+        leadingActions: [
           FloatingSearchBarAction.back(),
           FloatingSearchBarAction.icon(
             onTap: () {},

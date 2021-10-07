@@ -64,8 +64,8 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     Widget getLanguageImage(Locale locale) {
       late String svgLocation;
@@ -106,7 +106,7 @@ class SettingsView extends StatelessWidget {
               return SettingsDialog(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
+                  children: [
                     RadioItem<Locale>(
                       onChanged: controller.updateLocale,
                       onTap: () => controller.updateLocale(kLocaleEnglish),
@@ -123,14 +123,14 @@ class SettingsView extends StatelessWidget {
                       text: AppLocalizations.of(context)!.turkish,
                       iconPath: 'assets/icons/tr.svg',
                     ),
-                    const SizedBox(height: 15.0),
+                    const SizedBox(height: 15),
                     SizedBox(
-                      height: 45.0,
+                      height: 45,
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
+                            borderRadius: BorderRadius.circular(30),
                           ),
                         ),
                         onPressed: () => Navigator.of(context).pop(),
@@ -157,7 +157,7 @@ class SettingsView extends StatelessWidget {
           return SettingsDialog(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
+              children: [
                 RadioItem<ThemeMode>(
                   onChanged: controller.updateThemeMode,
                   onTap: () {
@@ -188,14 +188,14 @@ class SettingsView extends StatelessWidget {
                   icon: Icons.dark_mode,
                   text: AppLocalizations.of(context)!.dark,
                 ),
-                const SizedBox(height: 15.0),
+                const SizedBox(height: 15),
                 SizedBox(
-                  height: 45.0,
+                  height: 45,
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     onPressed: () => Navigator.of(context).pop(),
@@ -215,7 +215,7 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
       body: Column(
-        children: <Widget>[
+        children: [
           SettingsListItem(
             image: getLanguageImage(controller.locale),
             title: AppLocalizations.of(context)!.language,

@@ -44,7 +44,7 @@ class CommentItem extends StatelessWidget {
               placeholder: (BuildContext context, String url) =>
                   const CircleAvatar(radius: 16),
             ),
-            const SizedBox(width: 8.0),
+            const SizedBox(width: 8),
             Text(poster.nickname!, style: textTheme.subtitle2)
           ],
         ),

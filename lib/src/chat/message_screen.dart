@@ -108,11 +108,11 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         builder: (_) {
           return Scaffold(
             appBar: AppBar(
-              elevation: 0.0,
+              elevation: 0,
               title: Text(message.name),
-              titleSpacing: 0.0,
+              titleSpacing: 0,
               leading: IconButton(
-                icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20.0),
+                icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
@@ -152,7 +152,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   @override
   Widget build(BuildContext context) {
     final Locale currentLocale = GetIt.I.get<SettingsController>().locale;
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     final MyUser _user = Provider.of<UserControllerImpl>(context).user!;
     final bool _isUser2Blocked = _user.blockedUsers!.contains(widget.user2.uid);
     final bool _isUserBlocked = widget.user2.blockedUsers!.contains(_user.uid);
@@ -281,18 +281,18 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     Widget _buildAttachmentBottomSheet() {
       return SafeArea(
         child: Wrap(
-          children: <Widget>[
+          children: [
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
+                children: [
                   GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: const Icon(
                       FontAwesomeIcons.times,
                       color: Color.fromRGBO(148, 148, 148, 1),
-                      size: 20.0,
+                      size: 20,
                     ),
                   ),
                   Padding(
@@ -336,8 +336,8 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         context: context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24.0),
-            topRight: Radius.circular(24.0),
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
           ),
         ),
         builder: (BuildContext context) => _buildAttachmentBottomSheet(),

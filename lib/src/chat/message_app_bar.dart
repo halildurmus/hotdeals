@@ -44,18 +44,18 @@ class _MessageAppBarState extends State<MessageAppBar> {
         final SnackBar snackBar = SnackBar(
           backgroundColor: Theme.of(context).backgroundColor,
           behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(20),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(30.0),
+              Radius.circular(30),
             ),
           ),
           content: Row(
-            children: <Widget>[
-              const Icon(LineIcons.ban, size: 24.0),
+            children: [
+              const Icon(LineIcons.ban, size: 24),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     AppLocalizations.of(context)!.successfullyBlocked,
                     overflow: TextOverflow.ellipsis,
@@ -72,18 +72,18 @@ class _MessageAppBarState extends State<MessageAppBar> {
         final SnackBar snackBar = SnackBar(
           backgroundColor: Theme.of(context).backgroundColor,
           behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(20),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(30.0),
+              Radius.circular(30),
             ),
           ),
           content: Row(
-            children: <Widget>[
-              const Icon(FontAwesomeIcons.exclamationCircle, size: 20.0),
+            children: [
+              const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     AppLocalizations.of(context)!.anErrorOccurredWhileBlocking,
                     overflow: TextOverflow.ellipsis,
@@ -120,18 +120,18 @@ class _MessageAppBarState extends State<MessageAppBar> {
         final SnackBar snackBar = SnackBar(
           backgroundColor: Theme.of(context).backgroundColor,
           behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(20),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
-              Radius.circular(30.0),
+              Radius.circular(30),
             ),
           ),
           content: Row(
-            children: <Widget>[
-              const Icon(FontAwesomeIcons.exclamationCircle, size: 20.0),
+            children: [
+              const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.only(left: 8),
                   child: Text(
                     AppLocalizations.of(context)!
                         .anErrorOccurredWhileUnblocking,
@@ -151,8 +151,8 @@ class _MessageAppBarState extends State<MessageAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     final MyUser _user = Provider.of<UserControllerImpl>(context).user!;
     final bool _isUserBlocked = _user.blockedUsers!.contains(widget.user2.uid);
 
@@ -167,13 +167,13 @@ class _MessageAppBarState extends State<MessageAppBar> {
     return AppBar(
       titleSpacing: 0,
       leading: IconButton(
-        icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20.0),
+        icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
         onPressed: () => Navigator.of(context).pop(),
       ),
       title: GestureDetector(
         onTap: () {},
         child: Row(
-          children: <Widget>[
+          children: [
             CachedNetworkImage(
               imageUrl: widget.user2.avatar!,
               imageBuilder:
@@ -188,19 +188,16 @@ class _MessageAppBarState extends State<MessageAppBar> {
               overflow: TextOverflow.ellipsis,
               style: textTheme.bodyText2!.copyWith(
                 color: Colors.white,
-                fontSize: 16.0,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
       ),
-      actions: <Widget>[
+      actions: [
         PopupMenuButton<_MessagePopup>(
-          icon: const Icon(
-            FontAwesomeIcons.ellipsisV,
-            size: 20.0,
-          ),
+          icon: const Icon(FontAwesomeIcons.ellipsisV, size: 20),
           onSelected: (_MessagePopup result) {
             if (result == _MessagePopup.blockUser) {
               _confirmBlockUser(context);
@@ -210,8 +207,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
               _onPressedReport();
             }
           },
-          itemBuilder: (BuildContext context) =>
-              <PopupMenuEntry<_MessagePopup>>[
+          itemBuilder: (BuildContext context) => [
             PopupMenuItem<_MessagePopup>(
               value: _isUserBlocked
                   ? _MessagePopup.unblockUser

@@ -32,7 +32,7 @@ class SocialButton extends StatelessWidget {
     required this.onPressed,
     this.text,
     required this.icon,
-    this.iconSize = 25.0,
+    this.iconSize = 25,
     this.image,
     this.fontSize,
     this.textColor,
