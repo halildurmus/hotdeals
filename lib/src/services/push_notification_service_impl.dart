@@ -48,20 +48,6 @@ class PushNotificationServiceImpl extends ChangeNotifier
     );
   }
 
-  /// Calculates the unread notifications count.
-  @override
-  Future<int> calculateUnreadNotifications() async {
-    final List<PushNotification> notifications = await getAll();
-
-    for (PushNotification e in notifications) {
-      if (!e.isRead) {
-        unreadNotifications++;
-      }
-    }
-
-    return Future<int>.value(unreadNotifications);
-  }
-
   /// Inserts the notification into the database.
   @override
   Future<void> insert(PushNotification notification) async {

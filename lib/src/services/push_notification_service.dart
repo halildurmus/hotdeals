@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 
 import '../models/push_notification.dart';
@@ -10,7 +8,4 @@ import '../services/sqlite_service.dart';
 abstract class PushNotificationService extends SQLiteService<PushNotification>
     with ChangeNotifier {
   int unreadNotifications = 0;
-
-  /// Calculates the unread notifications count.
-  Future<int> calculateUnreadNotifications();
 }

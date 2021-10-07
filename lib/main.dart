@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:isolate';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -130,11 +129,6 @@ void main() async {
 
     // Loads the sqlite database.
     await getIt.get<PushNotificationService>().load();
-
-    // Calculates the unread notifications count if there is a signed in user.
-    if (FirebaseAuth.instance.currentUser != null) {
-      await getIt.get<PushNotificationService>().calculateUnreadNotifications();
-    }
 
     // Initializes a new SharedPreferences instance.
     final SharedPreferences prefs = await SharedPreferences.getInstance();
