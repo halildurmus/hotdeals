@@ -72,14 +72,14 @@ class SignInPage extends StatelessWidget {
   }
 
   Widget buildSignIn(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: [
           Text(
             AppLocalizations.of(context)!.signIn,
             style: textTheme.headline2!.copyWith(
@@ -87,51 +87,52 @@ class SignInPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 50.0),
+          const SizedBox(height: 50),
           SocialButton(
+            onPressed: () => signInWithFacebook(context),
             backgroundColor: const Color.fromRGBO(63, 91, 150, 1),
+            height: 48,
             icon: FontAwesomeIcons.facebook,
             text: AppLocalizations.of(context)!.continueWithFacebook,
-            onPressed: () => signInWithFacebook(context),
-            height: 48.0,
           ),
-          const SizedBox(height: 10.0),
+          const SizedBox(height: 10),
           SocialButton(
+            onPressed: () => signInWithGoogle(context),
             backgroundColor: const Color.fromRGBO(66, 133, 244, 1),
+            height: 48,
             icon: FontAwesomeIcons.google,
             text: AppLocalizations.of(context)!.continueWithGoogle,
-            onPressed: () => signInWithGoogle(context),
-            height: 48.0,
           ),
         ],
       ),
     );
   }
 
+  Widget buildLoadingIndicator(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(AppLocalizations.of(context)!.signIn),
-        actions: <IconButton>[
+        actions: [
           IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(SettingsView.routeName);
-            },
+            onPressed: () =>
+                Navigator.of(context).pushNamed(SettingsView.routeName),
             icon: LineIcon.cog(),
           ),
         ],
       ),
-      body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
-              ),
-            )
-          : buildSignIn(context),
+      body: isLoading ? buildLoadingIndicator(context) : buildSignIn(context),
     );
   }
 }

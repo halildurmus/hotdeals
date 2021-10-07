@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final width = MediaQuery.of(context).size.width;
+    final deviceWidth = MediaQuery.of(context).size.width;
 
     Future<void> _onRefresh() async {
       setState(() {});
@@ -152,24 +152,21 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildFileText(String fileName) {
       return Row(
-        children: <Widget>[
-          const Icon(
+        children: [
+          Icon(
             Icons.description,
-            color: Color.fromRGBO(117, 117, 117, 1),
+            color: theme.primaryColorLight,
             size: 18,
           ),
           const SizedBox(width: 4),
           SizedBox(
-            width: width / 1.8,
+            width: deviceWidth * .55,
             child: Text(
               fileName,
               maxLines: 1,
               softWrap: false,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w300,
-              ),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
             ),
           ),
         ],
@@ -179,9 +176,9 @@ class _ChatScreenState extends State<ChatScreen> {
     Widget _buildImageText() {
       return Row(
         children: [
-          const Icon(
+          Icon(
             FontAwesomeIcons.solidImage,
-            color: Color.fromRGBO(117, 117, 117, 1),
+            color: theme.primaryColorLight,
             size: 16,
           ),
           const SizedBox(width: 4),
@@ -195,7 +192,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildMessageText(String text) {
       return SizedBox(
-        width: width / 1.8,
+        width: deviceWidth * .55,
         child: Text(
           text,
           maxLines: 1,
@@ -218,7 +215,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildUserNickname(String nickname) {
       return SizedBox(
-        width: width / 1.8,
+        width: deviceWidth * .55,
         child: Text(
           nickname,
           maxLines: 1,

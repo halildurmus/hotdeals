@@ -84,95 +84,90 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final double deviceWidth = MediaQuery.of(context).size.width;
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     Widget buildButtons() {
       final List<String> usersArray = ChatUtil.getUsersArray(
           user1Uid: loggedInUser!.uid, user2Uid: user.uid);
 
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 16, bottom: 8),
-            width: deviceWidth / 2.8,
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: onPressedReport,
-                style: ElevatedButton.styleFrom(
-                  primary: theme.colorScheme.secondary,
-                ),
-                child: Text(AppLocalizations.of(context)!.reportUser),
+      return Padding(
+        padding: const EdgeInsets.only(top: 16, bottom: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: onPressedReport,
+              style: ElevatedButton.styleFrom(
+                fixedSize: Size(deviceWidth * .35, 50),
+                primary: theme.colorScheme.secondary,
               ),
+              child: Text(AppLocalizations.of(context)!.reportUser),
             ),
-          ),
-          FutureBuilder<QuerySnapshot<Json>>(
-            future: GetIt.I
-                .get<FirestoreService>()
-                .getMessageDocument(usersArray: usersArray),
-            builder: (BuildContext context,
-                AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
-              VoidCallback? onTap;
+            FutureBuilder<QuerySnapshot<Json>>(
+              future: GetIt.I
+                  .get<FirestoreService>()
+                  .getMessageDocument(usersArray: usersArray),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
+                VoidCallback? onTap;
 
-              if (snapshot.hasData) {
-                final List<DocumentSnapshot<Json>> _items = snapshot.data!.docs;
-                onTap = () async {
-                  if (_items.isEmpty) {
-                    await firestoreService.createMessageDocument(
+                if (snapshot.hasData) {
+                  final List<DocumentSnapshot<Json>> _items =
+                      snapshot.data!.docs;
+                  onTap = () async {
+                    if (_items.isEmpty) {
+                      await firestoreService.createMessageDocument(
+                          user1Uid: loggedInUser!.uid, user2Uid: user.uid);
+                    }
+
+                    final String conversationId = ChatUtil.getConversationID(
                         user1Uid: loggedInUser!.uid, user2Uid: user.uid);
-                  }
 
-                  final String conversationId = ChatUtil.getConversationID(
-                      user1Uid: loggedInUser!.uid, user2Uid: user.uid);
+                    Navigator.of(context).pushNamed(
+                      MessageScreen.routeName,
+                      arguments: MessageArguments(
+                        docId: conversationId,
+                        user2: user,
+                      ),
+                    );
+                  };
+                }
 
-                  Navigator.of(context).pushNamed(
-                    MessageScreen.routeName,
-                    arguments: MessageArguments(
-                      docId: conversationId,
-                      user2: user,
-                    ),
-                  );
-                };
-              }
-
-              return Container(
-                padding: const EdgeInsets.only(top: 16, bottom: 8),
-                width: deviceWidth / 2.8,
-                child: SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: onTap,
-                    style: ElevatedButton.styleFrom(
-                      primary: theme.colorScheme.secondary,
-                    ),
-                    child: Text(AppLocalizations.of(context)!.sendMessage),
+                return ElevatedButton(
+                  onPressed: onTap,
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(deviceWidth * .35, 50),
+                    primary: theme.colorScheme.secondary,
                   ),
-                ),
-              );
-            },
-          ),
-        ],
+                  child: Text(AppLocalizations.of(context)!.sendMessage),
+                );
+              },
+            ),
+          ],
+        ),
       );
     }
 
     Widget buildJoinedSection() {
       return Row(
-        children: <Widget>[
-          Icon(Icons.date_range,
-              color: theme.brightness == Brightness.dark
-                  ? Colors.grey
-                  : theme.primaryColor,
-              size: 18),
+        children: [
+          Icon(
+            Icons.date_range,
+            color: theme.brightness == Brightness.dark
+                ? Colors.grey
+                : theme.primaryColor,
+            size: 18,
+          ),
           const SizedBox(width: 6),
           Text(
             AppLocalizations.of(context)!
                 .joined(DateFormat.yMMM().format(user.createdAt!)),
             style: textTheme.bodyText2!.copyWith(
-                color: theme.brightness == Brightness.dark ? Colors.grey : null,
-                fontSize: 13),
+              color: theme.brightness == Brightness.dark ? Colors.grey : null,
+              fontSize: 13,
+            ),
           ),
         ],
       );
@@ -180,18 +175,21 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
 
     Widget buildNumberOfPostedDealsSection() {
       return Row(
-        children: <Widget>[
-          Icon(Icons.local_offer,
-              color: theme.brightness == Brightness.dark
-                  ? Colors.grey
-                  : theme.primaryColor,
-              size: 18),
+        children: [
+          Icon(
+            Icons.local_offer,
+            color: theme.brightness == Brightness.dark
+                ? Colors.grey
+                : theme.primaryColor,
+            size: 18,
+          ),
           const SizedBox(width: 6),
           Text(
             '$postedDealsCount ${AppLocalizations.of(context)!.dealsPosted}',
             style: textTheme.bodyText2!.copyWith(
-                color: theme.brightness == Brightness.dark ? Colors.grey : null,
-                fontSize: 13),
+              color: theme.brightness == Brightness.dark ? Colors.grey : null,
+              fontSize: 13,
+            ),
           ),
         ],
       );
@@ -200,17 +198,20 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
     Widget buildNumberOfPostedCommentsSection() {
       return Row(
         children: [
-          Icon(Icons.chat,
-              color: theme.brightness == Brightness.dark
-                  ? Colors.grey
-                  : theme.primaryColor,
-              size: 18),
+          Icon(
+            Icons.chat,
+            color: theme.brightness == Brightness.dark
+                ? Colors.grey
+                : theme.primaryColor,
+            size: 18,
+          ),
           const SizedBox(width: 6),
           Text(
             '$postedCommentsCount ${AppLocalizations.of(context)!.commentsPosted}',
             style: textTheme.bodyText2!.copyWith(
-                color: theme.brightness == Brightness.dark ? Colors.grey : null,
-                fontSize: 13),
+              color: theme.brightness == Brightness.dark ? Colors.grey : null,
+              fontSize: 13,
+            ),
           ),
         ],
       );
