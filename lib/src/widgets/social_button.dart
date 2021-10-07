@@ -7,22 +7,18 @@ class SocialButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     this.icon,
-    this.iconSize = 20.0,
+    this.iconSize = 20,
     this.image,
-    this.fontSize = 18.0,
+    this.fontSize = 18,
     this.textColor = Colors.white,
     this.iconColor = Colors.white,
     this.splashColor = Colors.white30,
-    this.padding = const EdgeInsets.all(8.0),
-    this.innerPadding = const EdgeInsets.symmetric(
-      horizontal: 6.0,
-    ),
-    this.elevation = 2.0,
-    this.highlightElevation = 2.0,
+    this.padding = const EdgeInsets.all(8),
+    this.innerPadding = const EdgeInsets.symmetric(horizontal: 6),
+    this.elevation = 2,
+    this.highlightElevation = 2,
     this.shape = const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(24.0),
-      ),
+      borderRadius: BorderRadius.all(Radius.circular(24)),
     ),
     this.height,
     this.width = double.infinity,
@@ -35,24 +31,22 @@ class SocialButton extends StatelessWidget {
     this.backgroundColor,
     required this.onPressed,
     this.text,
-    @required this.icon,
+    required this.icon,
     this.iconSize = 25.0,
     this.image,
     this.fontSize,
     this.textColor,
     this.iconColor = Colors.white,
     this.splashColor = Colors.white30,
-    this.padding = const EdgeInsets.all(8.0),
+    this.padding = const EdgeInsets.all(8),
     this.innerPadding = EdgeInsets.zero,
-    this.elevation = 0.0,
-    this.highlightElevation = 0.0,
+    this.elevation = 0,
+    this.highlightElevation = 0,
     this.shape = const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(24.0),
-      ),
+      borderRadius: BorderRadius.all(Radius.circular(24)),
     ),
-    this.height = 25.0,
-    this.width = 25.0,
+    this.height = 25,
+    this.width = 25,
     this.tapTargetSize = MaterialTapTargetSize.shrinkWrap,
   })  : _mini = true,
         super(key: key);
@@ -93,50 +87,36 @@ class SocialButton extends StatelessWidget {
     );
   }
 
-  /// Get the inner content of a button
   Widget _getButtonChild(BuildContext context) {
     if (_mini) {
-      return SizedBox(
-        height: height,
-        width: width,
-        child: _getIconOrImage(),
-      );
+      return SizedBox(height: height, width: width, child: _getIconOrImage());
     }
 
     return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: width,
-      ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: innerPadding,
-              child: _getIconOrImage(),
+      constraints: BoxConstraints(maxWidth: width),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (icon != null || image != null)
+            Padding(padding: innerPadding, child: _getIconOrImage()),
+          Text(
+            text!,
+            style: TextStyle(
+              color: textColor,
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
             ),
-            Text(
-              text!,
-              style: TextStyle(
-                color: textColor,
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  /// Get the icon or image widget
   Widget _getIconOrImage() {
-    if (image != null) {
-      return image!;
-    } else if (icon != null) {
+    if (icon != null) {
       return Icon(icon, size: iconSize, color: iconColor);
     }
 
-    return const SizedBox();
+    return image!;
   }
 }
