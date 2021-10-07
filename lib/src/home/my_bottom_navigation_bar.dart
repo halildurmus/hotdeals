@@ -43,8 +43,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final TextTheme textTheme = theme.textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
     _user = Provider.of<UserControllerImpl>(context).user;
     isLoggedIn = _user != null;
 
@@ -55,13 +55,13 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
           unreadNotifications = pushNotificationService.unreadNotifications;
 
           return GNav(
-            gap: 8,
-            color: theme.primaryColorLight,
             activeColor: Colors.white,
-            textStyle: textTheme.bodyText2!.copyWith(color: Colors.white),
-            tabBackgroundColor: theme.primaryColor,
+            color: theme.primaryColorLight,
+            gap: 8,
             padding: const EdgeInsets.all(16),
-            tabs: <GButton>[
+            tabBackgroundColor: theme.primaryColor,
+            textStyle: textTheme.bodyText2!.copyWith(color: Colors.white),
+            tabs: [
               GButton(
                 icon: LineIcons.tag,
                 text: AppLocalizations.of(context)!.deals,
@@ -101,17 +101,10 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                           )
                         : Badge(
                             badgeColor: theme.primaryColor.withOpacity(.3),
-                            badgeContent: Text(
-                              unreadNotifications.toString(),
-                              style: TextStyle(
-                                color: theme.primaryColor.withOpacity(.9),
-                              ),
-                            ),
                             elevation: 0,
-                            position: BadgePosition.topEnd(top: -12, end: -12),
                             child: CircleAvatar(
-                              radius: 12.0,
                               backgroundImage: NetworkImage(_user!.avatar!),
+                              radius: 12,
                             ),
                           )
                     : null,
@@ -174,10 +167,10 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
-          boxShadow: <BoxShadow>[
+          boxShadow: [
             BoxShadow(
-              color: theme.shadowColor.withOpacity(.2),
               blurRadius: 7,
+              color: theme.shadowColor.withOpacity(.2),
               offset: const Offset(0, -3),
             ),
           ],
