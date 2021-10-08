@@ -70,6 +70,7 @@ class SocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
+      onPressed: onPressed,
       disabledColor: backgroundColor!.withOpacity(.5),
       disabledElevation: elevation,
       materialTapTargetSize: _mini ? tapTargetSize : null,
@@ -80,7 +81,6 @@ class SocialButton extends StatelessWidget {
       highlightElevation: highlightElevation,
       padding: padding,
       color: backgroundColor,
-      onPressed: onPressed,
       splashColor: splashColor,
       shape: shape,
       child: _getButtonChild(context),

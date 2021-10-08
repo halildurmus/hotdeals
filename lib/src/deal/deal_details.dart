@@ -239,9 +239,6 @@ class _DealDetailsState extends State<DealDetails> {
           final bool isFavorited = user?.favorites![widget.deal.id!] == true;
 
           return FloatingActionButton(
-            heroTag: 'favoriteFAB',
-            backgroundColor: theme.backgroundColor,
-            elevation: 3,
             onPressed: () {
               if (_user == null) {
                 GetIt.I.get<SignInDialog>().showSignInDialog(context);
@@ -271,6 +268,9 @@ class _DealDetailsState extends State<DealDetails> {
                 });
               }
             },
+            heroTag: 'favoriteFAB',
+            backgroundColor: theme.backgroundColor,
+            elevation: 3,
             child: Icon(
               isFavorited
                   ? FontAwesomeIcons.solidHeart

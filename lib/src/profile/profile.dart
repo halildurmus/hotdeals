@@ -32,12 +32,10 @@ class _ProfileState extends State<Profile> {
 
     Widget buildAvatar() {
       return GestureDetector(
-        onTap: () {
-          NavigationUtil.navigate(
-            context,
-            AvatarFullScreen(avatarURL: user!.avatar!, heroTag: user.id!),
-          );
-        },
+        onTap: () => NavigationUtil.navigate(
+          context,
+          AvatarFullScreen(avatarURL: user!.avatar!, heroTag: user.id!),
+        ),
         child: Hero(
           tag: user!.id!,
           child: CircleAvatar(
@@ -52,13 +50,13 @@ class _ProfileState extends State<Profile> {
       return SizedBox(
         width: 150,
         child: OutlinedButton(
+          onPressed: () =>
+              NavigationUtil.navigate(context, const UpdateProfile()),
           style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          onPressed: () =>
-              NavigationUtil.navigate(context, const UpdateProfile()),
           child: Text(AppLocalizations.of(context)!.updateProfile),
         ),
       );

@@ -167,8 +167,8 @@ class _MessageAppBarState extends State<MessageAppBar> {
     return AppBar(
       titleSpacing: 0,
       leading: IconButton(
-        icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
         onPressed: () => Navigator.of(context).pop(),
+        icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
       ),
       title: GestureDetector(
         onTap: () {},

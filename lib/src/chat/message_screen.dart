@@ -112,8 +112,8 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
               title: Text(message.name),
               titleSpacing: 0,
               leading: IconButton(
-                icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
                 onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
               ),
             ),
             body: PhotoView(

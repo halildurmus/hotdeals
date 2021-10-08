@@ -53,13 +53,13 @@ class CustomAlertDialog extends StatelessWidget {
                 child: SizedBox(
                   width: buttonWidth,
                   child: OutlinedButton(
+                    onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                       side: BorderSide(color: theme.primaryColor),
                     ),
-                    onPressed: () => Navigator.of(context).pop(false),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 11),
                       child: Text(
@@ -79,6 +79,7 @@ class CustomAlertDialog extends StatelessWidget {
               child: SizedBox(
                 width: buttonWidth,
                 child: OutlinedButton(
+                  onPressed: () => Navigator.of(context).pop(true),
                   style: OutlinedButton.styleFrom(
                     backgroundColor: theme.primaryColor,
                     shape: RoundedRectangleBorder(
@@ -86,7 +87,6 @@ class CustomAlertDialog extends StatelessWidget {
                     ),
                     side: BorderSide(color: theme.primaryColor),
                   ),
-                  onPressed: () => Navigator.of(context).pop(true),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 11),
                     child: Text(
