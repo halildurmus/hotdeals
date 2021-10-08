@@ -32,8 +32,8 @@ class _NoInternetState extends State<NoInternet> {
 
   @override
   void dispose() {
-    super.dispose();
     connection.cancel();
+    super.dispose();
   }
 
   @override
@@ -101,13 +101,7 @@ class _NoInternetState extends State<NoInternet> {
         centerTitle: true,
         title: Text(AppLocalizations.of(context)!.appTitle),
       ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          buildHeader(),
-          buildBody(),
-        ],
-      ),
+      body: Stack(fit: StackFit.expand, children: [buildHeader(), buildBody()]),
     );
   }
 }
