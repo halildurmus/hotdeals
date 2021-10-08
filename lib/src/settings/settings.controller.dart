@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'settings_controller.dart';
-import 'settings_service.dart';
+import 'settings.service.dart';
 
-/// An implementation of the [SettingsController] that many Widgets
-/// can interact with to read user settings, update user settings,
-/// or listen to user settings changes.
+/// A class that many Widgets can interact with to read user settings,
+/// update user settings, or listen to user settings changes.
 ///
 /// Controllers glue Data Services to Flutter Widgets.
-/// The [SettingsControllerImpl] uses the [SettingsService] to store
+/// The [SettingsController] uses the [SettingsService] to store
 /// and retrieve user settings.
-class SettingsControllerImpl extends ChangeNotifier
-    implements SettingsController {
-  SettingsControllerImpl(this._settingsService);
+class SettingsController extends ChangeNotifier {
+  SettingsController(this._settingsService);
 
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
@@ -22,7 +19,6 @@ class SettingsControllerImpl extends ChangeNotifier
   late Locale _locale;
 
   // Allow Widgets to read the user's preferred locale.
-  @override
   Locale get locale => _locale;
 
   // Make ThemeMode a private variable so it is not updated directly without
@@ -30,13 +26,11 @@ class SettingsControllerImpl extends ChangeNotifier
   late ThemeMode _themeMode;
 
   // Allow Widgets to read the user's preferred ThemeMode.
-  @override
   ThemeMode get themeMode => _themeMode;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
-  @override
   Future<void> loadSettings() async {
     _locale = await _settingsService.locale();
     _themeMode = await _settingsService.themeMode();
@@ -46,7 +40,6 @@ class SettingsControllerImpl extends ChangeNotifier
   }
 
   /// Update and persist the locale based on the user's selection.
-  @override
   Future<void> updateLocale(Locale? newLocale) async {
     if (newLocale == null) {
       return;
@@ -68,7 +61,6 @@ class SettingsControllerImpl extends ChangeNotifier
   }
 
   /// Update and persist the ThemeMode based on the user's selection.
-  @override
   Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
     if (newThemeMode == null) {
       return;

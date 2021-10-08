@@ -12,7 +12,6 @@ import 'models/current_route.dart';
 import 'models/notification_verb.dart';
 import 'models/push_notification.dart';
 import 'services/push_notification_service.dart';
-import 'services/push_notification_service_impl.dart';
 import 'widgets/notification_overlay_item.dart';
 
 /// Sets a message handler function which is called when the app is in the
@@ -77,7 +76,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   logInfo('Handling a background message: ${message.messageId}');
 
   // Creates a new PushNotificationServiceImpl instance.
-  final pushNotificationService = PushNotificationServiceImpl();
+  final pushNotificationService = PushNotificationService();
   // Loads the sqlite database.
   await pushNotificationService.load();
   // Constructs a PushNotification from the RemoteMessage.

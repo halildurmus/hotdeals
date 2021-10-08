@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:timeago/timeago.dart';
 
-import '../settings/settings_controller.dart';
+import '../settings/settings.controller.dart';
 
 /// A static class that contains useful utility functions for formatting
 /// `DateTime` with [timeago].

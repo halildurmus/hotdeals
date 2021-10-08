@@ -7,8 +7,8 @@ import '../chat/message_screen.dart';
 import '../models/current_route.dart';
 import '../models/my_user.dart';
 import '../profile/profile.dart';
+import '../settings/settings.controller.dart';
 import '../settings/settings.view.dart';
-import '../settings/settings_controller.dart';
 import '../sign_in/auth_widget.dart';
 
 class AppRouter {

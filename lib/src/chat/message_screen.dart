@@ -31,7 +31,7 @@ import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
 import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
-import '../settings/settings_controller.dart';
+import '../settings/settings.controller.dart';
 import '../utils/chat_util.dart';
 import 'message_app_bar.dart';
 

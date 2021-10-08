@@ -16,7 +16,7 @@ import '../widgets/exception_alert_dialog.dart';
 import '../widgets/radio_item.dart';
 import '../widgets/settings_dialog.dart';
 import '../widgets/settings_list_item.dart';
-import 'settings_controller.dart';
+import 'settings.controller.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key, required this.controller}) : super(key: key);

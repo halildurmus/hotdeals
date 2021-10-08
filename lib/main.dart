@@ -19,18 +19,12 @@ import 'src/models/current_route.dart';
 import 'src/models/stores.dart';
 import 'src/services/connection_service.dart';
 import 'src/services/firebase_storage_service.dart';
-import 'src/services/firebase_storage_service_impl.dart';
 import 'src/services/firestore_service.dart';
-import 'src/services/firestore_service_impl.dart';
 import 'src/services/image_picker_service.dart';
-import 'src/services/image_picker_service_impl.dart';
 import 'src/services/push_notification_service.dart';
-import 'src/services/push_notification_service_impl.dart';
 import 'src/services/spring_service.dart';
-import 'src/services/spring_service_impl.dart';
-import 'src/settings/settings.controller.impl.dart';
-import 'src/settings/settings.service.impl.dart';
-import 'src/settings/settings_controller.dart';
+import 'src/settings/settings.controller.dart';
+import 'src/settings/settings.service.dart';
 import 'src/utils/crashlytics_printer.dart';
 import 'src/utils/custom_loggy_printer.dart';
 import 'src/utils/tr_messages.dart';
@@ -100,13 +94,11 @@ void main() async {
     final GetIt getIt = GetIt.I;
     getIt.registerSingleton<CurrentRoute>(CurrentRoute());
     getIt.registerSingleton<ConnectionService>(ConnectionService());
-    getIt.registerSingleton<PushNotificationService>(
-        PushNotificationServiceImpl());
-    getIt.registerSingleton<FirebaseStorageService>(
-        FirebaseStorageServiceImpl());
-    getIt.registerSingleton<FirestoreService>(FirestoreServiceImpl());
-    getIt.registerSingleton<ImagePickerService>(ImagePickerServiceImpl());
-    getIt.registerSingleton<SpringService>(SpringServiceImpl());
+    getIt.registerSingleton<PushNotificationService>(PushNotificationService());
+    getIt.registerSingleton<FirebaseStorageService>(FirebaseStorageService());
+    getIt.registerSingleton<FirestoreService>(FirestoreService());
+    getIt.registerSingleton<ImagePickerService>(ImagePickerService());
+    getIt.registerSingleton<SpringService>(SpringService());
     getIt.registerSingleton<Categories>(Categories());
     getIt.registerSingleton<Stores>(Stores());
     getIt.registerSingleton<LoadingDialog>(const LoadingDialog());
@@ -135,7 +127,7 @@ void main() async {
 
     // Sets up the SettingsController, and registers it as a Singleton class.
     getIt.registerSingleton<SettingsController>(
-        SettingsControllerImpl(SettingsServiceImpl(prefs)));
+        SettingsController(SettingsService(prefs)));
 
     // Loads the user's preferred settings.
     await getIt.get<SettingsController>().loadSettings();

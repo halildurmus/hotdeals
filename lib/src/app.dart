@@ -16,7 +16,7 @@ import 'models/store.dart';
 import 'models/stores.dart';
 import 'offline_builder.dart';
 import 'routing/app_router.dart';
-import 'settings/settings_controller.dart';
+import 'settings/settings.controller.dart';
 import 'sign_in/auth_widget.dart';
 import 'sign_in/auth_widget_builder.dart';
 import 'top_level_providers.dart';
