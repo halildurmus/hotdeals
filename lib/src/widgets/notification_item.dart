@@ -7,30 +7,37 @@ import 'package:loggy/loggy.dart' show NetworkLoggy;
 import '../models/my_user.dart';
 import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
+import '../services/push_notification_service.dart';
 import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
 
-class NotificationItem extends StatelessWidget with NetworkLoggy {
-  const NotificationItem({
-    Key? key,
-    required this.notification,
-    required this.onTap,
-  }) : super(key: key);
+class NotificationItem extends StatefulWidget {
+  const NotificationItem({Key? key, required this.notification})
+      : super(key: key);
 
   final PushNotification notification;
-  final VoidCallback onTap;
+
+  @override
+  State<NotificationItem> createState() => _NotificationItemState();
+}
+
+class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
+  Future<void> onTap() async {
+    if (widget.notification.isRead) {
+      return;
+    }
+
+    widget.notification.isRead = true;
+    await GetIt.I.get<PushNotificationService>().update(widget.notification);
+  }
 
   Widget buildErrorWidget() {
-    return ListView.builder(
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      shrinkWrap: true,
-      itemCount: 1,
-      itemBuilder: (BuildContext context, int index) {
-        return Text(
-          AppLocalizations.of(context)!.anErrorOccurred,
-          textAlign: TextAlign.center,
-        );
-      },
+      child: Text(
+        AppLocalizations.of(context)!.anErrorOccurred,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 
@@ -39,7 +46,9 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
     final textTheme = theme.textTheme;
 
     return Card(
-      color: notification.isRead ? null : theme.primaryColor.withOpacity(.1),
+      color: widget.notification.isRead
+          ? null
+          : theme.primaryColor.withOpacity(.1),
       elevation: 0,
       margin: EdgeInsets.zero,
       child: InkWell(
@@ -47,7 +56,7 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
         highlightColor: theme.primaryColorLight.withOpacity(.1),
         splashColor: theme.primaryColorLight.withOpacity(.1),
         child: ListTile(
-          isThreeLine: notification.verb == NotificationVerb.comment,
+          isThreeLine: widget.notification.verb == NotificationVerb.comment,
           leading: CachedNetworkImage(
             imageUrl: user.avatar!,
             imageBuilder:
@@ -64,7 +73,7 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
                 style:
                     textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w500),
                 children: [
-                  if (notification.verb == NotificationVerb.comment)
+                  if (widget.notification.verb == NotificationVerb.comment)
                     TextSpan(
                       text: AppLocalizations.of(context)!.commentedOnYourPost,
                       style: textTheme.bodyText2,
@@ -73,12 +82,12 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
               ),
             ),
           ),
-          subtitle: notification.verb == NotificationVerb.comment
+          subtitle: widget.notification.verb == NotificationVerb.comment
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '"${notification.message!}"',
+                      '"${widget.notification.message!}"',
                       style: textTheme.bodyText2!.copyWith(
                         color: theme.colorScheme.secondary,
                       ),
@@ -86,7 +95,7 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
                     const SizedBox(height: 5),
                     Text(
                       DateTimeUtil.formatDateTime(
-                        notification.createdAt!,
+                        widget.notification.createdAt!,
                         useShortMessages: false,
                       ),
                     ),
@@ -94,11 +103,11 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
                 )
               : Text(
                   DateTimeUtil.formatDateTime(
-                    notification.createdAt!,
+                    widget.notification.createdAt!,
                     useShortMessages: false,
                   ),
                 ),
-          trailing: notification.isRead
+          trailing: widget.notification.isRead
               ? null
               : Text(
                   '•',
@@ -113,7 +122,9 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<MyUser>(
-      future: GetIt.I.get<SpringService>().getUserById(id: notification.actor),
+      future: GetIt.I
+          .get<SpringService>()
+          .getUserById(id: widget.notification.actor),
       builder: (BuildContext context, AsyncSnapshot<MyUser> snapshot) {
         if (snapshot.hasData) {
           final MyUser user = snapshot.data!;

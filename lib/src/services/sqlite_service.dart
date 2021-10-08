@@ -10,7 +10,7 @@ abstract class SQLiteService<T> {
   Future<void> insert(T t);
 
   /// Retrieves all the records from the table.
-  Future<List<T>> getAll();
+  Future<List<T>> getAll({int? limit, int? offset});
 
   /// Updates the record in the database.
   Future<void> update(T t);

@@ -8,17 +8,17 @@ import 'package:sqflite/sqflite.dart';
 import '../models/push_notification.dart';
 import '../services/push_notification_service.dart';
 
+typedef Json = Map<String, dynamic>;
+
 /// An implementation of the [PushNotificationService] that many Widgets
 /// can interact with to create, read and update notifications.
 class PushNotificationServiceImpl extends ChangeNotifier
     implements PushNotificationService {
-  late Database _db;
-
   @override
   int unreadNotifications = 0;
 
+  late Database _db;
   static const String tableNotificationName = 'Notification';
-
   static const String tableNotification = '''
   CREATE TABLE IF NOT EXISTS Notification (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -36,11 +36,11 @@ class PushNotificationServiceImpl extends ChangeNotifier
   /// Opens the database and sets the database reference.
   @override
   Future<void> load() async {
-    final String path = join(await getDatabasesPath(), 'core5.db');
+    final String path = join(await getDatabasesPath(), 'core.db');
 
     _db = await openDatabase(
       path,
-      version: 10,
+      version: 1,
       onCreate: (Database db, int version) async {
         // When creating the db, create the table
         await db.execute(tableNotification);
@@ -67,18 +67,22 @@ class PushNotificationServiceImpl extends ChangeNotifier
 
   /// Retrieves all notifications sorted by `created_at` from the database.
   @override
-  Future<List<PushNotification>> getAll() async {
+  Future<List<PushNotification>> getAll({int? limit, int? offset}) async {
     // Query the table for all the records.
-    final List<Map<String, dynamic>> maps = await _db.query(
+    final List<Json> maps = await _db.query(
       tableNotificationName,
       orderBy: 'created_at DESC',
       where: 'uid = ?',
       whereArgs: [FirebaseAuth.instance.currentUser?.uid],
+      limit: limit,
+      offset: offset,
     );
 
-    // Convert the List<Map<String, dynamic> into a List<Notification>.
+    // Convert the List<Json> into a List<Notification>.
     return List<PushNotification>.generate(
-        maps.length, (int i) => PushNotification.fromMap(maps[i]));
+      maps.length,
+      (int i) => PushNotification.fromMap(maps[i]),
+    );
   }
 
   /// Updates the given notification.

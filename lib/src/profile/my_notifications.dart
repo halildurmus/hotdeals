@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../models/push_notification.dart';
 import '../services/push_notification_service.dart';
-import '../widgets/notification_item.dart';
+import '../widgets/error_indicator.dart';
+import 'notification_paged_listview.dart';
 
 class MyNotifications extends StatefulWidget {
   const MyNotifications({Key? key}) : super(key: key);
@@ -15,69 +17,46 @@ class MyNotifications extends StatefulWidget {
 }
 
 class _MyNotificationsState extends State<MyNotifications> with NetworkLoggy {
-  late PushNotificationService pushNotificationService;
+  late PagingController<int, PushNotification> _pagingController;
+  late PushNotificationService _pushNotificationService;
 
   @override
   void initState() {
-    pushNotificationService = GetIt.I.get<PushNotificationService>();
+    _pagingController =
+        PagingController<int, PushNotification>(firstPageKey: 0);
+    _pushNotificationService = GetIt.I.get<PushNotificationService>();
+    _pushNotificationService.addListener(() => _pagingController.refresh());
     super.initState();
   }
 
-  Widget buildNotifications(List<PushNotification> notifications) {
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      itemCount: notifications.length,
-      itemBuilder: (BuildContext context, int index) {
-        final notification = notifications.elementAt(index);
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 
-        Future<void> onTap() async {
-          if (notification.isRead) {
-            return;
-          }
+  Future<List<PushNotification>> _notificationFuture(int offset, int limit) =>
+      _pushNotificationService.getAll(offset: offset, limit: limit);
 
-          notification.isRead = true;
-          await pushNotificationService.update(notification);
-        }
+  Widget buildNoNotificationsFound(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
 
-        return NotificationItem(onTap: onTap, notification: notification);
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return const SizedBox();
-      },
+    return SizedBox(
+      height: deviceHeight * .5,
+      child: ErrorIndicator(
+        icon: Icons.notifications_none_outlined,
+        title: AppLocalizations.of(context)!.noNotifications,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: pushNotificationService,
-      builder: (BuildContext context, Widget? child) {
-        return FutureBuilder<List<PushNotification>>(
-          future: pushNotificationService.getAll(),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<PushNotification>> snapshot) {
-            if (snapshot.hasData) {
-              final notifications = snapshot.data!;
-
-              if (notifications.isEmpty) {
-                return Center(
-                  child: Text(AppLocalizations.of(context)!.noNotifications),
-                );
-              }
-
-              return buildNotifications(notifications);
-            } else if (snapshot.hasError) {
-              loggy.error(snapshot.error, snapshot.error);
-
-              return Center(
-                child: Text(AppLocalizations.of(context)!.anErrorOccurred),
-              );
-            }
-
-            return const Center(child: CircularProgressIndicator());
-          },
-        );
-      },
+    return NotificationPagedListView(
+      notificationFuture: _notificationFuture,
+      noNotificationsFound: buildNoNotificationsFound(context),
+      pageSize: 8,
+      pagingController: _pagingController,
     );
   }
 }
