@@ -12,11 +12,11 @@ import '../settings/settings_controller.dart';
 import '../sign_in/auth_widget.dart';
 
 class AppRouter {
-  static Route<dynamic>? onGenerateRoute(
+  static Route? onGenerateRoute(
       RouteSettings routeSettings,
       AsyncSnapshot<MyUser?> userSnapshot,
       SettingsController settingsController) {
-    return MaterialPageRoute<void>(
+    return MaterialPageRoute(
       settings: routeSettings,
       builder: (BuildContext context) {
         switch (routeSettings.name) {
@@ -26,7 +26,6 @@ class AppRouter {
             {
               final MessageArguments args =
                   routeSettings.arguments! as MessageArguments;
-
               GetIt.I
                   .get<CurrentRoute>()
                   .updateRouteName(MessageScreen.routeName);

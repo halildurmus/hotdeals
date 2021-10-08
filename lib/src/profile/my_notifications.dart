@@ -28,7 +28,7 @@ class _MyNotificationsState extends State<MyNotifications> with NetworkLoggy {
       padding: const EdgeInsets.symmetric(vertical: 16),
       itemCount: notifications.length,
       itemBuilder: (BuildContext context, int index) {
-        final PushNotification notification = notifications.elementAt(index);
+        final notification = notifications.elementAt(index);
 
         Future<void> onTap() async {
           if (notification.isRead) {
@@ -57,7 +57,7 @@ class _MyNotificationsState extends State<MyNotifications> with NetworkLoggy {
           builder: (BuildContext context,
               AsyncSnapshot<List<PushNotification>> snapshot) {
             if (snapshot.hasData) {
-              final List<PushNotification> notifications = snapshot.data!;
+              final notifications = snapshot.data!;
 
               if (notifications.isEmpty) {
                 return Center(
