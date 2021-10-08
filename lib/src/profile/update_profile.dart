@@ -26,6 +26,7 @@ class UpdateProfile extends StatefulWidget {
 class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   late TextEditingController nicknameController;
   late VoidCallback showLoadingDialog;
+  late MyUser user;
 
   Future<MyUser> updateUserAvatar(String userId, String avatarUrl) async {
     return GetIt.I
@@ -57,7 +58,6 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                 mimeType: mimeType,
                 userID: userID,
               );
-
       await updateUserAvatar(userID, avatarURL);
       Provider.of<UserControllerImpl>(context, listen: false).getUser();
       Navigator.of(context).pop();
@@ -66,8 +66,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     }
   }
 
-  void showImagePicker(String userID) {
-    showModalBottomSheet<void>(
+  Future<void> showImagePicker(String userID) {
+    return showModalBottomSheet<void>(
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -130,6 +130,73 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     );
   }
 
+  Future<void> nicknameOnTap() {
+    final theme = Theme.of(context);
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Dialog(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: nicknameController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: AppLocalizations.of(context)!.nickname,
+                      ),
+                      onChanged: (String? text) {
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 45,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: nicknameController.text.isEmpty ||
+                                nicknameController.text == user.nickname
+                            ? null
+                            : () async {
+                                showLoadingDialog();
+                                await updateNickname(
+                                    user.id!, nicknameController.text);
+                                Navigator.of(context).pop();
+                                Provider.of<UserControllerImpl>(context,
+                                        listen: false)
+                                    .getUser();
+                                Navigator.of(context).pop();
+                              },
+                        style: ElevatedButton.styleFrom(
+                          primary: theme.colorScheme.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.updateNickname,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     showLoadingDialog =
@@ -149,74 +216,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final MyUser user = Provider.of<UserControllerImpl>(context).user!;
-
-    Future<void> nicknameOnTap() {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Dialog(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        controller: nicknameController,
-                        onChanged: (String? text) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          labelText: AppLocalizations.of(context)!.nickname,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 45,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: nicknameController.text.isEmpty ||
-                                  nicknameController.text == user.nickname
-                              ? null
-                              : () async {
-                                  showLoadingDialog();
-                                  await updateNickname(
-                                      user.id!, nicknameController.text);
-                                  Navigator.of(context).pop();
-                                  Provider.of<UserControllerImpl>(context,
-                                          listen: false)
-                                      .getUser();
-                                  Navigator.of(context).pop();
-                                },
-                          style: ElevatedButton.styleFrom(
-                            primary: theme.colorScheme.secondary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          child: Text(
-                            AppLocalizations.of(context)!.updateNickname,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      );
-    }
+    user = Provider.of<UserControllerImpl>(context).user!;
 
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.updateProfile)),
@@ -231,6 +231,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
             ),
           ),
           SettingsListItem(
+            onTap: () => showImagePicker(user.id!),
             image: CachedNetworkImage(
               imageUrl: user.avatar!,
               imageBuilder:
@@ -240,13 +241,12 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                   const CircleAvatar(),
             ),
             title: AppLocalizations.of(context)!.avatar,
-            onTap: () => showImagePicker(user.id!),
           ),
           SettingsListItem(
+            onTap: nicknameOnTap,
             icon: Icons.edit,
             title: AppLocalizations.of(context)!.nickname,
             subtitle: user.nickname,
-            onTap: nicknameOnTap,
           ),
         ],
       ),
