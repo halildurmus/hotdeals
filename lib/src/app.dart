@@ -29,7 +29,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with NetworkLoggy {
-  final FlexScheme usedFlexScheme = FlexScheme.deepBlue;
+  final usedFlexScheme = FlexScheme.deepBlue;
   late SettingsController settingsController;
   late List<Category>? categories;
   late List<Store>? stores;
@@ -82,35 +82,35 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget buildErrorScreen() {
-      Future<void> onTap() async {
-        try {
-          await Future.wait<dynamic>(
-            [
-              GetIt.I
-                  .get<Categories>()
-                  .getCategories()
-                  .then<void>((List<Category> value) => categories = value),
-              GetIt.I
-                  .get<Stores>()
-                  .getStores()
-                  .then<void>((List<Store> value) => stores = value),
-            ],
-          );
-        } on Exception {
-          loggy.error('Failed to fetch categories and stores!');
-        } finally {
-          if (categories != null && stores != null) {
-            setState(() {});
-          }
+  Widget buildErrorScreen() {
+    Future<void> onTap() async {
+      try {
+        await Future.wait<dynamic>(
+          [
+            GetIt.I
+                .get<Categories>()
+                .getCategories()
+                .then<void>((List<Category> value) => categories = value),
+            GetIt.I
+                .get<Stores>()
+                .getStores()
+                .then<void>((List<Store> value) => stores = value),
+          ],
+        );
+      } on Exception {
+        loggy.error('Failed to fetch categories and stores!');
+      } finally {
+        if (categories != null && stores != null) {
+          setState(() {});
         }
       }
-
-      return buildMaterialApp(home: ErrorScreen(onTap: onTap));
     }
 
+    return buildMaterialApp(home: ErrorScreen(onTap: onTap));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     if (categories == null || stores == null) {
       return buildErrorScreen();
     }

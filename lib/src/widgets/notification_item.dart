@@ -39,7 +39,7 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
     final textTheme = theme.textTheme;
 
     return Card(
-      color: !notification.isRead ? theme.primaryColor.withOpacity(.1) : null,
+      color: notification.isRead ? null : theme.primaryColor.withOpacity(.1),
       elevation: 0,
       margin: EdgeInsets.zero,
       child: InkWell(
@@ -98,13 +98,13 @@ class NotificationItem extends StatelessWidget with NetworkLoggy {
                     useShortMessages: false,
                   ),
                 ),
-          trailing: !notification.isRead
-              ? Text(
+          trailing: notification.isRead
+              ? null
+              : Text(
                   '•',
                   style: TextStyle(
                       color: theme.colorScheme.secondary, fontSize: 36),
-                )
-              : null,
+                ),
         ),
       ),
     );

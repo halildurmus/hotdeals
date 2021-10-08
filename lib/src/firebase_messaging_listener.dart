@@ -18,8 +18,7 @@ import 'widgets/notification_overlay_item.dart';
 /// Sets a message handler function which is called when the app is in the
 /// foreground.
 void subscribeToFCM() {
-  final PushNotificationService pushNotificationService =
-      GetIt.I.get<PushNotificationService>();
+  final pushNotificationService = GetIt.I.get<PushNotificationService>();
 
   FirebaseMessaging.onMessage.listen(
     (RemoteMessage message) {
@@ -31,7 +30,7 @@ void subscribeToFCM() {
             'Message also contained a notification: ${message.notification}');
 
         // Constructs a PushNotification from the RemoteMessage.
-        final PushNotification notification = PushNotification(
+        final notification = PushNotification(
           title: message.notification!.title!,
           body: message.notification!.body!,
           actor: message.data['actor'] as String,
@@ -78,12 +77,11 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   logInfo('Handling a background message: ${message.messageId}');
 
   // Creates a new PushNotificationServiceImpl instance.
-  final PushNotificationService pushNotificationService =
-      PushNotificationServiceImpl();
+  final pushNotificationService = PushNotificationServiceImpl();
   // Loads the sqlite database.
   await pushNotificationService.load();
   // Constructs a PushNotification from the RemoteMessage.
-  final PushNotification notification = PushNotification(
+  final notification = PushNotification(
     title: message.notification!.title!,
     body: message.notification!.body!,
     actor: message.data['actor'] as String,
