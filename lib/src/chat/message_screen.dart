@@ -151,11 +151,11 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    final Locale currentLocale = GetIt.I.get<SettingsController>().locale;
+    final currentLocale = GetIt.I.get<SettingsController>().locale;
     final theme = Theme.of(context);
     final MyUser _user = Provider.of<UserControllerImpl>(context).user!;
-    final bool _isUser2Blocked = _user.blockedUsers!.contains(widget.user2.uid);
-    final bool _isUserBlocked = widget.user2.blockedUsers!.contains(_user.uid);
+    final _isUser2Blocked = _user.blockedUsers!.contains(widget.user2.uid);
+    final _isUserBlocked = widget.user2.blockedUsers!.contains(_user.uid);
 
     Widget _buildBlockedText() {
       return Container(
