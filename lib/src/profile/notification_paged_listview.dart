@@ -68,7 +68,7 @@ class _NotificationPagedListViewState extends State<NotificationPagedListView>
   @override
   Widget build(BuildContext context) {
     Widget buildPagedListView() {
-      return PagedListView(
+      return PagedListView.separated(
         pagingController: _pagingController,
         padding: const EdgeInsets.symmetric(vertical: 16),
         builderDelegate: PagedChildBuilderDelegate<PushNotification>(
@@ -87,6 +87,11 @@ class _NotificationPagedListViewState extends State<NotificationPagedListView>
           ),
           noItemsFoundIndicatorBuilder: (context) =>
               widget.noNotificationsFound,
+        ),
+        separatorBuilder: (context, index) => const Divider(
+          height: 0,
+          indent: 16,
+          endIndent: 16,
         ),
       );
     }
