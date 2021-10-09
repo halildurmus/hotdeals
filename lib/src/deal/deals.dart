@@ -153,7 +153,7 @@ class _DealsState extends State<Deals> {
     Widget buildBody() {
       return Column(
         children: [
-          const SizedBox(height: 100),
+          const SizedBox(height: 70),
           buildChoiceChips(),
           Expanded(child: buildPagedListView()),
         ],
@@ -310,6 +310,7 @@ class _DealsState extends State<Deals> {
     }
 
     return Scaffold(
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.appTitle)),
       body: Stack(
         fit: StackFit.expand,
         children: [buildBody(), buildFloatingSearchBar()],
