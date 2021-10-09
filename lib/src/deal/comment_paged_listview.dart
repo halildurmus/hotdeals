@@ -64,9 +64,8 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView(
+    return PagedListView.separated(
       pagingController: _pagingController,
-      padding: const EdgeInsets.symmetric(vertical: 16),
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       builderDelegate: PagedChildBuilderDelegate<Comment>(
@@ -84,6 +83,7 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
         ),
         noItemsFoundIndicatorBuilder: (context) => widget.noCommentsFound,
       ),
+      separatorBuilder: (context, index) => const SizedBox(height: 10),
     );
   }
 }
