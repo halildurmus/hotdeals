@@ -39,14 +39,9 @@ class _MyNotificationsState extends State<MyNotifications> with NetworkLoggy {
       _pushNotificationService.getAll(offset: offset, limit: limit);
 
   Widget buildNoNotificationsFound(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
-
-    return SizedBox(
-      height: deviceHeight * .5,
-      child: ErrorIndicator(
-        icon: Icons.notifications_none_outlined,
-        title: AppLocalizations.of(context)!.noNotifications,
-      ),
+    return ErrorIndicator(
+      icon: Icons.notifications_none_outlined,
+      title: AppLocalizations.of(context)!.noNotifications,
     );
   }
 
