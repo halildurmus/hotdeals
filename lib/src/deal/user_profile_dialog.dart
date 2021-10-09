@@ -89,7 +89,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
     final textTheme = theme.textTheme;
 
     Widget buildButtons() {
-      final List<String> usersArray = ChatUtil.getUsersArray(
+      final usersArray = ChatUtil.getUsersArray(
           user1Uid: loggedInUser!.uid, user2Uid: user.uid);
 
       return Padding(
@@ -103,7 +103,10 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
                 fixedSize: Size(deviceWidth * .35, 50),
                 primary: theme.colorScheme.secondary,
               ),
-              child: Text(AppLocalizations.of(context)!.reportUser),
+              child: Text(
+                AppLocalizations.of(context)!.reportUser,
+                textAlign: TextAlign.center,
+              ),
             ),
             FutureBuilder<QuerySnapshot<Json>>(
               future: GetIt.I
@@ -141,7 +144,10 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
                     fixedSize: Size(deviceWidth * .35, 50),
                     primary: theme.colorScheme.secondary,
                   ),
-                  child: Text(AppLocalizations.of(context)!.sendMessage),
+                  child: Text(
+                    AppLocalizations.of(context)!.sendMessage,
+                    textAlign: TextAlign.center,
+                  ),
                 );
               },
             ),
