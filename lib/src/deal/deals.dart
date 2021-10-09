@@ -246,9 +246,7 @@ class _DealsState extends State<Deals> {
         // TODO(halildurmus): Add support for displaying recent searches.
         return Material(
           elevation: 4,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: searchErrorOccurred
               ? buildSearchError()
               : _searchBarController.query.isEmpty
@@ -259,36 +257,41 @@ class _DealsState extends State<Deals> {
         );
       }
 
-      final bool isPortrait =
+      final isPortrait =
           MediaQuery.of(context).orientation == Orientation.portrait;
 
-      return FloatingSearchBar(
-        controller: _searchBarController,
-        progress: searchProgress,
-        hint: AppLocalizations.of(context)!.search,
-        scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-        transitionDuration: const Duration(milliseconds: 500),
-        transitionCurve: Curves.easeInOut,
-        physics: const BouncingScrollPhysics(),
-        axisAlignment: isPortrait ? 0 : -1,
-        openAxisAlignment: 0,
-        width: isPortrait ? 600 : 500,
-        debounceDelay: const Duration(milliseconds: 500),
-        onSubmitted: (String query) {
-          NavigationUtil.navigate(context, SearchDeals(keyword: query));
-        },
-        onQueryChanged: (String query) => searchDeals(query),
-        transition: CircularFloatingSearchBarTransition(),
-        actions: [FloatingSearchBarAction.searchToClear(showIfClosed: false)],
-        leadingActions: [
-          FloatingSearchBarAction.back(),
-          FloatingSearchBarAction.icon(
-            onTap: () {},
-            icon: const Icon(Icons.search),
-          )
-        ],
-        builder: (BuildContext context, Animation<double> transition) =>
-            buildSearchResultBuilder(),
+      return Theme(
+        data: theme.copyWith(
+          inputDecorationTheme: theme.inputDecorationTheme
+              .copyWith(fillColor: Colors.transparent),
+        ),
+        child: FloatingSearchBar(
+          controller: _searchBarController,
+          axisAlignment: isPortrait ? 0 : -1,
+          debounceDelay: const Duration(milliseconds: 500),
+          hint: AppLocalizations.of(context)!.search,
+          openAxisAlignment: 0,
+          physics: const BouncingScrollPhysics(),
+          progress: searchProgress,
+          scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
+          transition: CircularFloatingSearchBarTransition(),
+          transitionCurve: Curves.easeInOut,
+          transitionDuration: const Duration(milliseconds: 500),
+          onSubmitted: (String query) =>
+              NavigationUtil.navigate(context, SearchDeals(keyword: query)),
+          onQueryChanged: (String query) => searchDeals(query),
+          width: isPortrait ? 600 : 500,
+          actions: [FloatingSearchBarAction.searchToClear(showIfClosed: false)],
+          leadingActions: [
+            FloatingSearchBarAction.back(),
+            FloatingSearchBarAction.icon(
+              onTap: () {},
+              icon: const Icon(Icons.search),
+            )
+          ],
+          builder: (BuildContext context, Animation<double> transition) =>
+              buildSearchResultBuilder(),
+        ),
       );
     }
 
