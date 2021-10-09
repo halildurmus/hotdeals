@@ -621,10 +621,11 @@ class _DealDetailsState extends State<DealDetails> {
                       const SizedBox(height: 3),
                       Text(
                         nickname,
-                        style: TextStyle(
-                            color: theme.brightness == Brightness.light
-                                ? theme.primaryColor
-                                : null),
+                        style: textTheme.subtitle2!.copyWith(
+                          color: theme.brightness == Brightness.light
+                              ? theme.primaryColor
+                              : null,
+                        ),
                       ),
                     ],
                   ),
