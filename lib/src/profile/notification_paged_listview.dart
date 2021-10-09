@@ -71,8 +71,6 @@ class _NotificationPagedListViewState extends State<NotificationPagedListView>
       return PagedListView(
         pagingController: _pagingController,
         padding: const EdgeInsets.symmetric(vertical: 16),
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
         builderDelegate: PagedChildBuilderDelegate<PushNotification>(
           animateTransitions: true,
           itemBuilder: (context, notification, index) =>
