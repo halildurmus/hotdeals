@@ -47,11 +47,13 @@ class _BlockedUsersState extends State<BlockedUsers> {
         highlightColor: theme.primaryColorLight.withOpacity(.1),
         splashColor: theme.primaryColorLight.withOpacity(.1),
         child: ListTile(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           leading: CachedNetworkImage(
             imageUrl: user.avatar!,
             imageBuilder:
                 (BuildContext ctx, ImageProvider<Object> imageProvider) =>
-                    CircleAvatar(backgroundImage: imageProvider, radius: 24),
+                    CircleAvatar(backgroundImage: imageProvider),
             placeholder: (BuildContext context, String url) =>
                 const CircleAvatar(),
           ),
