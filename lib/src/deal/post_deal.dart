@@ -68,7 +68,7 @@ class _PostDealState extends State<PostDeal> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final double deviceWidth = MediaQuery.of(context).size.width;
+    final deviceWidth = MediaQuery.of(context).size.width;
 
     Widget buildPictureUpload() {
       return PictureUploadWidget(

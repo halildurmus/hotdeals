@@ -40,14 +40,14 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    final double deviceWidth = MediaQuery.of(context).size.width;
+    final deviceWidth = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
     Future<void> sendReport() async {
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
-      final DealReport report = DealReport(
+      final report = DealReport(
         reportedDeal: widget.reportedDealId,
         reasons: [
           if (repostCheckbox) DealReportReason.repost,

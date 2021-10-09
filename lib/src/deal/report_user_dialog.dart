@@ -40,7 +40,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    final double deviceWidth = MediaQuery.of(context).size.width;
+    final deviceWidth = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 

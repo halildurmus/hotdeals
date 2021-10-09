@@ -115,8 +115,8 @@ class _DealDetailsState extends State<DealDetails> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final double deviceWidth = MediaQuery.of(context).size.width;
-    final double deviceHeight = MediaQuery.of(context).size.height;
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height;
 
     final List<Widget> carouselItems = _images.map((String item) {
       return GestureDetector(

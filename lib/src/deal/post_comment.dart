@@ -43,7 +43,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final double deviceWidth = MediaQuery.of(context).size.width;
+    final deviceWidth = MediaQuery.of(context).size.width;
 
     Future<void> onPressed() async {
       if (commentController.text.isEmpty) {
@@ -67,7 +67,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
             .get<SpringService>()
             .getUserById(id: widget.deal.postedBy!);
 
-        final PushNotification notification = PushNotification(
+        final notification = PushNotification(
           title:
               '${user!.nickname} ${AppLocalizations.of(context)!.commentedOnYourPost}',
           body: comment.message,
@@ -161,8 +161,10 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(AppLocalizations.of(context)!.postAComment,
-              style: textTheme.headline6),
+          Text(
+            AppLocalizations.of(context)!.postAComment,
+            style: textTheme.headline6,
+          ),
           const SizedBox(height: 20),
           buildForm(),
         ],
