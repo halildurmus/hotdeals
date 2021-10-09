@@ -19,7 +19,7 @@ import '../utils/navigation_util.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 import 'post_deal.dart';
-import 'search_deals.dart';
+import 'search_results.dart';
 
 class Deals extends StatefulWidget {
   const Deals({Key? key}) : super(key: key);
@@ -225,7 +225,7 @@ class _DealsState extends State<Deals> {
               child: InkWell(
                 onTap: () => NavigationUtil.navigate(
                   context,
-                  SearchDeals(keyword: keyword),
+                  SearchResults(keyword: keyword),
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(8)),
                 highlightColor: theme.primaryColorLight.withOpacity(.1),
@@ -278,7 +278,7 @@ class _DealsState extends State<Deals> {
           transitionCurve: Curves.easeInOut,
           transitionDuration: const Duration(milliseconds: 500),
           onSubmitted: (String query) =>
-              NavigationUtil.navigate(context, SearchDeals(keyword: query)),
+              NavigationUtil.navigate(context, SearchResults(keyword: query)),
           onQueryChanged: (String query) => searchDeals(query),
           width: isPortrait ? 600 : 500,
           actions: [FloatingSearchBarAction.searchToClear(showIfClosed: false)],

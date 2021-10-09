@@ -7,8 +7,8 @@ import '../services/spring_service.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 
-class SearchDeals extends StatelessWidget {
-  const SearchDeals({Key? key, required this.keyword}) : super(key: key);
+class SearchResults extends StatelessWidget {
+  const SearchResults({Key? key, required this.keyword}) : super(key: key);
 
   final String keyword;
 
