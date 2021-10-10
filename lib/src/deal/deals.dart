@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
-import 'package:line_icons/line_icons.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -304,7 +303,7 @@ class _DealsState extends State<Deals> {
           });
         },
         elevation: 3,
-        icon: const Icon(LineIcons.tags),
+        icon: const Icon(Icons.sell_outlined),
         label: Text(AppLocalizations.of(context)!.post),
       );
     }

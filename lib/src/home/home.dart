@@ -29,11 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens.elementAt(activeScreen),
-      bottomNavigationBar: MyBottomNavigationBar(activeScreen, (int value) {
-        setState(() {
-          activeScreen = value;
-        });
-      }),
+      bottomNavigationBar: MyBottomNavigationBar(
+        activeScreen,
+        (int value) => setState(() => activeScreen = value),
+      ),
       resizeToAvoidBottomInset: false,
     );
   }

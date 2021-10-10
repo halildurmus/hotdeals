@@ -625,13 +625,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
-  line_icons:
-    dependency: "direct main"
-    description:
-      name: line_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   linkify:
     dependency: transitive
     description:

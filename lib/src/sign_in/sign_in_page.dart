@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart';
@@ -128,7 +127,7 @@ class SignInPage extends StatelessWidget {
           IconButton(
             onPressed: () =>
                 Navigator.of(context).pushNamed(SettingsView.routeName),
-            icon: LineIcon.cog(),
+            icon: const Icon(Icons.settings),
           ),
         ],
       ),

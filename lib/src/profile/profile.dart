@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
@@ -123,7 +122,7 @@ class _ProfileState extends State<Profile> {
             IconButton(
               onPressed: () =>
                   Navigator.of(context).pushNamed(SettingsView.routeName),
-              icon: LineIcon.cog(),
+              icon: const Icon(Icons.settings),
             ),
           ],
         ),

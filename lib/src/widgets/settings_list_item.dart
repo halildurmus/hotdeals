@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 
 class SettingsListItem extends StatelessWidget {
   const SettingsListItem({
@@ -48,7 +47,7 @@ class SettingsListItem extends StatelessWidget {
           ),
           subtitle: subtitle != null ? Text(subtitle!) : null,
           trailing:
-              hasNavigation ? const Icon(LineIcons.angleRight, size: 25) : null,
+              hasNavigation ? const Icon(Icons.chevron_right, size: 30) : null,
         ),
       ),
     );

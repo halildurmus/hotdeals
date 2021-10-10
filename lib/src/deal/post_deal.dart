@@ -2,7 +2,6 @@ import 'package:firebase_picture_uploader/firebase_picture_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:validators/validators.dart';
 
 import '../models/categories.dart';
@@ -121,7 +120,7 @@ class _PostDealState extends State<PostDeal> {
             child: Row(
               children: [
                 if (selectedCategory == value)
-                  Icon(LineIcons.check, color: theme.primaryColor)
+                  Icon(Icons.check, color: theme.primaryColor)
                 else
                   const SizedBox(width: 24),
                 const SizedBox(width: 10),
@@ -156,7 +155,7 @@ class _PostDealState extends State<PostDeal> {
             child: Row(
               children: [
                 if (selectedStore == value)
-                  Icon(LineIcons.check, color: theme.primaryColor)
+                  Icon(Icons.check, color: theme.primaryColor)
                 else
                   const SizedBox(width: 24),
                 const SizedBox(width: 10),
@@ -316,7 +315,7 @@ class _PostDealState extends State<PostDeal> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: AppLocalizations.of(context)!.originalPrice,
-                  prefixIcon: const Icon(LineIcons.dollarSign, size: 20),
+                  prefixIcon: const Icon(Icons.attach_money, size: 20),
                 ),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,
@@ -340,7 +339,7 @@ class _PostDealState extends State<PostDeal> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: AppLocalizations.of(context)!.discountPrice,
-                  prefixIcon: const Icon(LineIcons.dollarSign, size: 20),
+                  prefixIcon: const Icon(Icons.attach_money, size: 20),
                 ),
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.next,

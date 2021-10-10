@@ -2,9 +2,9 @@ import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
@@ -15,9 +15,11 @@ import '../services/push_notification_service.dart';
 typedef Json = Map<String, dynamic>;
 
 class MyBottomNavigationBar extends StatefulWidget {
-  const MyBottomNavigationBar(this.activeScreen, this.activeScreenOnChanged,
-      {Key? key})
-      : super(key: key);
+  const MyBottomNavigationBar(
+    this.activeScreen,
+    this.activeScreenOnChanged, {
+    Key? key,
+  }) : super(key: key);
 
   final int activeScreen;
   final ValueChanged<int> activeScreenOnChanged;
@@ -63,15 +65,16 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             textStyle: textTheme.bodyText2!.copyWith(color: Colors.white),
             tabs: [
               GButton(
-                icon: LineIcons.tag,
+                icon: Icons.local_offer_outlined,
                 text: AppLocalizations.of(context)!.deals,
               ),
               GButton(
-                icon: LineIcons.compass,
+                icon: Icons.explore_outlined,
                 text: AppLocalizations.of(context)!.browse,
               ),
               GButton(
-                icon: LineIcons.facebookMessenger,
+                icon: FontAwesomeIcons.comment,
+                iconSize: 20,
                 leading: widget.activeScreen == 2 || unreadMessages == 0
                     ? null
                     : Badge(
@@ -85,14 +88,15 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                           ),
                         ),
                         child: Icon(
-                          LineIcons.facebookMessenger,
+                          FontAwesomeIcons.comment,
                           color: theme.primaryColorLight,
+                          size: 20,
                         ),
                       ),
                 text: AppLocalizations.of(context)!.chats,
               ),
               GButton(
-                icon: LineIcons.user,
+                icon: Icons.person_outlined,
                 leading: isLoggedIn
                     ? widget.activeScreen == 3 || unreadNotifications == 0
                         ? CircleAvatar(

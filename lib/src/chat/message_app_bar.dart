@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../deal/report_user_dialog.dart';
@@ -52,7 +51,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
           ),
           content: Row(
             children: [
-              const Icon(LineIcons.ban, size: 24),
+              const Icon(Icons.error, size: 24),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),

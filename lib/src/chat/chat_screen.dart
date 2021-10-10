@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
@@ -67,9 +66,9 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
             children: [
               Icon(
-                LineIcons.facebookMessenger,
+                FontAwesomeIcons.comment,
                 color: theme.primaryColor,
-                size: 150,
+                size: 120,
               ),
               const SizedBox(height: 16),
               Text(
@@ -100,9 +99,9 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
             children: [
               Icon(
-                LineIcons.facebookMessenger,
+                FontAwesomeIcons.comment,
                 color: theme.primaryColor,
-                size: 150,
+                size: 120,
               ),
               const SizedBox(height: 16),
               Text(
@@ -136,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
     Widget _buildBlockedText() {
       return Row(
         children: [
-          Icon(LineIcons.ban, size: 18, color: theme.errorColor),
+          Icon(Icons.error, size: 18, color: theme.errorColor),
           const SizedBox(width: 4),
           Text(
             AppLocalizations.of(context)!.youCannotChatWithThisUser,

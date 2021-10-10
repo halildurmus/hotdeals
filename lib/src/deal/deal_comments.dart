@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../models/comment.dart';
@@ -91,7 +90,7 @@ class _DealCommentsState extends State<DealComments> {
 
   Widget buildNoCommentsFound() {
     return ErrorIndicator(
-      icon: LineIcons.comments,
+      icon: Icons.comment_outlined,
       title: AppLocalizations.of(context)!.noComments,
       message: AppLocalizations.of(context)!.startTheConversation,
     );
