@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -8,13 +9,13 @@ import 'package:provider/provider.dart';
 
 import '../chat/message_arguments.dart';
 import '../chat/message_screen.dart';
+import '../deal/report_user_dialog.dart';
 import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
 import '../utils/error_indicator_util.dart';
-import 'report_user_dialog.dart';
 
 typedef Json = Map<String, dynamic>;
 
@@ -34,6 +35,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
   late final Future<MyUser> userFuture;
   late final Future<int?> postedCommentsFuture;
   late final Future<int?> postedDealsFuture;
+  late final Future<List<dynamic>> future;
   late MyUser user;
   late int postedCommentsCount;
   late int postedDealsCount;
@@ -48,10 +50,11 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
         springService.getNumberOfCommentsPostedByUser(userId: widget.userId);
     postedDealsFuture =
         springService.getNumberOfDealsPostedByUser(userId: widget.userId);
+    future = Future.wait([userFuture, postedCommentsFuture, postedDealsFuture]);
     super.initState();
   }
 
-  Future<void> onPressedReport() async {
+  Future<void> _onReportUserPressed() async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) =>
@@ -59,7 +62,17 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
     ).then((_) => Navigator.of(context).pop());
   }
 
-  Widget buildCircularProgressIndicator() {
+  Widget _buildErrorWidget() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: ErrorIndicatorUtil.buildFirstPageError(
+        context,
+        onTryAgain: () => setState(() {}),
+      ),
+    );
+  }
+
+  Widget _buildCircularProgressIndicator() {
     final theme = Theme.of(context);
 
     return SizedBox(
@@ -72,23 +85,62 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
     );
   }
 
-  Widget buildErrorWidget() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: ErrorIndicatorUtil.buildFirstPageError(
-        context,
-        onTryAgain: () => setState(() {}),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    final iconColor = theme.brightness == Brightness.dark
+        ? Colors.grey.shade300
+        : theme.primaryColor;
+    final textStyle = textTheme.bodyText2!.copyWith(
+      color: theme.brightness == Brightness.dark ? Colors.grey.shade400 : null,
+      fontSize: 13,
+    );
 
-    Widget buildButtons() {
+    Widget _buildJoinedSection() {
+      return Row(
+        children: [
+          Icon(Icons.date_range, color: iconColor, size: 18),
+          const SizedBox(width: 6),
+          Text(
+            AppLocalizations.of(context)!
+                .joined(DateFormat.yMMM().format(user.createdAt!)),
+            style: textStyle,
+          ),
+        ],
+      );
+    }
+
+    Widget _buildNumberOfPostedDealsSection() {
+      return Row(
+        children: [
+          Icon(Icons.local_offer, color: iconColor, size: 18),
+          const SizedBox(width: 6),
+          Text(
+            '$postedDealsCount',
+            style: textStyle.copyWith(fontWeight: FontWeight.bold),
+          ),
+          Text(AppLocalizations.of(context)!.dealsPosted, style: textStyle),
+        ],
+      );
+    }
+
+    Widget _buildNumberOfPostedCommentsSection() {
+      return Row(
+        children: [
+          Icon(Icons.chat, color: iconColor, size: 18),
+          const SizedBox(width: 6),
+          Text(
+            '$postedCommentsCount',
+            style: textStyle.copyWith(fontWeight: FontWeight.bold),
+          ),
+          Text(AppLocalizations.of(context)!.commentsPosted, style: textStyle),
+        ],
+      );
+    }
+
+    Widget _buildButtons() {
       final usersArray = ChatUtil.getUsersArray(
           user1Uid: loggedInUser!.uid, user2Uid: user.uid);
 
@@ -98,7 +150,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
-              onPressed: onPressedReport,
+              onPressed: _onReportUserPressed,
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(deviceWidth * .35, 50),
                 primary: theme.colorScheme.secondary,
@@ -156,133 +208,67 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
       );
     }
 
-    Widget buildJoinedSection() {
-      return Row(
+    Widget _buildAvatar() {
+      return CachedNetworkImage(
+        imageUrl: user.avatar!,
+        imageBuilder: (ctx, imageProvider) =>
+            CircleAvatar(backgroundImage: imageProvider, radius: 30),
+        placeholder: (context, url) => const CircleAvatar(radius: 30),
+      );
+    }
+
+    Widget _buildNickname() {
+      return Text(
+        user.nickname!,
+        style: textTheme.headline6!.copyWith(fontSize: 18),
+      );
+    }
+
+    Widget _buildUserDetails() {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.date_range,
-            color: theme.brightness == Brightness.dark
-                ? Colors.grey
-                : theme.primaryColor,
-            size: 18,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildAvatar(),
+              const SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildNickname(),
+                  const SizedBox(height: 8),
+                  _buildJoinedSection(),
+                  const SizedBox(height: 8),
+                  _buildNumberOfPostedDealsSection(),
+                  const SizedBox(height: 8),
+                  _buildNumberOfPostedCommentsSection(),
+                ],
+              ),
+            ],
           ),
-          const SizedBox(width: 6),
-          Text(
-            AppLocalizations.of(context)!
-                .joined(DateFormat.yMMM().format(user.createdAt!)),
-            style: textTheme.bodyText2!.copyWith(
-              color: theme.brightness == Brightness.dark ? Colors.grey : null,
-              fontSize: 13,
-            ),
-          ),
+          const SizedBox(height: 10),
+          if (loggedInUser != null && loggedInUser?.id != user.id)
+            _buildButtons(),
         ],
       );
     }
 
-    Widget buildNumberOfPostedDealsSection() {
-      return Row(
-        children: [
-          Icon(
-            Icons.local_offer,
-            color: theme.brightness == Brightness.dark
-                ? Colors.grey
-                : theme.primaryColor,
-            size: 18,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            '$postedDealsCount ${AppLocalizations.of(context)!.dealsPosted}',
-            style: textTheme.bodyText2!.copyWith(
-              color: theme.brightness == Brightness.dark ? Colors.grey : null,
-              fontSize: 13,
-            ),
-          ),
-        ],
-      );
-    }
-
-    Widget buildNumberOfPostedCommentsSection() {
-      return Row(
-        children: [
-          Icon(
-            Icons.chat,
-            color: theme.brightness == Brightness.dark
-                ? Colors.grey
-                : theme.primaryColor,
-            size: 18,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            '$postedCommentsCount ${AppLocalizations.of(context)!.commentsPosted}',
-            style: textTheme.bodyText2!.copyWith(
-              color: theme.brightness == Brightness.dark ? Colors.grey : null,
-              fontSize: 13,
-            ),
-          ),
-        ],
-      );
-    }
-
-    Widget buildUserDetails() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CachedNetworkImage(
-                  imageUrl: user.avatar!,
-                  imageBuilder: (BuildContext ctx,
-                          ImageProvider<Object> imageProvider) =>
-                      CircleAvatar(backgroundImage: imageProvider, radius: 30),
-                  placeholder: (BuildContext context, String url) =>
-                      const CircleAvatar(radius: 30),
-                ),
-                const SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user.nickname!,
-                      style: textTheme.headline6!.copyWith(fontSize: 18),
-                    ),
-                    const SizedBox(height: 8),
-                    buildJoinedSection(),
-                    const SizedBox(height: 8),
-                    buildNumberOfPostedDealsSection(),
-                    const SizedBox(height: 8),
-                    buildNumberOfPostedCommentsSection(),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            if (loggedInUser != null && loggedInUser?.id != user.id)
-              buildButtons(),
-          ],
-        ),
-      );
-    }
-
-    Widget buildFutureBuilder() {
-      return FutureBuilder<dynamic>(
-        future: Future.wait<dynamic>(
-          [userFuture, postedCommentsFuture, postedDealsFuture],
-        ),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    Widget _buildFutureBuilder() {
+      return FutureBuilder(
+        future: future,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             user = snapshot.data![0];
             postedCommentsCount = snapshot.data![1];
             postedDealsCount = snapshot.data![2];
 
-            return buildUserDetails();
+            return _buildUserDetails();
           } else if (snapshot.hasError) {
-            return buildErrorWidget();
+            return _buildErrorWidget();
           }
 
-          return buildCircularProgressIndicator();
+          return _buildCircularProgressIndicator();
         },
       );
     }
@@ -304,7 +290,10 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
             ),
             const Divider(),
             const SizedBox(height: 10),
-            buildFutureBuilder(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _buildFutureBuilder(),
+            ),
           ],
         ),
       ),

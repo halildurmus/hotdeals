@@ -8,7 +8,7 @@ import '../models/my_user.dart';
 import '../models/user_controller_impl.dart';
 import '../utils/date_time_util.dart';
 import '../widgets/sign_in_dialog.dart';
-import 'user_profile_dialog.dart';
+import '../widgets/user_profile_dialog.dart';
 
 class CommentItem extends StatelessWidget {
   const CommentItem({Key? key, required this.comment}) : super(key: key);

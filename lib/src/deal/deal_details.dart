@@ -8,7 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../deal/user_profile_dialog.dart';
+import '../widgets/user_profile_dialog.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
