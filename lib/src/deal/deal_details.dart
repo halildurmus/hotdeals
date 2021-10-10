@@ -680,18 +680,15 @@ class _DealDetailsState extends State<DealDetails> {
             : throw 'Could not launch ${_deal.dealUrl}';
       }
 
-      return Container(
+      return Padding(
         padding: const EdgeInsets.all(16),
-        width: deviceWidth,
-        child: SizedBox(
-          height: 50,
-          child: ElevatedButton(
-            onPressed: launchURL,
-            style: ElevatedButton.styleFrom(
-              primary: theme.colorScheme.secondary,
-            ),
-            child: Text(AppLocalizations.of(context)!.seeDeal),
+        child: ElevatedButton(
+          onPressed: launchURL,
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(deviceWidth, 50),
+            primary: theme.colorScheme.secondary,
           ),
+          child: Text(AppLocalizations.of(context)!.seeDeal),
         ),
       );
     }

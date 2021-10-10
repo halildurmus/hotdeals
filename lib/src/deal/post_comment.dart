@@ -108,21 +108,18 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
     }
 
     Widget buildPostButton() {
-      return Container(
+      return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        width: deviceWidth,
-        child: SizedBox(
-          height: 45,
-          child: ElevatedButton(
-            onPressed: commentController.text.isEmpty ? null : onPressed,
-            style: ElevatedButton.styleFrom(
-              primary: theme.colorScheme.secondary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
+        child: ElevatedButton(
+          onPressed: commentController.text.isEmpty ? null : onPressed,
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(deviceWidth, 45),
+            primary: theme.colorScheme.secondary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
-            child: Text(AppLocalizations.of(context)!.postComment),
           ),
+          child: Text(AppLocalizations.of(context)!.postComment),
         ),
       );
     }

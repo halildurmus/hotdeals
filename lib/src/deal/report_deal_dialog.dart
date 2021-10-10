@@ -140,23 +140,20 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                   minLines: 1,
                   maxLines: 10,
                 ),
-                Container(
+                Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  width: deviceWidth,
-                  child: SizedBox(
-                    height: 45,
-                    child: ElevatedButton(
-                      onPressed: repostCheckbox || spamCheckbox || otherCheckbox
-                          ? sendReport
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        primary: theme.colorScheme.secondary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
+                  child: ElevatedButton(
+                    onPressed: repostCheckbox || spamCheckbox || otherCheckbox
+                        ? sendReport
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(deviceWidth, 45),
+                      primary: theme.colorScheme.secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Text(AppLocalizations.of(context)!.reportDeal),
                     ),
+                    child: Text(AppLocalizations.of(context)!.reportDeal),
                   ),
                 )
               ],

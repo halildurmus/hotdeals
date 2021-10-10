@@ -240,22 +240,19 @@ class _PostDealState extends State<PostDeal> {
     }
 
     Widget buildPostButton() {
-      return Container(
+      return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        width: deviceWidth,
-        child: SizedBox(
-          height: 50,
-          child: ElevatedButton(
-            onPressed: _formKey.currentState == null
-                ? null
-                : _formKey.currentState!.validate()
-                    ? onPressed
-                    : null,
-            style: ElevatedButton.styleFrom(
-              primary: theme.colorScheme.secondary,
-            ),
-            child: Text(AppLocalizations.of(context)!.postDeal),
+        child: ElevatedButton(
+          onPressed: _formKey.currentState == null
+              ? null
+              : _formKey.currentState!.validate()
+                  ? onPressed
+                  : null,
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(deviceWidth, 50),
+            primary: theme.colorScheme.secondary,
           ),
+          child: Text(AppLocalizations.of(context)!.postDeal),
         ),
       );
     }

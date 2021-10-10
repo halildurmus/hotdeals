@@ -45,18 +45,16 @@ class _ProfileState extends State<Profile> {
     }
 
     Widget buildUpdateProfileButton() {
-      return SizedBox(
-        width: 150,
-        child: OutlinedButton(
-          onPressed: () =>
-              NavigationUtil.navigate(context, const UpdateProfile()),
-          style: OutlinedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
+      return OutlinedButton(
+        onPressed: () =>
+            NavigationUtil.navigate(context, const UpdateProfile()),
+        style: OutlinedButton.styleFrom(
+          fixedSize: const Size.fromWidth(150),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
           ),
-          child: Text(AppLocalizations.of(context)!.updateProfile),
         ),
+        child: Text(AppLocalizations.of(context)!.updateProfile),
       );
     }
 

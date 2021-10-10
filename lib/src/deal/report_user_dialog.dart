@@ -139,24 +139,21 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
                   minLines: 1,
                   maxLines: 10,
                 ),
-                Container(
+                Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  width: deviceWidth,
-                  child: SizedBox(
-                    height: 45,
-                    child: ElevatedButton(
-                      onPressed:
-                          harassingCheckbox || spamCheckbox || otherCheckbox
-                              ? () => sendReport(context)
-                              : null,
-                      style: ElevatedButton.styleFrom(
-                        primary: theme.colorScheme.secondary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
+                  child: ElevatedButton(
+                    onPressed:
+                        harassingCheckbox || spamCheckbox || otherCheckbox
+                            ? () => sendReport(context)
+                            : null,
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(deviceWidth, 45),
+                      primary: theme.colorScheme.secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Text(AppLocalizations.of(context)!.reportUser),
                     ),
+                    child: Text(AppLocalizations.of(context)!.reportUser),
                   ),
                 )
               ],

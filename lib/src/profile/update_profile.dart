@@ -131,6 +131,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   }
 
   Future<void> nicknameOnTap() {
+    final deviceWidth = MediaQuery.of(context).size.width;
     final theme = Theme.of(context);
 
     return showDialog<void>(
@@ -159,32 +160,29 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                       },
                     ),
                     const SizedBox(height: 20),
-                    SizedBox(
-                      height: 45,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: nicknameController.text.isEmpty ||
-                                nicknameController.text == user.nickname
-                            ? null
-                            : () async {
-                                showLoadingDialog();
-                                await updateNickname(
-                                    user.id!, nicknameController.text);
-                                Navigator.of(context).pop();
-                                Provider.of<UserControllerImpl>(context,
-                                        listen: false)
-                                    .getUser();
-                                Navigator.of(context).pop();
-                              },
-                        style: ElevatedButton.styleFrom(
-                          primary: theme.colorScheme.secondary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+                    ElevatedButton(
+                      onPressed: nicknameController.text.isEmpty ||
+                              nicknameController.text == user.nickname
+                          ? null
+                          : () async {
+                              showLoadingDialog();
+                              await updateNickname(
+                                  user.id!, nicknameController.text);
+                              Navigator.of(context).pop();
+                              Provider.of<UserControllerImpl>(context,
+                                      listen: false)
+                                  .getUser();
+                              Navigator.of(context).pop();
+                            },
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(deviceWidth, 45),
+                        primary: theme.colorScheme.secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        child: Text(
-                          AppLocalizations.of(context)!.updateNickname,
-                        ),
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.updateNickname,
                       ),
                     ),
                   ],
