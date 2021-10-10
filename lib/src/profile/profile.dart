@@ -81,16 +81,18 @@ class _ProfileState extends State<Profile> {
     }
 
     Widget buildTabBar() {
+      final isLightMode = theme.brightness == Brightness.light;
+
       return Container(
         margin: const EdgeInsets.only(top: 5),
         padding: const EdgeInsets.only(bottom: 2),
         child: Center(
           child: TabBar(
-            indicatorColor: theme.primaryColor,
+            indicatorColor: isLightMode ? theme.primaryColor : null,
             indicatorSize: TabBarIndicatorSize.label,
             isScrollable: true,
-            labelColor: theme.primaryColor,
-            unselectedLabelColor: theme.primaryColorLight,
+            labelColor: isLightMode ? theme.primaryColor : null,
+            unselectedLabelColor: isLightMode ? theme.primaryColorLight : null,
             labelStyle: textTheme.bodyText2!.copyWith(
               fontSize: 16,
               fontWeight: FontWeight.bold,
