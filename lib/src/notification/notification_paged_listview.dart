@@ -70,7 +70,6 @@ class _NotificationPagedListViewState extends State<NotificationPagedListView>
     Widget buildPagedListView() {
       return PagedListView.separated(
         pagingController: _pagingController,
-        padding: const EdgeInsets.symmetric(vertical: 16),
         builderDelegate: PagedChildBuilderDelegate<PushNotification>(
           animateTransitions: true,
           itemBuilder: (context, notification, index) =>
