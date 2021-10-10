@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../browse/browse.dart';
 import '../chat/chat_screen.dart';
 import '../deal/deals.dart';
+import '../notification/notifications.dart';
 import '../profile/profile.dart';
 import 'my_bottom_navigation_bar.dart';
 
@@ -18,11 +19,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int activeScreen = 0;
 
-  final List<Widget> screens = [
-    const Deals(),
-    const Browse(),
-    const ChatScreen(),
-    const Profile(),
+  final List<Widget> screens = const [
+    Deals(),
+    Browse(),
+    ChatScreen(),
+    Notifications(),
+    Profile(),
   ];
 
   @override

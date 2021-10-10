@@ -96,9 +96,13 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                 text: AppLocalizations.of(context)!.chats,
               ),
               GButton(
+                icon: Icons.notifications_outlined,
+                text: AppLocalizations.of(context)!.notifications,
+              ),
+              GButton(
                 icon: Icons.person_outlined,
                 leading: isLoggedIn
-                    ? widget.activeScreen == 3 || unreadNotifications == 0
+                    ? widget.activeScreen == 4 || unreadNotifications == 0
                         ? CircleAvatar(
                             backgroundImage: NetworkImage(_user!.avatar!),
                             radius: 12,

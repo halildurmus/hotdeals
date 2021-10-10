@@ -10,7 +10,6 @@ import '../utils/navigation_util.dart';
 import 'avatar_fullscreen.dart';
 import 'my_deals.dart';
 import 'my_favorites.dart';
-import 'my_notifications.dart';
 import 'update_profile.dart';
 
 class Profile extends StatefulWidget {
@@ -99,7 +98,6 @@ class _ProfileState extends State<Profile> {
               fontWeight: FontWeight.bold,
             ),
             tabs: [
-              Tab(text: AppLocalizations.of(context)!.notifications),
               Tab(text: AppLocalizations.of(context)!.posts),
               Tab(text: AppLocalizations.of(context)!.favorites),
             ],
@@ -110,7 +108,7 @@ class _ProfileState extends State<Profile> {
 
     Widget buildTabBarView() {
       return const TabBarView(
-        children: [MyNotifications(), MyDeals(), MyFavorites()],
+        children: [MyDeals(), MyFavorites()],
       );
     }
 
@@ -127,7 +125,7 @@ class _ProfileState extends State<Profile> {
           ],
         ),
         body: DefaultTabController(
-          length: 3,
+          length: 2,
           child: NestedScrollView(
             headerSliverBuilder: (BuildContext context, bool value) {
               return [

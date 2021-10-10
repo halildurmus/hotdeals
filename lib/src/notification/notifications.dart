@@ -9,14 +9,14 @@ import '../services/push_notification_service.dart';
 import '../widgets/error_indicator.dart';
 import 'notification_paged_listview.dart';
 
-class MyNotifications extends StatefulWidget {
-  const MyNotifications({Key? key}) : super(key: key);
+class Notifications extends StatefulWidget {
+  const Notifications({Key? key}) : super(key: key);
 
   @override
-  _MyNotificationsState createState() => _MyNotificationsState();
+  _NotificationsState createState() => _NotificationsState();
 }
 
-class _MyNotificationsState extends State<MyNotifications> with NetworkLoggy {
+class _NotificationsState extends State<Notifications> with NetworkLoggy {
   late PagingController<int, PushNotification> _pagingController;
   late PushNotificationService _pushNotificationService;
 
@@ -47,11 +47,16 @@ class _MyNotificationsState extends State<MyNotifications> with NetworkLoggy {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationPagedListView(
-      notificationFuture: _notificationFuture,
-      noNotificationsFound: buildNoNotificationsFound(context),
-      pageSize: 8,
-      pagingController: _pagingController,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.notifications),
+      ),
+      body: NotificationPagedListView(
+        notificationFuture: _notificationFuture,
+        noNotificationsFound: buildNoNotificationsFound(context),
+        pageSize: 8,
+        pagingController: _pagingController,
+      ),
     );
   }
 }
