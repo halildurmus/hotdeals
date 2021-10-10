@@ -97,24 +97,27 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
               ),
               GButton(
                 icon: Icons.notifications_outlined,
+                leading: isLoggedIn
+                    ? widget.activeScreen == 3 || unreadNotifications == 0
+                        ? null
+                        : Badge(
+                            badgeColor: theme.primaryColor.withOpacity(.3),
+                            elevation: 0,
+                            child: Icon(
+                              Icons.notifications_outlined,
+                              color: theme.primaryColorLight,
+                            ),
+                          )
+                    : null,
                 text: AppLocalizations.of(context)!.notifications,
               ),
               GButton(
                 icon: Icons.person_outlined,
                 leading: isLoggedIn
-                    ? widget.activeScreen == 4 || unreadNotifications == 0
-                        ? CircleAvatar(
-                            backgroundImage: NetworkImage(_user!.avatar!),
-                            radius: 12,
-                          )
-                        : Badge(
-                            badgeColor: theme.primaryColor.withOpacity(.3),
-                            elevation: 0,
-                            child: CircleAvatar(
-                              backgroundImage: NetworkImage(_user!.avatar!),
-                              radius: 12,
-                            ),
-                          )
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(_user!.avatar!),
+                        radius: 12,
+                      )
                     : null,
                 text: AppLocalizations.of(context)!.profile,
               ),
