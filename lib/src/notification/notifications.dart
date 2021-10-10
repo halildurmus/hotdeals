@@ -54,7 +54,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
       body: NotificationPagedListView(
         notificationFuture: _notificationFuture,
         noNotificationsFound: buildNoNotificationsFound(context),
-        pageSize: 8,
+        pageSize: 10,
         pagingController: _pagingController,
       ),
     );
