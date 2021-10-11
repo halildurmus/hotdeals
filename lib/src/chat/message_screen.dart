@@ -26,7 +26,7 @@ import '../models/current_route.dart';
 import '../models/my_user.dart';
 import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
 import '../services/image_picker_service.dart';
@@ -153,7 +153,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   Widget build(BuildContext context) {
     final currentLocale = GetIt.I.get<SettingsController>().locale;
     final theme = Theme.of(context);
-    final MyUser _user = Provider.of<UserControllerImpl>(context).user!;
+    final MyUser _user = Provider.of<UserController>(context).user!;
     final _isUser2Blocked = _user.blockedUsers!.contains(widget.user2.uid);
     final _isUserBlocked = widget.user2.blockedUsers!.contains(_user.uid);
 

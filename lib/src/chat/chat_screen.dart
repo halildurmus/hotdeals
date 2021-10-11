@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
@@ -35,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    _user = Provider.of<UserControllerImpl>(context, listen: false).user;
+    _user = Provider.of<UserController>(context, listen: false).user;
     super.initState();
   }
 
@@ -333,8 +333,8 @@ class _ChatScreenState extends State<ChatScreen> {
               return _buildNoChats();
             }
 
-            return Consumer<UserControllerImpl>(
-              builder: (BuildContext context, UserControllerImpl mongoUser,
+            return Consumer<UserController>(
+              builder: (BuildContext context, UserController mongoUser,
                   Widget? child) {
                 final MyUser? user = mongoUser.user;
 

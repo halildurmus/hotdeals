@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../models/deal.dart';
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../widgets/deal_item.dart';
@@ -86,7 +86,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
           .favoriteDeal(dealId: dealId)
           .then((bool result) {
         if (result) {
-          Provider.of<UserControllerImpl>(context, listen: false).getUser();
+          Provider.of<UserController>(context, listen: false).getUser();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -101,7 +101,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
           .unfavoriteDeal(dealId: dealId)
           .then((bool result) {
         if (result) {
-          Provider.of<UserControllerImpl>(context, listen: false).getUser();
+          Provider.of<UserController>(context, listen: false).getUser();
           if (widget.removeDealWhenUnfavorited) {
             _pagingController.itemList!.removeWhere((e) => e.id == dealId);
           }
@@ -118,7 +118,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
 
   @override
   Widget build(BuildContext context) {
-    final MyUser? user = Provider.of<UserControllerImpl>(context).user;
+    final MyUser? user = Provider.of<UserController>(context).user;
 
     Widget buildPagedListView() {
       return PagedListView(

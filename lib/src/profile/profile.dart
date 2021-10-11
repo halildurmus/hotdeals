@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../settings/settings.view.dart';
 import '../sign_in/sign_in_page.dart';
 import '../utils/navigation_util.dart';
@@ -26,7 +26,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final MyUser? user = Provider.of<UserControllerImpl>(context).user;
+    final MyUser? user = Provider.of<UserController>(context).user;
 
     Widget buildAvatar() {
       return GestureDetector(

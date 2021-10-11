@@ -8,7 +8,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/firestore_service.dart';
 import '../services/push_notification_service.dart';
 
@@ -47,7 +47,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    _user = Provider.of<UserControllerImpl>(context).user;
+    _user = Provider.of<UserController>(context).user;
     isLoggedIn = _user != null;
 
     Widget buildGNav() {

@@ -7,7 +7,7 @@ import '../chat/message_arguments.dart';
 import '../chat/message_screen.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
 
@@ -19,10 +19,9 @@ class NotificationOverlayItem extends StatelessWidget {
 
   Future<void> _onTap(BuildContext context) async {
     final String _docId = notification.object;
-    final MyUser _user = context.read<UserControllerImpl>().user!;
+    final MyUser _user = context.read<UserController>().user!;
     final String _user2Id =
         ChatUtil.getUser2Uid(docID: _docId, user1Uid: _user.uid);
-
     final MyUser user2 =
         await GetIt.I.get<SpringService>().getUserByUid(uid: _user2Id);
 

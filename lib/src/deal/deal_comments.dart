@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../widgets/error_indicator.dart';
 import '../widgets/sign_in_dialog.dart';
@@ -31,7 +31,7 @@ class _DealCommentsState extends State<DealComments> {
 
   @override
   void initState() {
-    _user = context.read<UserControllerImpl>().user;
+    _user = context.read<UserController>().user;
     _pagingController = PagingController<int, Comment>(firstPageKey: 0);
     updateCommentsCount();
     super.initState();

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../deal/report_user_dialog.dart';
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../widgets/custom_alert_dialog.dart';
 
@@ -38,7 +38,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
           .blockUser(userId: widget.user2.uid);
 
       if (_result) {
-        await Provider.of<UserControllerImpl>(context, listen: false).getUser();
+        await Provider.of<UserController>(context, listen: false).getUser();
 
         final SnackBar snackBar = SnackBar(
           backgroundColor: Theme.of(context).backgroundColor,
@@ -114,7 +114,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
           .unblockUser(userUid: widget.user2.uid);
 
       if (_result) {
-        await Provider.of<UserControllerImpl>(context, listen: false).getUser();
+        await Provider.of<UserController>(context, listen: false).getUser();
       } else {
         final SnackBar snackBar = SnackBar(
           backgroundColor: Theme.of(context).backgroundColor,
@@ -152,7 +152,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final MyUser _user = Provider.of<UserControllerImpl>(context).user!;
+    final MyUser _user = Provider.of<UserController>(context).user!;
     final bool _isUserBlocked = _user.blockedUsers!.contains(widget.user2.uid);
 
     Future<void> _onPressedReport() async {

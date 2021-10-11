@@ -11,7 +11,7 @@ import '../chat/message_arguments.dart';
 import '../chat/message_screen.dart';
 import '../deal/report_user_dialog.dart';
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
@@ -42,7 +42,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
 
   @override
   void initState() {
-    loggedInUser = context.read<UserControllerImpl>().user;
+    loggedInUser = context.read<UserController>().user;
     firestoreService = GetIt.I.get<FirestoreService>();
     springService = GetIt.I.get<SpringService>();
     userFuture = springService.getUserById(id: widget.userId);

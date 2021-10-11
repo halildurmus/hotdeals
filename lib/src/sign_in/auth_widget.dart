@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../home/home.dart';
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 
@@ -42,18 +42,18 @@ class AuthWidget extends StatelessWidget with UiLoggy {
   @override
   Widget build(BuildContext context) {
     Future<void> _saveFcmTokenToDatabase(String token) async {
-      final String userId = context.read<UserControllerImpl>().user!.id!;
+      final String userId = context.read<UserController>().user!.id!;
 
       await GetIt.I
           .get<SpringService>()
           .addFcmToken(userId: userId, fcmToken: token);
 
-      await context.read<UserControllerImpl>().getUser();
+      await context.read<UserController>().getUser();
     }
 
     if (userSnapshot.hasData) {
       final userFuture =
-          Provider.of<UserControllerImpl>(context, listen: false).getUser();
+          Provider.of<UserController>(context, listen: false).getUser();
 
       return FutureBuilder<MyUser?>(
         future: userFuture,

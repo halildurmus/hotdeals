@@ -12,7 +12,7 @@ import '../models/deal.dart';
 import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/search_hit.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/deal_paged_listview.dart';
@@ -79,7 +79,7 @@ class _DealsState extends State<Deals> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final MyUser? user = Provider.of<UserControllerImpl>(context).user;
+    final MyUser? user = Provider.of<UserController>(context).user;
 
     final List<String> _filterChoices = [
       AppLocalizations.of(context)!.newest,

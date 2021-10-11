@@ -9,7 +9,7 @@ import 'package:mime/mime.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
@@ -59,7 +59,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                 userID: userID,
               );
       await updateUserAvatar(userID, avatarURL);
-      Provider.of<UserControllerImpl>(context, listen: false).getUser();
+      Provider.of<UserController>(context, listen: false).getUser();
       Navigator.of(context).pop();
     } else {
       loggy.info('No image selected.');
@@ -169,7 +169,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                               await updateNickname(
                                   user.id!, nicknameController.text);
                               Navigator.of(context).pop();
-                              Provider.of<UserControllerImpl>(context,
+                              Provider.of<UserController>(context,
                                       listen: false)
                                   .getUser();
                               Navigator.of(context).pop();
@@ -199,7 +199,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   void initState() {
     showLoadingDialog =
         () => GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
-    final MyUser user = context.read<UserControllerImpl>().user!;
+    final MyUser user = context.read<UserController>().user!;
     nicknameController = TextEditingController(text: user.nickname);
     super.initState();
   }
@@ -214,7 +214,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    user = Provider.of<UserControllerImpl>(context).user!;
+    user = Provider.of<UserController>(context).user!;
 
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.updateProfile)),

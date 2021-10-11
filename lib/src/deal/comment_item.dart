@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../models/comment.dart';
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../utils/date_time_util.dart';
 import '../widgets/sign_in_dialog.dart';
 import '../widgets/user_profile_dialog.dart';
@@ -27,7 +27,7 @@ class CommentItem extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final poster = comment.poster!;
-    final MyUser? user = context.read<UserControllerImpl>().user;
+    final MyUser? user = context.read<UserController>().user;
 
     Widget buildUserDetails() {
       return GestureDetector(

@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../widgets/custom_alert_dialog.dart';
@@ -92,7 +92,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
           await GetIt.I.get<SpringService>().unblockUser(userUid: userUid);
 
       if (result) {
-        await Provider.of<UserControllerImpl>(context, listen: false).getUser();
+        await Provider.of<UserController>(context, listen: false).getUser();
 
         final SnackBar snackBar = SnackBar(
           content: Row(
@@ -140,10 +140,10 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
   @override
   Widget build(BuildContext context) {
-    final MyUser user = Provider.of<UserControllerImpl>(context).user!;
+    final MyUser user = Provider.of<UserController>(context).user!;
 
     Future<void> onRefresh() async {
-      await Provider.of<UserControllerImpl>(context, listen: false).getUser();
+      await Provider.of<UserController>(context, listen: false).getUser();
       setState(() {});
 
       if (mounted) {

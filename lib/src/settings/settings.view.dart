@@ -8,7 +8,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/auth_service.dart';
 import '../services/spring_service.dart';
 import '../widgets/custom_alert_dialog.dart';
@@ -45,7 +45,7 @@ class SettingsView extends StatelessWidget {
     try {
       final AuthService auth = Provider.of<AuthService>(context, listen: false);
       await auth.signOut();
-      Provider.of<UserControllerImpl>(context, listen: false).logout();
+      Provider.of<UserController>(context, listen: false).logout();
     } on PlatformException catch (e) {
       await ExceptionAlertDialog(
         title: AppLocalizations.of(context)!.logoutFailed,
@@ -210,7 +210,7 @@ class SettingsView extends StatelessWidget {
             title: AppLocalizations.of(context)!.theme,
             subtitle: _getThemeName(context, controller.themeMode),
           ),
-          if (Provider.of<UserControllerImpl>(context).user != null)
+          if (Provider.of<UserController>(context).user != null)
             SettingsListItem(
               onTap: () => _confirmSignOut(context),
               hasNavigation: false,

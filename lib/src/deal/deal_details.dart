@@ -15,7 +15,7 @@ import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../models/vote_type.dart';
 import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
@@ -65,7 +65,7 @@ class _DealDetailsState extends State<DealDetails> {
     _categories = GetIt.I.get<Categories>();
     final Stores stores = GetIt.I.get<Stores>();
     _store = stores.findByStoreId(_deal.store);
-    _user = context.read<UserControllerImpl>().user;
+    _user = context.read<UserController>().user;
     if (_user != null) {
       isUpvoted = _deal.upvoters!.contains(_user!.id);
       isDownvoted = _deal.downvoters!.contains(_user!.id);
@@ -232,9 +232,9 @@ class _DealDetailsState extends State<DealDetails> {
     }
 
     Widget buildFavoriteButton() {
-      return Consumer<UserControllerImpl>(
-        builder: (BuildContext context, UserControllerImpl mongoUser,
-            Widget? child) {
+      return Consumer<UserController>(
+        builder:
+            (BuildContext context, UserController mongoUser, Widget? child) {
           final MyUser? user = mongoUser.user;
           final bool isFavorited = user?.favorites![widget.deal.id!] == true;
 
@@ -252,7 +252,7 @@ class _DealDetailsState extends State<DealDetails> {
                     .favoriteDeal(dealId: widget.deal.id!)
                     .then((bool result) {
                   if (result) {
-                    Provider.of<UserControllerImpl>(context, listen: false)
+                    Provider.of<UserController>(context, listen: false)
                         .getUser();
                   }
                 });
@@ -262,7 +262,7 @@ class _DealDetailsState extends State<DealDetails> {
                     .unfavoriteDeal(dealId: widget.deal.id!)
                     .then((bool result) {
                   if (result) {
-                    Provider.of<UserControllerImpl>(context, listen: false)
+                    Provider.of<UserController>(context, listen: false)
                         .getUser();
                   }
                 });

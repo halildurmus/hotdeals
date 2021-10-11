@@ -3,7 +3,7 @@ import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/auth_service.dart';
 
 /// Used to create user-dependent objects that need to be accessible by all
@@ -28,8 +28,8 @@ class AuthWidgetBuilder extends StatelessWidget with UiLoggy {
 
         return MultiProvider(
           providers: [
-            ChangeNotifierProvider<UserControllerImpl>(
-              create: (_) => UserControllerImpl(),
+            ChangeNotifierProvider<UserController>(
+              create: (_) => UserController(),
             ),
           ],
           child: builder(context, snapshot),

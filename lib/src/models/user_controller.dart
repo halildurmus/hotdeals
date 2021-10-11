@@ -1,22 +1,28 @@
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 
+import '../services/spring_service.dart';
 import 'my_user.dart';
 
-/// An abstract class that many Widgets can interact with to get logged in user,
+/// A class that many Widgets can interact with to get logged in user,
 /// logout user or listen to user changes.
-abstract class UserController extends ChangeNotifier {
-  // /// Returns the logged in user's FCM token.
-  // String? get fcmToken;
+///
+/// Controllers glue Data Services to Flutter Widgets.
+/// The [UserController] uses the [SpringService] to get logged in user.
+class UserController extends ChangeNotifier {
+  MyUser? _user;
 
-  /// Returns the logged in user.
-  MyUser? get user;
+  MyUser? get user => _user;
 
-  // /// Loads the logged in user's FCM token from [FirebaseMessaging].
-  // Future<String?> getFcmToken();
+  Future<MyUser?> getUser() async {
+    _user = await GetIt.I.get<SpringService>().getMongoUser();
+    notifyListeners();
 
-  /// Loads the logged in user's document from database.
-  Future<MyUser?> getUser();
+    return _user;
+  }
 
-  /// Logs the user out of the system.
-  void logout();
+  void logout() {
+    _user = null;
+    notifyListeners();
+  }
 }

@@ -9,7 +9,7 @@ import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
-import '../models/user_controller_impl.dart';
+import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../widgets/loading_dialog.dart';
 
@@ -28,7 +28,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
 
   @override
   void initState() {
-    user = context.read<UserControllerImpl>().user;
+    user = context.read<UserController>().user;
     commentController = TextEditingController();
     super.initState();
   }
