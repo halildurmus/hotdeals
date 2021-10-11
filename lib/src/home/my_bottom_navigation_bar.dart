@@ -32,9 +32,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
   MyUser? _user;
   bool isLoggedIn = false;
   int unreadMessages = 0;
-  int unreadNotifications = 0;
   late int activeScreen;
-  late PushNotificationService pushNotificationService;
+  late final PushNotificationService pushNotificationService;
 
   @override
   void initState() {
@@ -53,8 +52,9 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
     Widget buildGNav() {
       return AnimatedBuilder(
         animation: pushNotificationService,
-        builder: (BuildContext context, Widget? child) {
-          unreadNotifications = pushNotificationService.unreadNotifications;
+        builder: (context, child) {
+          final unreadNotifications =
+              pushNotificationService.unreadNotifications;
 
           return GNav(
             activeColor: Colors.white,
@@ -139,28 +139,20 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         stream: GetIt.I
             .get<FirestoreService>()
             .messagesStreamByUserUid(userUid: _user!.uid),
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             unreadMessages = 0;
             final List<DocumentSnapshot<Json>> items = snapshot.data!.docs;
-
-            items.removeWhere((DocumentSnapshot<Json> e) =>
-                (e.get('latestMessage') as Map<String, dynamic>).isEmpty);
-
+            items.removeWhere((e) => (e.get('latestMessage') as Json).isEmpty);
             if (items.isEmpty) {
               return buildGNav();
             }
 
             for (DocumentSnapshot e in items) {
-              final Map<String, dynamic> latestMessage =
-                  e.get('latestMessage') as Map<String, dynamic>;
-
+              final latestMessage = e.get('latestMessage') as Json;
               final String senderId = latestMessage['author']['id'] as String;
               if (senderId != _user?.uid) {
-                final bool isRead =
-                    (latestMessage['status'] as String) == 'seen';
-
+                final isRead = (latestMessage['status'] as String) == 'seen';
                 if (!isRead) {
                   unreadMessages++;
                 }
