@@ -26,7 +26,7 @@ class CommentPagedListView extends StatefulWidget {
 
 class _CommentPagedListViewState extends State<CommentPagedListView>
     with NetworkLoggy {
-  late PagingController<int, Comment> _pagingController;
+  late final PagingController<int, Comment> _pagingController;
 
   @override
   void initState() {

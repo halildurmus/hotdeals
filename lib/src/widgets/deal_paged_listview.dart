@@ -37,7 +37,7 @@ class DealPagedListView extends StatefulWidget {
 
 class _DealPagedListViewState extends State<DealPagedListView>
     with NetworkLoggy {
-  late PagingController<int, Deal> _pagingController;
+  late final PagingController<int, Deal> _pagingController;
 
   @override
   void initState() {
