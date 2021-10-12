@@ -88,55 +88,50 @@ class _DealsState extends State<Deals> {
     ];
 
     Widget buildChoiceChips() {
-      return Container(
+      return SizedBox(
         height: 65,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: theme.shadowColor.withOpacity(.2),
-              blurRadius: 7,
-              offset: const Offset(0, 3),
-            ),
-          ],
+        child: Material(
           color: theme.backgroundColor,
-        ),
-        child: ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          scrollDirection: Axis.horizontal,
-          itemCount: 3,
-          itemBuilder: (BuildContext context, int index) {
-            return ChoiceChip(
-              labelStyle: TextStyle(
-                color: _selectedFilter == index
-                    ? Colors.white
-                    : theme.primaryColorLight,
-                fontWeight: FontWeight.bold,
-              ),
-              labelPadding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-              side: BorderSide(
-                color: _selectedFilter == index
-                    ? Colors.transparent
-                    : theme.primaryColor,
-              ),
-              pressElevation: 0,
-              elevation: _selectedFilter == index ? 4 : 0,
-              backgroundColor: theme.backgroundColor,
-              selectedColor: theme.primaryColor,
-              label: Text(_filterChoices.elementAt(index)),
-              selected: _selectedFilter == index,
-              onSelected: (bool selected) {
-                if (_selectedFilter != index) {
-                  _selectedFilter = index;
-                  setState(() {});
-                  _sortDeals(_selectedFilter);
-                }
-              },
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(width: 8);
-          },
+          elevation: 4,
+          shadowColor: const Color(0xFF000000),
+          child: ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            scrollDirection: Axis.horizontal,
+            itemCount: 3,
+            itemBuilder: (BuildContext context, int index) {
+              return ChoiceChip(
+                labelStyle: TextStyle(
+                  color: _selectedFilter == index
+                      ? Colors.white
+                      : theme.primaryColorLight,
+                  fontWeight: FontWeight.bold,
+                ),
+                labelPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                side: BorderSide(
+                  color: _selectedFilter == index
+                      ? Colors.transparent
+                      : theme.primaryColor,
+                ),
+                pressElevation: 0,
+                elevation: _selectedFilter == index ? 4 : 0,
+                backgroundColor: theme.backgroundColor,
+                selectedColor: theme.primaryColor,
+                label: Text(_filterChoices.elementAt(index)),
+                selected: _selectedFilter == index,
+                onSelected: (bool selected) {
+                  if (_selectedFilter != index) {
+                    _selectedFilter = index;
+                    setState(() {});
+                    _sortDeals(_selectedFilter);
+                  }
+                },
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(width: 8);
+            },
+          ),
         ),
       );
     }
