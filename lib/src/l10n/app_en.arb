@@ -7,6 +7,41 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "selectAll": "Select all",
+  "@selectAll": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deselectAll": "Deselect all",
+  "@deselectAll": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "markAsRead": "Mark as read",
+  "@markAsRead": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "markAsUnread": "Mark as unread",
+  "@markAsUnread": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "selected": "selected",
+  "@selected": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "youNeedToSignInToPerform": "You need to sign in to perform this action.",
   "@youNeedToSignInToPerform": {
     "description": "",

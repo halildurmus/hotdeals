@@ -12,11 +12,18 @@ typedef Json = Map<String, dynamic>;
 /// An implementation of the [PushNotificationService] that many Widgets
 /// can interact with to create, read and update notifications.
 class PushNotificationService extends ChangeNotifier {
-  int unreadNotifications = 0;
+  late final _notificationsController =
+      StreamController<PushNotification>.broadcast();
 
-  late Database _db;
-  static const String tableNotificationName = 'Notification';
-  static const String tableNotification = '''
+  Stream<PushNotification> get notifications => _notificationsController.stream;
+
+  int _unreadNotifications = 0;
+
+  int get unreadNotifications => _unreadNotifications;
+
+  late final Database _db;
+  static const String _tableNotificationName = 'Notification';
+  static const String _tableNotification = '''
   CREATE TABLE IF NOT EXISTS Notification (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         title TEXT,
@@ -33,15 +40,22 @@ class PushNotificationService extends ChangeNotifier {
   /// Opens the database and sets the database reference.
   Future<void> load() async {
     final String path = join(await getDatabasesPath(), 'core.db');
-
     _db = await openDatabase(
       path,
       version: 1,
       onCreate: (Database db, int version) async {
-        // When creating the db, create the table
-        await db.execute(tableNotification);
+        await db.execute(_tableNotification);
       },
     );
+    _unreadNotifications = await getUnreadNotificationsCount() ?? 0;
+  }
+
+  /// Retrieves the unread notifications count.
+  Future<int?> getUnreadNotificationsCount() async {
+    final result = await _db.rawQuery(
+        'SELECT COUNT (*) FROM $_tableNotificationName WHERE is_read = 0');
+
+    return Sqflite.firstIntValue(result);
   }
 
   /// Inserts the notification into the database.
@@ -51,20 +65,20 @@ class PushNotificationService extends ChangeNotifier {
     //
     // In this case, replace any previous data.
     await _db.insert(
-      tableNotificationName,
+      _tableNotificationName,
       notification.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
-    unreadNotifications++;
+    _unreadNotifications++;
+    _notificationsController.add(notification);
     notifyListeners();
   }
 
-  /// Retrieves all notifications sorted by `created_at` from the database.
+  /// Retrieves all notifications sorted by `created_at`.
   Future<List<PushNotification>> getAll({int? limit, int? offset}) async {
-    // Query the table for all the records.
     final List<Json> maps = await _db.query(
-      tableNotificationName,
+      _tableNotificationName,
       orderBy: 'created_at DESC',
       where: 'uid = ?',
       whereArgs: [FirebaseAuth.instance.currentUser?.uid],
@@ -72,48 +86,39 @@ class PushNotificationService extends ChangeNotifier {
       offset: offset,
     );
 
-    // Convert the List<Json> into a List<Notification>.
     return List<PushNotification>.generate(
       maps.length,
       (int i) => PushNotification.fromMap(maps[i]),
     );
   }
 
-  /// Updates the given notification.
-  Future<void> update(PushNotification notification) async {
+  /// Marks the notifications as read using given [ids].
+  Future<void> markAsRead(List<int> ids) async {
     await _db.update(
-      tableNotificationName,
-      notification.toMap(),
-      // Ensure that the record has a matching id.
-      where: 'id = ?',
-      // Pass the notification's id as a whereArg to prevent SQL injection.
-      whereArgs: [notification.id],
+      _tableNotificationName,
+      {'is_read': 1},
+      where: 'id IN (${ids.join(', ')})',
     );
 
-    if (notification.isRead) {
-      unreadNotifications--;
-    }
-
+    _unreadNotifications -= ids.length;
     notifyListeners();
   }
 
-  /// Deletes the notification from the database.
-  Future<void> delete(int id) async {
-    await _db.delete(
-      tableNotificationName,
-      // Use a `where` clause to delete a specific record.
-      where: 'id = ?',
-      // Pass the record's id as a whereArg to prevent SQL injection.
-      whereArgs: [id],
+  /// Marks the notifications as unread using given [ids].
+  Future<void> markAsUnread(List<int> ids) async {
+    await _db.update(
+      _tableNotificationName,
+      {'is_read': 0},
+      where: 'id IN (${ids.join(', ')})',
     );
 
+    _unreadNotifications += ids.length;
     notifyListeners();
   }
 
-  /// Deletes all notifications from the database.
-  Future<void> deleteAll() async {
-    await _db.delete(tableNotificationName);
-
-    notifyListeners();
+  @override
+  void dispose() {
+    _notificationsController.close();
+    super.dispose();
   }
 }

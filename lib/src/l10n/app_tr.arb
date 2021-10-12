@@ -7,6 +7,41 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "selectAll": "Tümünü seç",
+  "@selectAll": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deselectAll": "Tüm seçimleri kaldır",
+  "@deselectAll": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "markAsRead": "Okundu olarak işaretle",
+  "@markAsRead": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "markAsUnread": "Okunmadı olarak işaretle",
+  "@markAsUnread": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "selected": "seçili öğe",
+  "@selected": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "youNeedToSignInToPerform": "Bu işlemi gerçekleştirmek için giriş yapman gerekli.",
   "@youNeedToSignInToPerform": {
     "description": "",
