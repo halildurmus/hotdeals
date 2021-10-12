@@ -13,6 +13,7 @@ import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
 import '../utils/date_time_util.dart';
 import '../utils/error_indicator_util.dart';
+import '../widgets/error_indicator.dart';
 import 'blocked_users.dart';
 import 'message_arguments.dart';
 import 'message_screen.dart';
@@ -35,7 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    _user = Provider.of<UserController>(context, listen: false).user;
+    _user = context.read<UserController>().user;
     super.initState();
   }
 
@@ -60,68 +61,18 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     Widget _buildSignIn() {
-      return Center(
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              Icon(
-                FontAwesomeIcons.comment,
-                color: theme.primaryColor,
-                size: 120,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                AppLocalizations.of(context)!.youNeedToSignIn,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  AppLocalizations.of(context)!.youNeedToSignInToSee,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 15.5),
-                ),
-              ),
-            ],
-          ),
-        ),
+      return ErrorIndicator(
+        icon: Icons.chat,
+        title: AppLocalizations.of(context)!.youNeedToSignIn,
+        message: AppLocalizations.of(context)!.youNeedToSignInToSee,
       );
     }
 
     Widget _buildNoChats() {
-      return Center(
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              Icon(
-                FontAwesomeIcons.comment,
-                color: theme.primaryColor,
-                size: 120,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                AppLocalizations.of(context)!.noChats,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  AppLocalizations.of(context)!.noActiveConversations,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 15.5),
-                ),
-              ),
-            ],
-          ),
-        ),
+      return ErrorIndicator(
+        icon: Icons.chat,
+        title: AppLocalizations.of(context)!.noChats,
+        message: AppLocalizations.of(context)!.noActiveConversations,
       );
     }
 

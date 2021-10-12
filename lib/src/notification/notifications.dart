@@ -6,8 +6,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
+import 'package:provider/provider.dart';
 
+import '../models/my_user.dart';
 import '../models/push_notification.dart';
+import '../models/user_controller.dart';
 import '../services/push_notification_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../widgets/error_indicator.dart';
@@ -24,6 +27,7 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> with NetworkLoggy {
   static const kPageSize = 10;
+  late MyUser? _user;
   final _pagingController =
       PagingController<int, PushNotification>(firstPageKey: 0);
   late final PushNotificationService _pushNotificationService;
@@ -33,6 +37,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
 
   @override
   void initState() {
+    _user = context.read<UserController>().user;
     _pagingController.addPageRequestListener((pageKey) => _fetchPage(pageKey));
     _pushNotificationService = GetIt.I.get<PushNotificationService>();
     _notifications = _pushNotificationService.notifications.listen((event) {
@@ -294,6 +299,13 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     return Future<bool>.value(true);
   }
 
+  Widget _buildSignIn() {
+    return ErrorIndicator(
+      icon: Icons.notifications_none_outlined,
+      title: AppLocalizations.of(context)!.youNeedToSignIn,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -302,7 +314,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
         appBar: _buildAppBar(),
         body: RefreshIndicator(
           onRefresh: () => Future.sync(() => _pagingController.refresh()),
-          child: _buildPagedListView(),
+          child: _user == null ? _buildSignIn() : _buildPagedListView(),
         ),
       ),
     );
