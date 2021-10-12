@@ -13,9 +13,9 @@ class SearchResults extends StatelessWidget {
   final String keyword;
 
   PreferredSizeWidget buildAppBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(70),
-      child: AppBar(centerTitle: true, title: Text('"$keyword"')),
+    return AppBar(
+      centerTitle: true,
+      title: Text('"$keyword"'),
     );
   }
 
