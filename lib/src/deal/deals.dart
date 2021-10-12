@@ -90,7 +90,7 @@ class _DealsState extends State<Deals> {
 
     Widget buildChoiceChips() {
       return SizedBox(
-        height: 65,
+        height: kToolbarHeight,
         child: Material(
           color: theme.backgroundColor,
           elevation: isDarkMode ? 0 : 4,
