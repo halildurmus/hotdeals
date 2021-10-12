@@ -48,7 +48,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
         splashColor: theme.primaryColorLight.withOpacity(.1),
         child: ListTile(
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           leading: CachedNetworkImage(
             imageUrl: user.avatar!,
             imageBuilder:
@@ -57,7 +57,10 @@ class _BlockedUsersState extends State<BlockedUsers> {
             placeholder: (BuildContext context, String url) =>
                 const CircleAvatar(),
           ),
-          title: Text(user.nickname!, style: theme.textTheme.bodyText1),
+          title: Text(
+            user.nickname!,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           trailing: OutlinedButton(
             onPressed: () => confirmUnblockUser(context, user.uid),
             style: OutlinedButton.styleFrom(
@@ -138,18 +141,18 @@ class _BlockedUsersState extends State<BlockedUsers> {
     }
   }
 
+  Future<void> onRefresh() async {
+    await Provider.of<UserController>(context, listen: false).getUser();
+    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final MyUser user = Provider.of<UserController>(context).user!;
-
-    Future<void> onRefresh() async {
-      await Provider.of<UserController>(context, listen: false).getUser();
-      setState(() {});
-
-      if (mounted) {
-        setState(() {});
-      }
-    }
 
     Widget buildBlockedUsers() {
       return FutureBuilder<List<MyUser>?>(
@@ -160,16 +163,13 @@ class _BlockedUsersState extends State<BlockedUsers> {
           if (snapshot.hasData) {
             final List<MyUser> users = snapshot.data!;
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-              child: ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final MyUser user = users.elementAt(index);
+            return ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (BuildContext context, int index) {
+                final MyUser user = users.elementAt(index);
 
-                  return buildCard(user, context);
-                },
-              ),
+                return buildCard(user, context);
+              },
             );
           } else if (snapshot.hasError) {
             return buildErrorWidget();
