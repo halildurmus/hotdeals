@@ -31,6 +31,7 @@ class _DealsState extends State<Deals> {
   late DealSortBy _dealSortBy;
   late PagingController<int, Deal> _pagingController;
   int _selectedFilter = 0;
+  bool _isSearchMode = false;
   late FloatingSearchBarController _searchBarController;
   bool searchErrorOccurred = false;
   bool searchProgress = false;
@@ -80,7 +81,6 @@ class _DealsState extends State<Deals> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final MyUser? user = Provider.of<UserController>(context).user;
-
     final List<String> _filterChoices = [
       AppLocalizations.of(context)!.newest,
       AppLocalizations.of(context)!.mostLiked,
@@ -141,21 +141,11 @@ class _DealsState extends State<Deals> {
       );
     }
 
-    Widget buildPagedListView() {
+    Widget _buildPagedListView() {
       return DealPagedListView(
         dealFuture: _dealFuture,
         pagingController: _pagingController,
         noDealsFound: buildNoDealsFound(context),
-      );
-    }
-
-    Widget buildBody() {
-      return Column(
-        children: [
-          const SizedBox(height: 70),
-          buildChoiceChips(),
-          Expanded(child: buildPagedListView()),
-        ],
       );
     }
 
@@ -259,12 +249,53 @@ class _DealsState extends State<Deals> {
       final isPortrait =
           MediaQuery.of(context).orientation == Orientation.portrait;
 
+      void onFocusChanged(bool value) {
+        if (!value) {
+          setState(() {
+            _isSearchMode = false;
+          });
+        }
+      }
+
+      void onQueryChanged(String query) {
+        if (query.isNotEmpty) {
+          searchDeals(query);
+        }
+      }
+
+      void onSubmitted(String query) {
+        if (query.isNotEmpty) {
+          NavigationUtil.navigate(context, SearchResults(keyword: query));
+        }
+      }
+
+      List<Widget> buildActions() {
+        return [FloatingSearchBarAction.searchToClear(showIfClosed: false)];
+      }
+
+      List<Widget> buildLeadingActions() {
+        return [
+          if (_searchBarController.isOpen)
+            FloatingSearchBarAction.icon(
+              onTap: () => setState(() => _isSearchMode = false),
+              icon: const Icon(Icons.arrow_back),
+              showIfClosed: false,
+              showIfOpened: true,
+            ),
+          FloatingSearchBarAction.icon(
+            onTap: () {},
+            icon: const Icon(Icons.search),
+          )
+        ];
+      }
+
       return Theme(
         data: theme.copyWith(
           inputDecorationTheme: theme.inputDecorationTheme
               .copyWith(fillColor: Colors.transparent),
         ),
         child: FloatingSearchBar(
+          onFocusChanged: onFocusChanged,
           controller: _searchBarController,
           axisAlignment: isPortrait ? 0 : -1,
           debounceDelay: const Duration(milliseconds: 500),
@@ -276,45 +307,48 @@ class _DealsState extends State<Deals> {
           transition: CircularFloatingSearchBarTransition(),
           transitionCurve: Curves.easeInOut,
           transitionDuration: const Duration(milliseconds: 500),
-          onSubmitted: (String query) =>
-              NavigationUtil.navigate(context, SearchResults(keyword: query)),
-          onQueryChanged: (String query) => searchDeals(query),
+          onSubmitted: onSubmitted,
+          onQueryChanged: onQueryChanged,
           width: isPortrait ? 600 : 500,
-          actions: [FloatingSearchBarAction.searchToClear(showIfClosed: false)],
-          leadingActions: [
-            FloatingSearchBarAction.back(),
-            FloatingSearchBarAction.icon(
-              onTap: () {},
-              icon: const Icon(Icons.search),
-            )
-          ],
-          builder: (BuildContext context, Animation<double> transition) =>
-              buildSearchResultBuilder(),
+          actions: buildActions(),
+          leadingActions: buildLeadingActions(),
+          builder: (context, transition) => buildSearchResultBuilder(),
         ),
       );
     }
 
-    Widget buildFAB() {
-      return FloatingActionButton.extended(
-        onPressed: () {
-          NavigationUtil.navigate(context, const PostDeal())
-              .then((dynamic value) {
-            _pagingController.refresh();
-          });
-        },
-        elevation: 3,
-        icon: const Icon(Icons.sell_outlined),
-        label: Text(AppLocalizations.of(context)!.post),
+    PreferredSizeWidget _buildAppBar() {
+      return AppBar(
+        title: Text(AppLocalizations.of(context)!.appTitle),
+        actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _isSearchMode = true;
+              });
+              WidgetsBinding.instance!.addPostFrameCallback(
+                  (timeStamp) => _searchBarController.open());
+            },
+            icon: const Icon(Icons.search),
+          ),
+          if (user != null)
+            IconButton(
+              onPressed: () =>
+                  NavigationUtil.navigate(context, const PostDeal())
+                      .then((_) => _pagingController.refresh()),
+              icon: const Icon(Icons.add_circle),
+            ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: buildChoiceChips(),
+        ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.appTitle)),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [buildBody(), buildFloatingSearchBar()],
-      ),
-      floatingActionButton: user != null ? buildFAB() : null,
+      appBar: _isSearchMode ? null : _buildAppBar(),
+      body: _isSearchMode ? buildFloatingSearchBar() : _buildPagedListView(),
       resizeToAvoidBottomInset: false,
     );
   }
