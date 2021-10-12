@@ -77,9 +77,9 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
     settingsController = GetIt.I.get<SettingsController>();
     categories = GetIt.I.get<Categories>().categories;
     stores = GetIt.I.get<Stores>().stores;
+    super.initState();
     // Subscribes to Firebase Cloud Messaging.
     subscribeToFCM();
-    super.initState();
   }
 
   Widget buildErrorScreen() {
