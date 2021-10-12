@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,9 @@ class AuthWidget extends StatelessWidget with UiLoggy {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.appTitle),
+      ),
       body: Center(
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
