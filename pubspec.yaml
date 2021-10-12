@@ -29,7 +29,7 @@ dependencies:
   flutter_chat_ui:
     git:
       url: git://github.com/halildurmus/flutter_chat_ui.git
-      ref: full-size-emoji
+      ref: emoji
   flutter_facebook_auth: ^3.5.2
   flutter_localizations:
     sdk: flutter
