@@ -80,6 +80,7 @@ class _DealsState extends State<Deals> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     final MyUser? user = Provider.of<UserController>(context).user;
     final List<String> _filterChoices = [
       AppLocalizations.of(context)!.newest,
@@ -92,7 +93,7 @@ class _DealsState extends State<Deals> {
         height: 65,
         child: Material(
           color: theme.backgroundColor,
-          elevation: 4,
+          elevation: isDarkMode ? 0 : 4,
           shadowColor: const Color(0xFF000000),
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 16),
