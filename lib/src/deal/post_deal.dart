@@ -258,141 +258,134 @@ class _PostDealState extends State<PostDeal> {
     }
 
     Widget buildForm() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Form(
-          key: _formKey,
-          onChanged: () {
-            setState(() {});
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 5),
-              buildPictureUpload(),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: dealUrlController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: AppLocalizations.of(context)!.enterDealUrl,
-                ),
-                textInputAction: TextInputAction.next,
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.pleaseEnterTheDealUrl;
-                  } else if (!isURL(value)) {
-                    return AppLocalizations.of(context)!.pleaseEnterValidUrl;
-                  }
-
-                  return null;
-                },
+      return Form(
+        key: _formKey,
+        onChanged: () => setState(() {}),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 5),
+            buildPictureUpload(),
+            const SizedBox(height: 20),
+            TextFormField(
+              controller: dealUrlController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)!.enterDealUrl,
               ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: titleController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: AppLocalizations.of(context)!.title,
-                ),
-                textInputAction: TextInputAction.next,
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!
-                        .pleaseEnterTheDealTitle;
-                  }
+              textInputAction: TextInputAction.next,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.of(context)!.pleaseEnterTheDealUrl;
+                } else if (!isURL(value)) {
+                  return AppLocalizations.of(context)!.pleaseEnterValidUrl;
+                }
 
-                  return null;
-                },
+                return null;
+              },
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: titleController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)!.title,
               ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: priceController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: AppLocalizations.of(context)!.originalPrice,
-                  prefixIcon: const Icon(Icons.attach_money, size: 20),
-                ),
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!
-                        .pleaseEnterTheOriginalPrice;
-                  } else if (discountPriceController.text.isNotEmpty &&
-                      (int.parse(value) <
-                          int.parse(discountPriceController.text))) {
-                    return AppLocalizations.of(context)!
-                        .originalPriceCannotBeLower;
-                  }
+              textInputAction: TextInputAction.next,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.of(context)!.pleaseEnterTheDealTitle;
+                }
 
-                  return null;
-                },
+                return null;
+              },
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: priceController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)!.originalPrice,
+                prefixIcon: const Icon(Icons.attach_money, size: 20),
               ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: discountPriceController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: AppLocalizations.of(context)!.discountPrice,
-                  prefixIcon: const Icon(Icons.attach_money, size: 20),
-                ),
-                keyboardType: TextInputType.number,
-                textInputAction: TextInputAction.next,
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!
-                        .pleaseEnterTheDiscountPrice;
-                  } else if (priceController.text.isNotEmpty &&
-                      (int.parse(value) > int.parse(priceController.text))) {
-                    return AppLocalizations.of(context)!
-                        .discountPriceCannotBeGreater;
-                  }
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.of(context)!
+                      .pleaseEnterTheOriginalPrice;
+                } else if (discountPriceController.text.isNotEmpty &&
+                    (int.parse(value) <
+                        int.parse(discountPriceController.text))) {
+                  return AppLocalizations.of(context)!
+                      .originalPriceCannotBeLower;
+                }
 
-                  return null;
-                },
+                return null;
+              },
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: discountPriceController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)!.discountPrice,
+                prefixIcon: const Icon(Icons.attach_money, size: 20),
               ),
-              const SizedBox(height: 10),
-              buildCategoriesDropdown(),
-              const SizedBox(height: 10),
-              buildStoresDropdown(),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: descriptionController,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  hintStyle: textTheme.bodyText2!.copyWith(
-                      color: theme.brightness == Brightness.light
-                          ? Colors.black54
-                          : Colors.grey),
-                  hintText:
-                      AppLocalizations.of(context)!.enterSomeDetailsAboutDeal,
-                ),
-                minLines: 4,
-                maxLines: 30,
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the deal description.';
-                  }
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return AppLocalizations.of(context)!
+                      .pleaseEnterTheDiscountPrice;
+                } else if (priceController.text.isNotEmpty &&
+                    (int.parse(value) > int.parse(priceController.text))) {
+                  return AppLocalizations.of(context)!
+                      .discountPriceCannotBeGreater;
+                }
 
-                  return null;
-                },
+                return null;
+              },
+            ),
+            const SizedBox(height: 10),
+            buildCategoriesDropdown(),
+            const SizedBox(height: 10),
+            buildStoresDropdown(),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: descriptionController,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                hintStyle: textTheme.bodyText2!.copyWith(
+                    color: theme.brightness == Brightness.light
+                        ? Colors.black54
+                        : Colors.grey),
+                hintText:
+                    AppLocalizations.of(context)!.enterSomeDetailsAboutDeal,
               ),
-              const SizedBox(height: 10),
-              buildPostButton(),
-            ],
-          ),
+              minLines: 4,
+              maxLines: 30,
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the deal description.';
+                }
+
+                return null;
+              },
+            ),
+            const SizedBox(height: 10),
+            buildPostButton(),
+          ],
         ),
       );
     }
 
     Widget buildBody() {
       return SingleChildScrollView(
-        child: Column(
-          children: [
-            buildForm(),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: buildForm(),
         ),
       );
     }
