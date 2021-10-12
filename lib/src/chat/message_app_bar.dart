@@ -24,6 +24,7 @@ class MessageAppBar extends StatefulWidget {
 
 class _MessageAppBarState extends State<MessageAppBar> {
   Future<void> _confirmBlockUser(BuildContext context) async {
+    final theme = Theme.of(context);
     final bool _didRequestBlockUser = await CustomAlertDialog(
           title: AppLocalizations.of(context)!.blockUser,
           content: AppLocalizations.of(context)!.blockConfirm,
@@ -31,23 +32,18 @@ class _MessageAppBarState extends State<MessageAppBar> {
           defaultActionText: AppLocalizations.of(context)!.ok,
         ).show(context) ??
         false;
-
     if (_didRequestBlockUser == true) {
       final bool _result = await GetIt.I
           .get<SpringService>()
           .blockUser(userId: widget.user2.uid);
-
       if (_result) {
         await Provider.of<UserController>(context, listen: false).getUser();
-
         final SnackBar snackBar = SnackBar(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: theme.backgroundColor,
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(20),
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(30),
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
           content: Row(
             children: [
@@ -58,24 +54,21 @@ class _MessageAppBarState extends State<MessageAppBar> {
                   child: Text(
                     AppLocalizations.of(context)!.successfullyBlocked,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: theme.textTheme.bodyText2,
                   ),
                 ),
               ),
             ],
           ),
         );
-
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         final SnackBar snackBar = SnackBar(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: theme.backgroundColor,
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(20),
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(30),
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
           content: Row(
             children: [
@@ -86,20 +79,20 @@ class _MessageAppBarState extends State<MessageAppBar> {
                   child: Text(
                     AppLocalizations.of(context)!.anErrorOccurredWhileBlocking,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: theme.textTheme.bodyText2,
                   ),
                 ),
               ),
             ],
           ),
         );
-
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
   }
 
   Future<void> _confirmUnblockUser(BuildContext context) async {
+    final theme = Theme.of(context);
     final bool _didRequestUnblockUser = await CustomAlertDialog(
           title: AppLocalizations.of(context)!.unblockUser,
           content: AppLocalizations.of(context)!.unblockConfirm,
@@ -107,23 +100,19 @@ class _MessageAppBarState extends State<MessageAppBar> {
           defaultActionText: AppLocalizations.of(context)!.ok,
         ).show(context) ??
         false;
-
     if (_didRequestUnblockUser == true) {
       final bool _result = await GetIt.I
           .get<SpringService>()
           .unblockUser(userUid: widget.user2.uid);
-
       if (_result) {
         await Provider.of<UserController>(context, listen: false).getUser();
       } else {
         final SnackBar snackBar = SnackBar(
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: theme.backgroundColor,
           behavior: SnackBarBehavior.floating,
           margin: const EdgeInsets.all(20),
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(30),
-            ),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
           ),
           content: Row(
             children: [
@@ -135,14 +124,13 @@ class _MessageAppBarState extends State<MessageAppBar> {
                     AppLocalizations.of(context)!
                         .anErrorOccurredWhileUnblocking,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: theme.textTheme.bodyText2,
                   ),
                 ),
               ),
             ],
           ),
         );
-
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }

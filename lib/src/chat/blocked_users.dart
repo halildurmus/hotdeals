@@ -82,6 +82,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
   }
 
   Future<void> confirmUnblockUser(BuildContext context, String userUid) async {
+    final theme = Theme.of(context);
     final bool didRequestUnblockUser = await CustomAlertDialog(
           title: AppLocalizations.of(context)!.unblockUser,
           content: AppLocalizations.of(context)!.unblockConfirm,
@@ -89,15 +90,18 @@ class _BlockedUsersState extends State<BlockedUsers> {
           defaultActionText: AppLocalizations.of(context)!.ok,
         ).show(context) ??
         false;
-
     if (didRequestUnblockUser == true) {
       final bool result =
           await GetIt.I.get<SpringService>().unblockUser(userUid: userUid);
-
       if (result) {
         await Provider.of<UserController>(context, listen: false).getUser();
-
         final SnackBar snackBar = SnackBar(
+          backgroundColor: theme.backgroundColor,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(20),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          ),
           content: Row(
             children: [
               const Icon(FontAwesomeIcons.checkCircle, size: 20),
@@ -107,6 +111,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
                   child: Text(
                     AppLocalizations.of(context)!.successfullyUnblocked,
                     overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyText2,
                   ),
                 ),
               ),
@@ -119,6 +124,12 @@ class _BlockedUsersState extends State<BlockedUsers> {
         });
       } else {
         final SnackBar snackBar = SnackBar(
+          backgroundColor: theme.backgroundColor,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.all(20),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          ),
           content: Row(
             children: [
               const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
@@ -129,6 +140,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
                     AppLocalizations.of(context)!
                         .anErrorOccurredWhileUnblocking,
                     overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyText2,
                   ),
                 ),
               ),
