@@ -8,7 +8,6 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/user_profile_dialog.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
@@ -24,6 +23,7 @@ import '../widgets/deal_score_box.dart';
 import '../widgets/expandable_text.dart';
 import '../widgets/sign_in_dialog.dart';
 import '../widgets/slider_indicator.dart';
+import '../widgets/user_profile_dialog.dart';
 import 'deal_comments.dart';
 import 'image_fullscreen.dart';
 import 'report_deal_dialog.dart';
@@ -156,7 +156,7 @@ class _DealDetailsState extends State<DealDetails> {
           title: Text(_deal.title),
           actions: [
             PopupMenuButton<_DealPopup>(
-              icon: const Icon(FontAwesomeIcons.ellipsisV, size: 20),
+              icon: const Icon(Icons.more_vert),
               onSelected: (_DealPopup result) {
                 if (result == _DealPopup.reportDeal) {
                   _onPressedReport();
