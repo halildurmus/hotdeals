@@ -209,6 +209,8 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   }
 
   PreferredSizeWidget _buildAppBar() {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     bool isSelectedItemAvailable = false;
     bool isSelectedUnreadItemAvailable = false;
     int selectedItemCount = 0;
@@ -221,6 +223,11 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     }
 
     return AppBar(
+      backgroundColor: _isSelectionMode
+          ? isDarkMode
+              ? theme.primaryColor
+              : theme.primaryColorDark
+          : null,
       leading: _isSelectionMode
           ? IconButton(
               onPressed: _disableSelectionMode,
