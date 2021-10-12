@@ -237,13 +237,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget _buildUnreadIndicator() {
       return Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: CircleAvatar(
-          backgroundColor: theme.brightness == Brightness.dark
-              ? theme.primaryColor
-              : theme.primaryColorLight,
-          radius: 6,
-        ),
+        padding: const EdgeInsets.only(right: 10),
+        child: CircleAvatar(backgroundColor: theme.primaryColor, radius: 6),
       );
     }
 
@@ -274,9 +269,7 @@ class _ChatScreenState extends State<ChatScreen> {
         highlightColor: theme.primaryColorLight.withOpacity(.1),
         splashColor: theme.primaryColorLight.withOpacity(.1),
         child: Container(
-          color: _isMessageSeen
-              ? Colors.transparent
-              : theme.primaryColor.withOpacity(.2),
+          color: _isMessageSeen ? null : theme.primaryColor.withOpacity(.1),
           padding: const EdgeInsets.all(16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,6 +277,7 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               Row(
                 children: [
+                  if (!_isMessageSeen) _buildUnreadIndicator(),
                   _buildUserAvatar(user2.avatar!),
                   const SizedBox(width: 10),
                   Column(
@@ -303,13 +297,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  _buildMessageTime(_createdAt, _isMessageSeen),
-                  if (!_isMessageSeen) _buildUnreadIndicator()
-                ],
-              ),
+              _buildMessageTime(_createdAt, _isMessageSeen),
             ],
           ),
         ),
@@ -325,10 +313,8 @@ class _ChatScreenState extends State<ChatScreen> {
             AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (snapshot.hasData) {
             final _items = snapshot.data!.docs;
-
             // Removes empty message docs.
             _items.removeWhere((e) => (e.get('latestMessage') as Json).isEmpty);
-
             if (_items.isEmpty) {
               return _buildNoChats();
             }
