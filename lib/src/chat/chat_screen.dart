@@ -139,11 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
           const SizedBox(width: 4),
           Text(
             AppLocalizations.of(context)!.youCannotChatWithThisUser,
-            style: TextStyle(
-              color: theme.errorColor,
-              fontSize: 15,
-              fontWeight: FontWeight.w300,
-            ),
+            style: TextStyle(color: theme.errorColor, fontSize: 15),
           ),
         ],
       );
@@ -165,7 +161,7 @@ class _ChatScreenState extends State<ChatScreen> {
               maxLines: 1,
               softWrap: false,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+              style: const TextStyle(fontSize: 15),
             ),
           ),
         ],
@@ -183,7 +179,7 @@ class _ChatScreenState extends State<ChatScreen> {
           const SizedBox(width: 4),
           Text(
             AppLocalizations.of(context)!.image,
-            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+            style: const TextStyle(fontSize: 15),
           ),
         ],
       );
@@ -197,7 +193,7 @@ class _ChatScreenState extends State<ChatScreen> {
           maxLines: 1,
           softWrap: false,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
+          style: const TextStyle(fontSize: 15),
         ),
       );
     }
