@@ -11,6 +11,7 @@ import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/error_indicator.dart';
+import '../widgets/user_profile_dialog.dart';
 
 class BlockedUsers extends StatefulWidget {
   const BlockedUsers({Key? key}) : super(key: key);
@@ -22,6 +23,14 @@ class BlockedUsers extends StatefulWidget {
 }
 
 class _BlockedUsersState extends State<BlockedUsers> {
+  Future<void> _onUserTap(String userId) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) =>
+          UserProfileDialog(userId: userId, hideButtons: true),
+    );
+  }
+
   Widget buildNoBlockedUsersFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.person_outline,
@@ -42,7 +51,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: InkWell(
-        onTap: () {},
+        onTap: () => _onUserTap(user.id!),
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         highlightColor: theme.primaryColorLight.withOpacity(.1),
         splashColor: theme.primaryColorLight.withOpacity(.1),

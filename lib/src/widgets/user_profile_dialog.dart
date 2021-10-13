@@ -20,9 +20,14 @@ import '../utils/error_indicator_util.dart';
 typedef Json = Map<String, dynamic>;
 
 class UserProfileDialog extends StatefulWidget {
-  const UserProfileDialog({Key? key, required this.userId}) : super(key: key);
+  const UserProfileDialog({
+    Key? key,
+    required this.userId,
+    this.hideButtons = false,
+  }) : super(key: key);
 
   final String userId;
+  final bool hideButtons;
 
   @override
   _UserProfileDialogState createState() => _UserProfileDialogState();
@@ -248,7 +253,9 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
             ],
           ),
           const SizedBox(height: 10),
-          if (loggedInUser != null && loggedInUser?.id != user.id)
+          if (!widget.hideButtons &&
+              loggedInUser != null &&
+              loggedInUser?.id != user.id)
             _buildButtons(),
         ],
       );
