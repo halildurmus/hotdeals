@@ -1005,5 +1005,27 @@
     "placeholders": {
       "count": {}
     }
+  },
+  "markedNotificationAsRead": "{count,plural, =0{{count} bildirim okundu olarak işaretlendi}=1{{count} bildirim okundu olarak işaretlendi}=2{{count} bildirim okundu olarak işaretlendi}few{{count} bildirim okundu olarak işaretlendi}many{{count} bildirim okundu olarak işaretlendi}other{{count} bildirim okundu olarak işaretlendi}}",
+  "@markedNotificationAsRead": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "markedNotificationAsUnread": "{count,plural, =0{{count} bildirim okunmadı olarak işaretlendi}=1{{count} bildirim okunmadı olarak işaretlendi}=2{{count} bildirim okunmadı olarak işaretlendi}few{{count} bildirim okunmadı olarak işaretlendi}many{{count} bildirim okunmadı olarak işaretlendi}other{{count} bildirim okunmadı olarak işaretlendi}}",
+  "@markedNotificationAsUnread": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
   }
 }

@@ -1005,5 +1005,27 @@
     "placeholders": {
       "count": {}
     }
+  },
+  "markedNotificationAsRead": "{count,plural, =0{Marked {count} notification as read}=1{Marked {count} notification as read}=2{Marked {count} notifications as read}few{Marked {count} notifications as read}many{Marked {count} notifications as read}other{Marked {count} notifications as read}}",
+  "@markedNotificationAsRead": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "markedNotificationAsUnread": "{count,plural, =0{Marked {count} notification as unread}=1{Marked {count} notification as unread}=2{Marked {count} notifications as unread}few{Marked {count} notifications as unread}many{Marked {count} notifications as unread}other{Marked {count} notifications as unread}}",
+  "@markedNotificationAsUnread": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
   }
 }
