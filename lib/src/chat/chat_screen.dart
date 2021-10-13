@@ -52,14 +52,6 @@ class _ChatScreenState extends State<ChatScreen> {
     final theme = Theme.of(context);
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    Future<void> _onRefresh() async {
-      setState(() {});
-
-      if (mounted) {
-        setState(() {});
-      }
-    }
-
     Widget _buildSignIn() {
       return ErrorIndicator(
         icon: Icons.chat,
@@ -78,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     Widget buildCircularProgressIndicator() {
       return const Padding(
-        padding: EdgeInsets.only(top: 16),
+        padding: EdgeInsets.symmetric(vertical: 16),
         child: Center(child: CircularProgressIndicator()),
       );
     }
@@ -315,12 +307,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       },
                     );
                   },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Padding(
-                      padding: EdgeInsets.only(left: 100, right: 16),
-                      child: Divider(height: 0),
-                    );
-                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(height: 0, indent: 16, endIndent: 16),
                 );
               },
             );
@@ -359,10 +347,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       appBar: _buildAppBar(),
-      body: RefreshIndicator(
-        onRefresh: _onRefresh,
-        child: _user == null ? _buildSignIn() : _buildChats(),
-      ),
+      body: _user == null ? _buildSignIn() : _buildChats(),
     );
   }
 }
