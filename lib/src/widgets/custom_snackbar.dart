@@ -6,30 +6,24 @@ class CustomSnackBar extends StatelessWidget {
     this.action,
     this.content,
     this.icon,
-    this.iconColor,
-    this.iconSize,
     required this.text,
   }) : super(key: key);
 
   final SnackBarAction? action;
   final Widget? content;
-  final IconData? icon;
-  final Color? iconColor;
-  final double? iconSize;
+  final Widget? icon;
   final String text;
 
   Widget _buildContent(BuildContext context) {
     return content ??
         Row(
           children: [
-            if (icon != null) _buildIcon(),
+            if (icon != null) icon!,
             if (icon != null) const SizedBox(width: 8),
             _buildText(context),
           ],
         );
   }
-
-  Widget _buildIcon() => Icon(icon, color: iconColor, size: iconSize);
 
   Widget _buildText(BuildContext context) {
     return Text(
