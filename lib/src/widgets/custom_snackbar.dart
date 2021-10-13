@@ -40,7 +40,7 @@ class CustomSnackBar extends StatelessWidget {
       action: action,
       backgroundColor: theme.backgroundColor,
       behavior: SnackBarBehavior.floating,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
