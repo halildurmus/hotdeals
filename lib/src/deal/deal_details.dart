@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/categories.dart';
-import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/store.dart';
@@ -41,12 +40,12 @@ class DealDetails extends StatefulWidget {
 
 class _DealDetailsState extends State<DealDetails> {
   late Deal _deal;
-  late Future<List<Comment>?> _commentsFuture;
   late List<String> _images;
   int currentIndex = 0;
   late Categories _categories;
   late Store _store;
   late MyUser? _user;
+  int _commentsCount = 0;
   bool isUpvoted = false;
   bool isDownvoted = false;
   bool _showBackToTopButton = false;
@@ -55,6 +54,7 @@ class _DealDetailsState extends State<DealDetails> {
   @override
   void initState() {
     _deal = widget.deal;
+    _updateCommentsCount();
     _images = [_deal.coverPhoto, ..._deal.photos!];
     // Prefetch and caches the images.
     WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -82,8 +82,6 @@ class _DealDetailsState extends State<DealDetails> {
         }
       });
     }
-    _commentsFuture =
-        GetIt.I.get<SpringService>().getComments(dealId: _deal.id!);
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -101,6 +99,22 @@ class _DealDetailsState extends State<DealDetails> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _updateCommentsCount() {
+    GetIt.I
+        .get<SpringService>()
+        .getNumberOfCommentsByDealId(dealId: widget.deal.id!)
+        .then((int? commentsCount) {
+      if (commentsCount != null) {
+        WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+          _commentsCount = commentsCount;
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      }
+    });
   }
 
   void _scrollToTop() {
@@ -328,27 +342,13 @@ class _DealDetailsState extends State<DealDetails> {
                             ),
                           ),
                         ),
-                        FutureBuilder<List<Comment>?>(
-                          future: _commentsFuture,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Comment>?> snapshot) {
-                            final List<Comment>? comments;
-
-                            if (snapshot.hasData) {
-                              comments = snapshot.data;
-                            } else {
-                              comments = [];
-                            }
-
-                            return Text(
-                              AppLocalizations.of(context)!
-                                  .commentCount(comments!.length),
-                              style: textTheme.bodyText2!.copyWith(
-                                color: theme.primaryColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            );
-                          },
+                        Text(
+                          AppLocalizations.of(context)!
+                              .commentCount(_commentsCount),
+                          style: textTheme.bodyText2!.copyWith(
+                            color: theme.primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),

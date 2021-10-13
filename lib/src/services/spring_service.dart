@@ -639,6 +639,23 @@ class SpringService with NetworkLoggy {
     }
   }
 
+  Future<int?> getNumberOfCommentsByDealId({required String dealId}) async {
+    final String url =
+        '$_baseUrl/comments/search/countCommentsByDealId?dealId=$dealId';
+
+    try {
+      final Response response = await _httpService.get(url, auth: false);
+      if (response.statusCode == 200) {
+        return int.parse(response.body);
+      }
+
+      return null;
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      return null;
+    }
+  }
+
   Future<int?> getNumberOfCommentsPostedByUser({required String userId}) async {
     final String url =
         '$_baseUrl/comments/search/countCommentsByPostedBy?postedBy=$userId';

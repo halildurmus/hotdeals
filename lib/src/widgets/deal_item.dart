@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 
 import '../deal/deal_details.dart';
 import '../models/categories.dart';
-import '../models/comment.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
@@ -33,15 +32,30 @@ class DealItem extends StatefulWidget {
 }
 
 class _DealItemState extends State<DealItem> {
+  int _commentsCount = 0;
   late Categories _categories;
-  late Future<List<Comment>?> _commentsFuture;
 
   @override
   void initState() {
     _categories = GetIt.I.get<Categories>();
-    _commentsFuture =
-        GetIt.I.get<SpringService>().getComments(dealId: widget.deal.id!);
+    _updateCommentsCount();
     super.initState();
+  }
+
+  void _updateCommentsCount() {
+    GetIt.I
+        .get<SpringService>()
+        .getNumberOfCommentsByDealId(dealId: widget.deal.id!)
+        .then((int? commentsCount) {
+      if (commentsCount != null) {
+        WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+          _commentsCount = commentsCount;
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      }
+    });
   }
 
   @override
@@ -149,21 +163,10 @@ class _DealItemState extends State<DealItem> {
         children: [
           const Icon(FontAwesomeIcons.comment, size: 14),
           const SizedBox(width: 4),
-          FutureBuilder<List<Comment>?>(
-            future: _commentsFuture,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Comment>?> snapshot) {
-              String commentText = '...';
-              if (snapshot.hasData) {
-                commentText = snapshot.data!.length.toString();
-              }
-
-              return Text(
-                commentText,
-                style: textTheme.subtitle2!.copyWith(fontSize: 12),
-              );
-            },
-          ),
+          Text(
+            _commentsCount.toString(),
+            style: textTheme.subtitle2!.copyWith(fontSize: 12),
+          )
         ],
       );
     }

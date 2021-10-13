@@ -25,7 +25,7 @@ class DealComments extends StatefulWidget {
 }
 
 class _DealCommentsState extends State<DealComments> {
-  int commentsCount = -1;
+  int _commentsCount = 0;
   late MyUser? _user;
   late PagingController<int, Comment> _pagingController;
 
@@ -33,7 +33,7 @@ class _DealCommentsState extends State<DealComments> {
   void initState() {
     _user = context.read<UserController>().user;
     _pagingController = PagingController<int, Comment>(firstPageKey: 0);
-    updateCommentsCount();
+    _updateCommentsCount();
     super.initState();
   }
 
@@ -43,22 +43,23 @@ class _DealCommentsState extends State<DealComments> {
     super.dispose();
   }
 
-  void updateCommentsCount() {
+  void _updateCommentsCount() {
     GetIt.I
         .get<SpringService>()
-        .getComments(dealId: widget.deal.id!)
-        .then((List<Comment>? comments) {
-      if (comments != null) {
+        .getNumberOfCommentsByDealId(dealId: widget.deal.id!)
+        .then((int? commentsCount) {
+      if (commentsCount != null) {
         WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
-          setState(() {
-            commentsCount = comments.length;
-          });
+          _commentsCount = commentsCount;
+          if (mounted) {
+            setState(() {});
+          }
         });
       }
     });
   }
 
-  void onPostCommentTap() {
+  void _onPostCommentTap() {
     if (_user == null) {
       GetIt.I.get<SignInDialog>().showSignInDialog(context);
 
@@ -76,7 +77,7 @@ class _DealCommentsState extends State<DealComments> {
         );
       },
     ).then((_) {
-      updateCommentsCount();
+      _updateCommentsCount();
       _pagingController.refresh();
     });
   }
@@ -100,7 +101,7 @@ class _DealCommentsState extends State<DealComments> {
     final textTheme = Theme.of(context).textTheme;
 
     return Text(
-      AppLocalizations.of(context)!.commentCount(commentsCount),
+      AppLocalizations.of(context)!.commentCount(_commentsCount),
       style: textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
     );
   }
@@ -110,7 +111,7 @@ class _DealCommentsState extends State<DealComments> {
     final textTheme = theme.textTheme;
 
     return TextButton(
-      onPressed: () => onPostCommentTap(),
+      onPressed: () => _onPostCommentTap(),
       child: Text(
         AppLocalizations.of(context)!.postComment,
         style: textTheme.subtitle2!.copyWith(
