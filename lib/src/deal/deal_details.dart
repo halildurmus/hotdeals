@@ -18,6 +18,7 @@ import '../models/vote_type.dart';
 import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
 import '../utils/navigation_util.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/deal_score_box.dart';
 import '../widgets/expandable_text.dart';
 import '../widgets/sign_in_dialog.dart';
@@ -475,12 +476,12 @@ class _DealDetailsState extends State<DealDetails> {
 
                       if (deal == null) {
                         ScaffoldMessenger.of(context).clearSnackBars();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                AppLocalizations.of(context)!.anErrorOccurred),
-                          ),
-                        );
+                        final snackBar = CustomSnackBar(
+                          icon: const Icon(FontAwesomeIcons.exclamationCircle,
+                              size: 20),
+                          text: AppLocalizations.of(context)!.anErrorOccurred,
+                        ).buildSnackBar(context);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
                         setState(() {
                           _deal = deal;
@@ -519,15 +520,14 @@ class _DealDetailsState extends State<DealDetails> {
                           .get<SpringService>()
                           .voteDeal(
                               dealId: _deal.id!, voteType: VoteType.downvote);
-
                       if (deal == null) {
                         ScaffoldMessenger.of(context).clearSnackBars();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                AppLocalizations.of(context)!.anErrorOccurred),
-                          ),
-                        );
+                        final snackBar = CustomSnackBar(
+                          icon: const Icon(FontAwesomeIcons.exclamationCircle,
+                              size: 20),
+                          text: AppLocalizations.of(context)!.anErrorOccurred,
+                        ).buildSnackBar(context);
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
                         setState(() {
                           _deal = deal;

@@ -13,6 +13,7 @@ import '../models/push_notification.dart';
 import '../models/user_controller.dart';
 import '../services/push_notification_service.dart';
 import '../utils/error_indicator_util.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/error_indicator.dart';
 import 'notification_item.dart';
 
@@ -122,11 +123,12 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
       _isSelectionMode = false;
     });
     await GetIt.I.get<PushNotificationService>().markAsRead(ids);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Marked $updatedNotificationCount notification as read'),
-      ),
-    );
+    final snackBar = CustomSnackBar(
+      icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+      text: AppLocalizations.of(context)!
+          .markedNotificationAsRead(updatedNotificationCount),
+    ).buildSnackBar(context);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Future<void> _markSelectedAsUnread() async {
@@ -145,12 +147,12 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
       _isSelectionMode = false;
     });
     await GetIt.I.get<PushNotificationService>().markAsUnread(ids);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content:
-            Text('Marked $updatedNotificationCount notification as unread'),
-      ),
-    );
+    final snackBar = CustomSnackBar(
+      icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+      text: AppLocalizations.of(context)!
+          .markedNotificationAsUnread(updatedNotificationCount),
+    ).buildSnackBar(context);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Future<void> _onTap(bool isSelected, PushNotification notification) async {

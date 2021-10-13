@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
 
 import '../models/deal_report.dart';
 import '../models/deal_report_reason.dart';
 import '../services/spring_service.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
 class ReportDealDialog extends StatefulWidget {
@@ -66,19 +68,18 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
       Navigator.of(context).pop();
       if (sentReport != null) {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text(AppLocalizations.of(context)!.successfullyReportedDeal),
-          ),
-        );
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          text: AppLocalizations.of(context)!.successfullyReportedDeal,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
-          ),
-        );
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          text: AppLocalizations.of(context)!.anErrorOccurred,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
 

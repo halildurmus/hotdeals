@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
@@ -12,6 +13,7 @@ import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../widgets/deal_item.dart';
 import '../widgets/sign_in_dialog.dart';
+import 'custom_snackbar.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({
@@ -88,11 +90,11 @@ class _DealPagedListViewState extends State<DealPagedListView>
         if (result) {
           Provider.of<UserController>(context, listen: false).getUser();
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.favoriteDealError),
-            ),
-          );
+          final snackBar = CustomSnackBar(
+            icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+            text: AppLocalizations.of(context)!.favoriteDealError,
+          ).buildSnackBar(context);
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       });
     } else {
@@ -106,11 +108,11 @@ class _DealPagedListViewState extends State<DealPagedListView>
             _pagingController.itemList!.removeWhere((e) => e.id == dealId);
           }
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.unfavoriteDealError),
-            ),
-          );
+          final snackBar = CustomSnackBar(
+            icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+            text: AppLocalizations.of(context)!.unfavoriteDealError,
+          ).buildSnackBar(context);
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       });
     }

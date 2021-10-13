@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller.dart';
 import '../services/spring_service.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
 class PostComment extends StatefulWidget {
@@ -92,18 +94,18 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
       // Pops the loading dialog.
       Navigator.of(context).pop();
       if (postedComment != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.postedYourComment),
-          ),
-        );
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          text: AppLocalizations.of(context)!.postedYourComment,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Navigator.of(context).pop();
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
-          ),
-        );
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          text: AppLocalizations.of(context)!.anErrorOccurred,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
 

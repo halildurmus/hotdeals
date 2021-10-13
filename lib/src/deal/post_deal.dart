@@ -1,6 +1,7 @@
 import 'package:firebase_picture_uploader/firebase_picture_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:validators/validators.dart';
 
@@ -10,6 +11,7 @@ import '../models/deal.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
 import '../services/spring_service.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
 class PostDeal extends StatefulWidget {
@@ -188,12 +190,11 @@ class _PostDealState extends State<PostDeal> {
 
     Future<void> onPressed() async {
       if (!areImagesReady()) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text(AppLocalizations.of(context)!.pleaseUploadAtLeastOneImage),
-          ),
-        );
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          text: AppLocalizations.of(context)!.pleaseUploadAtLeastOneImage,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return;
       }
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
@@ -223,19 +224,18 @@ class _PostDealState extends State<PostDeal> {
       // Pops the loading dialog.
       Navigator.of(context).pop();
       if (postedDeal != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content:
-                Text(AppLocalizations.of(context)!.successfullyPostedYourDeal),
-          ),
-        );
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          text: AppLocalizations.of(context)!.successfullyPostedYourDeal,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Navigator.of(context).popUntil((Route<void> route) => route.isFirst);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.anErrorOccurred),
-          ),
-        );
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          text: AppLocalizations.of(context)!.anErrorOccurred,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
 

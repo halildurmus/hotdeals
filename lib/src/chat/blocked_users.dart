@@ -10,6 +10,7 @@ import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../widgets/custom_alert_dialog.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/error_indicator.dart';
 import '../widgets/user_profile_dialog.dart';
 
@@ -91,7 +92,6 @@ class _BlockedUsersState extends State<BlockedUsers> {
   }
 
   Future<void> confirmUnblockUser(BuildContext context, String userUid) async {
-    final theme = Theme.of(context);
     final bool didRequestUnblockUser = await CustomAlertDialog(
           title: AppLocalizations.of(context)!.unblockUser,
           content: AppLocalizations.of(context)!.unblockConfirm,
@@ -104,59 +104,18 @@ class _BlockedUsersState extends State<BlockedUsers> {
           await GetIt.I.get<SpringService>().unblockUser(userUid: userUid);
       if (result) {
         await Provider.of<UserController>(context, listen: false).getUser();
-        final SnackBar snackBar = SnackBar(
-          backgroundColor: theme.backgroundColor,
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(20),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          content: Row(
-            children: [
-              const Icon(FontAwesomeIcons.checkCircle, size: 20),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    AppLocalizations.of(context)!.successfullyUnblocked,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodyText2,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          text: AppLocalizations.of(context)!.successfullyUnblocked,
+        ).buildSnackBar(context);
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         });
       } else {
-        final SnackBar snackBar = SnackBar(
-          backgroundColor: theme.backgroundColor,
-          behavior: SnackBarBehavior.floating,
-          margin: const EdgeInsets.all(20),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          content: Row(
-            children: [
-              const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    AppLocalizations.of(context)!
-                        .anErrorOccurredWhileUnblocking,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodyText2,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          text: AppLocalizations.of(context)!.anErrorOccurredWhileUnblocking,
+        ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
