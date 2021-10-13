@@ -15,24 +15,25 @@ class NoInternet extends StatefulWidget {
 }
 
 class _NoInternetState extends State<NoInternet> {
-  late StreamSubscription<void> connection;
-  bool isConnected = false;
+  late final StreamSubscription<bool> _connection;
+  bool _isConnected = false;
 
   @override
   void initState() {
     final ConnectionService connectionService =
         GetIt.I.get<ConnectionService>();
-    connection = connectionService.connectionChange.listen((bool event) {
-      setState(() {
-        isConnected = event;
-      });
+    _connection = connectionService.connectionChange.listen((bool isConnected) {
+      _isConnected = isConnected;
+      if (mounted) {
+        setState(() {});
+      }
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    connection.cancel();
+    _connection.cancel();
     super.dispose();
   }
 
@@ -49,18 +50,18 @@ class _NoInternetState extends State<NoInternet> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           color:
-              isConnected ? const Color(0xFF00EE44) : const Color(0xFFEE4400),
+              _isConnected ? const Color(0xFF00EE44) : const Color(0xFFEE4400),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                isConnected
+                _isConnected
                     ? AppLocalizations.of(context)!.online
                     : AppLocalizations.of(context)!.offline,
                 style: textTheme.bodyText2!.copyWith(color: Colors.white),
               ),
-              if (!isConnected) const SizedBox(width: 8),
-              if (!isConnected)
+              if (!_isConnected) const SizedBox(width: 8),
+              if (!_isConnected)
                 SizedBox.fromSize(
                   size: const Size(12, 12),
                   child: const CircularProgressIndicator(
@@ -76,7 +77,7 @@ class _NoInternetState extends State<NoInternet> {
 
     Widget buildBody() {
       return Center(
-        child: isConnected
+        child: _isConnected
             ? const CircularProgressIndicator()
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,

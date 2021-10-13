@@ -31,7 +31,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   final _pagingController =
       PagingController<int, PushNotification>(firstPageKey: 0);
   late final PushNotificationService _pushNotificationService;
-  late final StreamSubscription<PushNotification> _notifications;
+  late final StreamSubscription<PushNotification> _notification;
   bool _isSelectionMode = false;
   final Map<int, bool> _items = {};
 
@@ -40,12 +40,13 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     _user = context.read<UserController>().user;
     _pagingController.addPageRequestListener((pageKey) => _fetchPage(pageKey));
     _pushNotificationService = GetIt.I.get<PushNotificationService>();
-    _notifications = _pushNotificationService.notifications.listen((event) {
+    _notification = _pushNotificationService.notification.listen((event) {
       if (_pagingController.itemList != null &&
           !_pagingController.itemList!.contains(event)) {
-        setState(() {
-          _pagingController.itemList!.insert(0, event);
-        });
+        _pagingController.itemList!.insert(0, event);
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
     super.initState();
@@ -54,7 +55,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   @override
   void dispose() {
     _pagingController.dispose();
-    _notifications.cancel();
+    _notification.cancel();
     super.dispose();
   }
 

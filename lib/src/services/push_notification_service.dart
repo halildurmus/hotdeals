@@ -12,10 +12,10 @@ typedef Json = Map<String, dynamic>;
 /// An implementation of the [PushNotificationService] that many Widgets
 /// can interact with to create, read and update notifications.
 class PushNotificationService extends ChangeNotifier {
-  late final _notificationsController =
+  late final _notificationController =
       StreamController<PushNotification>.broadcast();
 
-  Stream<PushNotification> get notifications => _notificationsController.stream;
+  Stream<PushNotification> get notification => _notificationController.stream;
 
   int _unreadNotifications = 0;
 
@@ -71,7 +71,7 @@ class PushNotificationService extends ChangeNotifier {
     );
 
     _unreadNotifications++;
-    _notificationsController.add(notification);
+    _notificationController.add(notification);
     notifyListeners();
   }
 
@@ -118,7 +118,7 @@ class PushNotificationService extends ChangeNotifier {
 
   @override
   void dispose() {
-    _notificationsController.close();
+    _notificationController.close();
     super.dispose();
   }
 }

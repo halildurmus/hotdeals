@@ -62,6 +62,19 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   bool _isAttachmentUploading = false;
   final Uuid uuid = const Uuid();
 
+  @override
+  void initState() {
+    _markAsSeen();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    GetIt.I.get<CurrentRoute>().clearRouteName();
+    GetIt.I.get<CurrentRoute>().clearMessageArguments();
+    super.dispose();
+  }
+
   Future<void> _markAsSeen() async {
     await GetIt.I
         .get<FirestoreService>()
@@ -134,19 +147,6 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     } else if (message is types.ImageMessage) {
       _onImageTap(message);
     }
-  }
-
-  @override
-  void initState() {
-    _markAsSeen();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    GetIt.I.get<CurrentRoute>().clearRouteName();
-    GetIt.I.get<CurrentRoute>().clearMessageArguments();
-    super.dispose();
   }
 
   @override

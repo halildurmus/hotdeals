@@ -69,27 +69,12 @@ class _DealDetailsState extends State<DealDetails> {
     if (_user != null) {
       isUpvoted = _deal.upvoters!.contains(_user!.id);
       isDownvoted = _deal.downvoters!.contains(_user!.id);
-      GetIt.I
-          .get<SpringService>()
-          .incrementViewsCounter(dealId: _deal.id!)
-          .then((Deal? deal) {
-        if (deal != null) {
-          WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
-            setState(() {
-              _deal = deal;
-            });
-          });
-        }
-      });
+      _incrementViewsCounter();
     }
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
-          if (_scrollController.offset >= 1000) {
-            _showBackToTopButton = true;
-          } else {
-            _showBackToTopButton = false;
-          }
+          _showBackToTopButton = _scrollController.offset >= 1000;
         });
       });
     super.initState();
@@ -109,6 +94,22 @@ class _DealDetailsState extends State<DealDetails> {
       if (commentsCount != null) {
         WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
           _commentsCount = commentsCount;
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      }
+    });
+  }
+
+  void _incrementViewsCounter() {
+    GetIt.I
+        .get<SpringService>()
+        .incrementViewsCounter(dealId: _deal.id!)
+        .then((Deal? deal) {
+      if (deal != null) {
+        WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+          _deal = deal;
           if (mounted) {
             setState(() {});
           }

@@ -28,8 +28,8 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
   @override
   void initState() {
     springService = GetIt.I.get<SpringService>();
-    super.initState();
     messageController = TextEditingController();
+    super.initState();
   }
 
   @override
