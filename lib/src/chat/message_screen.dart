@@ -368,10 +368,14 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     }
 
     ChatTheme _chatTheme(ThemeData theme) {
+      final isLightMode = theme.brightness == Brightness.light;
       const defaultChatTheme = DefaultChatTheme();
 
       return DefaultChatTheme(
         backgroundColor: theme.backgroundColor,
+        inputBackgroundColor: isLightMode
+            ? theme.colorScheme.secondary
+            : defaultChatTheme.inputBackgroundColor,
         inputTextDecoration: defaultChatTheme.inputTextDecoration.copyWith(
           fillColor: Colors.transparent,
         ),
