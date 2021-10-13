@@ -163,13 +163,19 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(16)),
           color: theme.brightness == Brightness.dark
-              ? theme.primaryColorDark.withOpacity(.4)
-              : theme.primaryColorLight.withOpacity(.7),
+              ? theme.colorScheme.secondary.withOpacity(.5)
+              : theme.colorScheme.secondary.withOpacity(.9),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: _isUser2Blocked
-            ? Text(AppLocalizations.of(context)!.youHaveBlockedThisUser)
-            : Text(AppLocalizations.of(context)!.youHaveBeenBlockedByThisUser),
+            ? Text(
+                AppLocalizations.of(context)!.youHaveBlockedThisUser,
+                style: const TextStyle(color: Colors.white),
+              )
+            : Text(
+                AppLocalizations.of(context)!.youHaveBeenBlockedByThisUser,
+                style: const TextStyle(color: Colors.white),
+              ),
       );
     }
 
