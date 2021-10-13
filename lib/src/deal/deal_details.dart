@@ -661,11 +661,15 @@ class _DealDetailsState extends State<DealDetails> {
               ),
             ),
             if (_showBackToTopButton)
-              Align(
-                alignment: Alignment.bottomRight,
-                child: FloatingActionButton(
-                  onPressed: _scrollToTop,
-                  child: const Icon(Icons.arrow_upward),
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: FloatingActionButton(
+                    onPressed: _scrollToTop,
+                    mini: true,
+                    child: const Icon(Icons.expand_less),
+                  ),
                 ),
               ),
           ],
