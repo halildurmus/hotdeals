@@ -36,39 +36,57 @@ class _ExpandableTextState extends State<ExpandableText> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     final textTheme = theme.textTheme;
     final textStyle = textTheme.bodyText2!.copyWith(
       color: theme.brightness == Brightness.dark ? Colors.grey : null,
       fontSize: 15,
     );
-    final expandTextStyle = textTheme.bodyText2!.copyWith(
-      color: theme.primaryColor,
-      fontSize: 13,
-    );
 
     Widget buildCollapsed() {
-      return Column(
+      return Stack(
+        alignment: Alignment.bottomCenter,
         children: [
-          Text(
-            widget.text,
-            maxLines: widget.maxLines,
-            overflow: TextOverflow.fade,
-            style: textStyle,
+          Padding(
+            padding: widget.padding,
+            child: Text(
+              widget.text,
+              maxLines: widget.maxLines,
+              overflow: TextOverflow.fade,
+              style: textStyle,
+            ),
           ),
-          const SizedBox(height: 10),
-          InkWell(
-            onTap: () => controller.toggle(),
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.readMore,
-                  style: expandTextStyle,
-                ),
-                Icon(Icons.expand_more, color: theme.primaryColor),
-              ],
+          Positioned(
+            bottom: 5,
+            child: InkWell(
+              onTap: () => controller.toggle(),
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () => controller.toggle(),
+                    icon: Icon(
+                      Icons.arrow_downward,
+                      color:
+                          isDarkMode ? null : theme.textTheme.bodyText2!.color,
+                      size: 16,
+                    ),
+                    label: Text(
+                      AppLocalizations.of(context)!.readMore,
+                      style: textTheme.bodyText2!.copyWith(fontSize: 15),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary:
+                          isDarkMode ? const Color(0xFF2e2d2d) : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -76,32 +94,15 @@ class _ExpandableTextState extends State<ExpandableText> {
     }
 
     Widget buildExpanded() {
-      return Column(
-        children: [
-          SelectableText(widget.text, style: textStyle),
-          const SizedBox(height: 10),
-          InkWell(
-            onTap: () => controller.toggle(),
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.readLess,
-                  style: expandTextStyle,
-                ),
-                Icon(Icons.expand_less, color: theme.primaryColor),
-              ],
-            ),
-          ),
-        ],
+      return Padding(
+        padding: widget.padding,
+        child: SelectableText(widget.text, style: textStyle),
       );
     }
 
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final TextPainter textPainter = TextPainter(
+      builder: (context, constraints) {
+        final textPainter = TextPainter(
           maxLines: widget.maxLines,
           text: TextSpan(text: widget.text, style: textStyle),
           textDirection: TextDirection.ltr,
@@ -117,15 +118,12 @@ class _ExpandableTextState extends State<ExpandableText> {
           );
         }
 
-        return Padding(
-          padding: widget.padding,
-          child: ExpandableNotifier(
-            controller: controller,
-            child: ScrollOnExpand(
-              child: Expandable(
-                collapsed: buildCollapsed(),
-                expanded: buildExpanded(),
-              ),
+        return ExpandableNotifier(
+          controller: controller,
+          child: ScrollOnExpand(
+            child: Expandable(
+              collapsed: buildCollapsed(),
+              expanded: buildExpanded(),
             ),
           ),
         );
