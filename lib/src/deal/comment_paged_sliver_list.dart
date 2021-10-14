@@ -32,9 +32,7 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
   void initState() {
     _pagingController = widget.pagingController ??
         PagingController<int, Comment>(firstPageKey: 0);
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    _pagingController.addPageRequestListener((pageKey) => _fetchPage(pageKey));
     super.initState();
   }
 
@@ -64,10 +62,8 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView.separated(
+    return PagedSliverList.separated(
       pagingController: _pagingController,
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
       builderDelegate: PagedChildBuilderDelegate<Comment>(
         animateTransitions: true,
         itemBuilder: (context, comment, index) => CommentItem(comment: comment),

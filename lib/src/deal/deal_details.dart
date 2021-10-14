@@ -5,10 +5,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
+    show PagingController;
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/categories.dart';
+import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/store.dart';
@@ -26,6 +29,7 @@ import '../widgets/slider_indicator.dart';
 import '../widgets/user_profile_dialog.dart';
 import 'deal_comments.dart';
 import 'image_fullscreen.dart';
+import 'post_comment.dart';
 import 'report_deal_dialog.dart';
 
 enum _DealPopup { reportDeal }
@@ -40,6 +44,7 @@ class DealDetails extends StatefulWidget {
 }
 
 class _DealDetailsState extends State<DealDetails> {
+  final _pagingController = PagingController<int, Comment>(firstPageKey: 0);
   late Deal _deal;
   late List<String> _images;
   int currentIndex = 0;
@@ -49,7 +54,7 @@ class _DealDetailsState extends State<DealDetails> {
   int _commentsCount = 0;
   bool isUpvoted = false;
   bool isDownvoted = false;
-  bool _showBackToTopButton = false;
+  bool _showScrollToTopButton = false;
   late ScrollController _scrollController;
 
   @override
@@ -75,7 +80,7 @@ class _DealDetailsState extends State<DealDetails> {
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
-          _showBackToTopButton = _scrollController.offset >= 1000;
+          _showScrollToTopButton = _scrollController.offset >= 1000;
         });
       });
     super.initState();
@@ -83,6 +88,7 @@ class _DealDetailsState extends State<DealDetails> {
 
   @override
   void dispose() {
+    _pagingController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -164,7 +170,7 @@ class _DealDetailsState extends State<DealDetails> {
       );
     }
 
-    PreferredSizeWidget buildAppBar() {
+    PreferredSizeWidget _buildAppBar() {
       return PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
@@ -638,47 +644,123 @@ class _DealDetailsState extends State<DealDetails> {
       );
     }
 
-    Widget buildComments() {
-      return DealComments(deal: _deal);
+    Widget buildCommentCounts() {
+      final textTheme = Theme.of(context).textTheme;
+
+      return Text(
+        AppLocalizations.of(context)!.commentCount(_commentsCount),
+        style: textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
+      );
     }
 
-    Widget buildMainContent() {
-      return Expanded(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              controller: _scrollController,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  buildDealImages(),
-                  buildDealDetails(),
-                  buildRateDeal(),
-                  const Padding(padding: EdgeInsets.all(16), child: Divider()),
-                  buildUserDetails(),
-                  buildComments(),
-                  const SizedBox(height: 20),
-                ],
-              ),
+    void _onPostCommentTap() {
+      if (_user == null) {
+        GetIt.I.get<SignInDialog>().showSignInDialog(context);
+
+        return;
+      }
+
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-            if (_showBackToTopButton)
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: FloatingActionButton(
-                    onPressed: _scrollToTop,
-                    mini: true,
-                    child: const Icon(Icons.expand_less),
-                  ),
-                ),
-              ),
+            child: PostComment(deal: widget.deal),
+          );
+        },
+      ).then((_) {
+        _updateCommentsCount();
+        _pagingController.refresh();
+      });
+    }
+
+    Widget buildPostCommentButton() {
+      final theme = Theme.of(context);
+      final textTheme = theme.textTheme;
+
+      return TextButton(
+        onPressed: () => _onPostCommentTap(),
+        child: Text(
+          AppLocalizations.of(context)!.postComment,
+          style: textTheme.subtitle2!.copyWith(
+              color: theme.brightness == Brightness.light
+                  ? theme.primaryColor
+                  : theme.primaryColorLight),
+        ),
+      );
+    }
+
+    SliverToBoxAdapter _buildMainContent() {
+      return SliverToBoxAdapter(
+        child: Column(
+          children: [
+            buildDealImages(),
+            buildDealDetails(),
+            buildRateDeal(),
+            const Padding(padding: EdgeInsets.all(16), child: Divider()),
+            buildUserDetails(),
           ],
         ),
       );
     }
 
-    Widget buildSeeDealButton() {
+    SliverPadding _buildCommentsHeader() {
+      return SliverPadding(
+        padding: const EdgeInsets.all(16),
+        sliver: SliverToBoxAdapter(
+          child: Column(
+            children: [
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildCommentCounts(),
+                  const SizedBox(width: 10),
+                  buildPostCommentButton(),
+                ],
+              ),
+              const Divider(),
+            ],
+          ),
+        ),
+      );
+    }
+
+    SliverPadding _buildComments() {
+      return SliverPadding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+        sliver: DealComments(deal: _deal, pagingController: _pagingController),
+      );
+    }
+
+    Widget _buildCustomScrollView() {
+      return CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          _buildMainContent(),
+          _buildCommentsHeader(),
+          _buildComments(),
+        ],
+      );
+    }
+
+    Widget _buildScrollToTopButton() {
+      return Padding(
+        padding: const EdgeInsets.only(right: 12),
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: FloatingActionButton(
+            onPressed: _scrollToTop,
+            mini: true,
+            child: const Icon(Icons.expand_less),
+          ),
+        ),
+      );
+    }
+
+    Widget _buildSeeDealButton() {
       Future<void> launchURL() async {
         await canLaunch(_deal.dealUrl)
             ? await launch(_deal.dealUrl)
@@ -698,14 +780,25 @@ class _DealDetailsState extends State<DealDetails> {
       );
     }
 
-    return Scaffold(
-      appBar: buildAppBar(),
-      body: Column(
+    Widget _buildBody() {
+      return Column(
         children: [
-          buildMainContent(),
-          buildSeeDealButton(),
+          Expanded(
+            child: Stack(
+              children: [
+                _buildCustomScrollView(),
+                if (_showScrollToTopButton) _buildScrollToTopButton(),
+              ],
+            ),
+          ),
+          _buildSeeDealButton(),
         ],
-      ),
+      );
+    }
+
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: _buildBody(),
     );
   }
 }
