@@ -27,7 +27,7 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> with NetworkLoggy {
-  static const kPageSize = 10;
+  static const _kPageSize = 12;
   late MyUser? _user;
   final _pagingController =
       PagingController<int, PushNotification>(firstPageKey: 0);
@@ -78,8 +78,8 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   Future<void> _fetchPage(int pageKey) async {
     try {
       final newItems = await _pushNotificationService.getAll(
-          offset: pageKey, limit: kPageSize);
-      final isLastPage = newItems.length < kPageSize;
+          offset: pageKey, limit: _kPageSize);
+      final isLastPage = newItems.length < _kPageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
       } else {

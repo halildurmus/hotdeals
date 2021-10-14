@@ -185,7 +185,10 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
           return _buildErrorWidget(context);
         }
 
-        return const Center(child: CircularProgressIndicator());
+        return const Padding(
+          padding: EdgeInsets.symmetric(vertical: 25),
+          child: Center(child: CircularProgressIndicator()),
+        );
       },
     );
   }
