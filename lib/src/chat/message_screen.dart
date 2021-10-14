@@ -59,11 +59,13 @@ class MessageScreen extends StatefulWidget {
 }
 
 class _MessageScreenState extends State<MessageScreen> with UiLoggy {
+  late final Locale _currentLocale;
   bool _isAttachmentUploading = false;
   final Uuid uuid = const Uuid();
 
   @override
   void initState() {
+    _currentLocale = GetIt.I.get<SettingsController>().locale;
     _markAsSeen();
     super.initState();
   }
@@ -151,11 +153,10 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    final currentLocale = GetIt.I.get<SettingsController>().locale;
     final theme = Theme.of(context);
     final MyUser _user = Provider.of<UserController>(context).user!;
-    final _isUser2Blocked = _user.blockedUsers!.contains(widget.user2.uid);
     final _isUserBlocked = widget.user2.blockedUsers!.contains(_user.uid);
+    final _isUser2Blocked = _user.blockedUsers!.contains(widget.user2.uid);
 
     Widget _buildBlockedText() {
       return Container(
@@ -362,7 +363,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     }
 
     ChatL10n _getChatL10n() {
-      return currentLocale == kLocaleTurkish
+      return _currentLocale == kLocaleTurkish
           ? const ChatL10nTr()
           : const ChatL10nEn();
     }
@@ -415,8 +416,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         stream: GetIt.I
             .get<FirestoreService>()
             .messagesStreamByDocID(docID: widget.docId),
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           } else {
