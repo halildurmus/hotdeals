@@ -1,18 +1,9 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../models/user_controller.dart';
-import '../services/auth_service.dart';
-import '../services/spring_service.dart';
-import '../widgets/custom_alert_dialog.dart';
-import '../widgets/exception_alert_dialog.dart';
 import '../widgets/radio_item.dart';
 import '../widgets/settings_dialog.dart';
 import '../widgets/settings_list_item.dart';
@@ -24,35 +15,6 @@ class SettingsView extends StatelessWidget {
   static const String routeName = '/settings';
 
   final SettingsController controller;
-
-  Future<void> _confirmSignOut(BuildContext context) async {
-    final bool _didRequestSignOut = await CustomAlertDialog(
-          title: AppLocalizations.of(context)!.logoutConfirm,
-          cancelActionText: AppLocalizations.of(context)!.cancel,
-          defaultActionText: AppLocalizations.of(context)!.logout,
-        ).show(context) ??
-        false;
-
-    if (_didRequestSignOut) {
-      final String? fcmToken = await FirebaseMessaging.instance.getToken();
-      await GetIt.I.get<SpringService>().logout(fcmToken: fcmToken!);
-      await _signOut(context);
-      Navigator.of(context).pushReplacementNamed('/');
-    }
-  }
-
-  Future<void> _signOut(BuildContext context) async {
-    try {
-      final AuthService auth = Provider.of<AuthService>(context, listen: false);
-      await auth.signOut();
-      Provider.of<UserController>(context, listen: false).logout();
-    } on PlatformException catch (e) {
-      await ExceptionAlertDialog(
-        title: AppLocalizations.of(context)!.logoutFailed,
-        exception: e,
-      ).show(context);
-    }
-  }
 
   Widget _getLanguageImage(Locale locale) {
     late String svgLocation;
@@ -210,13 +172,6 @@ class SettingsView extends StatelessWidget {
             title: AppLocalizations.of(context)!.theme,
             subtitle: _getThemeName(context, controller.themeMode),
           ),
-          if (Provider.of<UserController>(context).user != null)
-            SettingsListItem(
-              onTap: () => _confirmSignOut(context),
-              hasNavigation: false,
-              icon: Icons.cancel,
-              title: AppLocalizations.of(context)!.logout,
-            ),
         ],
       ),
     );

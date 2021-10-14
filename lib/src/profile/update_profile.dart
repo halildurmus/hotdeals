@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
@@ -10,9 +12,12 @@ import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
+import '../services/auth_service.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
+import '../widgets/custom_alert_dialog.dart';
+import '../widgets/exception_alert_dialog.dart';
 import '../widgets/loading_dialog.dart';
 import '../widgets/settings_list_item.dart';
 
@@ -210,6 +215,35 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     super.dispose();
   }
 
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final bool _didRequestSignOut = await CustomAlertDialog(
+          title: AppLocalizations.of(context)!.logoutConfirm,
+          cancelActionText: AppLocalizations.of(context)!.cancel,
+          defaultActionText: AppLocalizations.of(context)!.logout,
+        ).show(context) ??
+        false;
+
+    if (_didRequestSignOut) {
+      final String? fcmToken = await FirebaseMessaging.instance.getToken();
+      await GetIt.I.get<SpringService>().logout(fcmToken: fcmToken!);
+      await _signOut(context);
+      Navigator.of(context).pushReplacementNamed('/');
+    }
+  }
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      final AuthService auth = Provider.of<AuthService>(context, listen: false);
+      await auth.signOut();
+      Provider.of<UserController>(context, listen: false).logout();
+    } on PlatformException catch (e) {
+      await ExceptionAlertDialog(
+        title: AppLocalizations.of(context)!.logoutFailed,
+        exception: e,
+      ).show(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     user = Provider.of<UserController>(context).user!;
@@ -223,11 +257,9 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
             onTap: () => showImagePicker(user.id!),
             image: CachedNetworkImage(
               imageUrl: user.avatar!,
-              imageBuilder:
-                  (BuildContext ctx, ImageProvider<Object> imageProvider) =>
-                      CircleAvatar(backgroundImage: imageProvider),
-              placeholder: (BuildContext context, String url) =>
-                  const CircleAvatar(),
+              imageBuilder: (ctx, imageProvider) =>
+                  CircleAvatar(backgroundImage: imageProvider),
+              placeholder: (context, url) => const CircleAvatar(),
             ),
             title: AppLocalizations.of(context)!.avatar,
           ),
@@ -236,6 +268,12 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
             icon: Icons.edit,
             title: AppLocalizations.of(context)!.nickname,
             subtitle: user.nickname,
+          ),
+          SettingsListItem(
+            onTap: () => _confirmSignOut(context),
+            hasNavigation: false,
+            icon: Icons.cancel,
+            title: AppLocalizations.of(context)!.logout,
           ),
         ],
       ),
