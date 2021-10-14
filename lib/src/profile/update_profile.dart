@@ -212,8 +212,6 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
     user = Provider.of<UserController>(context).user!;
 
     return Scaffold(
@@ -221,13 +219,6 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Text(
-              AppLocalizations.of(context)!.generalSettings,
-              style: textTheme.subtitle1,
-            ),
-          ),
           SettingsListItem(
             onTap: () => showImagePicker(user.id!),
             image: CachedNetworkImage(
