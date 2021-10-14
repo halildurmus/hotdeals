@@ -45,9 +45,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
   void initState() {
     _pagingController =
         widget.pagingController ?? PagingController<int, Deal>(firstPageKey: 0);
-    _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    _pagingController.addPageRequestListener((pageKey) => _fetchPage(pageKey));
     super.initState();
   }
 
