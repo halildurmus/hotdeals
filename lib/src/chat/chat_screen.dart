@@ -32,6 +32,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final Map<String, MyUser> _users = {};
   late MyUser? _user;
 
   @override
@@ -47,142 +48,148 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  Widget _buildSignIn() {
+    return ErrorIndicator(
+      icon: Icons.chat,
+      title: AppLocalizations.of(context)!.youNeedToSignIn,
+      message: AppLocalizations.of(context)!.youNeedToSignInToSee,
+    );
+  }
+
+  Widget _buildNoChats() {
+    return ErrorIndicator(
+      icon: Icons.chat,
+      title: AppLocalizations.of(context)!.noChats,
+      message: AppLocalizations.of(context)!.noActiveConversations,
+    );
+  }
+
+  Widget _buildCircularProgressIndicator() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16),
+      child: Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  Widget _buildBlockedText() {
+    return Row(
+      children: [
+        Icon(Icons.error, size: 18, color: Theme.of(context).errorColor),
+        const SizedBox(width: 4),
+        Text(
+          AppLocalizations.of(context)!.youCannotChatWithThisUser,
+          style: TextStyle(color: Theme.of(context).errorColor, fontSize: 15),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFileText(String fileName) {
+    return Row(
+      children: [
+        Icon(
+          Icons.description,
+          color: Theme.of(context).primaryColorLight,
+          size: 18,
+        ),
+        const SizedBox(width: 4),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * .55,
+          child: Text(
+            fileName,
+            maxLines: 1,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 15),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageText() {
+    return Row(
+      children: [
+        Icon(
+          FontAwesomeIcons.solidImage,
+          color: Theme.of(context).primaryColorLight,
+          size: 16,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          AppLocalizations.of(context)!.image,
+          style: const TextStyle(fontSize: 15),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMessageText(String text) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .55,
+      child: Text(
+        text,
+        maxLines: 1,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontSize: 15),
+      ),
+    );
+  }
+
+  Widget _buildUserAvatar(String avatarURL) {
+    return CachedNetworkImage(
+      imageUrl: avatarURL,
+      imageBuilder: (BuildContext ctx, ImageProvider<Object> imageProvider) =>
+          CircleAvatar(backgroundImage: imageProvider, radius: 24),
+      placeholder: (BuildContext context, String url) =>
+          const CircleAvatar(radius: 24),
+    );
+  }
+
+  Widget _buildUserNickname(String nickname) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * .55,
+      child: Text(
+        nickname,
+        maxLines: 1,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildMessageTime(DateTime createdAt, bool isRead) {
+    return Text(
+      DateTimeUtil.formatDateTime(createdAt),
+      style: TextStyle(
+        color: isRead ? Colors.grey : Theme.of(context).primaryColor,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
+  Widget _buildUnreadIndicator() {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: CircleAvatar(
+        backgroundColor: Theme.of(context).primaryColor,
+        radius: 6,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final deviceWidth = MediaQuery.of(context).size.width;
-
-    Widget _buildSignIn() {
-      return ErrorIndicator(
-        icon: Icons.chat,
-        title: AppLocalizations.of(context)!.youNeedToSignIn,
-        message: AppLocalizations.of(context)!.youNeedToSignInToSee,
-      );
-    }
-
-    Widget _buildNoChats() {
-      return ErrorIndicator(
-        icon: Icons.chat,
-        title: AppLocalizations.of(context)!.noChats,
-        message: AppLocalizations.of(context)!.noActiveConversations,
-      );
-    }
-
-    Widget buildCircularProgressIndicator() {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 16),
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    Widget _buildBlockedText() {
-      return Row(
-        children: [
-          Icon(Icons.error, size: 18, color: theme.errorColor),
-          const SizedBox(width: 4),
-          Text(
-            AppLocalizations.of(context)!.youCannotChatWithThisUser,
-            style: TextStyle(color: theme.errorColor, fontSize: 15),
-          ),
-        ],
-      );
-    }
-
-    Widget _buildFileText(String fileName) {
-      return Row(
-        children: [
-          Icon(
-            Icons.description,
-            color: theme.primaryColorLight,
-            size: 18,
-          ),
-          const SizedBox(width: 4),
-          SizedBox(
-            width: deviceWidth * .55,
-            child: Text(
-              fileName,
-              maxLines: 1,
-              softWrap: false,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 15),
-            ),
-          ),
-        ],
-      );
-    }
-
-    Widget _buildImageText() {
-      return Row(
-        children: [
-          Icon(
-            FontAwesomeIcons.solidImage,
-            color: theme.primaryColorLight,
-            size: 16,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            AppLocalizations.of(context)!.image,
-            style: const TextStyle(fontSize: 15),
-          ),
-        ],
-      );
-    }
-
-    Widget _buildMessageText(String text) {
-      return SizedBox(
-        width: deviceWidth * .55,
-        child: Text(
-          text,
-          maxLines: 1,
-          softWrap: false,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 15),
-        ),
-      );
-    }
-
-    Widget _buildUserAvatar(String avatarURL) {
-      return CachedNetworkImage(
-        imageUrl: avatarURL,
-        imageBuilder: (BuildContext ctx, ImageProvider<Object> imageProvider) =>
-            CircleAvatar(backgroundImage: imageProvider, radius: 24),
-        placeholder: (BuildContext context, String url) =>
-            const CircleAvatar(radius: 24),
-      );
-    }
-
-    Widget _buildUserNickname(String nickname) {
-      return SizedBox(
-        width: deviceWidth * .55,
-        child: Text(
-          nickname,
-          maxLines: 1,
-          softWrap: false,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      );
-    }
-
-    Widget _buildMessageTime(DateTime createdAt, bool isRead) {
-      return Text(
-        DateTimeUtil.formatDateTime(createdAt),
-        style: TextStyle(
-          color: isRead ? Colors.grey : theme.primaryColor,
-          fontWeight: FontWeight.w500,
-        ),
-      );
-    }
-
-    Widget _buildUnreadIndicator() {
-      return Padding(
-        padding: const EdgeInsets.only(right: 10),
-        child: CircleAvatar(backgroundColor: theme.primaryColor, radius: 6),
-      );
-    }
 
     Widget _buildMessage(
-        String docId, Json lastMessage, MyUser user, MyUser user2) {
+      String docId,
+      Json lastMessage,
+      MyUser user,
+      MyUser user2,
+    ) {
       final _lastMessageIsFile = lastMessage['type'] == 'file';
       final _lastMessageIsImage = lastMessage['type'] == 'image';
       final _sentBy = lastMessage['author']['id'] as String;
@@ -192,11 +199,13 @@ class _ChatScreenState extends State<ChatScreen> {
       } else {
         _isMessageSeen = true;
       }
-      final bool _isUserBlocked = user.blockedUsers!.contains(user2.uid);
+      final _isUserBlocked = user2.blockedUsers!.contains(user.uid);
+      final _isUser2Blocked = user.blockedUsers!.contains(user2.uid);
       final DateTime _createdAt = DateTime.fromMillisecondsSinceEpoch(
         lastMessage['createdAt'] as int,
       );
 
+      // TODO(halildurmus): Extract this as a stateless widget
       return InkWell(
         onTap: () => Navigator.of(context).pushNamed(
           MessageScreen.routeName,
@@ -224,7 +233,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     children: [
                       _buildUserNickname(user2.nickname!),
                       const SizedBox(height: 4),
-                      if (_isUserBlocked)
+                      if (_isUserBlocked || _isUser2Blocked)
                         _buildBlockedText()
                       else if (_lastMessageIsFile)
                         _buildFileText(lastMessage['name'] as String)
@@ -243,13 +252,61 @@ class _ChatScreenState extends State<ChatScreen> {
       );
     }
 
-    Widget _buildChats() {
+    Widget _buildListView(
+      List<QueryDocumentSnapshot<Json>> items,
+      MyUser user,
+    ) {
+      return ListView.separated(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final String _docID = items[index].id;
+          final String _user2Uid =
+              ChatUtil.getUser2Uid(docID: _docID, user1Uid: _user!.uid);
+          final _latestMessage = items[index].get('latestMessage') as Json;
+
+          if (_users.containsKey(_user2Uid)) {
+            final MyUser _user2 = _users[_user2Uid]!;
+
+            return _buildMessage(_docID, _latestMessage, user, _user2);
+          }
+
+          return FutureBuilder<MyUser>(
+            future: GetIt.I.get<SpringService>().getUserByUid(uid: _user2Uid),
+            builder: (context, AsyncSnapshot<MyUser> snapshot) {
+              if (snapshot.hasData) {
+                final MyUser _user2 = snapshot.data!;
+                _users[_user2Uid] = _user2;
+
+                return _buildMessage(_docID, _latestMessage, user, _user2);
+              } else if (snapshot.hasError) {
+                return buildErrorWidget();
+              }
+
+              return _buildCircularProgressIndicator();
+            },
+          );
+        },
+        separatorBuilder: (context, index) =>
+            const Divider(height: 0, indent: 16, endIndent: 16),
+      );
+    }
+
+    Widget _buildConsumer(List<QueryDocumentSnapshot<Json>> items) {
+      return Consumer<UserController>(
+        builder: (context, ctrl, child) {
+          final MyUser user = ctrl.user!;
+
+          return _buildListView(items, user);
+        },
+      );
+    }
+
+    Widget _buildStreamBuilder() {
       return StreamBuilder<QuerySnapshot<Json>>(
         stream: GetIt.I
             .get<FirestoreService>()
             .messagesStreamByUserUid(userUid: _user!.uid),
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (snapshot.hasData) {
             final _items = snapshot.data!.docs;
             // Removes empty message docs.
@@ -258,60 +315,7 @@ class _ChatScreenState extends State<ChatScreen> {
               return _buildNoChats();
             }
 
-            return Consumer<UserController>(
-              builder: (BuildContext context, UserController mongoUser,
-                  Widget? child) {
-                final MyUser? user = mongoUser.user;
-
-                return ListView.separated(
-                  itemCount: _items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final String _docID = _items[index].id;
-                    final String _user2Uid = ChatUtil.getUser2Uid(
-                        docID: _docID, user1Uid: _user!.uid);
-                    final _latestMessage =
-                        _items[index].get('latestMessage') as Json;
-
-                    return FutureBuilder<MyUser>(
-                      future: GetIt.I
-                          .get<SpringService>()
-                          .getUserByUid(uid: _user2Uid),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<MyUser> snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.none:
-                            return Center(
-                              child: Text(AppLocalizations.of(context)!
-                                  .anErrorOccurred),
-                            );
-                          case ConnectionState.active:
-                          case ConnectionState.waiting:
-                            return buildCircularProgressIndicator();
-                          case ConnectionState.done:
-                            {
-                              if (snapshot.hasData) {
-                                final MyUser _user2 = snapshot.data!;
-
-                                return _buildMessage(
-                                    _docID, _latestMessage, user!, _user2);
-                              }
-
-                              return Center(
-                                child: Text(AppLocalizations.of(context)!
-                                    .anErrorOccurred),
-                              );
-                            }
-                          default:
-                            return buildCircularProgressIndicator();
-                        }
-                      },
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(height: 0, indent: 16, endIndent: 16),
-                );
-              },
-            );
+            return _buildConsumer(_items);
           } else if (snapshot.hasError) {
             return buildErrorWidget();
           }
@@ -321,33 +325,35 @@ class _ChatScreenState extends State<ChatScreen> {
       );
     }
 
+    List<Widget> _buildActions() {
+      return [
+        PopupMenuButton<_ChatPopup>(
+          icon: const Icon(Icons.more_vert),
+          onSelected: (_ChatPopup result) {
+            if (result == _ChatPopup.blockedUsers) {
+              Navigator.of(context).pushNamed(BlockedUsers.routeName);
+            }
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem<_ChatPopup>(
+              value: _ChatPopup.blockedUsers,
+              child: Text(AppLocalizations.of(context)!.blockedUsers),
+            ),
+          ],
+        ),
+      ];
+    }
+
     PreferredSizeWidget _buildAppBar() {
       return AppBar(
         title: Text(AppLocalizations.of(context)!.chats),
-        actions: _user == null
-            ? null
-            : [
-                PopupMenuButton<_ChatPopup>(
-                  icon: const Icon(Icons.more_vert),
-                  onSelected: (_ChatPopup result) {
-                    if (result == _ChatPopup.blockedUsers) {
-                      Navigator.of(context).pushNamed(BlockedUsers.routeName);
-                    }
-                  },
-                  itemBuilder: (BuildContext context) => [
-                    PopupMenuItem<_ChatPopup>(
-                      value: _ChatPopup.blockedUsers,
-                      child: Text(AppLocalizations.of(context)!.blockedUsers),
-                    ),
-                  ],
-                ),
-              ],
+        actions: _user == null ? null : _buildActions(),
       );
     }
 
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _user == null ? _buildSignIn() : _buildChats(),
+      body: _user == null ? _buildSignIn() : _buildStreamBuilder(),
     );
   }
 }
