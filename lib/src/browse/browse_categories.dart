@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import '../models/categories.dart';
 import '../models/category.dart';
 import '../utils/navigation_util.dart';
-import '../widgets/category_item.dart';
+import 'category_item.dart';
 import 'deals_by_category.dart';
 
 class BrowseCategories extends StatefulWidget {
