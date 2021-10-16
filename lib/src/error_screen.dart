@@ -8,7 +8,7 @@ import 'widgets/loading_dialog.dart';
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({Key? key, required this.onTap}) : super(key: key);
 
-  final Future<void> Function() onTap;
+  final Function(BuildContext ctx) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +18,7 @@ class ErrorScreen extends StatelessWidget {
         context,
         onTryAgain: () async {
           GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
-          await onTap();
-          Navigator.of(context).pop();
+          onTap(context);
         },
       ),
     );

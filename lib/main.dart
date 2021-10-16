@@ -104,18 +104,6 @@ void main() async {
     getIt.registerSingleton<LoadingDialog>(const LoadingDialog());
     getIt.registerSingleton<SignInDialog>(const SignInDialog());
 
-    // Fetches categories and stores.
-    try {
-      await Future.wait<dynamic>(
-        <Future<dynamic>>[
-          getIt.get<Categories>().getCategories(),
-          getIt.get<Stores>().getStores(),
-        ],
-      );
-    } on Exception {
-      logError('Failed to fetch categories and stores!');
-    }
-
     // Initializes the ConnectionService.
     getIt.get<ConnectionService>().initialize();
 

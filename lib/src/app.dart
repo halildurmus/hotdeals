@@ -10,9 +10,7 @@ import 'package:provider/provider.dart';
 import 'error_screen.dart';
 import 'firebase_messaging_listener.dart';
 import 'models/categories.dart';
-import 'models/category.dart';
 import 'models/my_user.dart';
-import 'models/store.dart';
 import 'models/stores.dart';
 import 'offline_builder.dart';
 import 'routing/app_router.dart';
@@ -20,6 +18,8 @@ import 'settings/settings.controller.dart';
 import 'sign_in/auth_widget.dart';
 import 'sign_in/auth_widget_builder.dart';
 import 'top_level_providers.dart';
+
+enum _FutureState { loading, success, error }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -31,10 +31,45 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with NetworkLoggy {
   final usedFlexScheme = FlexScheme.deepBlue;
   late SettingsController settingsController;
-  late List<Category>? categories;
-  late List<Store>? stores;
+  _FutureState _futureState = _FutureState.loading;
 
-  Widget buildMaterialApp({
+  @override
+  void initState() {
+    settingsController = GetIt.I.get<SettingsController>();
+    _fetchCategoriesAndStores();
+    super.initState();
+    // Subscribes to Firebase Cloud Messaging.
+    subscribeToFCM();
+  }
+
+  void _fetchCategoriesAndStores({BuildContext? ctx}) {
+    Future.wait<dynamic>([
+      GetIt.I.get<Categories>().getCategories(),
+      GetIt.I.get<Stores>().getStores(),
+    ]).then((_) {
+      WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+        // If ctx is provided, pops the LoadingDialog in the ErrorScreen.
+        if (ctx != null) {
+          Navigator.of(ctx).pop();
+        }
+        setState(() {
+          _futureState = _FutureState.success;
+        });
+      });
+    }).catchError((_) {
+      WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+        // If ctx is provided, pops the LoadingDialog in the ErrorScreen.
+        if (ctx != null) {
+          Navigator.of(ctx).pop();
+        }
+        setState(() {
+          _futureState = _FutureState.error;
+        });
+      });
+    });
+  }
+
+  Widget _buildMaterialApp({
     Widget? home,
     AsyncSnapshot<MyUser?>? userSnapshot,
   }) {
@@ -58,74 +93,42 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
         ).toTheme,
         themeMode: settingsController.themeMode,
-        onGenerateTitle: (BuildContext context) =>
-            AppLocalizations.of(context)!.appTitle,
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         home: home ?? AuthWidget(userSnapshot: userSnapshot!),
-        onGenerateRoute: (RouteSettings routeSettings) =>
-            AppRouter.onGenerateRoute(
-                routeSettings, userSnapshot!, settingsController),
+        onGenerateRoute: (routeSettings) => AppRouter.onGenerateRoute(
+            routeSettings, userSnapshot!, settingsController),
         builder: home == null
-            ? (BuildContext context, Widget? child) =>
-                buildOfflineBuilder(context, child)
+            ? (context, child) => buildOfflineBuilder(context, child)
             : null,
       ),
     );
   }
 
   @override
-  void initState() {
-    settingsController = GetIt.I.get<SettingsController>();
-    categories = GetIt.I.get<Categories>().categories;
-    stores = GetIt.I.get<Stores>().stores;
-    super.initState();
-    // Subscribes to Firebase Cloud Messaging.
-    subscribeToFCM();
-  }
-
-  Widget buildErrorScreen() {
-    Future<void> onTap() async {
-      try {
-        await Future.wait<dynamic>(
-          [
-            GetIt.I
-                .get<Categories>()
-                .getCategories()
-                .then<void>((List<Category> value) => categories = value),
-            GetIt.I
-                .get<Stores>()
-                .getStores()
-                .then<void>((List<Store> value) => stores = value),
-          ],
-        );
-      } on Exception {
-        loggy.error('Failed to fetch categories and stores!');
-      } finally {
-        if (categories != null && stores != null) {
-          setState(() {});
-        }
-      }
-    }
-
-    return buildMaterialApp(home: ErrorScreen(onTap: onTap));
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (categories == null || stores == null) {
-      return buildErrorScreen();
+    if (_futureState == _FutureState.loading) {
+      // TODO(halildurmus): Replace this with a splash screen
+      return _buildMaterialApp(
+        home: const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    } else if (_futureState == _FutureState.error) {
+      return _buildMaterialApp(
+        home: ErrorScreen(
+          onTap: (ctx) => _fetchCategoriesAndStores(ctx: ctx),
+        ),
+      );
     }
 
     return MultiProvider(
       providers: buildTopLevelProviders(),
       child: AuthWidgetBuilder(
-        builder: (BuildContext context, AsyncSnapshot<MyUser?> userSnapshot) {
-          return AnimatedBuilder(
-            animation: settingsController,
-            builder: (BuildContext context, Widget? child) {
-              return buildMaterialApp(userSnapshot: userSnapshot);
-            },
-          );
-        },
+        builder: (context, userSnapshot) => AnimatedBuilder(
+          animation: settingsController,
+          builder: (context, child) =>
+              _buildMaterialApp(userSnapshot: userSnapshot),
+        ),
       ),
     );
   }
