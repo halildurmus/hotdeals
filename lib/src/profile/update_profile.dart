@@ -255,7 +255,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
         children: [
           SettingsListItem(
             onTap: () => showImagePicker(user.id!),
-            image: CachedNetworkImage(
+            leading: CachedNetworkImage(
               imageUrl: user.avatar!,
               imageBuilder: (ctx, imageProvider) =>
                   CircleAvatar(backgroundImage: imageProvider),
@@ -265,14 +265,14 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
           ),
           SettingsListItem(
             onTap: nicknameOnTap,
-            icon: Icons.edit,
+            leading: const Icon(Icons.edit),
             title: AppLocalizations.of(context)!.nickname,
             subtitle: user.nickname,
           ),
           SettingsListItem(
             onTap: () => _confirmSignOut(context),
             hasNavigation: false,
-            icon: Icons.logout,
+            leading: const Icon(Icons.logout),
             title: AppLocalizations.of(context)!.logout,
           ),
         ],

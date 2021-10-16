@@ -162,13 +162,13 @@ class SettingsView extends StatelessWidget {
         children: [
           SettingsListItem(
             onTap: () => _changeLanguage(context),
-            image: _getLanguageImage(controller.locale),
+            leading: _getLanguageImage(controller.locale),
             title: AppLocalizations.of(context)!.language,
             subtitle: _getLanguageName(context, controller.locale),
           ),
           SettingsListItem(
             onTap: () => _changeAppTheme(context),
-            icon: Icons.settings_brightness,
+            leading: const Icon(Icons.settings_brightness),
             title: AppLocalizations.of(context)!.theme,
             subtitle: _getThemeName(context, controller.themeMode),
           ),

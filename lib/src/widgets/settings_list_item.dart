@@ -4,18 +4,14 @@ class SettingsListItem extends StatelessWidget {
   const SettingsListItem({
     Key? key,
     this.hasNavigation = true,
-    this.icon,
-    this.image,
+    required this.leading,
     required this.onTap,
     this.subtitle,
     required this.title,
-  })  : assert(icon != null || image != null,
-            'You need to specify either an icon or an image!'),
-        super(key: key);
+  }) : super(key: key);
 
   final bool hasNavigation;
-  final IconData? icon;
-  final Widget? image;
+  final Widget leading;
   final VoidCallback onTap;
   final String? subtitle;
   final String title;
@@ -34,13 +30,10 @@ class SettingsListItem extends StatelessWidget {
         child: ListTile(
           dense: true,
           horizontalTitleGap: 0,
-          leading: icon != null
-              ? Icon(icon, size: 25)
-              : ConstrainedBox(
-                  constraints:
-                      const BoxConstraints(maxHeight: 25, maxWidth: 25),
-                  child: image,
-                ),
+          leading: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 24, maxWidth: 24),
+            child: leading,
+          ),
           title: Text(
             title,
             style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w500),
