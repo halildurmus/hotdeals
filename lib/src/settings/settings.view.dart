@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hotdeals/src/widgets/settings_section.dart';
 
 import '../constants.dart';
 import '../widgets/radio_item.dart';
@@ -160,17 +161,22 @@ class SettingsView extends StatelessWidget {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
       body: Column(
         children: [
-          SettingsListItem(
-            onTap: () => _changeLanguage(context),
-            leading: _getLanguageImage(controller.locale),
-            title: AppLocalizations.of(context)!.language,
-            subtitle: _getLanguageName(context, controller.locale),
-          ),
-          SettingsListItem(
-            onTap: () => _changeAppTheme(context),
-            leading: const Icon(Icons.settings_brightness),
-            title: AppLocalizations.of(context)!.theme,
-            subtitle: _getThemeName(context, controller.themeMode),
+          SettingsSection(
+            title: AppLocalizations.of(context)!.general,
+            children: [
+              SettingsListItem(
+                onTap: () => _changeLanguage(context),
+                leading: _getLanguageImage(controller.locale),
+                title: AppLocalizations.of(context)!.language,
+                subtitle: _getLanguageName(context, controller.locale),
+              ),
+              SettingsListItem(
+                onTap: () => _changeAppTheme(context),
+                leading: const Icon(Icons.settings_brightness),
+                title: AppLocalizations.of(context)!.theme,
+                subtitle: _getThemeName(context, controller.themeMode),
+              ),
+            ],
           ),
         ],
       ),
