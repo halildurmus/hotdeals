@@ -41,13 +41,6 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
-  Widget buildErrorWidget() {
-    return ErrorIndicatorUtil.buildFirstPageError(
-      context,
-      onTryAgain: () => setState(() {}),
-    );
-  }
-
   Widget _buildSignIn() {
     return ErrorIndicator(
       icon: Icons.chat,
@@ -277,7 +270,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
                 return _buildMessage(_docID, _latestMessage, user, _user2);
               } else if (snapshot.hasError) {
-                return buildErrorWidget();
+                return ErrorIndicatorUtil.buildNewPageError(
+                  context,
+                  onTryAgain: () => setState(() {}),
+                );
               }
 
               return _buildCircularProgressIndicator();
@@ -315,7 +311,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
             return _buildConsumer(_items);
           } else if (snapshot.hasError) {
-            return buildErrorWidget();
+            return ErrorIndicatorUtil.buildFirstPageError(
+              context,
+              onTryAgain: () => setState(() {}),
+            );
           }
 
           return const Center(child: CircularProgressIndicator());
