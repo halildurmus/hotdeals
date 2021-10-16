@@ -113,15 +113,6 @@ class _BlockedUsersState extends State<BlockedUsers> {
     }
   }
 
-  Future<void> onRefresh() async {
-    await Provider.of<UserController>(context, listen: false).getUser();
-    setState(() {});
-
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final MyUser user = Provider.of<UserController>(context).user!;
@@ -156,12 +147,9 @@ class _BlockedUsersState extends State<BlockedUsers> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.blockedUsers),
       ),
-      body: RefreshIndicator(
-        onRefresh: onRefresh,
-        child: user.blockedUsers!.isEmpty
-            ? buildNoBlockedUsersFound(context)
-            : buildBlockedUsers(),
-      ),
+      body: user.blockedUsers!.isEmpty
+          ? buildNoBlockedUsersFound(context)
+          : buildBlockedUsers(),
     );
   }
 }
