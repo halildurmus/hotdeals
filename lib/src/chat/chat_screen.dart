@@ -214,8 +214,6 @@ class _ChatScreenState extends State<ChatScreen> {
             user2: user2,
           ),
         ),
-        highlightColor: theme.primaryColorLight.withOpacity(.1),
-        splashColor: theme.primaryColorLight.withOpacity(.1),
         child: Container(
           color: _isMessageSeen ? null : theme.primaryColor.withOpacity(.1),
           padding: const EdgeInsets.all(16),

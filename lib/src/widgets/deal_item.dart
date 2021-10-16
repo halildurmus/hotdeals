@@ -185,30 +185,35 @@ class _DealItemState extends State<DealItem> {
     }
 
     Widget buildDealDetails() {
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildDealTitle(),
-              const SizedBox(height: 3),
-              buildDealCategory(),
-              const SizedBox(height: 8),
-              buildDealPrice(),
-              const SizedBox(height: 10),
-              Row(
+      return Row(
+        children: [
+          buildDealCoverPhoto(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildDealScore(),
-                  buildSeparator(),
-                  buildCommentsCount(),
-                  buildSeparator(),
-                  buildViewsCount(),
+                  buildDealTitle(),
+                  const SizedBox(height: 3),
+                  buildDealCategory(),
+                  const SizedBox(height: 8),
+                  buildDealPrice(),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      buildDealScore(),
+                      buildSeparator(),
+                      buildCommentsCount(),
+                      buildSeparator(),
+                      buildViewsCount(),
+                    ],
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       );
     }
 
@@ -259,6 +264,21 @@ class _DealItemState extends State<DealItem> {
       );
     }
 
+    Widget buildDealContent() {
+      return SizedBox(
+        height: 120,
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          child: InkWell(
+            onTap: widget.onTap ??
+                () => NavigationUtil.navigate(context, DealDetails(deal: deal)),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            child: buildDealDetails(),
+          ),
+        ),
+      );
+    }
+
     return Container(
       height: 145,
       width: deviceWidth,
@@ -267,25 +287,7 @@ class _DealItemState extends State<DealItem> {
         opacity: widget.inactiveMessage == null ? 1 : .6,
         child: Stack(
           children: [
-            SizedBox(
-              height: 120,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: InkWell(
-                  onTap: widget.onTap ??
-                      () => NavigationUtil.navigate(
-                          context, DealDetails(deal: deal)),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  highlightColor: theme.primaryColorLight.withOpacity(.1),
-                  splashColor: theme.primaryColorLight.withOpacity(.1),
-                  child: Row(
-                    children: [buildDealCoverPhoto(), buildDealDetails()],
-                  ),
-                ),
-              ),
-            ),
+            buildDealContent(),
             buildFavoriteButton(),
             if (widget.inactiveMessage != null) buildInactiveMessage(),
             if (deal.isNew!) buildSpecialMark()

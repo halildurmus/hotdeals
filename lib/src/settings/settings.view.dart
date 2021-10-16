@@ -5,9 +5,9 @@ import 'package:flutter_svg/svg.dart';
 
 import '../constants.dart';
 import '../widgets/radio_item.dart';
-import '../widgets/settings_dialog.dart';
 import '../widgets/settings_list_item.dart';
 import 'settings.controller.dart';
+import 'settings_dialog.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key, required this.controller}) : super(key: key);
@@ -64,7 +64,7 @@ class SettingsView extends StatelessWidget {
                     onChanged: controller.updateLocale,
                     providerValue: controller.locale,
                     radioValue: kLocaleEnglish,
-                    iconPath: 'assets/icons/en.svg',
+                    leading: SvgPicture.asset('assets/icons/en.svg'),
                     text: AppLocalizations.of(context)!.english,
                   ),
                   RadioItem<Locale>(
@@ -72,7 +72,7 @@ class SettingsView extends StatelessWidget {
                     onChanged: controller.updateLocale,
                     providerValue: controller.locale,
                     radioValue: kLocaleTurkish,
-                    iconPath: 'assets/icons/tr.svg',
+                    leading: SvgPicture.asset('assets/icons/tr.svg'),
                     text: AppLocalizations.of(context)!.turkish,
                   ),
                   const SizedBox(height: 15),
@@ -114,7 +114,7 @@ class SettingsView extends StatelessWidget {
                 onChanged: controller.updateThemeMode,
                 providerValue: controller.themeMode,
                 radioValue: ThemeMode.system,
-                icon: Icons.brightness_auto,
+                leading: const Icon(Icons.brightness_auto, size: 30),
                 text: AppLocalizations.of(context)!.system,
               ),
               RadioItem<ThemeMode>(
@@ -122,7 +122,7 @@ class SettingsView extends StatelessWidget {
                 onChanged: controller.updateThemeMode,
                 providerValue: controller.themeMode,
                 radioValue: ThemeMode.light,
-                icon: Icons.light_mode,
+                leading: const Icon(Icons.light_mode, size: 30),
                 text: AppLocalizations.of(context)!.light,
               ),
               RadioItem<ThemeMode>(
@@ -130,7 +130,7 @@ class SettingsView extends StatelessWidget {
                 onChanged: controller.updateThemeMode,
                 providerValue: controller.themeMode,
                 radioValue: ThemeMode.dark,
-                icon: Icons.dark_mode,
+                leading: const Icon(Icons.dark_mode, size: 30),
                 text: AppLocalizations.of(context)!.dark,
               ),
               const SizedBox(height: 15),

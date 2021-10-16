@@ -75,6 +75,7 @@ class _StoreItemState extends State<StoreItem> {
   Widget buildNumberOfDeals() {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return FutureBuilder<int?>(
       future: numberOfDealsFuture,
@@ -86,7 +87,8 @@ class _StoreItemState extends State<StoreItem> {
 
         return Text(
           AppLocalizations.of(context)!.dealCount(dealsCount),
-          style: textTheme.subtitle2!.copyWith(color: theme.primaryColorLight),
+          style: textTheme.subtitle2!.copyWith(
+              color: isDarkMode ? theme.primaryColorLight : theme.primaryColor),
         );
       },
     );

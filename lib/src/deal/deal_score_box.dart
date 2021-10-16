@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class DealScoreBox extends StatelessWidget {
-  const DealScoreBox({Key? key, required this.dealScore}) : super(key: key);
+  const DealScoreBox({Key? key, required this.score}) : super(key: key);
 
-  final int dealScore;
+  final int score;
 
   Color _getBoxColor(int dealScore) {
     if (dealScore < 0) {
@@ -15,18 +15,16 @@ class DealScoreBox extends StatelessWidget {
     return const Color(0xFF006400).withOpacity(.8);
   }
 
-  String _getDealScore() =>
-      dealScore > 0 ? '+$dealScore' : dealScore.toString();
+  String _getDealScore() => score > 0 ? '+$score' : score.toString();
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(4)),
-        color: _getBoxColor(dealScore),
+        color: _getBoxColor(score),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       child: Text(

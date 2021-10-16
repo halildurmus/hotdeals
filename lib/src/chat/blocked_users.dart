@@ -51,39 +51,31 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: InkWell(
+      child: ListTile(
         onTap: () => _onUserTap(user.id!),
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        highlightColor: theme.primaryColorLight.withOpacity(.1),
-        splashColor: theme.primaryColorLight.withOpacity(.1),
-        child: ListTile(
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          leading: CachedNetworkImage(
-            imageUrl: user.avatar!,
-            imageBuilder:
-                (BuildContext ctx, ImageProvider<Object> imageProvider) =>
-                    CircleAvatar(backgroundImage: imageProvider),
-            placeholder: (BuildContext context, String url) =>
-                const CircleAvatar(),
-          ),
-          title: Text(
-            user.nickname!,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          trailing: OutlinedButton(
-            onPressed: () => confirmUnblockUser(context, user.uid),
-            style: OutlinedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              side: BorderSide(color: theme.errorColor),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        leading: CachedNetworkImage(
+          imageUrl: user.avatar!,
+          imageBuilder: (ctx, imageProvider) =>
+              CircleAvatar(backgroundImage: imageProvider),
+          placeholder: (context, url) => const CircleAvatar(),
+        ),
+        title: Text(
+          user.nickname!,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        trailing: OutlinedButton(
+          onPressed: () => confirmUnblockUser(context, user.uid),
+          style: OutlinedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
             ),
-            child: Text(
-              AppLocalizations.of(context)!.unblock,
-              style: theme.textTheme.subtitle2!.copyWith(
-                color: theme.errorColor,
-              ),
+            side: BorderSide(color: theme.errorColor),
+          ),
+          child: Text(
+            AppLocalizations.of(context)!.unblock,
+            style: theme.textTheme.subtitle2!.copyWith(
+              color: theme.errorColor,
             ),
           ),
         ),

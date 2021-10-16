@@ -22,7 +22,7 @@ import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/custom_snackbar.dart';
-import '../widgets/deal_score_box.dart';
+import 'deal_score_box.dart';
 import '../widgets/expandable_text.dart';
 import '../widgets/sign_in_dialog.dart';
 import '../widgets/slider_indicator.dart';
@@ -328,7 +328,7 @@ class _DealDetailsState extends State<DealDetails> {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        DealScoreBox(dealScore: _deal.dealScore!),
+                        DealScoreBox(score: _deal.dealScore!),
                         const SizedBox(width: 5),
                         Text(
                           AppLocalizations.of(context)!.dealScore,

@@ -131,6 +131,8 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
     }
 
     return ListTile(
+      onLongPress: widget.onLongPress,
+      onTap: widget.onTap,
       isThreeLine: widget.notification.verb == NotificationVerb.comment,
       leading: _buildLeading(),
       title: _buildTitle(),
@@ -150,13 +152,7 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
               : null,
       elevation: 0,
       margin: EdgeInsets.zero,
-      child: InkWell(
-        onLongPress: widget.onLongPress,
-        onTap: widget.onTap,
-        highlightColor: theme.primaryColorLight.withOpacity(.1),
-        splashColor: theme.primaryColorLight.withOpacity(.1),
-        child: _buildListTile(user),
-      ),
+      child: _buildListTile(user),
     );
   }
 

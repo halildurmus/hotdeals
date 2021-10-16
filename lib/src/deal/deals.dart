@@ -201,29 +201,19 @@ class _DealsState extends State<Deals> {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: min(searchResults.length, 5),
-          itemBuilder: (BuildContext context, int index) {
+          itemBuilder: (context, index) {
             final String keyword = searchResults.elementAt(index);
 
-            return Material(
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () => NavigationUtil.navigate(
-                  context,
-                  SearchResults(keyword: keyword),
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                highlightColor: theme.primaryColorLight.withOpacity(.1),
-                splashColor: theme.primaryColorLight.withOpacity(.1),
-                child: ListTile(
-                  leading: const Icon(Icons.search),
-                  title: Text(keyword),
-                ),
+            return ListTile(
+              onTap: () => NavigationUtil.navigate(
+                context,
+                SearchResults(keyword: keyword),
               ),
+              leading: const Icon(Icons.search),
+              title: Text(keyword),
             );
           },
-          separatorBuilder: (BuildContext context, int index) =>
-              const Divider(height: 0),
+          separatorBuilder: (context, index) => const Divider(height: 0),
         );
       }
 
