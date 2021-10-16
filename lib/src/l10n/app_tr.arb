@@ -430,8 +430,8 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "generalSettings": "Genel Ayarlar",
-  "@generalSettings": {
+  "general": "Genel",
+  "@general": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

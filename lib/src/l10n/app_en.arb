@@ -430,8 +430,8 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "generalSettings": "General Settings",
-  "@generalSettings": {
+  "general": "General",
+  "@general": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
