@@ -9,13 +9,12 @@ import '../services/spring_service.dart';
 class StoreItem extends StatefulWidget {
   const StoreItem({
     Key? key,
-    required this.store,
     required this.onTap,
+    required this.store,
   }) : super(key: key);
 
-  final Store store;
-
   final VoidCallback onTap;
+  final Store store;
 
   @override
   _StoreItemState createState() => _StoreItemState();
@@ -34,17 +33,16 @@ class _StoreItemState extends State<StoreItem> {
 
   Widget buildStoreLogo() {
     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return Container(
-      color: theme.brightness == Brightness.dark ? Colors.white : null,
-      padding: theme.brightness == Brightness.dark
-          ? const EdgeInsets.all(3)
-          : EdgeInsets.zero,
+      color: isDarkMode ? Colors.white : null,
+      padding: isDarkMode ? const EdgeInsets.all(3) : EdgeInsets.zero,
       height: 55,
       width: 55,
       child: CachedNetworkImage(
         imageUrl: widget.store.logo,
-        imageBuilder: (BuildContext ctx, ImageProvider<Object> imageProvider) {
+        imageBuilder: (ctx, imageProvider) {
           return Hero(
             tag: widget.store.id!,
             child: DecoratedBox(
@@ -54,21 +52,22 @@ class _StoreItemState extends State<StoreItem> {
             ),
           );
         },
-        placeholder: (BuildContext context, String url) =>
-            const SizedBox.square(dimension: 50),
+        placeholder: (context, url) => const SizedBox.square(dimension: 50),
       ),
     );
   }
 
   Widget buildStoreName() {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    return Text(
-      widget.store.name,
-      style: textTheme.headline6!.copyWith(
-        color: theme.primaryColor,
-        fontSize: 18,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        widget.store.name,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: textTheme.headline6!.copyWith(fontSize: 18),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -79,16 +78,14 @@ class _StoreItemState extends State<StoreItem> {
 
     return FutureBuilder<int?>(
       future: numberOfDealsFuture,
-      builder: (BuildContext context, AsyncSnapshot<int?> snapshot) {
-        String dealsText = '...';
-
+      builder: (context, AsyncSnapshot<int?> snapshot) {
+        int dealsCount = 0;
         if (snapshot.hasData) {
-          dealsText = snapshot.data!.toString();
+          dealsCount = snapshot.data!;
         }
 
         return Text(
-          AppLocalizations.of(context)!
-              .dealCount(dealsText == '...' ? 0 : int.parse(dealsText)),
+          AppLocalizations.of(context)!.dealCount(dealsCount),
           style: textTheme.subtitle2!.copyWith(color: theme.primaryColorLight),
         );
       },
@@ -106,8 +103,6 @@ class _StoreItemState extends State<StoreItem> {
         child: InkWell(
           onTap: widget.onTap,
           borderRadius: const BorderRadius.all(Radius.circular(24)),
-          highlightColor: theme.primaryColorLight.withOpacity(.1),
-          splashColor: theme.primaryColorLight.withOpacity(.1),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
