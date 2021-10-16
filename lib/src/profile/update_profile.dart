@@ -272,7 +272,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
           SettingsListItem(
             onTap: () => _confirmSignOut(context),
             hasNavigation: false,
-            icon: Icons.cancel,
+            icon: Icons.logout,
             title: AppLocalizations.of(context)!.logout,
           ),
         ],
