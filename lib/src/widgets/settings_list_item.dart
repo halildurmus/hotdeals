@@ -22,26 +22,21 @@ class SettingsListItem extends StatelessWidget {
     final textTheme = theme.textTheme;
 
     return Card(
-      child: InkWell(
+      child: ListTile(
         onTap: onTap,
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        highlightColor: theme.primaryColorLight.withOpacity(.1),
-        splashColor: theme.primaryColorLight.withOpacity(.1),
-        child: ListTile(
-          dense: true,
-          horizontalTitleGap: 0,
-          leading: ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 24, maxWidth: 24),
-            child: leading,
-          ),
-          title: Text(
-            title,
-            style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w500),
-          ),
-          subtitle: subtitle != null ? Text(subtitle!) : null,
-          trailing:
-              hasNavigation ? const Icon(Icons.chevron_right, size: 30) : null,
+        dense: true,
+        horizontalTitleGap: 0,
+        leading: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 24, maxWidth: 24),
+          child: leading,
         ),
+        title: Text(
+          title,
+          style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w500),
+        ),
+        subtitle: subtitle != null ? Text(subtitle!) : null,
+        trailing:
+            hasNavigation ? const Icon(Icons.chevron_right, size: 30) : null,
       ),
     );
   }
