@@ -19,7 +19,7 @@ class _BrowseCategoriesState extends State<BrowseCategories> {
 
   @override
   void initState() {
-    categories = GetIt.I.get<Categories>().mainCategories!;
+    categories = GetIt.I.get<Categories>().mainCategories;
     super.initState();
   }
 
@@ -28,7 +28,7 @@ class _BrowseCategoriesState extends State<BrowseCategories> {
     Widget buildCategories() {
       return ListView.builder(
         itemCount: categories.length,
-        itemBuilder: (BuildContext context, int index) {
+        itemBuilder: (context, index) {
           final Category category = categories[index];
 
           return CategoryItem(

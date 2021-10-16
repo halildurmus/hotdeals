@@ -13,7 +13,6 @@ class Stores {
     return _stores!;
   }
 
-  Store findByStoreId(String storeId) {
-    return _stores!.singleWhere((Store s) => s.id == storeId);
-  }
+  Store getStoreByStoreId(String storeId) =>
+      _stores!.singleWhere((e) => e.id == storeId);
 }

@@ -22,12 +22,12 @@ import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/custom_snackbar.dart';
-import 'deal_score_box.dart';
 import '../widgets/expandable_text.dart';
 import '../widgets/sign_in_dialog.dart';
 import '../widgets/slider_indicator.dart';
 import '../widgets/user_profile_dialog.dart';
 import 'deal_comments.dart';
+import 'deal_score_box.dart';
 import 'image_fullscreen.dart';
 import 'post_comment.dart';
 import 'report_deal_dialog.dart';
@@ -70,7 +70,7 @@ class _DealDetailsState extends State<DealDetails> {
     });
     _categories = GetIt.I.get<Categories>();
     final Stores stores = GetIt.I.get<Stores>();
-    _store = stores.findByStoreId(_deal.store);
+    _store = stores.getStoreByStoreId(_deal.store);
     _user = context.read<UserController>().user;
     if (_user != null) {
       isUpvoted = _deal.upvoters!.contains(_user!.id);

@@ -25,7 +25,7 @@ class _FilterChipsState extends State<FilterChips> {
   @override
   void initState() {
     subcategories =
-        GetIt.I.get<Categories>().getSubcategories(category: widget.category);
+        GetIt.I.get<Categories>().getSubcategoriesByCategory(widget.category);
     super.initState();
   }
 

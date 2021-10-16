@@ -43,7 +43,7 @@ class _PostDealState extends State<PostDeal> {
 
   @override
   void initState() {
-    categories = GetIt.I.get<Categories>().mainCategories!;
+    categories = GetIt.I.get<Categories>().mainCategories;
     selectedCategory = categories.first;
     stores = GetIt.I.get<Stores>().stores!;
     selectedStore = stores.first;
