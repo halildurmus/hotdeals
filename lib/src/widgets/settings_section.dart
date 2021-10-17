@@ -15,20 +15,15 @@ class SettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
           child: Text(
             title,
-            style: TextStyle(
-              color: isDarkMode ? null : Theme.of(context).primaryColorDark,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            style:
+                Theme.of(context).textTheme.headline6!.copyWith(fontSize: 16),
           ),
         ),
         ...children,
