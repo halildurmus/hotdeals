@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
 import '../utils/navigation_util.dart';
-import 'store_item.dart';
 import 'deals_by_store.dart';
+import 'store_item.dart';
 
 class BrowseStores extends StatefulWidget {
   const BrowseStores({Key? key}) : super(key: key);
