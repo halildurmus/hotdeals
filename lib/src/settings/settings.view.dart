@@ -54,17 +54,17 @@ class _SettingsViewState extends State<SettingsView> {
 
   Widget _getLanguageImage(Locale locale) {
     late String svgLocation;
-    if (locale == kLocaleTurkish) {
-      svgLocation = kTurkishSvg;
+    if (locale == localeTurkish) {
+      svgLocation = turkishSvg;
     } else {
-      svgLocation = kEnglishSvg;
+      svgLocation = englishSvg;
     }
 
     return SvgPicture.asset(svgLocation);
   }
 
   String _getLanguageName(BuildContext context, Locale locale) {
-    if (locale == kLocaleTurkish) {
+    if (locale == localeTurkish) {
       return AppLocalizations.of(context)!.turkish;
     }
 
@@ -96,18 +96,18 @@ class _SettingsViewState extends State<SettingsView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   RadioItem<Locale>(
-                    onTap: () => widget.controller.updateLocale(kLocaleEnglish),
+                    onTap: () => widget.controller.updateLocale(localeEnglish),
                     onChanged: widget.controller.updateLocale,
                     providerValue: widget.controller.locale,
-                    radioValue: kLocaleEnglish,
+                    radioValue: localeEnglish,
                     leading: SvgPicture.asset('assets/icons/en.svg'),
                     text: AppLocalizations.of(context)!.english,
                   ),
                   RadioItem<Locale>(
-                    onTap: () => widget.controller.updateLocale(kLocaleTurkish),
+                    onTap: () => widget.controller.updateLocale(localeTurkish),
                     onChanged: widget.controller.updateLocale,
                     providerValue: widget.controller.locale,
-                    radioValue: kLocaleTurkish,
+                    radioValue: localeTurkish,
                     leading: SvgPicture.asset('assets/icons/tr.svg'),
                     text: AppLocalizations.of(context)!.turkish,
                   ),

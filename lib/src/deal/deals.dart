@@ -255,25 +255,23 @@ class _DealsState extends State<Deals> {
         }
       }
 
-      List<Widget> buildActions() {
-        return [FloatingSearchBarAction.searchToClear(showIfClosed: false)];
-      }
+      List<Widget> buildActions() => [
+            FloatingSearchBarAction.searchToClear(showIfClosed: false),
+          ];
 
-      List<Widget> buildLeadingActions() {
-        return [
-          if (_searchBarController.isOpen)
+      List<Widget> buildLeadingActions() => [
+            if (_searchBarController.isOpen)
+              FloatingSearchBarAction.icon(
+                onTap: () => setState(() => _isSearchMode = false),
+                icon: const Icon(Icons.arrow_back),
+                showIfClosed: false,
+                showIfOpened: true,
+              ),
             FloatingSearchBarAction.icon(
-              onTap: () => setState(() => _isSearchMode = false),
-              icon: const Icon(Icons.arrow_back),
-              showIfClosed: false,
-              showIfOpened: true,
-            ),
-          FloatingSearchBarAction.icon(
-            onTap: () {},
-            icon: const Icon(Icons.search),
-          )
-        ];
-      }
+              onTap: () {},
+              icon: const Icon(Icons.search),
+            )
+          ];
 
       return Theme(
         data: theme.copyWith(

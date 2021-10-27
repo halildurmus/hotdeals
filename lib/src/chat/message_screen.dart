@@ -363,7 +363,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     }
 
     ChatL10n _getChatL10n() {
-      return _currentLocale == kLocaleTurkish
+      return _currentLocale == localeTurkish
           ? const ChatL10nTr()
           : const ChatL10nEn();
     }

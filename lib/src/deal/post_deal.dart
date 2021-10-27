@@ -146,11 +146,8 @@ class _PostDealState extends State<PostDeal> {
             selectedStore = newValue!;
           });
         },
-        selectedItemBuilder: (BuildContext context) {
-          return stores.map<Widget>((Store item) {
-            return Text(item.name);
-          }).toList();
-        },
+        selectedItemBuilder: (context) =>
+            stores.map<Widget>((store) => Text(store.name)).toList(),
         items: stores.map((Store value) {
           return DropdownMenuItem<Store>(
             value: value,
