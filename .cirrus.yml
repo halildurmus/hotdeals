@@ -1,0 +1,19 @@
+container:
+  image: cirrusci/flutter:stable
+pub_cache:
+  folder: ~/.pub-cache
+  
+task:
+  name: Run analyzer
+  analyze_script: flutter analyze
+  
+task:
+  name: Run tests
+  test_script: flutter test
+      
+task:
+  name: Build app (Android)
+  env:
+    GOOGLE_SERVICES: ENCRYPTED[90c838ad4b5800145148bc20ba1aa394cbd5b31123ffa6778c99bb7c839a08fa2b8224bf074a3ca7980c43fd5cfb6d6b]
+  create_google_services_script: echo "$GOOGLE_SERVICES" > android/app/google-services.json
+  build_script: flutter build apk --debug
