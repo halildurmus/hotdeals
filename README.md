@@ -1,10 +1,7 @@
 # hotdeals-app
 
 ![GitHub top language](https://img.shields.io/github/languages/top/halildurmus/hotdeals-app?style=for-the-badge)
-[![GitHub contributors](https://img.shields.io/github/contributors-anon/halildurmus/hotdeals-app?style=for-the-badge)](https://github.com/halildurmus/hotdeals-app/graphs/contributors)
-[![GitHub issues](https://img.shields.io/github/issues/halildurmus/hotdeals-app?style=for-the-badge)](https://github.com/halildurmus/hotdeals-app/issues)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/halildurmus/hotdeals-app/blob/master/LICENSE)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin&labelColor=blue&style=for-the-badge)](https://linkedin.com/in/halildurmus)
 ![Visits](https://badges.pufler.dev/visits/halildurmus/hotdeals-app?style=for-the-badge)
 
 > **hotdeals-app** is an **online marketplace** app developed with **[Flutter](https://github.com/flutter/flutter)**.  
