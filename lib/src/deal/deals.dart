@@ -1,24 +1,22 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart'
+    show FloatingSearchBarController;
 import 'package:provider/provider.dart';
 
 import '../models/deal.dart';
 import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
-import '../models/search_hit.dart';
 import '../models/user_controller.dart';
+import '../search/search_bar.dart';
 import '../services/spring_service.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 import 'post_deal.dart';
-import 'search_results.dart';
 
 class Deals extends StatefulWidget {
   const Deals({Key? key}) : super(key: key);
@@ -31,17 +29,14 @@ class _DealsState extends State<Deals> {
   late DealSortBy _dealSortBy;
   late PagingController<int, Deal> _pagingController;
   int _selectedFilter = 0;
-  bool _isSearchMode = false;
-  late FloatingSearchBarController _searchBarController;
-  bool searchErrorOccurred = false;
-  bool searchProgress = false;
-  final List<String> searchResults = [];
+  bool _searchMode = false;
+  late final FloatingSearchBarController _searchBarController;
 
   @override
   void initState() {
     _dealSortBy = DealSortBy.createdAt;
-    _searchBarController = FloatingSearchBarController();
     _pagingController = PagingController<int, Deal>(firstPageKey: 0);
+    _searchBarController = FloatingSearchBarController();
     super.initState();
   }
 
@@ -77,6 +72,13 @@ class _DealsState extends State<Deals> {
     );
   }
 
+  Widget _buildSearchBar() {
+    return SearchBar(
+      controller: _searchBarController,
+      onSearchModeChanged: (bool value) => setState(() => _searchMode = value),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -88,7 +90,7 @@ class _DealsState extends State<Deals> {
       AppLocalizations.of(context)!.cheapest,
     ];
 
-    Widget buildChoiceChips() {
+    Widget _buildChoiceChips() {
       return SizedBox(
         height: kToolbarHeight,
         child: Material(
@@ -145,170 +147,13 @@ class _DealsState extends State<Deals> {
       );
     }
 
-    Future<void> searchDeals(String keyword) async {
-      setState(() {
-        searchProgress = true;
-      });
-
-      late List<SearchHit> searchHits;
-      try {
-        searchHits =
-            await GetIt.I.get<SpringService>().searchDeals(keyword: keyword);
-      } on Exception {
-        setState(() {
-          searchErrorOccurred = true;
-          searchProgress = false;
-        });
-        return;
-      }
-
-      searchResults.clear();
-      for (SearchHit e in searchHits) {
-        searchResults.add(e.content.title);
-        //   if (e.highlightFields.title != null) {
-        //     _searchResults.add(e.highlightFields.title!.first);
-        //   } else {
-        //     _searchResults.add(e.content.title);
-        //   }
-      }
-
-      setState(() {
-        searchErrorOccurred = false;
-        searchProgress = false;
-      });
-    }
-
-    Widget buildFloatingSearchBar() {
-      Widget buildSearchError() {
-        return ListTile(
-          title: Text(AppLocalizations.of(context)!.anErrorOccurred),
-        );
-      }
-
-      Widget buildPlaceHolder() {
-        return const ListTile(title: Text('Placeholder'));
-      }
-
-      Widget buildNoResults() {
-        return ListTile(
-          title: Text(AppLocalizations.of(context)!.noResults),
-        );
-      }
-
-      Widget buildSearchResults() {
-        return ListView.separated(
-          padding: EdgeInsets.zero,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: min(searchResults.length, 5),
-          itemBuilder: (context, index) {
-            final String keyword = searchResults.elementAt(index);
-
-            return ListTile(
-              onTap: () => NavigationUtil.navigate(
-                context,
-                SearchResults(keyword: keyword),
-              ),
-              leading: const Icon(Icons.search),
-              title: Text(keyword),
-            );
-          },
-          separatorBuilder: (context, index) => const Divider(height: 0),
-        );
-      }
-
-      Widget buildSearchResultBuilder() {
-        // TODO(halildurmus): Add support for displaying recent searches.
-        return Material(
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          child: searchErrorOccurred
-              ? buildSearchError()
-              : _searchBarController.query.isEmpty
-                  ? buildPlaceHolder()
-                  : searchResults.isEmpty
-                      ? buildNoResults()
-                      : buildSearchResults(),
-        );
-      }
-
-      final isPortrait =
-          MediaQuery.of(context).orientation == Orientation.portrait;
-
-      void onFocusChanged(bool value) {
-        if (!value) {
-          setState(() {
-            _isSearchMode = false;
-          });
-        }
-      }
-
-      void onQueryChanged(String query) {
-        if (query.isNotEmpty) {
-          searchDeals(query);
-        }
-      }
-
-      void onSubmitted(String query) {
-        if (query.isNotEmpty) {
-          NavigationUtil.navigate(context, SearchResults(keyword: query));
-        }
-      }
-
-      List<Widget> buildActions() => [
-            FloatingSearchBarAction.searchToClear(showIfClosed: false),
-          ];
-
-      List<Widget> buildLeadingActions() => [
-            if (_searchBarController.isOpen)
-              FloatingSearchBarAction.icon(
-                onTap: () => setState(() => _isSearchMode = false),
-                icon: const Icon(Icons.arrow_back),
-                showIfClosed: false,
-                showIfOpened: true,
-              ),
-            FloatingSearchBarAction.icon(
-              onTap: () {},
-              icon: const Icon(Icons.search),
-            )
-          ];
-
-      return Theme(
-        data: theme.copyWith(
-          inputDecorationTheme: theme.inputDecorationTheme
-              .copyWith(fillColor: Colors.transparent),
-        ),
-        child: FloatingSearchBar(
-          onFocusChanged: onFocusChanged,
-          controller: _searchBarController,
-          axisAlignment: isPortrait ? 0 : -1,
-          debounceDelay: const Duration(milliseconds: 500),
-          hint: AppLocalizations.of(context)!.search,
-          openAxisAlignment: 0,
-          physics: const BouncingScrollPhysics(),
-          progress: searchProgress,
-          scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-          transition: CircularFloatingSearchBarTransition(),
-          transitionCurve: Curves.easeInOut,
-          transitionDuration: const Duration(milliseconds: 500),
-          onSubmitted: onSubmitted,
-          onQueryChanged: onQueryChanged,
-          width: isPortrait ? 600 : 500,
-          actions: buildActions(),
-          leadingActions: buildLeadingActions(),
-          builder: (context, transition) => buildSearchResultBuilder(),
-        ),
-      );
-    }
-
     PreferredSizeWidget _buildAppBar() {
-      return AppBar(
-        title: Text(AppLocalizations.of(context)!.appTitle),
-        actions: [
+      List<Widget> _buildActions() {
+        return [
           IconButton(
             onPressed: () {
               setState(() {
-                _isSearchMode = true;
+                _searchMode = true;
               });
               WidgetsBinding.instance!.addPostFrameCallback(
                   (timeStamp) => _searchBarController.open());
@@ -322,17 +167,22 @@ class _DealsState extends State<Deals> {
                       .then((_) => _pagingController.refresh()),
               icon: const Icon(Icons.add_circle),
             ),
-        ],
+        ];
+      }
+
+      return AppBar(
+        title: Text(AppLocalizations.of(context)!.appTitle),
+        actions: _buildActions(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: buildChoiceChips(),
+          child: _buildChoiceChips(),
         ),
       );
     }
 
     return Scaffold(
-      appBar: _isSearchMode ? null : _buildAppBar(),
-      body: _isSearchMode ? buildFloatingSearchBar() : _buildPagedListView(),
+      appBar: _searchMode ? null : _buildAppBar(),
+      body: _searchMode ? _buildSearchBar() : _buildPagedListView(),
       resizeToAvoidBottomInset: false,
     );
   }

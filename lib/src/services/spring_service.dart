@@ -14,10 +14,10 @@ import '../models/deal_report.dart';
 import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
-import '../models/search_hit.dart';
 import '../models/store.dart';
 import '../models/user_report.dart';
 import '../models/vote_type.dart';
+import '../search/search_hit.dart';
 import 'http_service.dart';
 
 typedef Json = Map<String, dynamic>;
