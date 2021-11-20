@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -11,10 +9,11 @@ import '../models/user_controller.dart';
 import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
-import '../utils/date_time_util.dart';
 import '../utils/error_indicator_util.dart';
 import '../widgets/error_indicator.dart';
 import 'blocked_users.dart';
+import 'chat.dart';
+import 'chat_item.dart';
 import 'message_arguments.dart';
 import 'message_screen.dart';
 
@@ -64,188 +63,34 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _buildBlockedText() {
-    return Row(
-      children: [
-        Icon(Icons.error, size: 18, color: Theme.of(context).errorColor),
-        const SizedBox(width: 4),
-        Text(
-          AppLocalizations.of(context)!.youCannotChatWithThisUser,
-          style: TextStyle(color: Theme.of(context).errorColor, fontSize: 15),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFileText(String fileName) {
-    return Row(
-      children: [
-        Icon(
-          Icons.description,
-          color: Theme.of(context).primaryColorLight,
-          size: 18,
-        ),
-        const SizedBox(width: 4),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * .55,
-          child: Text(
-            fileName,
-            maxLines: 1,
-            softWrap: false,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 15),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildImageText() {
-    return Row(
-      children: [
-        Icon(
-          FontAwesomeIcons.solidImage,
-          color: Theme.of(context).primaryColorLight,
-          size: 16,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          AppLocalizations.of(context)!.image,
-          style: const TextStyle(fontSize: 15),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMessageText(String text) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * .55,
-      child: Text(
-        text,
-        maxLines: 1,
-        softWrap: false,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 15),
-      ),
-    );
-  }
-
-  Widget _buildUserAvatar(String avatarURL) {
-    return CachedNetworkImage(
-      imageUrl: avatarURL,
-      imageBuilder: (BuildContext ctx, ImageProvider<Object> imageProvider) =>
-          CircleAvatar(backgroundImage: imageProvider, radius: 24),
-      placeholder: (BuildContext context, String url) =>
-          const CircleAvatar(radius: 24),
-    );
-  }
-
-  Widget _buildUserNickname(String nickname) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * .55,
-      child: Text(
-        nickname,
-        maxLines: 1,
-        softWrap: false,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Widget _buildMessageTime(DateTime createdAt, bool isRead) {
-    return Text(
-      DateTimeUtil.formatDateTime(createdAt),
-      style: TextStyle(
-        color: isRead ? Colors.grey : Theme.of(context).primaryColor,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-
-  Widget _buildUnreadIndicator() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 10),
-      child: CircleAvatar(
-        backgroundColor: Theme.of(context).primaryColor,
-        radius: 6,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    Widget _buildMessage(
+    Widget _buildChatItem(
       String docId,
       Json lastMessage,
-      MyUser user,
+      MyUser user1,
       MyUser user2,
     ) {
-      final _lastMessageIsFile = lastMessage['type'] == 'file';
-      final _lastMessageIsImage = lastMessage['type'] == 'image';
-      final _sentBy = lastMessage['author']['id'] as String;
-      bool _isMessageSeen;
-      if (_sentBy != _user!.uid) {
-        _isMessageSeen = (lastMessage['status'] as String) == 'seen';
-      } else {
-        _isMessageSeen = true;
-      }
-      final _isUserBlocked = user2.blockedUsers!.contains(user.uid);
-      final _isUser2Blocked = user.blockedUsers!.contains(user2.uid);
-      final DateTime _createdAt = DateTime.fromMillisecondsSinceEpoch(
-        lastMessage['createdAt'] as int,
+      final _chat = Chat(
+        id: docId,
+        lastMessage: lastMessage,
+        loggedInUserUid: _user!.uid,
+        user1: user1,
+        user2: user2,
       );
 
-      // TODO(halildurmus): Extract this as a stateless widget
-      return InkWell(
+      return ChatItem(
+        chat: _chat,
         onTap: () => Navigator.of(context).pushNamed(
           MessageScreen.routeName,
-          arguments: MessageArguments(
-            docId: docId,
-            user2: user2,
-          ),
-        ),
-        child: Container(
-          color: _isMessageSeen ? null : theme.primaryColor.withOpacity(.1),
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  if (!_isMessageSeen) _buildUnreadIndicator(),
-                  _buildUserAvatar(user2.avatar!),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildUserNickname(user2.nickname!),
-                      const SizedBox(height: 4),
-                      if (_isUserBlocked || _isUser2Blocked)
-                        _buildBlockedText()
-                      else if (_lastMessageIsFile)
-                        _buildFileText(lastMessage['name'] as String)
-                      else if (_lastMessageIsImage)
-                        _buildImageText()
-                      else
-                        _buildMessageText(lastMessage['text'] as String),
-                    ],
-                  ),
-                ],
-              ),
-              _buildMessageTime(_createdAt, _isMessageSeen),
-            ],
-          ),
+          arguments: MessageArguments(docId: docId, user2: user2),
         ),
       );
     }
 
     Widget _buildListView(
       List<QueryDocumentSnapshot<Json>> items,
-      MyUser user,
+      MyUser user1,
     ) {
       return ListView.separated(
         itemCount: items.length,
@@ -258,7 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
           if (_users.containsKey(_user2Uid)) {
             final MyUser _user2 = _users[_user2Uid]!;
 
-            return _buildMessage(_docID, _latestMessage, user, _user2);
+            return _buildChatItem(_docID, _latestMessage, user1, _user2);
           }
 
           return FutureBuilder<MyUser>(
@@ -268,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 final MyUser _user2 = snapshot.data!;
                 _users[_user2Uid] = _user2;
 
-                return _buildMessage(_docID, _latestMessage, user, _user2);
+                return _buildChatItem(_docID, _latestMessage, user1, _user2);
               } else if (snapshot.hasError) {
                 return ErrorIndicatorUtil.buildNewPageError(
                   context,
