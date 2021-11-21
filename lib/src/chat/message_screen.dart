@@ -420,20 +420,20 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
             final List<DocumentSnapshot<Json>> items = snapshot.data!.docs;
 
             final List<types.Message> messages = items
-                .map((DocumentSnapshot<Json> i) {
-                  final Json messageData = i.data()!;
-                  final String id = messageData['id'] as String;
-                  final int createdAt = messageData['createdAt'] as int;
-                  final types.Status status =
+                .map((DocumentSnapshot<Json> e) {
+                  final Json messageData = e.data()!;
+                  final id = messageData['id'] as String;
+                  final createdAt = messageData['createdAt'] as int;
+                  final status =
                       _statusEnumMap[(messageData['status'] as String)] ??
                           types.Status.sent;
-                  final types.User author = types.User(
+                  final author = types.User(
                     id: messageData['author']['id'] as String,
                     imageUrl: messageData['author']['id'] as String == _user.uid
                         ? _user.avatar!
                         : widget.user2.avatar!,
                   );
-                  final String type = messageData['type'] as String;
+                  final type = messageData['type'] as String;
                   final types.PreviewData? previewData =
                       messageData['previewData'] != null
                           ? types.PreviewData.fromJson(

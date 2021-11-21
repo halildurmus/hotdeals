@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -107,22 +108,27 @@ class ChatItem extends StatelessWidget {
   }
 
   Widget _messageTextBuilder(BuildContext context) {
-    if (chat.isUser1Blocked || chat.isUser2Blocked) {
+    if (chat.user1IsBlocked || chat.user2IsBlocked) {
       return _buildBlockedText(context);
-    } else if (chat.lastMessageIsFile) {
-      return _buildFileText(context);
-    } else if (chat.lastMessageIsImage) {
-      return _buildImageText(context);
     }
 
-    return _buildMessageText(context);
+    switch (chat.lastMessageType) {
+      case types.MessageType.file:
+        return _buildFileText(context);
+      case types.MessageType.image:
+        return _buildImageText(context);
+      default:
+        return _buildMessageText(context);
+    }
   }
 
   Widget _buildMessageTime(BuildContext context) {
     return Text(
       DateTimeUtil.formatDateTime(chat.createdAt),
       style: TextStyle(
-        color: chat.isRead ? Colors.grey : Theme.of(context).primaryColor,
+        color: chat.lastMessageIsRead
+            ? Colors.grey
+            : Theme.of(context).primaryColor,
         fontWeight: FontWeight.w500,
       ),
     );
@@ -145,7 +151,7 @@ class ChatItem extends StatelessWidget {
       children: [
         Row(
           children: [
-            if (!chat.isRead) _buildUnreadIndicator(context),
+            if (!chat.lastMessageIsRead) _buildUnreadIndicator(context),
             _buildUserAvatar(),
             const SizedBox(width: 10),
             Column(
@@ -170,7 +176,8 @@ class ChatItem extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: chat.isRead ? null : theme.primaryColor.withOpacity(.1),
+        color:
+            chat.lastMessageIsRead ? null : theme.primaryColor.withOpacity(.1),
         padding: const EdgeInsets.all(16),
         child: _buildContent(context),
       ),

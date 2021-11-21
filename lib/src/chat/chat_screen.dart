@@ -63,31 +63,18 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  Widget _buildChatItem(Chat chat) {
+    return ChatItem(
+      chat: chat,
+      onTap: () => Navigator.of(context).pushNamed(
+        MessageScreen.routeName,
+        arguments: MessageArguments(docId: chat.id, user2: chat.user2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget _buildChatItem(
-      String docId,
-      Json lastMessage,
-      MyUser user1,
-      MyUser user2,
-    ) {
-      final _chat = Chat(
-        id: docId,
-        lastMessage: lastMessage,
-        loggedInUserUid: _user!.uid,
-        user1: user1,
-        user2: user2,
-      );
-
-      return ChatItem(
-        chat: _chat,
-        onTap: () => Navigator.of(context).pushNamed(
-          MessageScreen.routeName,
-          arguments: MessageArguments(docId: docId, user2: user2),
-        ),
-      );
-    }
-
     Widget _buildListView(
       List<QueryDocumentSnapshot<Json>> items,
       MyUser user1,
@@ -95,25 +82,39 @@ class _ChatScreenState extends State<ChatScreen> {
       return ListView.separated(
         itemCount: items.length,
         itemBuilder: (context, index) {
-          final String _docID = items[index].id;
-          final String _user2Uid =
-              ChatUtil.getUser2Uid(docID: _docID, user1Uid: _user!.uid);
-          final _latestMessage = items[index].get('latestMessage') as Json;
+          final docID = items[index].id;
+          final user2Uid =
+              ChatUtil.getUser2Uid(docID: docID, user1Uid: _user!.uid);
+          final lastMessage = items[index].get('latestMessage') as Json;
 
-          if (_users.containsKey(_user2Uid)) {
-            final MyUser _user2 = _users[_user2Uid]!;
+          if (_users.containsKey(user2Uid)) {
+            final MyUser user2 = _users[user2Uid]!;
+            final chat = Chat(
+              id: docID,
+              lastMessage: lastMessage,
+              loggedInUserUid: _user!.uid,
+              user1: user1,
+              user2: user2,
+            );
 
-            return _buildChatItem(_docID, _latestMessage, user1, _user2);
+            return _buildChatItem(chat);
           }
 
           return FutureBuilder<MyUser>(
-            future: GetIt.I.get<SpringService>().getUserByUid(uid: _user2Uid),
+            future: GetIt.I.get<SpringService>().getUserByUid(uid: user2Uid),
             builder: (context, AsyncSnapshot<MyUser> snapshot) {
               if (snapshot.hasData) {
-                final MyUser _user2 = snapshot.data!;
-                _users[_user2Uid] = _user2;
+                final MyUser user2 = snapshot.data!;
+                _users[user2Uid] = user2;
+                final chat = Chat(
+                  id: docID,
+                  lastMessage: lastMessage,
+                  loggedInUserUid: _user!.uid,
+                  user1: user1,
+                  user2: user2,
+                );
 
-                return _buildChatItem(_docID, _latestMessage, user1, _user2);
+                return _buildChatItem(chat);
               } else if (snapshot.hasError) {
                 return ErrorIndicatorUtil.buildNewPageError(
                   context,
@@ -147,14 +148,14 @@ class _ChatScreenState extends State<ChatScreen> {
             .messagesStreamByUserUid(userUid: _user!.uid),
         builder: (context, AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
           if (snapshot.hasData) {
-            final _items = snapshot.data!.docs;
+            final items = snapshot.data!.docs;
             // Removes empty message docs.
-            _items.removeWhere((e) => (e.get('latestMessage') as Json).isEmpty);
-            if (_items.isEmpty) {
+            items.removeWhere((e) => (e.get('latestMessage') as Json).isEmpty);
+            if (items.isEmpty) {
               return _buildNoChats();
             }
 
-            return _buildConsumer(_items);
+            return _buildConsumer(items);
           } else if (snapshot.hasError) {
             return ErrorIndicatorUtil.buildFirstPageError(
               context,
