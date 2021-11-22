@@ -17,6 +17,7 @@ import 'src/firebase_messaging_listener.dart';
 import 'src/models/categories.dart';
 import 'src/models/current_route.dart';
 import 'src/models/stores.dart';
+import 'src/search/search_service.dart';
 import 'src/services/connection_service.dart';
 import 'src/services/firebase_storage_service.dart';
 import 'src/services/firestore_service.dart';
@@ -112,6 +113,9 @@ void main() async {
 
     // Initializes a new SharedPreferences instance.
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Sets up the SearchService, and registers it as a Singleton class.
+    getIt.registerSingleton<SearchService>(SearchService(prefs));
 
     // Sets up the SettingsController, and registers it as a Singleton class.
     getIt.registerSingleton<SettingsController>(

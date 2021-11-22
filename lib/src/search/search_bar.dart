@@ -3,9 +3,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
-import '../services/spring_service.dart';
 import 'search_hit.dart';
 import 'search_results.dart';
+import 'search_service.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({
@@ -22,37 +22,33 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
+  final searchService = GetIt.I.get<SearchService>();
   bool searchError = false;
   bool searchInProgress = false;
   final List<String> searchResults = [];
   String selectedKeyword = '';
 
   Future<void> searchDeals(String keyword) async {
-    searchResults.clear();
     setState(() {
+      searchResults.clear();
       searchInProgress = true;
     });
 
-    late final List<SearchHit> searchHits;
     try {
-      searchHits =
-          await GetIt.I.get<SpringService>().searchDeals(keyword: keyword);
+      final searchHits = await searchService.searchDeals(keyword);
+      for (SearchHit e in searchHits) {
+        searchResults.add(e.content.title);
+      }
+      setState(() {
+        searchError = false;
+        searchInProgress = false;
+      });
     } on Exception {
       setState(() {
         searchError = true;
         searchInProgress = false;
       });
-      return;
     }
-
-    for (SearchHit e in searchHits) {
-      searchResults.add(e.content.title);
-    }
-
-    setState(() {
-      searchError = false;
-      searchInProgress = false;
-    });
   }
 
   Widget buildSearchError() {
@@ -66,24 +62,35 @@ class _SearchBarState extends State<SearchBar> {
       selectedKeyword = keyword;
     });
     widget.controller.close();
+    searchService.saveKeyword(keyword);
   }
 
   Widget buildRecentSearches() {
-    // TODO(halildurmus): Implement this with the shared_preferences or sqflite.
+    void onIconButtonPressed(String keyword) =>
+        setState(() => searchService.removeKeyword(keyword));
+
+    final recentSearches = searchService.recentSearches();
+    if (recentSearches.isEmpty) return const SizedBox();
+
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        5,
-        (index) => ListTile(
-          onTap: () => onKeywordTap('Item$index'),
-          leading: const Icon(Icons.history),
-          title: Text('Item$index'),
-          trailing: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.clear),
-          ),
-        ),
-      ),
+      children: recentSearches
+          .map(
+            (keyword) => ListTile(
+              onTap: () => onKeywordTap(keyword),
+              leading: const Icon(Icons.history),
+              title: Text(
+                keyword,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: IconButton(
+                onPressed: () => onIconButtonPressed(keyword),
+                icon: const Icon(Icons.clear),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 
@@ -147,7 +154,8 @@ class _SearchBarState extends State<SearchBar> {
   void onFocusChanged(bool value) {
     if (value) {
       widget.controller.query = selectedKeyword;
-    } else if (!value && selectedKeyword.isEmpty) {
+    } else if (!value && selectedKeyword.isEmpty ||
+        (selectedKeyword.isEmpty && widget.controller.query.isEmpty)) {
       setState(() {
         widget.onSearchModeChanged(false);
       });
