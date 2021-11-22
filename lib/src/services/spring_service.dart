@@ -507,7 +507,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<SearchHit>> searchDeals({required String keyword}) async {
-    final String url = '$_baseUrl/deals/elastic-search?keyword=$keyword';
+    const pageSize = 5;
+    final String url =
+        '$_baseUrl/deals/elastic-search?keyword=$keyword&page=0&size=$pageSize';
 
     try {
       final Response response = await _httpService.get(url, auth: false);
