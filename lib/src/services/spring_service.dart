@@ -441,18 +441,18 @@ class SpringService with NetworkLoggy {
     required String userId,
     required String avatarUrl,
   }) async {
-    final String url = '$_baseUrl/users/$userId';
-    final List<Json> data = [
+    final url = '$_baseUrl/users/me';
+    final data = <Json>[
       <String, dynamic>{'op': 'replace', 'path': '/avatar', 'value': avatarUrl}
     ];
 
     try {
       final Response response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        final MyUser _myUser =
+        final myUser =
             MyUser.fromJson(jsonDecode(response.body) as Json);
 
-        return _myUser;
+        return myUser;
       }
 
       throw Exception("Failed to update the user's avatar!");
@@ -466,18 +466,18 @@ class SpringService with NetworkLoggy {
     required String userId,
     required String nickname,
   }) async {
-    final String url = '$_baseUrl/users/$userId';
-    final List<Json> data = [
+    final url = '$_baseUrl/users/me';
+    final data = <Json>[
       <String, dynamic>{'op': 'replace', 'path': '/nickname', 'value': nickname}
     ];
 
     try {
       final Response response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        final MyUser _myUser =
+        final myUser =
             MyUser.fromJson(jsonDecode(response.body) as Json);
 
-        return _myUser;
+        return myUser;
       } else if (response.body.contains('E11000')) {
         throw Exception('This nickname already being used by another user!');
       }
