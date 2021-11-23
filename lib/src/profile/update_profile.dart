@@ -251,15 +251,15 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       final String? fcmToken = await FirebaseMessaging.instance.getToken();
       await GetIt.I.get<SpringService>().logout(fcmToken: fcmToken!);
       await _signOut(context);
+      Provider.of<UserController>(context, listen: false).logout();
       Navigator.of(context).pushReplacementNamed('/');
     }
   }
 
   Future<void> _signOut(BuildContext context) async {
     try {
-      final AuthService auth = Provider.of<AuthService>(context, listen: false);
+      final auth = Provider.of<AuthService>(context, listen: false);
       await auth.signOut();
-      Provider.of<UserController>(context, listen: false).logout();
     } on PlatformException catch (e) {
       await ExceptionAlertDialog(
         title: AppLocalizations.of(context)!.logoutFailed,
@@ -270,6 +270,9 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
 
   @override
   Widget build(BuildContext context) {
+    if (Provider.of<UserController>(context, listen: false).user == null) {
+      return const SizedBox();
+    }
     user = Provider.of<UserController>(context).user!;
 
     return Scaffold(
