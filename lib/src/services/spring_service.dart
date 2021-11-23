@@ -449,8 +449,7 @@ class SpringService with NetworkLoggy {
     try {
       final Response response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        final myUser =
-            MyUser.fromJson(jsonDecode(response.body) as Json);
+        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
         return myUser;
       }
@@ -474,8 +473,7 @@ class SpringService with NetworkLoggy {
     try {
       final Response response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        final myUser =
-            MyUser.fromJson(jsonDecode(response.body) as Json);
+        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
         return myUser;
       } else if (response.body.contains('E11000')) {
