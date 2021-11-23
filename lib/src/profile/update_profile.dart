@@ -17,6 +17,7 @@ import '../services/firebase_storage_service.dart';
 import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
 import '../widgets/custom_alert_dialog.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/exception_alert_dialog.dart';
 import '../widgets/loading_dialog.dart';
 import '../widgets/settings_list_item.dart';
@@ -33,18 +34,50 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   late VoidCallback showLoadingDialog;
   late MyUser user;
 
-  Future<MyUser> updateUserAvatar(String userId, String avatarUrl) async {
-    return GetIt.I
-        .get<SpringService>()
-        .updateUserAvatar(userId: userId, avatarUrl: avatarUrl)
-        .catchError((dynamic error) {});
+  Future<void> updateAvatar(String userID, String avatarURL) async {
+    try {
+      await GetIt.I
+          .get<SpringService>()
+          .updateUserAvatar(userId: userID, avatarUrl: avatarURL);
+      Provider.of<UserController>(context, listen: false).getUser();
+      // Pops the LoadingDialog.
+      Navigator.of(context).pop();
+    } catch (e) {
+      loggy.error(e);
+      // Pops the LoadingDialog.
+      Navigator.of(context).pop();
+      final snackBar = CustomSnackBar(
+        icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+        text: AppLocalizations.of(context)!.anErrorOccurred,
+      ).buildSnackBar(context);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
-  Future<MyUser> updateNickname(String userId, String nickname) async {
-    return GetIt.I
-        .get<SpringService>()
-        .updateUserNickname(userId: userId, nickname: nickname)
-        .catchError((dynamic error) {});
+  Future<void> updateNickname(String userId, String nickname) async {
+    showLoadingDialog();
+    try {
+      await GetIt.I
+          .get<SpringService>()
+          .updateUserNickname(userId: userId, nickname: nickname);
+      // Pops the LoadingDialog.
+      Navigator.of(context).pop();
+      // Fetches the updated user data.
+      Provider.of<UserController>(context, listen: false).getUser();
+      // Pops the update nickname Dialog.
+      Navigator.of(context).pop();
+    } catch (e) {
+      loggy.error(e);
+      // Pops the LoadingDialog.
+      Navigator.of(context).pop();
+      // Pops the update nickname Dialog.
+      Navigator.of(context).pop();
+      final snackBar = CustomSnackBar(
+        icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+        text: AppLocalizations.of(context)!.anErrorOccurred,
+      ).buildSnackBar(context);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   Future<void> getImg(String userID, ImageSource imageSource) async {
@@ -55,19 +88,18 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     showLoadingDialog();
 
     if (pickedFile != null) {
-      final String mimeType = lookupMimeType(pickedFile.name) ?? '';
-      final String avatarURL =
+      final mimeType = lookupMimeType(pickedFile.name) ?? '';
+      final avatarURL =
           await GetIt.I.get<FirebaseStorageService>().uploadUserAvatar(
                 filePath: pickedFile.path,
                 fileName: pickedFile.name,
                 mimeType: mimeType,
                 userID: userID,
               );
-      await updateUserAvatar(userID, avatarURL);
-      Provider.of<UserController>(context, listen: false).getUser();
-      Navigator.of(context).pop();
+      await updateAvatar(userID, avatarURL);
     } else {
       loggy.info('No image selected.');
+      Navigator.of(context).pop();
     }
   }
 
@@ -169,16 +201,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                       onPressed: nicknameController.text.isEmpty ||
                               nicknameController.text == user.nickname
                           ? null
-                          : () async {
-                              showLoadingDialog();
-                              await updateNickname(
-                                  user.id!, nicknameController.text);
-                              Navigator.of(context).pop();
-                              Provider.of<UserController>(context,
-                                      listen: false)
-                                  .getUser();
-                              Navigator.of(context).pop();
-                            },
+                          : () =>
+                              updateNickname(user.id!, nicknameController.text),
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(deviceWidth, 45),
                         primary: theme.colorScheme.secondary,
