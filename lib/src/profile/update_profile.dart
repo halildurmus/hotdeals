@@ -190,14 +190,14 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                     Form(
                       key: _formKey,
                       child: TextFormField(
-                        maxLength: 25,
-                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
                         controller: nicknameController,
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
                           errorMaxLines: 2,
                           labelText: AppLocalizations.of(context)!.nickname,
                         ),
+                        maxLength: 25,
+                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
                         onChanged: (String? text) => setState(() {}),
                         validator: (String? value) {
                           if (value == null || value.length < 5) {
