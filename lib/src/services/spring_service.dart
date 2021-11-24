@@ -141,7 +141,7 @@ class SpringService with NetworkLoggy {
       final Response response =
           await _httpService.post(url, notification.toJson());
 
-      return response.statusCode == 200;
+      return response.statusCode == 201;
     } on Exception catch (e) {
       loggy.error(e, e);
       return false;

@@ -73,7 +73,6 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
           title:
               '${user!.nickname} ${AppLocalizations.of(context)!.commentedOnYourPost}',
           body: comment.message,
-          actor: user!.id!,
           verb: NotificationVerb.comment,
           object: widget.deal.id!,
           message: comment.message,

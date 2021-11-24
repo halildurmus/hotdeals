@@ -94,7 +94,6 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     final PushNotification notification = PushNotification(
       title: '${user.nickname} ${AppLocalizations.of(context)!.sentYouMessage}',
       body: messageText,
-      actor: user.id!,
       verb: NotificationVerb.message,
       object: widget.docId,
       message: messageText,

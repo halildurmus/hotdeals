@@ -7,7 +7,7 @@ class PushNotification {
     this.id,
     required this.title,
     required this.body,
-    required this.actor,
+    this.actor,
     required this.verb,
     required this.object,
     this.image,
@@ -39,7 +39,7 @@ class PushNotification {
   final String title;
   final String body;
   final String? image;
-  final String actor;
+  final String? actor;
   final NotificationVerb verb;
   final String object;
   final String? avatar;
@@ -54,7 +54,6 @@ class PushNotification {
         'body': body,
         if (image != null) 'image': image,
         'data': <String, dynamic>{
-          'actor': actor,
           'verb': verb.asString,
           'object': object,
           if (avatar != null) 'avatar': avatar,

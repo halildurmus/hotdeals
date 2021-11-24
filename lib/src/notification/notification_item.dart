@@ -36,7 +36,7 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
   @override
   void initState() {
     _userFuture =
-        GetIt.I.get<SpringService>().getUserById(id: widget.notification.actor);
+        GetIt.I.get<SpringService>().getUserById(id: widget.notification.actor!);
     super.initState();
   }
 
