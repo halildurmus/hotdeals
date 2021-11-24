@@ -855,6 +855,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "nicknameMustBe": "Takma ad en az 5 karakter uzunluğunda olmalı.",
+  "@pleaseEnterYourNickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "pleaseEnterTheDealUrl": "Lütfen fırsat URL'ini girin.",
   "@pleaseEnterTheDealUrl": {
     "description": "",

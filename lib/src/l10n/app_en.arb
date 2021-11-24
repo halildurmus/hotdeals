@@ -855,6 +855,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "nicknameMustBe": "The nickname must be at least 5 characters long.",
+  "@pleaseEnterYourNickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "pleaseEnterTheDealUrl": "Please enter the deal URL.",
   "@pleaseEnterTheDealUrl": {
     "description": "",

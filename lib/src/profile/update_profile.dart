@@ -30,6 +30,7 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController nicknameController;
   late VoidCallback showLoadingDialog;
   late MyUser user;
@@ -186,23 +187,34 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextFormField(
-                      controller: nicknameController,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: AppLocalizations.of(context)!.nickname,
+                    Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        maxLength: 25,
+                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                        controller: nicknameController,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          errorMaxLines: 2,
+                          labelText: AppLocalizations.of(context)!.nickname,
+                        ),
+                        onChanged: (String? text) => setState(() {}),
+                        validator: (String? value) {
+                          if (value == null || value.length < 5) {
+                            return AppLocalizations.of(context)!.nicknameMustBe;
+                          }
+
+                          return null;
+                        },
                       ),
-                      onChanged: (String? text) {
-                        setState(() {});
-                      },
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: nicknameController.text.isEmpty ||
-                              nicknameController.text == user.nickname
-                          ? null
-                          : () =>
-                              updateNickname(user.id!, nicknameController.text),
+                      onPressed: nicknameController.text != user.nickname &&
+                              (_formKey.currentState?.validate() ?? false)
+                          ? () =>
+                              updateNickname(user.id!, nicknameController.text)
+                          : null,
                       style: ElevatedButton.styleFrom(
                         fixedSize: Size(deviceWidth, 45),
                         primary: theme.colorScheme.secondary,
