@@ -100,9 +100,11 @@ class _DealDetailsState extends State<DealDetails> {
         .then((int? commentsCount) {
       if (commentsCount != null) {
         WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
-          setState(() {
-            _commentsCount = commentsCount;
-          });
+          if (mounted) {
+            setState(() {
+              _commentsCount = commentsCount;
+            });
+          }
         });
       }
     });
@@ -115,9 +117,11 @@ class _DealDetailsState extends State<DealDetails> {
         .then((Deal? deal) {
       if (deal != null) {
         WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
-          setState(() {
-            _deal = deal;
-          });
+          if (mounted) {
+            setState(() {
+              _deal = deal;
+            });
+          }
         });
       }
     });

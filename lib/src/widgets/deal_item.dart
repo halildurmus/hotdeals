@@ -49,9 +49,11 @@ class _DealItemState extends State<DealItem> {
         .then((int? commentsCount) {
       if (commentsCount != null) {
         WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
-          setState(() {
-            _commentsCount = commentsCount;
-          });
+          if (mounted) {
+            setState(() {
+              _commentsCount = commentsCount;
+            });
+          }
         });
       }
     });
