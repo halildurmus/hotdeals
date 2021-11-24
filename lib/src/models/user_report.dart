@@ -35,7 +35,6 @@ class UserReport {
 
   Json toJson() {
     return <String, dynamic>{
-      if (reportedBy != null) 'reportedBy': reportedBy,
       'reportedUser': reportedUser,
       'reasons': reasons.map((e) => e.asString).toList(),
       if (message != null) 'message': message,
