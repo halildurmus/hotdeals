@@ -46,12 +46,7 @@ class AuthWidget extends StatelessWidget with UiLoggy {
   @override
   Widget build(BuildContext context) {
     Future<void> _saveFcmTokenToDatabase(String token) async {
-      final String userId = context.read<UserController>().user!.id!;
-
-      await GetIt.I
-          .get<SpringService>()
-          .addFcmToken(userId: userId, fcmToken: token);
-
+      await GetIt.I.get<SpringService>().addFcmToken(fcmToken: token);
       await context.read<UserController>().getUser();
     }
 

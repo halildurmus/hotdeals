@@ -406,10 +406,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<bool> addFcmToken({
-    required String userId,
-    required String fcmToken,
-  }) async {
+  Future<bool> addFcmToken({required String fcmToken}) async {
     final String url = '$_baseUrl/users/add-fcm-token';
     final Json data = <String, dynamic>{'fcmToken': fcmToken};
 
