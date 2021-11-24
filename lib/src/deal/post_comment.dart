@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
@@ -25,6 +26,7 @@ class PostComment extends StatefulWidget {
 }
 
 class _PostCommentState extends State<PostComment> with UiLoggy {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late MyUser? user;
   late TextEditingController commentController;
 
@@ -112,7 +114,8 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: ElevatedButton(
-          onPressed: commentController.text.isEmpty ? null : onPressed,
+          onPressed:
+              (_formKey.currentState?.validate() ?? false) ? onPressed : null,
           style: ElevatedButton.styleFrom(
             fixedSize: Size(deviceWidth, 45),
             primary: theme.colorScheme.secondary,
@@ -126,30 +129,31 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
     }
 
     Widget buildForm() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: commentController,
-              onChanged: (String? text) {
-                setState(() {});
-              },
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                hintStyle: textTheme.bodyText2!.copyWith(
-                    color: theme.brightness == Brightness.light
-                        ? Colors.black54
-                        : Colors.grey),
-                hintText: AppLocalizations.of(context)!.enterYourComment,
-              ),
-              minLines: 4,
-              maxLines: 30,
-            ),
-            const SizedBox(height: 10),
-            buildPostButton(),
-          ],
+      return Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: commentController,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            errorMaxLines: 2,
+            hintStyle: textTheme.bodyText2!.copyWith(
+                color: theme.brightness == Brightness.light
+                    ? Colors.black54
+                    : Colors.grey),
+            hintText: AppLocalizations.of(context)!.enterYourComment,
+          ),
+          minLines: 4,
+          maxLines: 30,
+          maxLength: 500,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          onChanged: (String? text) => setState(() {}),
+          validator: (String? value) {
+            if (value == null || value.isEmpty) {
+              return AppLocalizations.of(context)!.nicknameMustBe;
+            }
+
+            return null;
+          },
         ),
       );
     }
@@ -164,7 +168,17 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
             style: textTheme.headline6,
           ),
           const SizedBox(height: 20),
-          buildForm(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                buildForm(),
+                const SizedBox(height: 10),
+                buildPostButton(),
+              ],
+            ),
+          ),
         ],
       ),
     );
