@@ -735,7 +735,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-    Future<Deal?> downvoteDeal({required String dealId}) async {
+  Future<Deal?> downvoteDeal({required String dealId}) async {
     final String url = '$_baseUrl/deals/$dealId/downvote';
 
     try {
