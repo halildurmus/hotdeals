@@ -70,7 +70,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> favoriteDeal({required String dealId}) async {
-    final String url = '$_baseUrl/users/favorite/$dealId';
+    final String url = '$_baseUrl/deals/$dealId/favorite';
 
     try {
       final Response response = await _httpService.post(url, null);
@@ -83,7 +83,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> unfavoriteDeal({required String dealId}) async {
-    final String url = '$_baseUrl/users/unfavorite/$dealId';
+    final String url = '$_baseUrl/deals/$dealId/unfavorite';
 
     try {
       final Response response = await _httpService.post(url, null);
@@ -520,7 +520,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<Deal>?> getUserDeals({int? page, int? size}) async {
-    final String url = '$_baseUrl/users/deals?page=$page&size=$size';
+    final String url = '$_baseUrl/users/me/deals?page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url);
