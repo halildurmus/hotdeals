@@ -45,7 +45,7 @@ class SpringService with NetworkLoggy {
   late HttpService _httpService;
 
   Future<bool> blockUser({required String userId}) async {
-    final String url = '$_baseUrl/users/block/$userId';
+    final String url = '$_baseUrl/users/$userId/block';
 
     try {
       final Response response = await _httpService.post(url, null);
@@ -58,7 +58,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> unblockUser({required String userUid}) async {
-    final String url = '$_baseUrl/users/unblock/$userUid';
+    final String url = '$_baseUrl/users/$userUid/unblock';
 
     try {
       final Response response = await _httpService.post(url, null);
