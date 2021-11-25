@@ -367,7 +367,7 @@ class _PostDealState extends State<PostDeal> {
               ),
               minLines: 4,
               maxLines: 30,
-              maxLength: 1500,
+              maxLength: 3000,
               maxLengthEnforcement: MaxLengthEnforcement.enforced,
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
