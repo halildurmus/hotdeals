@@ -862,6 +862,27 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "descriptionMustBe": "The description must be at least 10 characters long.",
+  "@pleaseEnterYourNickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "titleMustBe": "The title must be at least 10 characters long.",
+  "@pleaseEnterYourNickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheDealDescription": "Please enter the deal description.",
+  "@pleaseEnterTheDealDescription": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "pleaseEnterTheDealUrl": "Please enter the deal URL.",
   "@pleaseEnterTheDealUrl": {
     "description": "",

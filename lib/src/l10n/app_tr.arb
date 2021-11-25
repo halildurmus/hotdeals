@@ -862,6 +862,27 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "descriptionMustBe": "Açıklama en az 10 karakter uzunluğunda olmalı.",
+  "@pleaseEnterYourNickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "titleMustBe": "Başlık en az 10 karakter uzunluğunda olmalı.",
+  "@pleaseEnterYourNickname": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "pleaseEnterTheDealDescription": "Lütfen fırsat açıklamasını girin.",
+  "@pleaseEnterTheDealDescription": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "pleaseEnterTheDealUrl": "Lütfen fırsat URL'ini girin.",
   "@pleaseEnterTheDealUrl": {
     "description": "",

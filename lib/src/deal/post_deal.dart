@@ -1,5 +1,6 @@
 import 'package:firebase_picture_uploader/firebase_picture_uploader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
@@ -240,11 +241,8 @@ class _PostDealState extends State<PostDeal> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: ElevatedButton(
-          onPressed: _formKey.currentState == null
-              ? null
-              : _formKey.currentState!.validate()
-                  ? onPressed
-                  : null,
+          onPressed:
+              (_formKey.currentState?.validate() ?? false) ? onPressed : null,
           style: ElevatedButton.styleFrom(
             fixedSize: Size(deviceWidth, 50),
             primary: theme.colorScheme.secondary,
@@ -287,12 +285,17 @@ class _PostDealState extends State<PostDeal> {
               controller: titleController,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
+                errorMaxLines: 2,
                 labelText: AppLocalizations.of(context)!.title,
               ),
               textInputAction: TextInputAction.next,
+              maxLength: 100,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return AppLocalizations.of(context)!.pleaseEnterTheDealTitle;
+                } else if (value.length < 10) {
+                  return AppLocalizations.of(context)!.titleMustBe;
                 }
 
                 return null;
@@ -354,6 +357,7 @@ class _PostDealState extends State<PostDeal> {
               controller: descriptionController,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
+                errorMaxLines: 2,
                 hintStyle: textTheme.bodyText2!.copyWith(
                     color: theme.brightness == Brightness.light
                         ? Colors.black54
@@ -363,9 +367,14 @@ class _PostDealState extends State<PostDeal> {
               ),
               minLines: 4,
               maxLines: 30,
+              maxLength: 1500,
+              maxLengthEnforcement: MaxLengthEnforcement.enforced,
               validator: (String? value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter the deal description.';
+                  return AppLocalizations.of(context)!
+                      .pleaseEnterTheDealDescription;
+                } else if (value.length < 10) {
+                  return AppLocalizations.of(context)!.descriptionMustBe;
                 }
 
                 return null;
