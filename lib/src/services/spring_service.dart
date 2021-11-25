@@ -485,7 +485,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<Deal>?> getUserFavorites({int? page, int? size}) async {
-    final String url = '$_baseUrl/users/favorites?page=$page&size=$size';
+    final String url = '$_baseUrl/users/me/favorites?page=$page&size=$size';
 
     try {
       final Response response = await _httpService.get(url);
