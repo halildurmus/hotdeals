@@ -65,7 +65,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         trailing: OutlinedButton(
-          onPressed: () => confirmUnblockUser(context, user.uid),
+          onPressed: () => confirmUnblockUser(context, user.id!),
           style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
@@ -83,7 +83,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
     );
   }
 
-  Future<void> confirmUnblockUser(BuildContext context, String userUid) async {
+  Future<void> confirmUnblockUser(BuildContext context, String userId) async {
     final bool didRequestUnblockUser = await CustomAlertDialog(
           title: AppLocalizations.of(context)!.unblockUser,
           content: AppLocalizations.of(context)!.unblockConfirm,
@@ -93,7 +93,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
         false;
     if (didRequestUnblockUser == true) {
       final bool result =
-          await GetIt.I.get<SpringService>().unblockUser(userUid: userUid);
+          await GetIt.I.get<SpringService>().unblockUser(userId: userId);
       if (result) {
         await Provider.of<UserController>(context, listen: false).getUser();
         final snackBar = CustomSnackBar(
@@ -121,7 +121,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
       return FutureBuilder<List<MyUser>?>(
         future: GetIt.I
             .get<SpringService>()
-            .getBlockedUsers(userUids: user.blockedUsers!),
+            .getBlockedUsers(userIds: user.blockedUsers!),
         builder: (BuildContext context, AsyncSnapshot<List<MyUser>?> snapshot) {
           if (snapshot.hasData) {
             final List<MyUser> users = snapshot.data!;

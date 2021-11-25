@@ -46,7 +46,6 @@ class SpringService with NetworkLoggy {
 
   Future<bool> blockUser({required String userId}) async {
     final String url = '$_baseUrl/users/$userId/block';
-
     try {
       final Response response = await _httpService.post(url, null);
 
@@ -57,8 +56,8 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<bool> unblockUser({required String userUid}) async {
-    final String url = '$_baseUrl/users/$userUid/unblock';
+  Future<bool> unblockUser({required String userId}) async {
+    final String url = '$_baseUrl/users/$userId/unblock';
 
     try {
       final Response response = await _httpService.post(url, null);
@@ -348,11 +347,9 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<List<MyUser>?> getBlockedUsers({
-    required List<String> userUids,
-  }) async {
+  Future<List<MyUser>?> getBlockedUsers({required List<String> userIds}) async {
     final String url =
-        '$_baseUrl/users/search/findAllByUidIn?userUids=${userUids.join(',')}';
+        '$_baseUrl/users/search/findAllByIdIn?userIds=${userIds.join(',')}';
     try {
       final Response response = await _httpService.get(url);
       if (response.statusCode == 200) {

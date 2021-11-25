@@ -35,7 +35,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
     if (_didRequestBlockUser == true) {
       final bool _result = await GetIt.I
           .get<SpringService>()
-          .blockUser(userId: widget.user2.uid);
+          .blockUser(userId: widget.user2.id!);
       if (_result) {
         await Provider.of<UserController>(context, listen: false).getUser();
         final snackBar = CustomSnackBar(
@@ -64,7 +64,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
     if (_didRequestUnblockUser == true) {
       final bool _result = await GetIt.I
           .get<SpringService>()
-          .unblockUser(userUid: widget.user2.uid);
+          .unblockUser(userId: widget.user2.id!);
       if (_result) {
         await Provider.of<UserController>(context, listen: false).getUser();
       } else {
@@ -81,8 +81,8 @@ class _MessageAppBarState extends State<MessageAppBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final MyUser _user = Provider.of<UserController>(context).user!;
-    final bool _isUserBlocked = _user.blockedUsers!.contains(widget.user2.uid);
+    final _user = Provider.of<UserController>(context).user!;
+    final _isUserBlocked = _user.blockedUsers!.contains(widget.user2.id!);
 
     Future<void> _onPressedReport() async {
       return showDialog<void>(
