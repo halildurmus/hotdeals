@@ -17,7 +17,6 @@ import '../models/my_user.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
 import '../models/user_controller.dart';
-import '../models/vote_type.dart';
 import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
 import '../utils/navigation_util.dart';
@@ -111,10 +110,7 @@ class _DealDetailsState extends State<DealDetails> {
   }
 
   void _fetchDeal() {
-    GetIt.I
-        .get<SpringService>()
-        .getDeal(dealId: _deal.id!)
-        .then((Deal? deal) {
+    GetIt.I.get<SpringService>().getDeal(dealId: _deal.id!).then((Deal? deal) {
       if (deal != null) {
         WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
           if (mounted) {
@@ -479,8 +475,7 @@ class _DealDetailsState extends State<DealDetails> {
 
                       final Deal? deal = await GetIt.I
                           .get<SpringService>()
-                          .voteDeal(
-                              dealId: _deal.id!, voteType: VoteType.upvote);
+                          .upvoteDeal(dealId: _deal.id!);
 
                       if (deal == null) {
                         ScaffoldMessenger.of(context).clearSnackBars();
@@ -526,8 +521,7 @@ class _DealDetailsState extends State<DealDetails> {
 
                       final Deal? deal = await GetIt.I
                           .get<SpringService>()
-                          .voteDeal(
-                              dealId: _deal.id!, voteType: VoteType.downvote);
+                          .downvoteDeal(dealId: _deal.id!);
                       if (deal == null) {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         final snackBar = CustomSnackBar(

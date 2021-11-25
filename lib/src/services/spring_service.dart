@@ -16,7 +16,6 @@ import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/store.dart';
 import '../models/user_report.dart';
-import '../models/vote_type.dart';
 import '../search/search_hit.dart';
 import 'http_service.dart';
 
@@ -718,18 +717,29 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<Deal?> voteDeal({
-    required String dealId,
-    required VoteType voteType,
-  }) async {
-    final String url = '$_baseUrl/deals/vote';
-    final Json data = <String, dynamic>{
-      'dealId': dealId,
-      'voteType': voteType.asString,
-    };
+  Future<Deal?> upvoteDeal({required String dealId}) async {
+    final String url = '$_baseUrl/deals/$dealId/upvote';
 
     try {
-      final Response response = await _httpService.post(url, data);
+      final Response response = await _httpService.post(url, null);
+      if (response.statusCode == 200) {
+        final Deal deal = Deal.fromJson(jsonDecode(response.body) as Json);
+
+        return deal;
+      }
+
+      return null;
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      return null;
+    }
+  }
+
+    Future<Deal?> downvoteDeal({required String dealId}) async {
+    final String url = '$_baseUrl/deals/$dealId/downvote';
+
+    try {
+      final Response response = await _httpService.post(url, null);
       if (response.statusCode == 200) {
         final Deal deal = Deal.fromJson(jsonDecode(response.body) as Json);
 
