@@ -704,12 +704,10 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<Deal?> incrementViewsCounter({required String dealId}) async {
-    final String url = '$_baseUrl/deals/$dealId/increment-views-counter';
-
+  Future<Deal?> getDeal({required String dealId}) async {
+    final String url = '$_baseUrl/deals/$dealId';
     try {
-      final Response response =
-          await _httpService.post(url, <String, dynamic>{});
+      final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final Deal deal = Deal.fromJson(jsonDecode(response.body) as Json);
 

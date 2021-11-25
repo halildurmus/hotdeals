@@ -75,7 +75,7 @@ class _DealDetailsState extends State<DealDetails> {
     if (_user != null) {
       isUpvoted = _deal.upvoters!.contains(_user!.id);
       isDownvoted = _deal.downvoters!.contains(_user!.id);
-      _incrementViewsCounter();
+      _fetchDeal();
     }
     _scrollController = ScrollController()
       ..addListener(() {
@@ -110,10 +110,10 @@ class _DealDetailsState extends State<DealDetails> {
     });
   }
 
-  void _incrementViewsCounter() {
+  void _fetchDeal() {
     GetIt.I
         .get<SpringService>()
-        .incrementViewsCounter(dealId: _deal.id!)
+        .getDeal(dealId: _deal.id!)
         .then((Deal? deal) {
       if (deal != null) {
         WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
