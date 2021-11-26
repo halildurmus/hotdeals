@@ -72,7 +72,7 @@ class _PostDealState extends State<PostDeal> {
     final textTheme = theme.textTheme;
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    Widget buildPictureUpload() {
+    Widget buildPictureUploadWidget() {
       return PictureUploadWidget(
         buttonText: AppLocalizations.of(context)!.uploadImage,
         buttonStyle: PictureUploadButtonStyle(
@@ -100,7 +100,7 @@ class _PostDealState extends State<PostDeal> {
       );
     }
 
-    Widget buildCategoriesDropdown() {
+    Widget buildCategoryDropdown() {
       return DropdownButtonFormField<Category>(
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
@@ -135,7 +135,7 @@ class _PostDealState extends State<PostDeal> {
       );
     }
 
-    Widget buildStoresDropdown() {
+    Widget buildStoreDropdown() {
       return DropdownButtonFormField<Store>(
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
@@ -237,7 +237,124 @@ class _PostDealState extends State<PostDeal> {
       }
     }
 
-    Widget buildPostButton() {
+    Widget buildUrlFormField() {
+      return TextFormField(
+        controller: dealUrlController,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: AppLocalizations.of(context)!.enterDealUrl,
+        ),
+        textInputAction: TextInputAction.next,
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return AppLocalizations.of(context)!.pleaseEnterTheDealUrl;
+          } else if (!isURL(value)) {
+            return AppLocalizations.of(context)!.pleaseEnterValidUrl;
+          }
+
+          return null;
+        },
+      );
+    }
+
+    Widget buildTitleFormField() {
+      return TextFormField(
+        controller: titleController,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          errorMaxLines: 2,
+          labelText: AppLocalizations.of(context)!.title,
+        ),
+        textInputAction: TextInputAction.next,
+        maxLength: 100,
+        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return AppLocalizations.of(context)!.pleaseEnterTheDealTitle;
+          } else if (value.length < 10) {
+            return AppLocalizations.of(context)!.titleMustBe;
+          }
+
+          return null;
+        },
+      );
+    }
+
+    Widget buildOriginalPriceFormField() {
+      return TextFormField(
+        controller: priceController,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: AppLocalizations.of(context)!.originalPrice,
+          prefixIcon: const Icon(Icons.attach_money, size: 20),
+        ),
+        keyboardType: TextInputType.number,
+        textInputAction: TextInputAction.next,
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return AppLocalizations.of(context)!.pleaseEnterTheOriginalPrice;
+          } else if (discountPriceController.text.isNotEmpty &&
+              (int.parse(value) < int.parse(discountPriceController.text))) {
+            return AppLocalizations.of(context)!.originalPriceCannotBeLower;
+          }
+
+          return null;
+        },
+      );
+    }
+
+    Widget buildDiscountPriceFormField() {
+      return TextFormField(
+        controller: discountPriceController,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: AppLocalizations.of(context)!.discountPrice,
+          prefixIcon: const Icon(Icons.attach_money, size: 20),
+        ),
+        keyboardType: TextInputType.number,
+        textInputAction: TextInputAction.next,
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return AppLocalizations.of(context)!.pleaseEnterTheDiscountPrice;
+          } else if (priceController.text.isNotEmpty &&
+              (int.parse(value) > int.parse(priceController.text))) {
+            return AppLocalizations.of(context)!.discountPriceCannotBeGreater;
+          }
+
+          return null;
+        },
+      );
+    }
+
+    Widget buildDescriptionFormField() {
+      return TextFormField(
+        controller: descriptionController,
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          errorMaxLines: 2,
+          hintStyle: textTheme.bodyText2!.copyWith(
+              color: theme.brightness == Brightness.light
+                  ? Colors.black54
+                  : Colors.grey),
+          hintText: AppLocalizations.of(context)!.enterSomeDetailsAboutDeal,
+        ),
+        minLines: 4,
+        maxLines: 30,
+        maxLength: 3000,
+        maxLengthEnforcement: MaxLengthEnforcement.enforced,
+        validator: (String? value) {
+          if (value == null || value.isEmpty) {
+            return AppLocalizations.of(context)!.pleaseEnterTheDealDescription;
+          } else if (value.length < 10) {
+            return AppLocalizations.of(context)!.descriptionMustBe;
+          }
+
+          return null;
+        },
+      );
+    }
+
+    Widget buildPostDealButton() {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: ElevatedButton(
@@ -261,127 +378,23 @@ class _PostDealState extends State<PostDeal> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 5),
-            buildPictureUpload(),
+            buildPictureUploadWidget(),
             const SizedBox(height: 20),
-            TextFormField(
-              controller: dealUrlController,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: AppLocalizations.of(context)!.enterDealUrl,
-              ),
-              textInputAction: TextInputAction.next,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!.pleaseEnterTheDealUrl;
-                } else if (!isURL(value)) {
-                  return AppLocalizations.of(context)!.pleaseEnterValidUrl;
-                }
-
-                return null;
-              },
-            ),
+            buildUrlFormField(),
             const SizedBox(height: 10),
-            TextFormField(
-              controller: titleController,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                errorMaxLines: 2,
-                labelText: AppLocalizations.of(context)!.title,
-              ),
-              textInputAction: TextInputAction.next,
-              maxLength: 100,
-              maxLengthEnforcement: MaxLengthEnforcement.enforced,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!.pleaseEnterTheDealTitle;
-                } else if (value.length < 10) {
-                  return AppLocalizations.of(context)!.titleMustBe;
-                }
-
-                return null;
-              },
-            ),
+            buildTitleFormField(),
             const SizedBox(height: 10),
-            TextFormField(
-              controller: priceController,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: AppLocalizations.of(context)!.originalPrice,
-                prefixIcon: const Icon(Icons.attach_money, size: 20),
-              ),
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!
-                      .pleaseEnterTheOriginalPrice;
-                } else if (discountPriceController.text.isNotEmpty &&
-                    (int.parse(value) <
-                        int.parse(discountPriceController.text))) {
-                  return AppLocalizations.of(context)!
-                      .originalPriceCannotBeLower;
-                }
-
-                return null;
-              },
-            ),
+            buildOriginalPriceFormField(),
             const SizedBox(height: 10),
-            TextFormField(
-              controller: discountPriceController,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: AppLocalizations.of(context)!.discountPrice,
-                prefixIcon: const Icon(Icons.attach_money, size: 20),
-              ),
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!
-                      .pleaseEnterTheDiscountPrice;
-                } else if (priceController.text.isNotEmpty &&
-                    (int.parse(value) > int.parse(priceController.text))) {
-                  return AppLocalizations.of(context)!
-                      .discountPriceCannotBeGreater;
-                }
-
-                return null;
-              },
-            ),
+            buildDiscountPriceFormField(),
             const SizedBox(height: 10),
-            buildCategoriesDropdown(),
+            buildCategoryDropdown(),
             const SizedBox(height: 10),
-            buildStoresDropdown(),
+            buildStoreDropdown(),
             const SizedBox(height: 10),
-            TextFormField(
-              controller: descriptionController,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                errorMaxLines: 2,
-                hintStyle: textTheme.bodyText2!.copyWith(
-                    color: theme.brightness == Brightness.light
-                        ? Colors.black54
-                        : Colors.grey),
-                hintText:
-                    AppLocalizations.of(context)!.enterSomeDetailsAboutDeal,
-              ),
-              minLines: 4,
-              maxLines: 30,
-              maxLength: 3000,
-              maxLengthEnforcement: MaxLengthEnforcement.enforced,
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return AppLocalizations.of(context)!
-                      .pleaseEnterTheDealDescription;
-                } else if (value.length < 10) {
-                  return AppLocalizations.of(context)!.descriptionMustBe;
-                }
-
-                return null;
-              },
-            ),
+            buildDescriptionFormField(),
             const SizedBox(height: 10),
-            buildPostButton(),
+            buildPostDealButton(),
           ],
         ),
       );
