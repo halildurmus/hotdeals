@@ -127,13 +127,12 @@ class SpringService with NetworkLoggy {
 
   Future<bool> sendPushNotification({
     required PushNotification notification,
-    required List<String> tokens,
   }) async {
-    if (tokens.isEmpty) {
+    if (notification.tokens.isEmpty) {
       return false;
     }
 
-    final String url = '$_baseUrl/notifications?tokens=${tokens.join(',')}';
+    final String url = '$_baseUrl/notifications}';
 
     try {
       final Response response =

@@ -80,13 +80,12 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
           message: comment.message,
           uid: poster.id,
           avatar: user!.avatar,
+          tokens: poster.fcmTokens!,
         );
 
         final bool result = await GetIt.I
             .get<SpringService>()
-            .sendPushNotification(
-                notification: notification, tokens: poster.fcmTokens!);
-
+            .sendPushNotification(notification: notification);
         if (result) {
           loggy.info('Push notification sent to: ${poster.nickname}');
         }

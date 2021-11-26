@@ -10,6 +10,7 @@ class PushNotification {
     this.actor,
     required this.verb,
     required this.object,
+    this.tokens = const [],
     this.image,
     this.avatar,
     this.message,
@@ -42,6 +43,7 @@ class PushNotification {
   final String? actor;
   final NotificationVerb verb;
   final String object;
+  final List<String> tokens;
   final String? avatar;
   final String? message;
   final String? uid;
@@ -59,7 +61,8 @@ class PushNotification {
           if (avatar != null) 'avatar': avatar,
           if (message != null) 'message': message,
           if (uid != null) 'uid': uid,
-        }
+        },
+        'tokens': tokens,
       };
 
   /// Converts a [PushNotification] into a [Map].
@@ -79,6 +82,6 @@ class PushNotification {
 
   @override
   String toString() {
-    return 'PushNotification{id: $id, title: $title, body: $body, image: $image, actor: $actor, verb: $verb, object: $object, avatar: $avatar, message: $message, uid: $uid, isRead: $isRead, createdAt: $createdAt}';
+    return 'PushNotification{id: $id, title: $title, body: $body, image: $image, actor: $actor, verb: $verb, object: $object, tokens: $tokens, avatar: $avatar, message: $message, uid: $uid, isRead: $isRead, createdAt: $createdAt}';
   }
 }

@@ -82,7 +82,6 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
 
   Future<void> _sendPushNotification(MyUser user, types.Message message) async {
     String messageText = '';
-
     if (message is types.FileMessage) {
       messageText = AppLocalizations.of(context)!.file;
     } else if (message is types.ImageMessage) {
@@ -99,11 +98,12 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
       message: messageText,
       uid: widget.user2.uid,
       avatar: user.avatar,
+      tokens: widget.user2.fcmTokens!,
     );
 
-    final bool result = await GetIt.I.get<SpringService>().sendPushNotification(
-        notification: notification, tokens: widget.user2.fcmTokens!);
-
+    final bool result = await GetIt.I
+        .get<SpringService>()
+        .sendPushNotification(notification: notification);
     if (result) {
       loggy.info('Push notification sent to: ${widget.user2.nickname}');
     }
