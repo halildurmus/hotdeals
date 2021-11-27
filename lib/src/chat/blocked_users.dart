@@ -121,8 +121,8 @@ class _BlockedUsersState extends State<BlockedUsers> {
       return FutureBuilder<List<MyUser>?>(
         future: GetIt.I
             .get<SpringService>()
-            .getBlockedUsers(userIds: user.blockedUsers!),
-        builder: (BuildContext context, AsyncSnapshot<List<MyUser>?> snapshot) {
+            .getBlockedUsers(userIds: user.blockedUsers!.keys.toList()),
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             final List<MyUser> users = snapshot.data!;
 

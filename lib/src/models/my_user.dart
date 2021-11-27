@@ -33,9 +33,9 @@ class MyUser {
         avatar: json['avatar'] as String,
         email: json['email'] as String,
         nickname: json['nickname'] as String,
-        blockedUsers: List<String>.from(json['blockedUsers'] as List<dynamic>),
+        blockedUsers: _blockedUsersFromJson(json['blockedUsers'] as Json),
         fcmTokens: List<String>.from(json['fcmTokens'] as List<dynamic>),
-        favorites: favoritesFromJson(json['favorites'] as Json),
+        favorites: _favoritesFromJson(json['favorites'] as Json),
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
@@ -45,7 +45,7 @@ class MyUser {
   String? avatar;
   String? email;
   String? nickname;
-  List<String>? blockedUsers;
+  Map<String, bool>? blockedUsers;
   List<String>? fcmTokens;
   Map<String, bool>? favorites;
   final DateTime? createdAt;
@@ -66,12 +66,22 @@ class MyUser {
   }
 }
 
-Map<String, bool> favoritesFromJson(Json json) {
-  final Map<String, bool> _favorites = <String, bool>{};
+Map<String, bool> _blockedUsersFromJson(Json json) {
+  final blockedUsers = <String, bool>{};
 
   json.forEach((String k, dynamic v) {
-    _favorites.putIfAbsent(k, () => v as bool);
+    blockedUsers.putIfAbsent(k, () => v as bool);
   });
 
-  return _favorites;
+  return blockedUsers;
+}
+
+Map<String, bool> _favoritesFromJson(Json json) {
+  final favorites = <String, bool>{};
+
+  json.forEach((String k, dynamic v) {
+    favorites.putIfAbsent(k, () => v as bool);
+  });
+
+  return favorites;
 }

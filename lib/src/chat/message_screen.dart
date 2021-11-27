@@ -151,8 +151,8 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final MyUser _user = Provider.of<UserController>(context).user!;
-    final _isUserBlocked = widget.user2.blockedUsers!.contains(_user.id!);
-    final _isUser2Blocked = _user.blockedUsers!.contains(widget.user2.id!);
+    final _isUserBlocked = widget.user2.blockedUsers!.containsKey(_user.id!);
+    final _isUser2Blocked = _user.blockedUsers!.containsKey(widget.user2.id!);
 
     Widget _buildBlockedText() {
       return Container(

@@ -332,10 +332,9 @@ class SpringService with NetworkLoggy {
     try {
       final Response response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final MyUser _myUser =
-            MyUser.fromJson(jsonDecode(response.body) as Json);
+        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
-        return _myUser;
+        return myUser;
       }
 
       return null;
