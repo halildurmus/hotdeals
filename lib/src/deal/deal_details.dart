@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/categories.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
+import '../models/deal_vote_type.dart';
 import '../models/my_user.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
@@ -474,9 +475,11 @@ class _DealDetailsState extends State<DealDetails> {
                         return;
                       }
 
-                      final Deal? deal = await GetIt.I
-                          .get<SpringService>()
-                          .upvoteDeal(dealId: _deal.id!);
+                      final Deal? deal =
+                          await GetIt.I.get<SpringService>().voteDeal(
+                                dealId: _deal.id!,
+                                voteType: DealVoteType.up,
+                              );
 
                       if (deal == null) {
                         ScaffoldMessenger.of(context).clearSnackBars();
@@ -520,9 +523,11 @@ class _DealDetailsState extends State<DealDetails> {
                         return;
                       }
 
-                      final Deal? deal = await GetIt.I
-                          .get<SpringService>()
-                          .downvoteDeal(dealId: _deal.id!);
+                      final Deal? deal =
+                          await GetIt.I.get<SpringService>().voteDeal(
+                                dealId: _deal.id!,
+                                voteType: DealVoteType.down,
+                              );
                       if (deal == null) {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         final snackBar = CustomSnackBar(

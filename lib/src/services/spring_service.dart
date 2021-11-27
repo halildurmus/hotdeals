@@ -12,6 +12,7 @@ import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
 import '../models/deal_sortby.dart';
+import '../models/deal_vote_type.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/store.dart';
@@ -325,13 +326,12 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<List<MyUser>?> getBlockedUsers({required List<String> userIds}) async {
-    final String url =
-        '$_baseUrl/users/search/findAllByIdIn?userIds=${userIds.join(',')}';
+  Future<List<MyUser>?> getBlockedUsers() async {
+    final String url = '$_baseUrl/users/me/blocks';
     try {
       final Response response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final blockedUsers = userFromJson(response.body);
+        final blockedUsers = blockedUsersFromJson(response.body);
 
         return blockedUsers;
       }
@@ -680,27 +680,19 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<Deal?> upvoteDeal({required String dealId}) async {
-    final String url = '$_baseUrl/deals/$dealId/upvote';
+  Future<Deal?> voteDeal({
+    required String dealId,
+    required DealVoteType voteType,
+  }) async {
+    final String url = '$_baseUrl/deals/$dealId/votes';
+    final Json data = {'voteType': voteType.asString};
     try {
-      final Response response = await _httpService.post(url, null);
-      if (response.statusCode == 200) {
-        final deal = Deal.fromJson(jsonDecode(response.body) as Json);
-
-        return deal;
+      late final Response response;
+      if (voteType == DealVoteType.unvote) {
+        response = await _httpService.delete(url);
+      } else {
+        response = await _httpService.put(url, data);
       }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
-    }
-  }
-
-  Future<Deal?> downvoteDeal({required String dealId}) async {
-    final String url = '$_baseUrl/deals/$dealId/downvote';
-    try {
-      final Response response = await _httpService.post(url, null);
       if (response.statusCode == 200) {
         final deal = Deal.fromJson(jsonDecode(response.body) as Json);
 

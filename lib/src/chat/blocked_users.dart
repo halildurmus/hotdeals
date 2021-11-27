@@ -119,17 +119,15 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
     Widget buildBlockedUsers() {
       return FutureBuilder<List<MyUser>?>(
-        future: GetIt.I
-            .get<SpringService>()
-            .getBlockedUsers(userIds: user.blockedUsers!.keys.toList()),
+        future: GetIt.I.get<SpringService>().getBlockedUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final List<MyUser> users = snapshot.data!;
 
             return ListView.builder(
               itemCount: users.length,
-              itemBuilder: (BuildContext context, int index) {
-                final MyUser user = users.elementAt(index);
+              itemBuilder: (context, index) {
+                final user = users.elementAt(index);
 
                 return buildCard(user, context);
               },
