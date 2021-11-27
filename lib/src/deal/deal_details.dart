@@ -175,6 +175,7 @@ class _DealDetailsState extends State<DealDetails> {
           centerTitle: true,
           title: Text(_deal.title),
           actions: [
+            // TODO(halildurmus): Hide "Report Deal" button to the poster of the deal
             PopupMenuButton<_DealPopup>(
               icon: const Icon(Icons.more_vert),
               onSelected: (_DealPopup result) {
