@@ -576,11 +576,11 @@ class SpringService with NetworkLoggy {
   }) async {
     String url = '$_baseUrl/deals/search/findAllByOrderBy';
     if (dealSortBy == DealSortBy.createdAt) {
-      url += 'ByCreatedAtDesc';
+      url += 'CreatedAtDesc';
     } else if (dealSortBy == DealSortBy.dealScore) {
-      url += 'ByDealScoreDesc';
+      url += 'DealScoreDesc';
     } else if (dealSortBy == DealSortBy.price) {
-      url += 'ByDiscountPrice';
+      url += 'DiscountPrice';
     }
     url += '?page=$page&size=$size';
 
