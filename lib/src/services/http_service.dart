@@ -130,4 +130,31 @@ class HttpService {
 
     return response;
   }
+
+  Future<Response> put(String url, [Json? data]) async {
+    final String idToken = await _firebaseAuth.currentUser!.getIdToken();
+    data ??= <String, dynamic>{};
+
+    Response response;
+    try {
+      response = await _client
+          .put(
+            Uri.parse(url),
+            headers: <String, String>{
+              'Accept': 'application/json; charset=utf-8',
+              'Authorization': 'Bearer $idToken',
+              'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: jsonEncode(data),
+          )
+          .timeout(
+            _timeoutDuration,
+            onTimeout: () => throw Exception('Server timeout'),
+          );
+    } on Exception catch (e) {
+      throw Exception(e);
+    }
+
+    return response;
+  }
 }
