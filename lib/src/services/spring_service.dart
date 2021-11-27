@@ -46,9 +46,9 @@ class SpringService with NetworkLoggy {
   Future<bool> blockUser({required String userId}) async {
     final String url = '$_baseUrl/users/$userId/block';
     try {
-      final Response response = await _httpService.post(url, null);
+      final Response response = await _httpService.put(url);
 
-      return response.statusCode == 201;
+      return response.statusCode == 200;
     } on Exception catch (e) {
       loggy.error(e, e);
       return false;
@@ -59,9 +59,9 @@ class SpringService with NetworkLoggy {
     final String url = '$_baseUrl/users/$userId/unblock';
 
     try {
-      final Response response = await _httpService.post(url, null);
+      final Response response = await _httpService.delete(url);
 
-      return response.statusCode == 201;
+      return response.statusCode == 204;
     } on Exception catch (e) {
       loggy.error(e, e);
       return false;
@@ -72,9 +72,9 @@ class SpringService with NetworkLoggy {
     final String url = '$_baseUrl/deals/$dealId/favorite';
 
     try {
-      final Response response = await _httpService.post(url, null);
+      final Response response = await _httpService.put(url);
 
-      return response.statusCode == 201;
+      return response.statusCode == 200;
     } on Exception catch (e) {
       loggy.error(e, e);
       return false;
@@ -85,9 +85,9 @@ class SpringService with NetworkLoggy {
     final String url = '$_baseUrl/deals/$dealId/unfavorite';
 
     try {
-      final Response response = await _httpService.post(url, null);
+      final Response response = await _httpService.delete(url);
 
-      return response.statusCode == 201;
+      return response.statusCode == 204;
     } on Exception catch (e) {
       loggy.error(e, e);
       return false;
