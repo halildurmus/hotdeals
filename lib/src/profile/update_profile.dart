@@ -261,7 +261,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
 
     if (_didRequestSignOut) {
       final String? fcmToken = await FirebaseMessaging.instance.getToken();
-      await GetIt.I.get<SpringService>().logout(fcmToken: fcmToken!);
+      await GetIt.I.get<SpringService>().removeFcmToken(fcmToken: fcmToken!);
       await _signOut(context);
       Provider.of<UserController>(context, listen: false).logout();
       Navigator.of(context).pushReplacementNamed('/');

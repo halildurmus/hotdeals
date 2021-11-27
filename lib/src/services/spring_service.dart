@@ -44,7 +44,7 @@ class SpringService with NetworkLoggy {
   late HttpService _httpService;
 
   Future<bool> blockUser({required String userId}) async {
-    final String url = '$_baseUrl/users/$userId/block';
+    final String url = '$_baseUrl/users/me/blocks/$userId';
     try {
       final Response response = await _httpService.put(url);
 
@@ -56,7 +56,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> unblockUser({required String userId}) async {
-    final String url = '$_baseUrl/users/$userId/unblock';
+    final String url = '$_baseUrl/users/me/blocks/$userId';
 
     try {
       final Response response = await _httpService.delete(url);
@@ -69,7 +69,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> favoriteDeal({required String dealId}) async {
-    final String url = '$_baseUrl/deals/$dealId/favorite';
+    final String url = '$_baseUrl/users/me/favorites/$dealId';
 
     try {
       final Response response = await _httpService.put(url);
@@ -82,7 +82,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> unfavoriteDeal({required String dealId}) async {
-    final String url = '$_baseUrl/deals/$dealId/unfavorite';
+    final String url = '$_baseUrl/users/me/favorites/$dealId';
 
     try {
       final Response response = await _httpService.delete(url);
@@ -401,11 +401,11 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> addFcmToken({required String fcmToken}) async {
-    final String url = '$_baseUrl/users/add-fcm-token';
+    final String url = '$_baseUrl/users/me/fcm-tokens';
     final Json data = <String, dynamic>{'fcmToken': fcmToken};
 
     try {
-      final Response response = await _httpService.post(url, data);
+      final Response response = await _httpService.put(url, data);
 
       return response.statusCode == 200;
     } on Exception catch (e) {
@@ -414,14 +414,14 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<bool> logout({required String fcmToken}) async {
-    final String url = '$_baseUrl/users/logout';
+  Future<bool> removeFcmToken({required String fcmToken}) async {
+    final String url = '$_baseUrl/users/me/fcm-tokens';
     final Json data = <String, dynamic>{'fcmToken': fcmToken};
 
     try {
-      final Response response = await _httpService.post(url, data);
+      final Response response = await _httpService.delete(url, data);
 
-      return response.statusCode == 200;
+      return response.statusCode == 204;
     } on Exception catch (e) {
       loggy.error(e, e);
       throw Exception('An error occurred while logging out!');
