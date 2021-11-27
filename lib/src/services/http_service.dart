@@ -25,7 +25,7 @@ class HttpService {
 
   late Client _client;
 
-  Future<Response> delete(String url) async {
+  Future<Response> delete(String url, [Json? data]) async {
     final String idToken = await _firebaseAuth.currentUser!.getIdToken();
 
     Response response;
@@ -37,6 +37,7 @@ class HttpService {
           'Authorization': 'Bearer $idToken',
           'Content-Type': 'application/json; charset=utf-8',
         },
+        body: data != null ? jsonEncode(data) : null,
       ).timeout(
         _timeoutDuration,
         onTimeout: () => throw Exception('Server timeout'),
@@ -74,9 +75,8 @@ class HttpService {
     return response;
   }
 
-  Future<Response> patch(String url, List<Json>? data) async {
+  Future<Response> patch(String url, List<Json> data) async {
     final String idToken = await _firebaseAuth.currentUser!.getIdToken();
-    data ??= [<String, dynamic>{}];
 
     Response response;
     try {
@@ -106,7 +106,6 @@ class HttpService {
     if (auth) {
       idToken = await _firebaseAuth.currentUser!.getIdToken();
     }
-    data ??= <String, dynamic>{};
 
     Response response;
     try {
@@ -118,7 +117,7 @@ class HttpService {
               if (auth) 'Authorization': 'Bearer $idToken',
               'Content-Type': 'application/json; charset=utf-8',
             },
-            body: jsonEncode(data),
+            body: data != null ? jsonEncode(data) : null,
           )
           .timeout(
             _timeoutDuration,
