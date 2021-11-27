@@ -50,37 +50,38 @@ class AuthWidget extends StatelessWidget with UiLoggy {
       await context.read<UserController>().getUser();
     }
 
-    if (userSnapshot.hasData) {
-      final userFuture =
-          Provider.of<UserController>(context, listen: false).getUser();
-
-      return FutureBuilder<MyUser?>(
-        future: userFuture,
-        builder: (BuildContext context, AsyncSnapshot<MyUser?> snapshot) {
-          if (snapshot.hasData) {
-            loggy.info(snapshot.data);
-            // Gets the token each time the user logs in.
-            FirebaseMessaging.instance.getToken().then((String? token) async {
-              // Saves the initial token to the database.
-              await _saveFcmTokenToDatabase(token!);
-
-              // Any time the token refreshes, store this in the database too.
-              FirebaseMessaging.instance.onTokenRefresh
-                  .listen(_saveFcmTokenToDatabase);
-            });
-
-            return const HomeScreen();
-          } else if (snapshot.hasError) {
-            return const HomeScreen();
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            return buildErrorWidget(context);
-          }
-
-          return buildCircularProgressIndicator(context);
-        },
-      );
+    if (!userSnapshot.hasData) {
+      return const HomeScreen();
     }
 
-    return const HomeScreen();
+    final userFuture =
+        Provider.of<UserController>(context, listen: false).getUser();
+
+    return FutureBuilder<MyUser?>(
+      future: userFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          loggy.info(snapshot.data);
+          // Gets the token each time the user logs in.
+          FirebaseMessaging.instance.getToken().then((String? token) async {
+            // Saves the initial token to the database.
+            await _saveFcmTokenToDatabase(token!);
+
+            // Any time the token refreshes, store this in the database too.
+            FirebaseMessaging.instance.onTokenRefresh
+                .listen(_saveFcmTokenToDatabase);
+          });
+
+          return const HomeScreen();
+        } else if (snapshot.hasError) {
+          loggy.error(snapshot.error);
+          return const HomeScreen();
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return buildErrorWidget(context);
+        }
+
+        return buildCircularProgressIndicator(context);
+      },
+    );
   }
 }
