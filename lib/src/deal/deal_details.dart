@@ -451,6 +451,41 @@ class _DealDetailsState extends State<DealDetails> {
       );
     }
 
+    Future<void> voteDeal(DealVoteType voteType) async {
+      if (_user == null) {
+        GetIt.I.get<SignInDialog>().showSignInDialog(context);
+
+        return;
+      }
+
+      final Deal? deal = await GetIt.I.get<SpringService>().voteDeal(
+            dealId: _deal.id!,
+            voteType: voteType,
+          );
+      if (deal == null) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          text: AppLocalizations.of(context)!.anErrorOccurred,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        setState(() {
+          _deal = deal;
+          if (voteType == DealVoteType.up) {
+            isUpvoted = true;
+            isDownvoted = false;
+          } else if (voteType == DealVoteType.down) {
+            isUpvoted = false;
+            isDownvoted = true;
+          } else if (voteType == DealVoteType.unvote) {
+            isUpvoted = false;
+            isDownvoted = false;
+          }
+        });
+      }
+    }
+
     Widget buildRateDeal() {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -466,101 +501,50 @@ class _DealDetailsState extends State<DealDetails> {
             ),
             const SizedBox(width: 20),
             GestureDetector(
-              onTap: isUpvoted
-                  ? null
-                  : () async {
-                      if (_user == null) {
-                        GetIt.I.get<SignInDialog>().showSignInDialog(context);
-
-                        return;
-                      }
-
-                      final Deal? deal =
-                          await GetIt.I.get<SpringService>().voteDeal(
-                                dealId: _deal.id!,
-                                voteType: DealVoteType.up,
-                              );
-
-                      if (deal == null) {
-                        ScaffoldMessenger.of(context).clearSnackBars();
-                        final snackBar = CustomSnackBar(
-                          icon: const Icon(FontAwesomeIcons.exclamationCircle,
-                              size: 20),
-                          text: AppLocalizations.of(context)!.anErrorOccurred,
-                        ).buildSnackBar(context);
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else {
-                        setState(() {
-                          _deal = deal;
-                          isUpvoted = true;
-                          isDownvoted = false;
-                        });
-                      }
-                    },
+              onTap: () =>
+                  voteDeal(isUpvoted ? DealVoteType.unvote : DealVoteType.up),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: isUpvoted ? Colors.green : Colors.transparent,
-                      width: 1.5),
+                    color: isUpvoted ? Colors.green : Colors.transparent,
+                    width: 1.5,
+                  ),
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                   color: theme.brightness == Brightness.light
                       ? Colors.grey.shade300 //theme.primaryColor
                       : theme.primaryColor.withOpacity(.5),
                 ),
                 padding: const EdgeInsets.all(12),
-                child: Icon(FontAwesomeIcons.solidThumbsUp,
-                    color: isUpvoted ? Colors.green : Colors.grey, size: 16),
+                child: Icon(
+                  FontAwesomeIcons.solidThumbsUp,
+                  color: isUpvoted ? Colors.green : Colors.grey,
+                  size: 16,
+                ),
               ),
             ),
             const SizedBox(width: 20),
             GestureDetector(
-              onTap: isDownvoted
-                  ? null
-                  : () async {
-                      if (_user == null) {
-                        GetIt.I.get<SignInDialog>().showSignInDialog(context);
-
-                        return;
-                      }
-
-                      final Deal? deal =
-                          await GetIt.I.get<SpringService>().voteDeal(
-                                dealId: _deal.id!,
-                                voteType: DealVoteType.down,
-                              );
-                      if (deal == null) {
-                        ScaffoldMessenger.of(context).clearSnackBars();
-                        final snackBar = CustomSnackBar(
-                          icon: const Icon(FontAwesomeIcons.exclamationCircle,
-                              size: 20),
-                          text: AppLocalizations.of(context)!.anErrorOccurred,
-                        ).buildSnackBar(context);
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else {
-                        setState(() {
-                          _deal = deal;
-                          isDownvoted = true;
-                          isUpvoted = false;
-                        });
-                      }
-                    },
+              onTap: () => voteDeal(
+                  isDownvoted ? DealVoteType.unvote : DealVoteType.down),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color: isDownvoted
-                          ? Colors.pinkAccent.shade100
-                          : Colors.transparent,
-                      width: 1.5),
+                    color: isDownvoted
+                        ? Colors.pinkAccent.shade100
+                        : Colors.transparent,
+                    width: 1.5,
+                  ),
                   borderRadius: const BorderRadius.all(Radius.circular(4)),
                   color: theme.brightness == Brightness.light
                       ? Colors.grey.shade300 //theme.primaryColor
                       : theme.primaryColor.withOpacity(.5),
                 ),
                 padding: const EdgeInsets.all(12),
-                child: Icon(FontAwesomeIcons.solidThumbsDown,
-                    color:
-                        isDownvoted ? Colors.pinkAccent.shade100 : Colors.grey,
-                    size: 16),
+                child: Icon(
+                  FontAwesomeIcons.solidThumbsDown,
+                  color: isDownvoted ? Colors.pinkAccent.shade100 : Colors.grey,
+                  size: 16,
+                ),
               ),
             ),
           ],
