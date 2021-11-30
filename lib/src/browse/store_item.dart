@@ -79,7 +79,7 @@ class _StoreItemState extends State<StoreItem> {
 
     return FutureBuilder<int?>(
       future: numberOfDealsFuture,
-      builder: (context, AsyncSnapshot<int?> snapshot) {
+      builder: (context, snapshot) {
         int dealsCount = 0;
         if (snapshot.hasData) {
           dealsCount = snapshot.data!;
@@ -88,7 +88,8 @@ class _StoreItemState extends State<StoreItem> {
         return Text(
           AppLocalizations.of(context)!.dealCount(dealsCount),
           style: textTheme.subtitle2!.copyWith(
-              color: isDarkMode ? theme.primaryColorLight : theme.primaryColor),
+            color: isDarkMode ? theme.primaryColorLight : theme.primaryColor,
+          ),
         );
       },
     );

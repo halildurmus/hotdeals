@@ -56,13 +56,14 @@ class _DealsByCategoryState extends State<DealsByCategory> {
 
   Widget buildFilterChips() {
     return FilterChips(
-        category: widget.category,
-        onFilterChange: (newCategory) {
-          setState(() {
-            category = newCategory;
-            _pagingController.refresh();
-          });
+      category: widget.category,
+      onFilterChange: (newCategory) {
+        setState(() {
+          category = newCategory;
+          _pagingController.refresh();
         });
+      },
+    );
   }
 
   Widget buildNoDealsFound(BuildContext context) {
@@ -72,16 +73,16 @@ class _DealsByCategoryState extends State<DealsByCategory> {
     );
   }
 
+  Widget buildPagedListView() {
+    return DealPagedListView(
+      dealFuture: _dealFuture,
+      noDealsFound: buildNoDealsFound(context),
+      pagingController: _pagingController,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget buildPagedListView() {
-      return DealPagedListView(
-        dealFuture: _dealFuture,
-        noDealsFound: buildNoDealsFound(context),
-        pagingController: _pagingController,
-      );
-    }
-
     return Scaffold(
       appBar: buildAppBar(),
       body: Column(

@@ -30,8 +30,7 @@ class DealsByStore extends StatelessWidget {
           width: 55,
           child: CachedNetworkImage(
             imageUrl: store.logo,
-            imageBuilder:
-                (BuildContext ctx, ImageProvider<Object> imageProvider) {
+            imageBuilder: (ctx, imageProvider) {
               return Hero(
                 tag: store.id!,
                 child: DecoratedBox(
@@ -41,8 +40,7 @@ class DealsByStore extends StatelessWidget {
                 ),
               );
             },
-            placeholder: (BuildContext context, String url) =>
-                const SizedBox.square(dimension: 50),
+            placeholder: (context, url) => const SizedBox.square(dimension: 50),
           ),
         ),
       ),

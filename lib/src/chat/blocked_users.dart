@@ -27,7 +27,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
   Future<void> _onUserTap(String userId) async {
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) =>
+      builder: (context) =>
           UserProfileDialog(userId: userId, hideButtons: true),
     );
   }
@@ -113,33 +113,33 @@ class _BlockedUsersState extends State<BlockedUsers> {
     }
   }
 
+  Widget buildBlockedUsers(MyUser user) {
+    return FutureBuilder<List<MyUser>?>(
+      future: GetIt.I.get<SpringService>().getBlockedUsers(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final List<MyUser> users = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              final user = users.elementAt(index);
+
+              return buildCard(user, context);
+            },
+          );
+        } else if (snapshot.hasError) {
+          return buildErrorWidget();
+        }
+
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final MyUser user = Provider.of<UserController>(context).user!;
-
-    Widget buildBlockedUsers() {
-      return FutureBuilder<List<MyUser>?>(
-        future: GetIt.I.get<SpringService>().getBlockedUsers(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final List<MyUser> users = snapshot.data!;
-
-            return ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                final user = users.elementAt(index);
-
-                return buildCard(user, context);
-              },
-            );
-          } else if (snapshot.hasError) {
-            return buildErrorWidget();
-          }
-
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -147,7 +147,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
       ),
       body: user.blockedUsers!.isEmpty
           ? buildNoBlockedUsersFound(context)
-          : buildBlockedUsers(),
+          : buildBlockedUsers(user),
     );
   }
 }

@@ -176,7 +176,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
+          builder: (context, setState) {
             return Dialog(
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),

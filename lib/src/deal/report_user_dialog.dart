@@ -88,7 +88,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: StatefulBuilder(
-        builder: (BuildContext context, void Function(VoidCallback) setState) {
+        builder: (context, setState) {
           return Padding(
             padding: const EdgeInsets.all(24),
             child: Column(

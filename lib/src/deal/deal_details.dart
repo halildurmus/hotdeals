@@ -99,7 +99,7 @@ class _DealDetailsState extends State<DealDetails> {
         .getNumberOfCommentsByDealId(dealId: widget.deal.id!)
         .then((int? commentsCount) {
       if (commentsCount != null) {
-        WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           if (mounted) {
             setState(() {
               _commentsCount = commentsCount;
@@ -113,7 +113,7 @@ class _DealDetailsState extends State<DealDetails> {
   void _fetchDeal() {
     GetIt.I.get<SpringService>().getDeal(dealId: _deal.id!).then((Deal? deal) {
       if (deal != null) {
-        WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           if (mounted) {
             setState(() {
               _deal = deal;
@@ -564,7 +564,7 @@ class _DealDetailsState extends State<DealDetails> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: FutureBuilder<MyUser>(
           future: GetIt.I.get<SpringService>().getUserById(id: _deal.postedBy!),
-          builder: (BuildContext context, AsyncSnapshot<MyUser> snapshot) {
+          builder: (context, snapshot) {
             String avatar = 'http://www.gravatar.com/avatar';
             String nickname = '...';
             VoidCallback? onTap;
@@ -585,11 +585,9 @@ class _DealDetailsState extends State<DealDetails> {
                 children: [
                   CachedNetworkImage(
                     imageUrl: avatar,
-                    imageBuilder: (BuildContext ctx,
-                            ImageProvider<Object> imageProvider) =>
+                    imageBuilder: (ctx, imageProvider) =>
                         CircleAvatar(backgroundImage: imageProvider),
-                    placeholder: (BuildContext context, String url) =>
-                        const CircleAvatar(),
+                    placeholder: (context, url) => const CircleAvatar(),
                   ),
                   const SizedBox(width: 8),
                   Column(
@@ -602,7 +600,9 @@ class _DealDetailsState extends State<DealDetails> {
                           color: Colors.green.shade600,
                         ),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 3, vertical: 1),
+                          horizontal: 3,
+                          vertical: 1,
+                        ),
                         child: Text(
                           AppLocalizations.of(context)!.originalPoster,
                           style: textTheme.bodyText2!.copyWith(
@@ -648,7 +648,7 @@ class _DealDetailsState extends State<DealDetails> {
 
       showDialog<void>(
         context: context,
-        builder: (BuildContext context) {
+        builder: (context) {
           return Dialog(
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -685,7 +685,10 @@ class _DealDetailsState extends State<DealDetails> {
             buildDealImages(),
             buildDealDetails(),
             buildRateDeal(),
-            const Padding(padding: EdgeInsets.all(16), child: Divider()),
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Divider(),
+            ),
             buildUserDetails(),
           ],
         ),

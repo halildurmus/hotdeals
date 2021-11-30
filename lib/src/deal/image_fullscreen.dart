@@ -61,11 +61,7 @@ class _MyImageScreen extends State<ImageFullScreen> {
           height: double.infinity,
           enlargeCenterPage: true,
           initialPage: currentIndex,
-          onPageChanged: (int i, CarouselPageChangedReason reason) {
-            setState(() {
-              currentIndex = i;
-            });
-          },
+          onPageChanged: (i, reason) => setState(() => currentIndex = i),
         ),
       );
     }
@@ -74,8 +70,8 @@ class _MyImageScreen extends State<ImageFullScreen> {
       return SliderIndicator(images: images, currentIndex: currentIndex);
     }
 
-    Widget buildBody() {
-      return Stack(
+    return Scaffold(
+      body: Stack(
         alignment: Alignment.topLeft,
         children: [
           Stack(
@@ -87,11 +83,7 @@ class _MyImageScreen extends State<ImageFullScreen> {
           ),
           buildBackButton(),
         ],
-      );
-    }
-
-    return Scaffold(
-      body: buildBody(),
+      ),
     );
   }
 }

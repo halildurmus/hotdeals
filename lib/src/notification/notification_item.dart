@@ -35,8 +35,9 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
 
   @override
   void initState() {
-    _userFuture =
-        GetIt.I.get<SpringService>().getUserById(id: widget.notification.actor!);
+    _userFuture = GetIt.I
+        .get<SpringService>()
+        .getUserById(id: widget.notification.actor!);
     super.initState();
   }
 
@@ -54,10 +55,11 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                    widget.isSelected
-                        ? Icons.check_circle
-                        : Icons.radio_button_unchecked,
-                    color: theme.primaryColor),
+                  widget.isSelected
+                      ? Icons.check_circle
+                      : Icons.radio_button_unchecked,
+                  color: theme.primaryColor,
+                ),
               ],
             ),
           if (widget.isSelectionMode) const SizedBox(width: 16),
@@ -170,7 +172,7 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
   Widget build(BuildContext context) {
     return FutureBuilder<MyUser>(
       future: _userFuture,
-      builder: (BuildContext context, AsyncSnapshot<MyUser> snapshot) {
+      builder: (context, snapshot) {
         if (snapshot.hasData) {
           final MyUser user = snapshot.data!;
 

@@ -101,7 +101,7 @@ class _DealsState extends State<Deals> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             scrollDirection: Axis.horizontal,
             itemCount: 3,
-            itemBuilder: (BuildContext context, int index) {
+            itemBuilder: (context, index) {
               return ChoiceChip(
                 labelStyle: TextStyle(
                   color: _selectedFilter == index
@@ -131,9 +131,7 @@ class _DealsState extends State<Deals> {
                 },
               );
             },
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(width: 8);
-            },
+            separatorBuilder: (context, index) => const SizedBox(width: 8),
           ),
         ),
       );

@@ -53,7 +53,7 @@ class _FilterChipsState extends State<FilterChips> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
         itemCount: subcategories.length,
-        itemBuilder: (BuildContext context, int index) {
+        itemBuilder: (context, index) {
           final Category subcategory = subcategories.elementAt(index);
 
           return FilterChip(
@@ -90,8 +90,7 @@ class _FilterChipsState extends State<FilterChips> {
             },
           );
         },
-        separatorBuilder: (BuildContext context, int index) =>
-            const SizedBox(width: 8),
+        separatorBuilder: (context, index) => const SizedBox(width: 8),
       ),
     );
   }

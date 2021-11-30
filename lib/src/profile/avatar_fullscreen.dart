@@ -28,9 +28,9 @@ class AvatarFullScreen extends StatelessWidget {
       body: CachedNetworkImage(
         imageUrl: avatarURL,
         imageBuilder: _buildImage,
-        placeholder: (BuildContext context, String url) =>
+        placeholder: (context, url) =>
             const Center(child: CircularProgressIndicator()),
-        errorWidget: (BuildContext context, String url, dynamic error) =>
+        errorWidget: (context, url, error) =>
             const Center(child: Icon(Icons.error)),
       ),
     );

@@ -87,7 +87,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
     Future<void> _onPressedReport() async {
       return showDialog<void>(
         context: context,
-        builder: (BuildContext context) =>
+        builder: (context) =>
             ReportUserDialog(reportedUserId: widget.user2.id!),
       );
     }
@@ -104,11 +104,9 @@ class _MessageAppBarState extends State<MessageAppBar> {
           children: [
             CachedNetworkImage(
               imageUrl: widget.user2.avatar!,
-              imageBuilder:
-                  (BuildContext ctx, ImageProvider<Object> imageProvider) =>
-                      CircleAvatar(backgroundImage: imageProvider, radius: 16),
-              placeholder: (BuildContext context, String url) =>
-                  const CircleAvatar(radius: 16),
+              imageBuilder: (ctx, imageProvider) =>
+                  CircleAvatar(backgroundImage: imageProvider, radius: 16),
+              placeholder: (context, url) => const CircleAvatar(radius: 16),
             ),
             const SizedBox(width: 8),
             Text(
@@ -135,7 +133,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
               _onPressedReport();
             }
           },
-          itemBuilder: (BuildContext context) => [
+          itemBuilder: (context) => [
             PopupMenuItem<_MessagePopup>(
               value: _isUserBlocked
                   ? _MessagePopup.unblockUser

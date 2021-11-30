@@ -23,31 +23,31 @@ class _BrowseStoresState extends State<BrowseStores> {
     super.initState();
   }
 
+  Widget buildStores() {
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        childAspectRatio: 1.2,
+        crossAxisSpacing: 5,
+        mainAxisSpacing: 5,
+        maxCrossAxisExtent: 200,
+      ),
+      itemCount: stores.length,
+      itemBuilder: (context, index) {
+        final Store store = stores[index];
+
+        return StoreItem(
+          onTap: () => NavigationUtil.navigate(
+            context,
+            DealsByStore(store: store),
+          ),
+          store: store,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget buildStores() {
-      return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          childAspectRatio: 1.2,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
-        ),
-        itemCount: stores.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Store store = stores[index];
-
-          return StoreItem(
-            onTap: () => NavigationUtil.navigate(
-              context,
-              DealsByStore(store: store),
-            ),
-            store: store,
-          );
-        },
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       child: buildStores(),

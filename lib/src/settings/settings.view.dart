@@ -33,7 +33,7 @@ class _SettingsViewState extends State<SettingsView> {
 
   Future<void> _initPackageInfo() async {
     final packageInfo = await PackageInfo.fromPlatform();
-    WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setState(() {
         _packageInfo = packageInfo;
       });
@@ -47,8 +47,10 @@ class _SettingsViewState extends State<SettingsView> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Text('$appName v$version ($buildNumber)',
-          style: Theme.of(context).textTheme.bodyText2),
+      child: Text(
+        '$appName v$version ($buildNumber)',
+        style: Theme.of(context).textTheme.bodyText2,
+      ),
     );
   }
 
@@ -87,10 +89,9 @@ class _SettingsViewState extends State<SettingsView> {
 
     return showDialog<void>(
       context: context,
-      builder: (BuildContext ctx) {
+      builder: (ctx) {
         return StatefulBuilder(
-          builder:
-              (BuildContext context, void Function(VoidCallback) setState) {
+          builder: (context, setState) {
             return SettingsDialog(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -140,7 +141,7 @@ class _SettingsViewState extends State<SettingsView> {
 
     return showDialog<void>(
       context: context,
-      builder: (BuildContext ctx) {
+      builder: (ctx) {
         return SettingsDialog(
           child: Column(
             mainAxisSize: MainAxisSize.min,

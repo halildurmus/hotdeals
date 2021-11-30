@@ -18,7 +18,7 @@ class CommentItem extends StatelessWidget {
   Future<void> _onUserTap(BuildContext context, String userId) async {
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) => UserProfileDialog(userId: userId),
+      builder: (context) => UserProfileDialog(userId: userId),
     );
   }
 
@@ -38,11 +38,9 @@ class CommentItem extends StatelessWidget {
           children: [
             CachedNetworkImage(
               imageUrl: poster.avatar!,
-              imageBuilder:
-                  (BuildContext ctx, ImageProvider<Object> imageProvider) =>
-                      CircleAvatar(backgroundImage: imageProvider, radius: 16),
-              placeholder: (BuildContext context, String url) =>
-                  const CircleAvatar(radius: 16),
+              imageBuilder: (ctx, imageProvider) =>
+                  CircleAvatar(backgroundImage: imageProvider, radius: 16),
+              placeholder: (context, url) => const CircleAvatar(radius: 16),
             ),
             const SizedBox(width: 8),
             Text(poster.nickname!, style: textTheme.subtitle2)
@@ -74,7 +72,10 @@ class CommentItem extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [buildUserDetails(), buildCommentDateTime()],
+            children: [
+              buildUserDetails(),
+              buildCommentDateTime(),
+            ],
           ),
           const SizedBox(height: 10),
           SelectableText(comment.message)

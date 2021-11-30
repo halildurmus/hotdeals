@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: screens.elementAt(activeScreen),
       bottomNavigationBar: MyBottomNavigationBar(
         activeScreen,
-        (int value) => setState(() => activeScreen = value),
+        (value) => setState(() => activeScreen = value),
       ),
       resizeToAvoidBottomInset: false,
     );

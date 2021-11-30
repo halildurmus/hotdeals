@@ -13,9 +13,10 @@ import '../sign_in/auth_widget.dart';
 
 class AppRouter {
   static Route? onGenerateRoute(
-      RouteSettings routeSettings,
-      AsyncSnapshot<MyUser?> userSnapshot,
-      SettingsController settingsController) {
+    RouteSettings routeSettings,
+    AsyncSnapshot<MyUser?> userSnapshot,
+    SettingsController settingsController,
+  ) {
     return MaterialPageRoute(
       settings: routeSettings,
       builder: (BuildContext context) {
@@ -24,8 +25,7 @@ class AppRouter {
             return const BlockedUsers();
           case MessageScreen.routeName:
             {
-              final MessageArguments args =
-                  routeSettings.arguments! as MessageArguments;
+              final args = routeSettings.arguments! as MessageArguments;
               GetIt.I
                   .get<CurrentRoute>()
                   .updateRouteName(MessageScreen.routeName);

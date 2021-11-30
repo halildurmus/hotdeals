@@ -73,130 +73,130 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  Widget _buildListView(
+    List<QueryDocumentSnapshot<Json>> items,
+    MyUser user1,
+  ) {
+    return ListView.separated(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final docID = items[index].id;
+        final user2Uid =
+            ChatUtil.getUser2Uid(docID: docID, user1Uid: _user!.uid);
+        final lastMessage = items[index].get('latestMessage') as Json;
+
+        if (_users.containsKey(user2Uid)) {
+          final MyUser user2 = _users[user2Uid]!;
+          final chat = Chat(
+            id: docID,
+            lastMessage: lastMessage,
+            loggedInUserUid: _user!.uid,
+            user1: user1,
+            user2: user2,
+          );
+
+          return _buildChatItem(chat);
+        }
+
+        return FutureBuilder<MyUser>(
+          future: GetIt.I.get<SpringService>().getUserByUid(uid: user2Uid),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final MyUser user2 = snapshot.data!;
+              _users[user2Uid] = user2;
+              final chat = Chat(
+                id: docID,
+                lastMessage: lastMessage,
+                loggedInUserUid: _user!.uid,
+                user1: user1,
+                user2: user2,
+              );
+
+              return _buildChatItem(chat);
+            } else if (snapshot.hasError) {
+              return ErrorIndicatorUtil.buildNewPageError(
+                context,
+                onTryAgain: () => setState(() {}),
+              );
+            }
+
+            return _buildCircularProgressIndicator();
+          },
+        );
+      },
+      separatorBuilder: (context, index) =>
+          const Divider(height: 0, indent: 16, endIndent: 16),
+    );
+  }
+
+  Widget _buildConsumer(List<QueryDocumentSnapshot<Json>> items) {
+    return Consumer<UserController>(
+      builder: (context, ctrl, child) {
+        final MyUser user = ctrl.user!;
+
+        return _buildListView(items, user);
+      },
+    );
+  }
+
+  Widget _buildStreamBuilder() {
+    return StreamBuilder<QuerySnapshot<Json>>(
+      stream: GetIt.I
+          .get<FirestoreService>()
+          .messagesStreamByUserUid(userUid: _user!.uid),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final items = snapshot.data!.docs;
+          // Removes empty message docs.
+          items.removeWhere((e) => (e.get('latestMessage') as Json).isEmpty);
+          if (items.isEmpty) {
+            return _buildNoChats();
+          }
+
+          return _buildConsumer(items);
+        } else if (snapshot.hasError) {
+          return ErrorIndicatorUtil.buildFirstPageError(
+            context,
+            onTryAgain: () => setState(() {}),
+          );
+        }
+
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  List<Widget> _buildActions() {
+    return [
+      PopupMenuButton<_ChatPopup>(
+        icon: const Icon(Icons.more_vert),
+        onSelected: (_ChatPopup result) {
+          if (result == _ChatPopup.blockedUsers) {
+            Navigator.of(context).pushNamed(BlockedUsers.routeName);
+          }
+        },
+        itemBuilder: (context) => [
+          PopupMenuItem<_ChatPopup>(
+            value: _ChatPopup.blockedUsers,
+            child: Text(AppLocalizations.of(context)!.blockedUsers),
+          ),
+        ],
+      ),
+    ];
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      title: Text(AppLocalizations.of(context)!.chats),
+      actions: _user != null ? _buildActions() : null,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget _buildListView(
-      List<QueryDocumentSnapshot<Json>> items,
-      MyUser user1,
-    ) {
-      return ListView.separated(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          final docID = items[index].id;
-          final user2Uid =
-              ChatUtil.getUser2Uid(docID: docID, user1Uid: _user!.uid);
-          final lastMessage = items[index].get('latestMessage') as Json;
-
-          if (_users.containsKey(user2Uid)) {
-            final MyUser user2 = _users[user2Uid]!;
-            final chat = Chat(
-              id: docID,
-              lastMessage: lastMessage,
-              loggedInUserUid: _user!.uid,
-              user1: user1,
-              user2: user2,
-            );
-
-            return _buildChatItem(chat);
-          }
-
-          return FutureBuilder<MyUser>(
-            future: GetIt.I.get<SpringService>().getUserByUid(uid: user2Uid),
-            builder: (context, AsyncSnapshot<MyUser> snapshot) {
-              if (snapshot.hasData) {
-                final MyUser user2 = snapshot.data!;
-                _users[user2Uid] = user2;
-                final chat = Chat(
-                  id: docID,
-                  lastMessage: lastMessage,
-                  loggedInUserUid: _user!.uid,
-                  user1: user1,
-                  user2: user2,
-                );
-
-                return _buildChatItem(chat);
-              } else if (snapshot.hasError) {
-                return ErrorIndicatorUtil.buildNewPageError(
-                  context,
-                  onTryAgain: () => setState(() {}),
-                );
-              }
-
-              return _buildCircularProgressIndicator();
-            },
-          );
-        },
-        separatorBuilder: (context, index) =>
-            const Divider(height: 0, indent: 16, endIndent: 16),
-      );
-    }
-
-    Widget _buildConsumer(List<QueryDocumentSnapshot<Json>> items) {
-      return Consumer<UserController>(
-        builder: (context, ctrl, child) {
-          final MyUser user = ctrl.user!;
-
-          return _buildListView(items, user);
-        },
-      );
-    }
-
-    Widget _buildStreamBuilder() {
-      return StreamBuilder<QuerySnapshot<Json>>(
-        stream: GetIt.I
-            .get<FirestoreService>()
-            .messagesStreamByUserUid(userUid: _user!.uid),
-        builder: (context, AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
-          if (snapshot.hasData) {
-            final items = snapshot.data!.docs;
-            // Removes empty message docs.
-            items.removeWhere((e) => (e.get('latestMessage') as Json).isEmpty);
-            if (items.isEmpty) {
-              return _buildNoChats();
-            }
-
-            return _buildConsumer(items);
-          } else if (snapshot.hasError) {
-            return ErrorIndicatorUtil.buildFirstPageError(
-              context,
-              onTryAgain: () => setState(() {}),
-            );
-          }
-
-          return const Center(child: CircularProgressIndicator());
-        },
-      );
-    }
-
-    List<Widget> _buildActions() {
-      return [
-        PopupMenuButton<_ChatPopup>(
-          icon: const Icon(Icons.more_vert),
-          onSelected: (_ChatPopup result) {
-            if (result == _ChatPopup.blockedUsers) {
-              Navigator.of(context).pushNamed(BlockedUsers.routeName);
-            }
-          },
-          itemBuilder: (context) => [
-            PopupMenuItem<_ChatPopup>(
-              value: _ChatPopup.blockedUsers,
-              child: Text(AppLocalizations.of(context)!.blockedUsers),
-            ),
-          ],
-        ),
-      ];
-    }
-
-    PreferredSizeWidget _buildAppBar() {
-      return AppBar(
-        title: Text(AppLocalizations.of(context)!.chats),
-        actions: _user == null ? null : _buildActions(),
-      );
-    }
-
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _user == null ? _buildSignIn() : _buildStreamBuilder(),
+      body: _user != null ? _buildStreamBuilder() : _buildSignIn(),
     );
   }
 }

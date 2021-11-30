@@ -142,7 +142,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             unreadMessages = 0;
-            final List<DocumentSnapshot<Json>> items = snapshot.data!.docs;
+            final items = snapshot.data!.docs;
             items.removeWhere((e) => (e.get('latestMessage') as Json).isEmpty);
             if (items.isEmpty) {
               return buildGNav();

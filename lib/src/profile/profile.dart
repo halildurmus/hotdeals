@@ -108,7 +108,10 @@ class _ProfileState extends State<Profile> {
 
     Widget buildTabBarView() {
       return const TabBarView(
-        children: [MyDeals(), MyFavorites()],
+        children: [
+          MyDeals(),
+          MyFavorites(),
+        ],
       );
     }
 
@@ -127,7 +130,7 @@ class _ProfileState extends State<Profile> {
         body: DefaultTabController(
           length: 2,
           child: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool value) {
+            headerSliverBuilder: (context, value) {
               return [
                 SliverToBoxAdapter(child: buildProfileDetails()),
                 SliverToBoxAdapter(child: buildTabBar()),

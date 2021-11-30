@@ -52,6 +52,9 @@ class _BrowseState extends State<Browse> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: buildAppBar(), body: buildBody());
+    return Scaffold(
+      appBar: buildAppBar(),
+      body: buildBody(),
+    );
   }
 }
