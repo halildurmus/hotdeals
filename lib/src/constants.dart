@@ -8,8 +8,7 @@ const assetTurkish = 'assets/icons/tr.svg';
 const localeEnglish = Locale('en');
 const localeTurkish = Locale('tr');
 
-// Language images map
-final languageImages = <Locale, String>{
+final localeAssets = <Locale, String>{
   localeEnglish: assetEnglish,
   localeTurkish: assetTurkish,
 };
