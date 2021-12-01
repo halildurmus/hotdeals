@@ -1,4 +1,4 @@
-enum DealReportReason { repost, spam, other }
+enum DealReportReason { expired, repost, spam, other }
 
 extension AsString on DealReportReason {
   String get asString => toString().toUpperCase().split('.').last;

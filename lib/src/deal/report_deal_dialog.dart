@@ -23,6 +23,7 @@ class ReportDealDialog extends StatefulWidget {
 class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
   late final SpringService springService;
   late final TextEditingController messageController;
+  bool expiredCheckbox = false;
   bool repostCheckbox = false;
   bool spamCheckbox = false;
   bool otherCheckbox = false;
@@ -52,6 +53,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
       final report = DealReport(
         reportedDeal: widget.reportedDealId,
         reasons: [
+          if (expiredCheckbox) DealReportReason.expired,
           if (repostCheckbox) DealReportReason.repost,
           if (spamCheckbox) DealReportReason.spam,
           if (otherCheckbox) DealReportReason.other,
@@ -100,6 +102,15 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                 ),
                 const SizedBox(height: 10),
                 CheckboxListTile(
+                  title: Text(AppLocalizations.of(context)!.expired),
+                  value: expiredCheckbox,
+                  onChanged: (bool? newValue) {
+                    setState(() {
+                      expiredCheckbox = newValue!;
+                    });
+                  },
+                ),
+                CheckboxListTile(
                   title: Text(AppLocalizations.of(context)!.repost),
                   value: repostCheckbox,
                   onChanged: (bool? newValue) {
@@ -144,7 +155,10 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: ElevatedButton(
-                    onPressed: repostCheckbox || spamCheckbox || otherCheckbox
+                    onPressed: expiredCheckbox ||
+                            repostCheckbox ||
+                            spamCheckbox ||
+                            otherCheckbox
                         ? sendReport
                         : null,
                     style: ElevatedButton.styleFrom(

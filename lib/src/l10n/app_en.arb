@@ -1016,6 +1016,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "expired": "Expired",
+  "@expired": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "repost": "Repost",
   "@repost": {
     "description": "",

@@ -1016,6 +1016,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "expired": "Süresi biten",
+  "@expired": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "repost": "Kopya",
   "@repost": {
     "description": "",
