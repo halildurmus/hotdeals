@@ -1,6 +1,6 @@
 import 'package:timeago/timeago.dart' show LookupMessages;
 
-/// Turkish messages for [timeago].
+/// Turkish translated messages for [timeago].
 class TrMessages implements LookupMessages {
   @override
   String prefixAgo() => '';
@@ -51,7 +51,7 @@ class TrMessages implements LookupMessages {
   String wordSeparator() => ' ';
 }
 
-/// Turkish short messages for [timeago].
+/// Turkish translated short messages for [timeago].
 class TrShortMessages implements LookupMessages {
   @override
   String prefixAgo() => '';

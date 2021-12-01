@@ -3,8 +3,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widgets/error_indicator.dart';
 
+/// A static class that contains useful functions to display error indicator
+/// widgets.
 class ErrorIndicatorUtil {
-  static Widget buildFirstPageError(
+  static ErrorIndicator buildFirstPageError(
     BuildContext context, {
     required VoidCallback onTryAgain,
   }) {
