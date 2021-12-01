@@ -24,34 +24,19 @@ class SearchBar extends StatefulWidget {
 class _SearchBarState extends State<SearchBar> {
   final searchService = GetIt.I.get<SearchService>();
   bool searchError = false;
-  bool searchInProgress = false;
   final List<String> searchResults = [];
   String selectedQuery = '';
 
   Future<void> searchDeals(String query) async {
-    if (query.length < 3) {
-      return;
-    }
-
-    setState(() {
-      searchResults.clear();
-      searchInProgress = true;
-    });
-
+    searchResults.clear();
     try {
       final searchHits = await searchService.searchDeals(query);
-      for (SearchHit e in searchHits) {
-        searchResults.add(e.content.title);
+      for (SearchHit s in searchHits) {
+        searchResults.add(s.content.title);
       }
-      setState(() {
-        searchError = false;
-        searchInProgress = false;
-      });
+      setState(() => searchError = false);
     } on Exception {
-      setState(() {
-        searchError = true;
-        searchInProgress = false;
-      });
+      setState(() => searchError = true);
     }
   }
 
@@ -62,9 +47,7 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void onQueryTap(String query) {
-    setState(() {
-      selectedQuery = query;
-    });
+    setState(() => selectedQuery = query);
     widget.controller.close();
     searchService.saveQuery(query);
   }
@@ -98,7 +81,7 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
-  Widget buildNoSuggestions(String query) {
+  Widget buildListTile(String query) {
     return ListTile(
       onTap: () => onQueryTap(query),
       leading: const Icon(Icons.search),
@@ -124,22 +107,23 @@ class _SearchBarState extends State<SearchBar> {
   List<Widget> buildActions() => [FloatingSearchBarAction.searchToClear()];
 
   Widget buildSearchBarContent() {
-    Widget? child;
-    if (!searchInProgress && widget.controller.query.isEmpty) {
+    final query = widget.controller.query;
+    late Widget child;
+    if (query.isEmpty) {
       child = buildRecentSearches();
     } else if (searchError) {
       child = buildSearchError();
-    } else if (!searchInProgress && searchResults.isEmpty) {
-      child = buildNoSuggestions(widget.controller.query);
-    } else if (!searchInProgress &&
-        widget.controller.query.length >= 3 &&
-        searchResults.isNotEmpty) {
+    } else if (query.length >= 3 && searchResults.isNotEmpty) {
       child = buildSuggestions();
+    } else {
+      child = buildListTile(query);
     }
 
     return Material(
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: child,
     );
   }
@@ -162,9 +146,7 @@ class _SearchBarState extends State<SearchBar> {
       widget.controller.query = selectedQuery;
     } else if (!value && selectedQuery.isEmpty ||
         (selectedQuery.isEmpty && widget.controller.query.isEmpty)) {
-      setState(() {
-        widget.onSearchModeChanged(false);
-      });
+      setState(() => widget.onSearchModeChanged(false));
     }
   }
 
@@ -201,7 +183,6 @@ class _SearchBarState extends State<SearchBar> {
       onQueryChanged: onQueryChanged,
       openAxisAlignment: 0,
       physics: const BouncingScrollPhysics(),
-      progress: searchInProgress,
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
       title: Text(
         selectedQuery.isNotEmpty ? selectedQuery : 'hotdeals',
