@@ -470,10 +470,8 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<List<SearchHit>> searchDeals({required String keyword}) async {
-    const pageSize = 5;
-    final String url =
-        '$_baseUrl/deals/elastic-search?keyword=$keyword&page=0&size=$pageSize';
+  Future<List<SearchHit>> getDealSuggestions({required String query}) async {
+    final String url = '$_baseUrl/deals/suggestions?query=$query';
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {

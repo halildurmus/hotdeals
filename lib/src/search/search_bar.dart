@@ -26,16 +26,20 @@ class _SearchBarState extends State<SearchBar> {
   bool searchError = false;
   bool searchInProgress = false;
   final List<String> searchResults = [];
-  String selectedKeyword = '';
+  String selectedQuery = '';
 
-  Future<void> searchDeals(String keyword) async {
+  Future<void> searchDeals(String query) async {
+    if (query.length < 3) {
+      return;
+    }
+
     setState(() {
       searchResults.clear();
       searchInProgress = true;
     });
 
     try {
-      final searchHits = await searchService.searchDeals(keyword);
+      final searchHits = await searchService.searchDeals(query);
       for (SearchHit e in searchHits) {
         searchResults.add(e.content.title);
       }
@@ -57,17 +61,17 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
-  void onKeywordTap(String keyword) {
+  void onQueryTap(String query) {
     setState(() {
-      selectedKeyword = keyword;
+      selectedQuery = query;
     });
     widget.controller.close();
-    searchService.saveKeyword(keyword);
+    searchService.saveQuery(query);
   }
 
   Widget buildRecentSearches() {
-    void onIconButtonPressed(String keyword) =>
-        setState(() => searchService.removeKeyword(keyword));
+    void onIconButtonPressed(String query) =>
+        setState(() => searchService.removeQuery(query));
 
     final recentSearches = searchService.recentSearches();
     if (recentSearches.isEmpty) return const SizedBox();
@@ -76,16 +80,16 @@ class _SearchBarState extends State<SearchBar> {
       mainAxisSize: MainAxisSize.min,
       children: recentSearches
           .map(
-            (keyword) => ListTile(
-              onTap: () => onKeywordTap(keyword),
+            (query) => ListTile(
+              onTap: () => onQueryTap(query),
               leading: const Icon(Icons.history),
               title: Text(
-                keyword,
+                query,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
               trailing: IconButton(
-                onPressed: () => onIconButtonPressed(keyword),
+                onPressed: () => onIconButtonPressed(query),
                 icon: const Icon(Icons.clear),
               ),
             ),
@@ -94,11 +98,11 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
-  Widget buildNoSuggestions(String keyword) {
+  Widget buildNoSuggestions(String query) {
     return ListTile(
-      onTap: () => onKeywordTap(keyword),
+      onTap: () => onQueryTap(query),
       leading: const Icon(Icons.search),
-      title: Text(keyword),
+      title: Text(query),
     );
   }
 
@@ -107,10 +111,10 @@ class _SearchBarState extends State<SearchBar> {
       mainAxisSize: MainAxisSize.min,
       children: searchResults
           .map(
-            (keyword) => ListTile(
-              onTap: () => onKeywordTap(keyword),
+            (query) => ListTile(
+              onTap: () => onQueryTap(query),
               leading: const Icon(Icons.search),
-              title: Text(keyword),
+              title: Text(query),
             ),
           )
           .toList(),
@@ -127,7 +131,9 @@ class _SearchBarState extends State<SearchBar> {
       child = buildSearchError();
     } else if (!searchInProgress && searchResults.isEmpty) {
       child = buildNoSuggestions(widget.controller.query);
-    } else if (!searchInProgress && searchResults.isNotEmpty) {
+    } else if (!searchInProgress &&
+        widget.controller.query.length >= 3 &&
+        searchResults.isNotEmpty) {
       child = buildSuggestions();
     }
 
@@ -153,9 +159,9 @@ class _SearchBarState extends State<SearchBar> {
 
   void onFocusChanged(bool value) {
     if (value) {
-      widget.controller.query = selectedKeyword;
-    } else if (!value && selectedKeyword.isEmpty ||
-        (selectedKeyword.isEmpty && widget.controller.query.isEmpty)) {
+      widget.controller.query = selectedQuery;
+    } else if (!value && selectedQuery.isEmpty ||
+        (selectedQuery.isEmpty && widget.controller.query.isEmpty)) {
       setState(() {
         widget.onSearchModeChanged(false);
       });
@@ -164,12 +170,12 @@ class _SearchBarState extends State<SearchBar> {
 
   void onSubmitted(String query) {
     if (query.isNotEmpty) {
-      onKeywordTap(query);
+      onQueryTap(query);
     }
   }
 
   void onQueryChanged(String query) =>
-      query.isEmpty ? setState(() {}) : searchDeals(query);
+      query.length < 3 ? setState(() {}) : searchDeals(query);
 
   Widget buildFloatingSearchBar() {
     final portraitMode =
@@ -181,7 +187,7 @@ class _SearchBarState extends State<SearchBar> {
       axisAlignment: portraitMode ? 0 : -1,
       body: FloatingSearchBarScrollNotifier(
         child: SearchResults(
-          keyword: selectedKeyword,
+          query: selectedQuery,
         ),
       ),
       builder: (_, __) => buildSearchBarContent(),
@@ -197,7 +203,7 @@ class _SearchBarState extends State<SearchBar> {
       progress: searchInProgress,
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
       title: Text(
-        selectedKeyword.isNotEmpty ? selectedKeyword : 'hotdeals',
+        selectedQuery.isNotEmpty ? selectedQuery : 'hotdeals',
         style: Theme.of(context).textTheme.headline6,
       ),
       transition: CircularFloatingSearchBarTransition(),

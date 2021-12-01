@@ -10,23 +10,19 @@ class SearchHit {
   SearchHit({
     required this.id,
     required this.content,
-    required this.highlightFields,
   });
 
   factory SearchHit.fromJson(Json json) => SearchHit(
         id: json['id'] as String,
         content: Content.fromJson(json['content'] as Json),
-        highlightFields:
-            HighlightFields.fromJson(json['highlightFields'] as Json),
       );
 
   final String id;
   final Content content;
-  final HighlightFields highlightFields;
 
   @override
   String toString() {
-    return 'SearchResults{id: $id, content: $content, highlightFields: $highlightFields}';
+    return 'SearchResults{id: $id, content: $content}';
   }
 }
 
@@ -50,26 +46,5 @@ class Content {
   @override
   String toString() {
     return 'Content{id: $id, title: $title, description: $description}';
-  }
-}
-
-class HighlightFields {
-  HighlightFields({this.title});
-
-  factory HighlightFields.fromJson(Json json) {
-    if (json.isEmpty) {
-      return HighlightFields();
-    }
-
-    return HighlightFields(
-        title: List<String>.from(
-            (json['title'] as List<dynamic>).map<dynamic>((dynamic x) => x)));
-  }
-
-  final List<String>? title;
-
-  @override
-  String toString() {
-    return 'HighlightFields{title: $title}';
   }
 }

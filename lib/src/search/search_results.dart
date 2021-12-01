@@ -12,9 +12,9 @@ import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 
 class SearchResults extends StatefulWidget {
-  const SearchResults({Key? key, required this.keyword}) : super(key: key);
+  const SearchResults({Key? key, required this.query}) : super(key: key);
 
-  final String keyword;
+  final String query;
 
   @override
   State<SearchResults> createState() => _SearchResultsState();
@@ -37,7 +37,7 @@ class _SearchResultsState extends State<SearchResults> {
 
   @override
   void didUpdateWidget(covariant SearchResults oldWidget) {
-    if (oldWidget.keyword != widget.keyword) {
+    if (oldWidget.query != widget.query) {
       _pagingController.refresh();
     }
     super.didUpdateWidget(oldWidget);
@@ -45,7 +45,7 @@ class _SearchResultsState extends State<SearchResults> {
 
   Future<List<Deal>?> _dealFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getDealsByKeyword(
-            keyword: widget.keyword,
+            keyword: widget.query,
             page: page,
             size: size,
           );
@@ -59,7 +59,7 @@ class _SearchResultsState extends State<SearchResults> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.keyword.isEmpty) {
+    if (widget.query.isEmpty) {
       return const ErrorIndicator(
         icon: Icons.search,
         title: 'Start searching',

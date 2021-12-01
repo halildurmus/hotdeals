@@ -14,18 +14,18 @@ class SearchService {
   final SharedPreferences _prefs;
   static const String _recentSearchesKey = 'recent-searches';
 
-  Future<List<SearchHit>> searchDeals(String keyword) async =>
-      await GetIt.I.get<SpringService>().searchDeals(keyword: keyword);
+  Future<List<SearchHit>> searchDeals(String query) async =>
+      await GetIt.I.get<SpringService>().getDealSuggestions(query: query);
 
   /// Loads the user's search history from [SharedPreferences].
   List<String> recentSearches() =>
       _prefs.getStringList(_recentSearchesKey) ?? [];
 
-  /// Persists the keyword to local storage.
-  void saveKeyword(String keyword) {
+  /// Persists the query to local storage.
+  void saveQuery(String query) {
     final _recentSearches = recentSearches();
-    if (!_recentSearches.contains(keyword)) {
-      _recentSearches.insert(0, keyword);
+    if (!_recentSearches.contains(query)) {
+      _recentSearches.insert(0, query);
     }
     if (_recentSearches.length > 5) {
       _recentSearches.removeLast();
@@ -34,11 +34,11 @@ class SearchService {
     _prefs.setStringList(_recentSearchesKey, _recentSearches);
   }
 
-  /// Removes the keyword from local storage.
-  void removeKeyword(String keyword) {
+  /// Removes the query from local storage.
+  void removeQuery(String query) {
     final _recentSearches = recentSearches();
-    if (_recentSearches.contains(keyword)) {
-      _recentSearches.remove(keyword);
+    if (_recentSearches.contains(query)) {
+      _recentSearches.remove(query);
       _prefs.setStringList(_recentSearchesKey, _recentSearches);
     }
   }
