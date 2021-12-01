@@ -1,20 +1,20 @@
 import 'dart:async';
 
 StreamTransformer<bool, bool> debounce(Duration debounceDuration) {
-  bool _seenFirstData = false;
   Timer? _debounceTimer;
+  bool seenFirstData = false;
 
   return StreamTransformer<bool, bool>.fromHandlers(
-    handleData: (bool data, EventSink<bool> sink) {
-      if (_seenFirstData) {
+    handleData: (data, sink) {
+      if (seenFirstData) {
         _debounceTimer?.cancel();
         _debounceTimer = Timer(debounceDuration, () => sink.add(data));
       } else {
         sink.add(data);
-        _seenFirstData = true;
+        seenFirstData = true;
       }
     },
-    handleDone: (EventSink<bool> sink) {
+    handleDone: (sink) {
       _debounceTimer?.cancel();
       sink.close();
     },
@@ -23,7 +23,7 @@ StreamTransformer<bool, bool> debounce(Duration debounceDuration) {
 
 StreamTransformer<bool, bool> startsWith(bool data) {
   return StreamTransformer<bool, bool>(
-    (Stream<bool> input, bool cancelOnError) {
+    (input, cancelOnError) {
       StreamController<bool>? controller;
       late StreamSubscription<bool> subscription;
 

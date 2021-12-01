@@ -46,9 +46,11 @@ class ChatUtil {
     required String user1Uid,
     required String user2Uid,
   }) =>
-      List<String>.of(user1Uid.hashCode <= user2Uid.hashCode
-          ? [user1Uid, user2Uid]
-          : [user2Uid, user1Uid]);
+      List<String>.of(
+        user1Uid.hashCode <= user2Uid.hashCode
+            ? [user1Uid, user2Uid]
+            : [user2Uid, user1Uid],
+      );
 
   /// Constructs a [Json] from the given [message].
   static Json messageToJson({required types.Message message}) {
