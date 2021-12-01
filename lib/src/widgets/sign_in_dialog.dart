@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../utils/localization_util.dart';
 import 'custom_alert_dialog.dart';
 
 class SignInDialog extends StatelessWidget {
@@ -8,8 +8,8 @@ class SignInDialog extends StatelessWidget {
 
   Widget _buildSignInDialog(BuildContext context) {
     return CustomAlertDialog(
-      title: AppLocalizations.of(context)!.youNeedToSignIn,
-      content: AppLocalizations.of(context)!.youNeedToSignInToPerform,
+      title: l(context).youNeedToSignIn,
+      content: l(context).youNeedToSignInToPerform,
     );
   }
 

@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 
 import 'services/connection_service.dart';
+import 'utils/localization_util.dart';
 
 class NoInternet extends StatefulWidget {
   const NoInternet({Key? key}) : super(key: key);
@@ -55,9 +55,7 @@ class _NoInternetState extends State<NoInternet> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                _isConnected
-                    ? AppLocalizations.of(context)!.online
-                    : AppLocalizations.of(context)!.offline,
+                _isConnected ? l(context).online : l(context).offline,
                 style: textTheme.bodyText2!.copyWith(color: Colors.white),
               ),
               if (!_isConnected) const SizedBox(width: 8),
@@ -89,7 +87,7 @@ class _NoInternetState extends State<NoInternet> {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    AppLocalizations.of(context)!.checkYourInternet,
+                    l(context).checkYourInternet,
                     style: textTheme.bodyText2!.copyWith(fontSize: 15),
                   ),
                 ],
@@ -100,7 +98,7 @@ class _NoInternetState extends State<NoInternet> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AppLocalizations.of(context)!.appTitle),
+        title: Text(l(context).appTitle),
       ),
       body: Stack(fit: StackFit.expand, children: [buildHeader(), buildBody()]),
     );

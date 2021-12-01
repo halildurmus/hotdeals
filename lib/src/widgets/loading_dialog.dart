@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../utils/localization_util.dart';
 
 class LoadingDialog extends StatelessWidget {
   const LoadingDialog({Key? key}) : super(key: key);
@@ -10,7 +11,7 @@ class LoadingDialog extends StatelessWidget {
         children: [
           const CircularProgressIndicator(),
           const SizedBox(width: 16),
-          Text(AppLocalizations.of(context)!.loading),
+          Text(l(context).loading),
         ],
       ),
     );

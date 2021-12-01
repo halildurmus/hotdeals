@@ -7,7 +7,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,6 +29,7 @@ import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
 import '../settings/settings.controller.dart';
 import '../utils/chat_util.dart';
+import '../utils/localization_util.dart';
 import 'message_app_bar.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -83,15 +83,15 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   Future<void> _sendPushNotification(MyUser user, types.Message message) async {
     String messageText = '';
     if (message is types.FileMessage) {
-      messageText = AppLocalizations.of(context)!.file;
+      messageText = l(context).file;
     } else if (message is types.ImageMessage) {
-      messageText = AppLocalizations.of(context)!.image;
+      messageText = l(context).image;
     } else if (message is types.TextMessage) {
       messageText = message.text;
     }
 
     final notification = PushNotification(
-      title: '${user.nickname} ${AppLocalizations.of(context)!.sentYouMessage}',
+      title: '${user.nickname} ${l(context).sentYouMessage}',
       body: messageText,
       verb: NotificationVerb.message,
       object: widget.docId,
@@ -166,11 +166,11 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: _isUser2Blocked
             ? Text(
-                AppLocalizations.of(context)!.youHaveBlockedThisUser,
+                l(context).youHaveBlockedThisUser,
                 style: const TextStyle(color: Colors.white),
               )
             : Text(
-                AppLocalizations.of(context)!.youHaveBeenBlockedByThisUser,
+                l(context).youHaveBeenBlockedByThisUser,
                 style: const TextStyle(color: Colors.white),
               ),
       );
@@ -301,7 +301,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      AppLocalizations.of(context)!.selectSource,
+                      l(context).selectSource,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.subtitle1!.copyWith(
                         fontWeight: FontWeight.bold,
@@ -314,7 +314,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
             ListTile(
               horizontalTitleGap: 0,
               leading: const Icon(Icons.photo_camera),
-              title: Text(AppLocalizations.of(context)!.image),
+              title: Text(l(context).image),
               onTap: () {
                 Navigator.pop(context);
                 _handleImageSelection();
@@ -323,7 +323,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
             ListTile(
               horizontalTitleGap: 0,
               leading: const Icon(Icons.description),
-              title: Text(AppLocalizations.of(context)!.file),
+              title: Text(l(context).file),
               onTap: () {
                 Navigator.pop(context);
                 _handleFileSelection();

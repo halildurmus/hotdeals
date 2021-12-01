@@ -1,7 +1,8 @@
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../utils/localization_util.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
@@ -90,7 +91,7 @@ class CustomAlertDialog extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 11),
                     child: Text(
-                      defaultActionText ?? AppLocalizations.of(context)!.ok,
+                      defaultActionText ?? l(context).ok,
                       style: textTheme.bodyText1!.copyWith(
                         color: Colors.white,
                         fontSize: 18,

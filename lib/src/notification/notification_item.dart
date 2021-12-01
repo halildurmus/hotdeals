@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
@@ -9,6 +8,7 @@ import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
+import '../utils/localization_util.dart';
 
 class NotificationItem extends StatefulWidget {
   const NotificationItem({
@@ -81,7 +81,7 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
           children: [
             if (widget.notification.verb == NotificationVerb.comment)
               TextSpan(
-                text: AppLocalizations.of(context)!.commentedOnYourPost,
+                text: l(context).commentedOnYourPost,
                 style: textTheme.bodyText2,
               ),
           ],
@@ -162,7 +162,7 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Text(
-        AppLocalizations.of(context)!.anErrorOccurred,
+        l(context).anErrorOccurred,
         textAlign: TextAlign.center,
       ),
     );

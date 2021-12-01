@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import 'utils/error_indicator_util.dart';
+import 'utils/localization_util.dart';
 import 'widgets/loading_dialog.dart';
 
 class ErrorScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.appTitle)),
+      appBar: AppBar(title: Text(l(context).appTitle)),
       body: ErrorIndicatorUtil.buildFirstPageError(
         context,
         onTryAgain: () async {

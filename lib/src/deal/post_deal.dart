@@ -1,7 +1,6 @@
 import 'package:firebase_picture_uploader/firebase_picture_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:validators/validators.dart';
@@ -12,6 +11,7 @@ import '../models/deal.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
@@ -74,7 +74,7 @@ class _PostDealState extends State<PostDeal> {
 
     Widget buildPictureUploadWidget() {
       return PictureUploadWidget(
-        buttonText: AppLocalizations.of(context)!.uploadImage,
+        buttonText: l(context).uploadImage,
         buttonStyle: PictureUploadButtonStyle(
           backgroundColor: theme.primaryColor,
           closeIconBackgroundColor: theme.brightness == Brightness.dark
@@ -86,10 +86,10 @@ class _PostDealState extends State<PostDeal> {
         ),
         initialImages: dealImages,
         localization: PictureUploadLocalization(
-          abort: AppLocalizations.of(context)!.cancel,
-          camera: AppLocalizations.of(context)!.camera,
-          gallery: AppLocalizations.of(context)!.gallery,
-          selectSource: AppLocalizations.of(context)!.selectSource,
+          abort: l(context).cancel,
+          camera: l(context).camera,
+          gallery: l(context).gallery,
+          selectSource: l(context).selectSource,
         ),
         onPicturesChange: dealImageCallback,
         settings: PictureUploadSettings(
@@ -104,7 +104,7 @@ class _PostDealState extends State<PostDeal> {
       return DropdownButtonFormField<Category>(
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
-          labelText: AppLocalizations.of(context)!.category,
+          labelText: l(context).category,
         ),
         value: selectedCategory,
         onChanged: (Category? newValue) {
@@ -139,7 +139,7 @@ class _PostDealState extends State<PostDeal> {
       return DropdownButtonFormField<Store>(
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
-          labelText: AppLocalizations.of(context)!.store,
+          labelText: l(context).store,
         ),
         value: selectedStore,
         onChanged: (Store? newValue) {
@@ -190,7 +190,7 @@ class _PostDealState extends State<PostDeal> {
       if (!areImagesReady()) {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.pleaseUploadAtLeastOneImage,
+          text: l(context).pleaseUploadAtLeastOneImage,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return;
@@ -224,14 +224,14 @@ class _PostDealState extends State<PostDeal> {
       if (postedDeal != null) {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
-          text: AppLocalizations.of(context)!.successfullyPostedYourDeal,
+          text: l(context).successfullyPostedYourDeal,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Navigator.of(context).popUntil((Route<void> route) => route.isFirst);
       } else {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.anErrorOccurred,
+          text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -242,14 +242,14 @@ class _PostDealState extends State<PostDeal> {
         controller: dealUrlController,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
-          labelText: AppLocalizations.of(context)!.enterDealUrl,
+          labelText: l(context).enterDealUrl,
         ),
         textInputAction: TextInputAction.next,
         validator: (String? value) {
           if (value == null || value.isEmpty) {
-            return AppLocalizations.of(context)!.pleaseEnterTheDealUrl;
+            return l(context).pleaseEnterTheDealUrl;
           } else if (!isURL(value)) {
-            return AppLocalizations.of(context)!.pleaseEnterValidUrl;
+            return l(context).pleaseEnterValidUrl;
           }
 
           return null;
@@ -263,16 +263,16 @@ class _PostDealState extends State<PostDeal> {
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           errorMaxLines: 2,
-          labelText: AppLocalizations.of(context)!.title,
+          labelText: l(context).title,
         ),
         textInputAction: TextInputAction.next,
         maxLength: 100,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         validator: (String? value) {
           if (value == null || value.isEmpty) {
-            return AppLocalizations.of(context)!.pleaseEnterTheDealTitle;
+            return l(context).pleaseEnterTheDealTitle;
           } else if (value.length < 10) {
-            return AppLocalizations.of(context)!.titleMustBe;
+            return l(context).titleMustBe;
           }
 
           return null;
@@ -285,17 +285,17 @@ class _PostDealState extends State<PostDeal> {
         controller: priceController,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
-          labelText: AppLocalizations.of(context)!.originalPrice,
+          labelText: l(context).originalPrice,
           prefixIcon: const Icon(Icons.attach_money, size: 20),
         ),
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
         validator: (String? value) {
           if (value == null || value.isEmpty) {
-            return AppLocalizations.of(context)!.pleaseEnterTheOriginalPrice;
+            return l(context).pleaseEnterTheOriginalPrice;
           } else if (discountPriceController.text.isNotEmpty &&
               (int.parse(value) < int.parse(discountPriceController.text))) {
-            return AppLocalizations.of(context)!.originalPriceCannotBeLower;
+            return l(context).originalPriceCannotBeLower;
           }
 
           return null;
@@ -308,17 +308,17 @@ class _PostDealState extends State<PostDeal> {
         controller: discountPriceController,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
-          labelText: AppLocalizations.of(context)!.discountPrice,
+          labelText: l(context).discountPrice,
           prefixIcon: const Icon(Icons.attach_money, size: 20),
         ),
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
         validator: (String? value) {
           if (value == null || value.isEmpty) {
-            return AppLocalizations.of(context)!.pleaseEnterTheDiscountPrice;
+            return l(context).pleaseEnterTheDiscountPrice;
           } else if (priceController.text.isNotEmpty &&
               (int.parse(value) > int.parse(priceController.text))) {
-            return AppLocalizations.of(context)!.discountPriceCannotBeGreater;
+            return l(context).discountPriceCannotBeGreater;
           }
 
           return null;
@@ -336,7 +336,7 @@ class _PostDealState extends State<PostDeal> {
               color: theme.brightness == Brightness.light
                   ? Colors.black54
                   : Colors.grey),
-          hintText: AppLocalizations.of(context)!.enterSomeDetailsAboutDeal,
+          hintText: l(context).enterSomeDetailsAboutDeal,
         ),
         minLines: 4,
         maxLines: 30,
@@ -344,9 +344,9 @@ class _PostDealState extends State<PostDeal> {
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
         validator: (String? value) {
           if (value == null || value.isEmpty) {
-            return AppLocalizations.of(context)!.pleaseEnterTheDealDescription;
+            return l(context).pleaseEnterTheDealDescription;
           } else if (value.length < 10) {
-            return AppLocalizations.of(context)!.descriptionMustBe;
+            return l(context).descriptionMustBe;
           }
 
           return null;
@@ -364,7 +364,7 @@ class _PostDealState extends State<PostDeal> {
             fixedSize: Size(deviceWidth, 50),
             primary: theme.colorScheme.secondary,
           ),
-          child: Text(AppLocalizations.of(context)!.postDeal),
+          child: Text(l(context).postDeal),
         ),
       );
     }
@@ -412,7 +412,7 @@ class _PostDealState extends State<PostDeal> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AppLocalizations.of(context)!.postADeal),
+        title: Text(l(context).postADeal),
       ),
       body: buildBody(),
     );

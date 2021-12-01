@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -57,12 +56,12 @@ class _SettingsViewState extends State<SettingsView> {
 
   String _getThemeName(BuildContext context, ThemeMode themeMode) {
     if (themeMode == ThemeMode.dark) {
-      return AppLocalizations.of(context)!.dark;
+      return l(context).dark;
     } else if (themeMode == ThemeMode.light) {
-      return AppLocalizations.of(context)!.light;
+      return l(context).light;
     }
 
-    return AppLocalizations.of(context)!.system;
+    return l(context).system;
   }
 
   Future<void> _changeLanguage(BuildContext context) {
@@ -84,7 +83,7 @@ class _SettingsViewState extends State<SettingsView> {
                     providerValue: widget.controller.locale,
                     radioValue: localeEnglish,
                     leading: SvgPicture.asset(assetEnglish),
-                    text: AppLocalizations.of(context)!.english,
+                    text: l(context).english,
                   ),
                   RadioItem<Locale>(
                     onTap: () => widget.controller.updateLocale(localeTurkish),
@@ -92,7 +91,7 @@ class _SettingsViewState extends State<SettingsView> {
                     providerValue: widget.controller.locale,
                     radioValue: localeTurkish,
                     leading: SvgPicture.asset(assetTurkish),
-                    text: AppLocalizations.of(context)!.turkish,
+                    text: l(context).turkish,
                   ),
                   const SizedBox(height: 15),
                   ElevatedButton(
@@ -104,7 +103,7 @@ class _SettingsViewState extends State<SettingsView> {
                       ),
                     ),
                     child: Text(
-                      AppLocalizations.of(context)!.ok,
+                      l(context).ok,
                       style: textTheme.bodyText1!.copyWith(color: Colors.white),
                     ),
                   ),
@@ -135,7 +134,7 @@ class _SettingsViewState extends State<SettingsView> {
                 providerValue: widget.controller.themeMode,
                 radioValue: ThemeMode.system,
                 leading: const Icon(Icons.brightness_auto, size: 30),
-                text: AppLocalizations.of(context)!.system,
+                text: l(context).system,
               ),
               RadioItem<ThemeMode>(
                 onTap: () => widget.controller.updateThemeMode(ThemeMode.light),
@@ -143,7 +142,7 @@ class _SettingsViewState extends State<SettingsView> {
                 providerValue: widget.controller.themeMode,
                 radioValue: ThemeMode.light,
                 leading: const Icon(Icons.light_mode, size: 30),
-                text: AppLocalizations.of(context)!.light,
+                text: l(context).light,
               ),
               RadioItem<ThemeMode>(
                 onTap: () => widget.controller.updateThemeMode(ThemeMode.dark),
@@ -151,7 +150,7 @@ class _SettingsViewState extends State<SettingsView> {
                 providerValue: widget.controller.themeMode,
                 radioValue: ThemeMode.dark,
                 leading: const Icon(Icons.dark_mode, size: 30),
-                text: AppLocalizations.of(context)!.dark,
+                text: l(context).dark,
               ),
               const SizedBox(height: 15),
               ElevatedButton(
@@ -163,7 +162,7 @@ class _SettingsViewState extends State<SettingsView> {
                   ),
                 ),
                 child: Text(
-                  AppLocalizations.of(context)!.ok,
+                  l(context).ok,
                   style: textTheme.bodyText1!.copyWith(color: Colors.white),
                 ),
               ),
@@ -177,24 +176,25 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
+      appBar: AppBar(title: Text(l(context).settings)),
       body: Column(
         children: [
           SettingsSection(
-            title: AppLocalizations.of(context)!.general,
+            title: l(context).general,
             children: [
               SettingsListItem(
                 onTap: () => _changeLanguage(context),
-                leading:
-                    LocalizationUtil.getLanguageImage(widget.controller.locale),
-                title: AppLocalizations.of(context)!.language,
-                subtitle: LocalizationUtil.getLanguageName(
+                leading: SvgPicture.asset(
+                  LocalizationUtil.getAssetName(widget.controller.locale),
+                ),
+                title: l(context).language,
+                subtitle: LocalizationUtil.getLocaleName(
                     context, widget.controller.locale),
               ),
               SettingsListItem(
                 onTap: () => _changeAppTheme(context),
                 leading: const Icon(Icons.settings_brightness),
-                title: AppLocalizations.of(context)!.theme,
+                title: l(context).theme,
                 subtitle: _getThemeName(context, widget.controller.themeMode),
               ),
             ],

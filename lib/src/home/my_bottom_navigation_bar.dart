@@ -1,7 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -11,6 +10,7 @@ import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../services/firestore_service.dart';
 import '../services/push_notification_service.dart';
+import '../utils/localization_util.dart';
 
 typedef Json = Map<String, dynamic>;
 
@@ -66,11 +66,11 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
             tabs: [
               GButton(
                 icon: Icons.local_offer_outlined,
-                text: AppLocalizations.of(context)!.deals,
+                text: l(context).deals,
               ),
               GButton(
                 icon: Icons.explore_outlined,
-                text: AppLocalizations.of(context)!.browse,
+                text: l(context).browse,
               ),
               GButton(
                 icon: FontAwesomeIcons.comment,
@@ -93,7 +93,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                           size: 20,
                         ),
                       ),
-                text: AppLocalizations.of(context)!.chats,
+                text: l(context).chats,
               ),
               GButton(
                 icon: Icons.notifications_outlined,
@@ -109,7 +109,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                             ),
                           )
                     : null,
-                text: AppLocalizations.of(context)!.notifications,
+                text: l(context).notifications,
               ),
               GButton(
                 icon: Icons.person_outlined,
@@ -119,7 +119,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
                         radius: 12,
                       )
                     : null,
-                text: AppLocalizations.of(context)!.profile,
+                text: l(context).profile,
               ),
             ],
             selectedIndex: activeScreen,

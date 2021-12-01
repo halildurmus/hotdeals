@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../models/deal.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 
@@ -16,7 +16,7 @@ class MyDeals extends StatelessWidget {
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.local_offer,
-      title: AppLocalizations.of(context)!.noPostsYet,
+      title: l(context).noPostsYet,
     );
   }
 

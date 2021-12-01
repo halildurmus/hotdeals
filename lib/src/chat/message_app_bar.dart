@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +8,7 @@ import '../deal/report_user_dialog.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_snackbar.dart';
 
@@ -26,10 +26,10 @@ class MessageAppBar extends StatefulWidget {
 class _MessageAppBarState extends State<MessageAppBar> {
   Future<void> _confirmBlockUser(BuildContext context) async {
     final bool _didRequestBlockUser = await CustomAlertDialog(
-          title: AppLocalizations.of(context)!.blockUser,
-          content: AppLocalizations.of(context)!.blockConfirm,
-          cancelActionText: AppLocalizations.of(context)!.cancel,
-          defaultActionText: AppLocalizations.of(context)!.ok,
+          title: l(context).blockUser,
+          content: l(context).blockConfirm,
+          cancelActionText: l(context).cancel,
+          defaultActionText: l(context).ok,
         ).show(context) ??
         false;
     if (_didRequestBlockUser == true) {
@@ -40,13 +40,13 @@ class _MessageAppBarState extends State<MessageAppBar> {
         await Provider.of<UserController>(context, listen: false).getUser();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
-          text: AppLocalizations.of(context)!.successfullyBlocked,
+          text: l(context).successfullyBlocked,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.anErrorOccurredWhileBlocking,
+          text: l(context).anErrorOccurredWhileBlocking,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -55,10 +55,10 @@ class _MessageAppBarState extends State<MessageAppBar> {
 
   Future<void> _confirmUnblockUser(BuildContext context) async {
     final bool _didRequestUnblockUser = await CustomAlertDialog(
-          title: AppLocalizations.of(context)!.unblockUser,
-          content: AppLocalizations.of(context)!.unblockConfirm,
-          cancelActionText: AppLocalizations.of(context)!.cancel,
-          defaultActionText: AppLocalizations.of(context)!.ok,
+          title: l(context).unblockUser,
+          content: l(context).unblockConfirm,
+          cancelActionText: l(context).cancel,
+          defaultActionText: l(context).ok,
         ).show(context) ??
         false;
     if (_didRequestUnblockUser == true) {
@@ -70,7 +70,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
       } else {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.anErrorOccurredWhileUnblocking,
+          text: l(context).anErrorOccurredWhileUnblocking,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -139,12 +139,12 @@ class _MessageAppBarState extends State<MessageAppBar> {
                   ? _MessagePopup.unblockUser
                   : _MessagePopup.blockUser,
               child: _isUserBlocked
-                  ? Text(AppLocalizations.of(context)!.unblockUser)
-                  : Text(AppLocalizations.of(context)!.blockUser),
+                  ? Text(l(context).unblockUser)
+                  : Text(l(context).blockUser),
             ),
             PopupMenuItem<_MessagePopup>(
               value: _MessagePopup.reportUser,
-              child: Text(AppLocalizations.of(context)!.reportUser),
+              child: Text(l(context).reportUser),
             ),
           ],
         ),

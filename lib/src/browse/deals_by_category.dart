@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
@@ -7,6 +6,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
 import '../models/category.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 import 'filter_chips.dart';
@@ -69,7 +69,7 @@ class _DealsByCategoryState extends State<DealsByCategory> {
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.local_offer,
-      title: AppLocalizations.of(context)!.couldNotFindAnyDeal,
+      title: l(context).couldNotFindAnyDeal,
     );
   }
 

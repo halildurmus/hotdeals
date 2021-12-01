@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../utils/localization_util.dart';
 import 'search_hit.dart';
 import 'search_results.dart';
 import 'search_service.dart';
@@ -57,7 +57,7 @@ class _SearchBarState extends State<SearchBar> {
 
   Widget buildSearchError() {
     return ListTile(
-      title: Text(AppLocalizations.of(context)!.anErrorOccurred),
+      title: Text(l(context).anErrorOccurred),
     );
   }
 
@@ -194,7 +194,7 @@ class _SearchBarState extends State<SearchBar> {
       builder: (_, __) => buildSearchBarContent(),
       controller: widget.controller,
       debounceDelay: const Duration(milliseconds: 500),
-      hint: AppLocalizations.of(context)!.search,
+      hint: l(context).search,
       leadingActions: buildLeadingActions(),
       onFocusChanged: onFocusChanged,
       onSubmitted: onSubmitted,

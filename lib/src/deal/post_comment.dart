@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
@@ -13,6 +12,7 @@ import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
@@ -72,8 +72,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
             .getUserById(id: widget.deal.postedBy!);
 
         final notification = PushNotification(
-          title:
-              '${user!.nickname} ${AppLocalizations.of(context)!.commentedOnYourPost}',
+          title: '${user!.nickname} ${l(context).commentedOnYourPost}',
           body: comment.message,
           verb: NotificationVerb.comment,
           object: widget.deal.id!,
@@ -96,14 +95,14 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
       if (postedComment != null) {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
-          text: AppLocalizations.of(context)!.postedYourComment,
+          text: l(context).postedYourComment,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Navigator.of(context).pop();
       } else {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.anErrorOccurred,
+          text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -122,7 +121,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          child: Text(AppLocalizations.of(context)!.postComment),
+          child: Text(l(context).postComment),
         ),
       );
     }
@@ -139,7 +138,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
                 color: theme.brightness == Brightness.light
                     ? Colors.black54
                     : Colors.grey),
-            hintText: AppLocalizations.of(context)!.enterYourComment,
+            hintText: l(context).enterYourComment,
           ),
           minLines: 4,
           maxLines: 30,
@@ -148,7 +147,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
           onChanged: (String? text) => setState(() {}),
           validator: (String? value) {
             if (value == null || value.isEmpty) {
-              return AppLocalizations.of(context)!.nicknameMustBe;
+              return l(context).nicknameMustBe;
             }
 
             return null;
@@ -163,7 +162,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            AppLocalizations.of(context)!.postAComment,
+            l(context).postAComment,
             style: textTheme.headline6,
           ),
           const SizedBox(height: 20),

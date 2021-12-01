@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../settings/settings.view.dart';
 import '../sign_in/sign_in_page.dart';
+import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 import 'avatar_fullscreen.dart';
 import 'my_deals.dart';
@@ -54,7 +54,7 @@ class _ProfileState extends State<Profile> {
             borderRadius: BorderRadius.circular(30),
           ),
         ),
-        child: Text(AppLocalizations.of(context)!.updateProfile),
+        child: Text(l(context).updateProfile),
       );
     }
 
@@ -98,8 +98,8 @@ class _ProfileState extends State<Profile> {
               fontWeight: FontWeight.bold,
             ),
             tabs: [
-              Tab(text: AppLocalizations.of(context)!.posts),
-              Tab(text: AppLocalizations.of(context)!.favorites),
+              Tab(text: l(context).posts),
+              Tab(text: l(context).favorites),
             ],
           ),
         ),
@@ -118,7 +118,7 @@ class _ProfileState extends State<Profile> {
     Widget buildProfile() {
       return Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.profile),
+          title: Text(l(context).profile),
           actions: [
             IconButton(
               onPressed: () =>

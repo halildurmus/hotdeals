@@ -1,6 +1,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../utils/localization_util.dart';
 
 class ExpandableText extends StatefulWidget {
   const ExpandableText({
@@ -74,7 +75,7 @@ class _ExpandableTextState extends State<ExpandableText> {
                       size: 16,
                     ),
                     label: Text(
-                      AppLocalizations.of(context)!.readMore,
+                      l(context).readMore,
                       style: textTheme.bodyText2!.copyWith(fontSize: 15),
                     ),
                     style: ElevatedButton.styleFrom(

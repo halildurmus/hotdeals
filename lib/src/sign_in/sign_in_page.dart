@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart';
 import '../settings/settings.view.dart';
+import '../utils/localization_util.dart';
 import '../widgets/exception_alert_dialog.dart';
 import '../widgets/social_button.dart';
 import 'sign_in_manager.dart';
@@ -45,7 +45,7 @@ class SignInPage extends StatelessWidget {
   Future<void> showSignInError(
       BuildContext context, PlatformException exception) async {
     await ExceptionAlertDialog(
-      title: AppLocalizations.of(context)!.signInFailed,
+      title: l(context).signInFailed,
       exception: exception,
     ).show(context);
   }
@@ -80,7 +80,7 @@ class SignInPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            AppLocalizations.of(context)!.signIn,
+            l(context).signIn,
             style: textTheme.headline2!.copyWith(
               color: theme.primaryColor,
               fontWeight: FontWeight.bold,
@@ -92,7 +92,7 @@ class SignInPage extends StatelessWidget {
             backgroundColor: const Color.fromRGBO(63, 91, 150, 1),
             height: 48,
             icon: FontAwesomeIcons.facebook,
-            text: AppLocalizations.of(context)!.continueWithFacebook,
+            text: l(context).continueWithFacebook,
           ),
           const SizedBox(height: 10),
           SocialButton(
@@ -100,7 +100,7 @@ class SignInPage extends StatelessWidget {
             backgroundColor: const Color.fromRGBO(66, 133, 244, 1),
             height: 48,
             icon: FontAwesomeIcons.google,
-            text: AppLocalizations.of(context)!.continueWithGoogle,
+            text: l(context).continueWithGoogle,
           ),
         ],
       ),
@@ -122,7 +122,7 @@ class SignInPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(AppLocalizations.of(context)!.signIn),
+        title: Text(l(context).signIn),
         actions: [
           IconButton(
             onPressed: () =>

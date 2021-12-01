@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -13,6 +12,7 @@ import '../models/push_notification.dart';
 import '../models/user_controller.dart';
 import '../services/push_notification_service.dart';
 import '../utils/error_indicator_util.dart';
+import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/error_indicator.dart';
 import 'notification_item.dart';
@@ -95,7 +95,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   Widget buildNoNotificationsFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.notifications_none_outlined,
-      title: AppLocalizations.of(context)!.noNotifications,
+      title: l(context).noNotifications,
     );
   }
 
@@ -125,8 +125,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     await GetIt.I.get<PushNotificationService>().markAsRead(ids);
     final snackBar = CustomSnackBar(
       icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
-      text: AppLocalizations.of(context)!
-          .markedNotificationAsRead(updatedNotificationCount),
+      text: l(context).markedNotificationAsRead(updatedNotificationCount),
     ).buildSnackBar(context);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -149,8 +148,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     await GetIt.I.get<PushNotificationService>().markAsUnread(ids);
     final snackBar = CustomSnackBar(
       icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
-      text: AppLocalizations.of(context)!
-          .markedNotificationAsUnread(updatedNotificationCount),
+      text: l(context).markedNotificationAsUnread(updatedNotificationCount),
     ).buildSnackBar(context);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -244,8 +242,8 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
           : null,
       title: Text(
         _isSelectionMode
-            ? '$selectedItemCount ${AppLocalizations.of(context)!.selected}'
-            : AppLocalizations.of(context)!.notifications,
+            ? '$selectedItemCount ${l(context).selected}'
+            : l(context).notifications,
       ),
       actions: _isSelectionMode
           ? [
@@ -259,8 +257,8 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
                       : FontAwesomeIcons.solidCircle),
                   iconSize: 14,
                   tooltip: isSelectedUnreadItemAvailable
-                      ? AppLocalizations.of(context)!.markAsRead
-                      : AppLocalizations.of(context)!.markAsUnread,
+                      ? l(context).markAsRead
+                      : l(context).markAsUnread,
                 ),
               PopupMenuButton<_NotificationPopup>(
                 icon: const Icon(Icons.more_vert),
@@ -278,11 +276,11 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
                     if (isUnselectedItemAvailable)
                       PopupMenuItem<_NotificationPopup>(
                         value: _NotificationPopup.selectAll,
-                        child: Text(AppLocalizations.of(context)!.selectAll),
+                        child: Text(l(context).selectAll),
                       ),
                     PopupMenuItem<_NotificationPopup>(
                       value: _NotificationPopup.deselectAll,
-                      child: Text(AppLocalizations.of(context)!.deselectAll),
+                      child: Text(l(context).deselectAll),
                     ),
                   ];
                 },
@@ -305,7 +303,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   Widget _buildSignIn() {
     return ErrorIndicator(
       icon: Icons.notifications_none_outlined,
-      title: AppLocalizations.of(context)!.youNeedToSignIn,
+      title: l(context).youNeedToSignIn,
     );
   }
 

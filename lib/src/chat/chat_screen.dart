@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +9,7 @@ import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
 import '../utils/error_indicator_util.dart';
+import '../utils/localization_util.dart';
 import '../widgets/error_indicator.dart';
 import 'blocked_users.dart';
 import 'chat.dart';
@@ -43,16 +43,16 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildSignIn() {
     return ErrorIndicator(
       icon: Icons.chat,
-      title: AppLocalizations.of(context)!.youNeedToSignIn,
-      message: AppLocalizations.of(context)!.youNeedToSignInToSee,
+      title: l(context).youNeedToSignIn,
+      message: l(context).youNeedToSignInToSee,
     );
   }
 
   Widget _buildNoChats() {
     return ErrorIndicator(
       icon: Icons.chat,
-      title: AppLocalizations.of(context)!.noChats,
-      message: AppLocalizations.of(context)!.noActiveConversations,
+      title: l(context).noChats,
+      message: l(context).noActiveConversations,
     );
   }
 
@@ -178,7 +178,7 @@ class _ChatScreenState extends State<ChatScreen> {
         itemBuilder: (context) => [
           PopupMenuItem<_ChatPopup>(
             value: _ChatPopup.blockedUsers,
-            child: Text(AppLocalizations.of(context)!.blockedUsers),
+            child: Text(l(context).blockedUsers),
           ),
         ],
       ),
@@ -187,7 +187,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: Text(AppLocalizations.of(context)!.chats),
+      title: Text(l(context).chats),
       actions: _user != null ? _buildActions() : null,
     );
   }

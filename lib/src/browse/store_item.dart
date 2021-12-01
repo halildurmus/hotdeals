@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../models/store.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 
 class StoreItem extends StatefulWidget {
   const StoreItem({
@@ -86,7 +86,7 @@ class _StoreItemState extends State<StoreItem> {
         }
 
         return Text(
-          AppLocalizations.of(context)!.dealCount(dealsCount),
+          l(context).dealCount(dealsCount),
           style: textTheme.subtitle2!.copyWith(
             color: isDarkMode ? theme.primaryColorLight : theme.primaryColor,
           ),

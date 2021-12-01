@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
@@ -13,6 +12,7 @@ import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../search/search_bar.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
@@ -68,7 +68,7 @@ class _DealsState extends State<Deals> {
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.local_offer,
-      title: AppLocalizations.of(context)!.couldNotFindAnyDeal,
+      title: l(context).couldNotFindAnyDeal,
     );
   }
 
@@ -85,9 +85,9 @@ class _DealsState extends State<Deals> {
     final isDarkMode = theme.brightness == Brightness.dark;
     final MyUser? user = Provider.of<UserController>(context).user;
     final List<String> _filterChoices = [
-      AppLocalizations.of(context)!.newest,
-      AppLocalizations.of(context)!.mostLiked,
-      AppLocalizations.of(context)!.cheapest,
+      l(context).newest,
+      l(context).mostLiked,
+      l(context).cheapest,
     ];
 
     Widget _buildChoiceChips() {
@@ -169,7 +169,7 @@ class _DealsState extends State<Deals> {
       }
 
       return AppBar(
-        title: Text(AppLocalizations.of(context)!.appTitle),
+        title: Text(l(context).appTitle),
         actions: _buildActions(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),

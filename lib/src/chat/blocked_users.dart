@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +8,7 @@ import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
+import '../utils/localization_util.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/error_indicator.dart';
@@ -35,7 +35,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
   Widget buildNoBlockedUsersFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.person_outline,
-      title: AppLocalizations.of(context)!.noBlockedUsers,
+      title: l(context).noBlockedUsers,
     );
   }
 
@@ -73,7 +73,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
             side: BorderSide(color: theme.errorColor),
           ),
           child: Text(
-            AppLocalizations.of(context)!.unblock,
+            l(context).unblock,
             style: theme.textTheme.subtitle2!.copyWith(
               color: theme.errorColor,
             ),
@@ -85,10 +85,10 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
   Future<void> confirmUnblockUser(BuildContext context, String userId) async {
     final bool didRequestUnblockUser = await CustomAlertDialog(
-          title: AppLocalizations.of(context)!.unblockUser,
-          content: AppLocalizations.of(context)!.unblockConfirm,
-          cancelActionText: AppLocalizations.of(context)!.cancel,
-          defaultActionText: AppLocalizations.of(context)!.ok,
+          title: l(context).unblockUser,
+          content: l(context).unblockConfirm,
+          cancelActionText: l(context).cancel,
+          defaultActionText: l(context).ok,
         ).show(context) ??
         false;
     if (didRequestUnblockUser == true) {
@@ -98,7 +98,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
         await Provider.of<UserController>(context, listen: false).getUser();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
-          text: AppLocalizations.of(context)!.successfullyUnblocked,
+          text: l(context).successfullyUnblocked,
         ).buildSnackBar(context);
         setState(() {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -106,7 +106,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
       } else {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.anErrorOccurredWhileUnblocking,
+          text: l(context).anErrorOccurredWhileUnblocking,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -143,7 +143,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.blockedUsers),
+        title: Text(l(context).blockedUsers),
       ),
       body: user.blockedUsers!.isEmpty
           ? buildNoBlockedUsersFound(context)

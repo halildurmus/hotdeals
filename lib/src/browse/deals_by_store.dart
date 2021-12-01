@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import '../models/deal.dart';
 import '../models/store.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 
@@ -57,7 +57,7 @@ class DealsByStore extends StatelessWidget {
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.local_offer,
-      title: AppLocalizations.of(context)!.couldNotFindAnyDeal,
+      title: l(context).couldNotFindAnyDeal,
     );
   }
 

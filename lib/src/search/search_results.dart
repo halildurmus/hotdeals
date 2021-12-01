@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
@@ -8,6 +7,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart'
 
 import '../models/deal.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 
@@ -58,7 +58,7 @@ class _SearchResultsState extends State<SearchResults> {
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
       icon: Icons.local_offer,
-      title: AppLocalizations.of(context)!.couldNotFindAnyDeal,
+      title: l(context).couldNotFindAnyDeal,
     );
   }
 
@@ -76,7 +76,7 @@ class _SearchResultsState extends State<SearchResults> {
     return WillPopScope(
       onWillPop: () {
         widget.onSearchModeChanged(false);
-        
+
         return Future<bool>.value(false);
       },
       child: Padding(

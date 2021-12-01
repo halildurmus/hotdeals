@@ -30,18 +30,20 @@ class HttpService {
 
     Response response;
     try {
-      response = await _client.delete(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Accept': 'application/json; charset=utf-8',
-          'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-        body: data != null ? jsonEncode(data) : null,
-      ).timeout(
-        _timeoutDuration,
-        onTimeout: () => throw Exception('Server timeout'),
-      );
+      response = await _client
+          .delete(
+            Uri.parse(url),
+            headers: <String, String>{
+              'Accept': 'application/json; charset=utf-8',
+              'Authorization': 'Bearer $idToken',
+              'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: data != null ? jsonEncode(data) : null,
+          )
+          .timeout(
+            _timeoutDuration,
+            onTimeout: () => throw Exception('Server timeout'),
+          );
     } on Exception catch (e) {
       throw Exception(e);
     }

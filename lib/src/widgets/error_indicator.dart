@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../utils/localization_util.dart';
 
 class ErrorIndicator extends StatelessWidget {
   const ErrorIndicator({
@@ -56,7 +57,7 @@ class ErrorIndicator extends StatelessWidget {
                 onPressed: onTryAgain,
                 icon: const Icon(Icons.refresh),
                 label: Text(
-                  tryAgainText ?? AppLocalizations.of(context)!.tryAgain,
+                  tryAgainText ?? l(context).tryAgain,
                 ),
               ),
           ],

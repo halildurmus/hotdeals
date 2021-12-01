@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
@@ -7,6 +6,7 @@ import 'package:loggy/loggy.dart';
 import '../models/deal_report.dart';
 import '../models/deal_report_reason.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
@@ -72,14 +72,14 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
         Navigator.of(context).pop();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
-          text: AppLocalizations.of(context)!.successfullyReportedDeal,
+          text: l(context).successfullyReportedDeal,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         Navigator.of(context).pop();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.anErrorOccurred,
+          text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
@@ -97,12 +97,12 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  AppLocalizations.of(context)!.reportDeal,
+                  l(context).reportDeal,
                   style: textTheme.headline6,
                 ),
                 const SizedBox(height: 10),
                 CheckboxListTile(
-                  title: Text(AppLocalizations.of(context)!.expired),
+                  title: Text(l(context).expired),
                   value: expiredCheckbox,
                   onChanged: (bool? newValue) {
                     setState(() {
@@ -111,7 +111,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                   },
                 ),
                 CheckboxListTile(
-                  title: Text(AppLocalizations.of(context)!.repost),
+                  title: Text(l(context).repost),
                   value: repostCheckbox,
                   onChanged: (bool? newValue) {
                     setState(() {
@@ -120,7 +120,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                   },
                 ),
                 CheckboxListTile(
-                  title: Text(AppLocalizations.of(context)!.spam),
+                  title: Text(l(context).spam),
                   value: spamCheckbox,
                   onChanged: (bool? newValue) {
                     setState(() {
@@ -129,7 +129,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                   },
                 ),
                 CheckboxListTile(
-                  title: Text(AppLocalizations.of(context)!.other),
+                  title: Text(l(context).other),
                   value: otherCheckbox,
                   onChanged: (bool? newValue) {
                     setState(() {
@@ -146,8 +146,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                         color: theme.brightness == Brightness.light
                             ? Colors.black54
                             : Colors.grey),
-                    hintText: AppLocalizations.of(context)!
-                        .enterSomeDetailsAboutReport,
+                    hintText: l(context).enterSomeDetailsAboutReport,
                   ),
                   minLines: 1,
                   maxLines: 10,
@@ -168,7 +167,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(AppLocalizations.of(context)!.reportDeal),
+                    child: Text(l(context).reportDeal),
                   ),
                 )
               ],

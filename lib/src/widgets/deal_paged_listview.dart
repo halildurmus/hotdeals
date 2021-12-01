@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -11,6 +10,7 @@ import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
+import '../utils/localization_util.dart';
 import '../widgets/deal_item.dart';
 import '../widgets/sign_in_dialog.dart';
 import 'custom_snackbar.dart';
@@ -90,7 +90,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         } else {
           final snackBar = CustomSnackBar(
             icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-            text: AppLocalizations.of(context)!.favoriteDealError,
+            text: l(context).favoriteDealError,
           ).buildSnackBar(context);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
@@ -108,7 +108,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         } else {
           final snackBar = CustomSnackBar(
             icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-            text: AppLocalizations.of(context)!.unfavoriteDealError,
+            text: l(context).unfavoriteDealError,
           ).buildSnackBar(context);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }

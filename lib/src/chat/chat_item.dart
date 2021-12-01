@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/date_time_util.dart';
+import '../utils/localization_util.dart';
 import 'chat.dart';
 
 class ChatItem extends StatelessWidget {
@@ -20,7 +20,7 @@ class ChatItem extends StatelessWidget {
         Icon(Icons.error, size: 18, color: Theme.of(context).errorColor),
         const SizedBox(width: 4),
         Text(
-          AppLocalizations.of(context)!.youCannotChatWithThisUser,
+          l(context).youCannotChatWithThisUser,
           style: TextStyle(color: Theme.of(context).errorColor, fontSize: 15),
         ),
       ],
@@ -62,7 +62,7 @@ class ChatItem extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(
-          AppLocalizations.of(context)!.image,
+          l(context).image,
           style: const TextStyle(fontSize: 15),
         ),
       ],

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +15,7 @@ import '../services/auth_service.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/image_picker_service.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/exception_alert_dialog.dart';
@@ -49,7 +49,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       Navigator.of(context).pop();
       final snackBar = CustomSnackBar(
         icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-        text: AppLocalizations.of(context)!.anErrorOccurred,
+        text: l(context).anErrorOccurred,
       ).buildSnackBar(context);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -75,7 +75,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       Navigator.of(context).pop();
       final snackBar = CustomSnackBar(
         icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-        text: AppLocalizations.of(context)!.anErrorOccurred,
+        text: l(context).anErrorOccurred,
       ).buildSnackBar(context);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -134,7 +134,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(
-                      AppLocalizations.of(context)!.selectSource,
+                      l(context).selectSource,
                       textAlign: TextAlign.center,
                       style: textTheme.subtitle1!.copyWith(
                         fontWeight: FontWeight.bold,
@@ -147,7 +147,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
             ListTile(
               horizontalTitleGap: 0,
               leading: const Icon(Icons.photo_camera),
-              title: Text(AppLocalizations.of(context)!.camera),
+              title: Text(l(context).camera),
               onTap: () async {
                 await getImg(userID, ImageSource.camera);
                 Navigator.of(context).pop();
@@ -156,7 +156,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
             ListTile(
               horizontalTitleGap: 0,
               leading: const Icon(Icons.photo_library),
-              title: Text(AppLocalizations.of(context)!.gallery),
+              title: Text(l(context).gallery),
               onTap: () async {
                 await getImg(userID, ImageSource.gallery);
                 Navigator.of(context).pop();
@@ -194,14 +194,14 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(),
                           errorMaxLines: 2,
-                          labelText: AppLocalizations.of(context)!.nickname,
+                          labelText: l(context).nickname,
                         ),
                         maxLength: 25,
                         maxLengthEnforcement: MaxLengthEnforcement.enforced,
                         onChanged: (String? text) => setState(() {}),
                         validator: (String? value) {
                           if (value == null || value.length < 5) {
-                            return AppLocalizations.of(context)!.nicknameMustBe;
+                            return l(context).nicknameMustBe;
                           }
 
                           return null;
@@ -223,7 +223,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                         ),
                       ),
                       child: Text(
-                        AppLocalizations.of(context)!.updateNickname,
+                        l(context).updateNickname,
                       ),
                     ),
                   ],
@@ -253,9 +253,9 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
 
   Future<void> _confirmSignOut(BuildContext context) async {
     final bool _didRequestSignOut = await CustomAlertDialog(
-          title: AppLocalizations.of(context)!.logoutConfirm,
-          cancelActionText: AppLocalizations.of(context)!.cancel,
-          defaultActionText: AppLocalizations.of(context)!.logout,
+          title: l(context).logoutConfirm,
+          cancelActionText: l(context).cancel,
+          defaultActionText: l(context).logout,
         ).show(context) ??
         false;
 
@@ -274,7 +274,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       await auth.signOut();
     } on PlatformException catch (e) {
       await ExceptionAlertDialog(
-        title: AppLocalizations.of(context)!.logoutFailed,
+        title: l(context).logoutFailed,
         exception: e,
       ).show(context);
     }
@@ -288,7 +288,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     user = Provider.of<UserController>(context).user!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.updateProfile)),
+      appBar: AppBar(title: Text(l(context).updateProfile)),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -300,19 +300,19 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                   CircleAvatar(backgroundImage: imageProvider),
               placeholder: (context, url) => const CircleAvatar(),
             ),
-            title: AppLocalizations.of(context)!.avatar,
+            title: l(context).avatar,
           ),
           SettingsListItem(
             onTap: nicknameOnTap,
             leading: const Icon(Icons.edit),
-            title: AppLocalizations.of(context)!.nickname,
+            title: l(context).nickname,
             subtitle: user.nickname,
           ),
           SettingsListItem(
             onTap: () => _confirmSignOut(context),
             hasNavigation: false,
             leading: const Icon(Icons.logout),
-            title: AppLocalizations.of(context)!.logout,
+            title: l(context).logout,
           ),
         ],
       ),

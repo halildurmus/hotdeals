@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +9,7 @@ import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
+import '../utils/localization_util.dart';
 
 /// Builds the signed-in or non signed-in UI, depending on the user snapshot.
 /// This widget should be below the [MaterialApp].
@@ -24,7 +24,7 @@ class AuthWidget extends StatelessWidget with UiLoggy {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.appTitle),
+        title: Text(l(context).appTitle),
       ),
       body: Center(
         child: CircularProgressIndicator(

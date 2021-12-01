@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +15,7 @@ import '../services/firestore_service.dart';
 import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
 import '../utils/error_indicator_util.dart';
+import '../utils/localization_util.dart';
 
 typedef Json = Map<String, dynamic>;
 
@@ -109,8 +109,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
           Icon(Icons.date_range, color: iconColor, size: 18),
           const SizedBox(width: 6),
           Text(
-            AppLocalizations.of(context)!
-                .joined(DateFormat.yMMM().format(user.createdAt!)),
+            l(context).joined(DateFormat.yMMM().format(user.createdAt!)),
             style: textStyle,
           ),
         ],
@@ -126,7 +125,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
             '$postedDealsCount',
             style: textStyle.copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(AppLocalizations.of(context)!.dealsPosted, style: textStyle),
+          Text(l(context).dealsPosted, style: textStyle),
         ],
       );
     }
@@ -140,7 +139,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
             '$postedCommentsCount',
             style: textStyle.copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(AppLocalizations.of(context)!.commentsPosted, style: textStyle),
+          Text(l(context).commentsPosted, style: textStyle),
         ],
       );
     }
@@ -161,7 +160,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
                 primary: theme.colorScheme.secondary,
               ),
               child: Text(
-                AppLocalizations.of(context)!.reportUser,
+                l(context).reportUser,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -202,7 +201,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
                     primary: theme.colorScheme.secondary,
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.sendMessage,
+                    l(context).sendMessage,
                     textAlign: TextAlign.center,
                   ),
                 );
@@ -292,7 +291,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppLocalizations.of(context)!.aboutUser,
+              l(context).aboutUser,
               style: textTheme.headline6!.copyWith(fontSize: 16),
             ),
             const Divider(),

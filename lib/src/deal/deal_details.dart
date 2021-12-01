@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
@@ -20,6 +19,7 @@ import '../models/stores.dart';
 import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
+import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/expandable_text.dart';
@@ -187,7 +187,7 @@ class _DealDetailsState extends State<DealDetails> {
               itemBuilder: (BuildContext context) => [
                 PopupMenuItem<_DealPopup>(
                   value: _DealPopup.reportDeal,
-                  child: Text(AppLocalizations.of(context)!.reportDeal),
+                  child: Text(l(context).reportDeal),
                 ),
               ],
             ),
@@ -331,7 +331,7 @@ class _DealDetailsState extends State<DealDetails> {
                         DealScoreBox(score: _deal.dealScore!),
                         const SizedBox(width: 5),
                         Text(
-                          AppLocalizations.of(context)!.dealScore,
+                          l(context).dealScore,
                           style: textTheme.bodyText2!.copyWith(
                             color: theme.brightness == Brightness.light
                                 ? Colors.black54
@@ -351,8 +351,7 @@ class _DealDetailsState extends State<DealDetails> {
                           ),
                         ),
                         Text(
-                          AppLocalizations.of(context)!
-                              .commentCount(_commentsCount),
+                          l(context).commentCount(_commentsCount),
                           style: textTheme.bodyText2!.copyWith(
                             color: theme.primaryColor,
                             fontWeight: FontWeight.w500,
@@ -466,7 +465,7 @@ class _DealDetailsState extends State<DealDetails> {
         ScaffoldMessenger.of(context).clearSnackBars();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.anErrorOccurred,
+          text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
@@ -492,7 +491,7 @@ class _DealDetailsState extends State<DealDetails> {
         child: Row(
           children: [
             Text(
-              AppLocalizations.of(context)!.didYouLikeTheDeal,
+              l(context).didYouLikeTheDeal,
               style: textTheme.bodyText2!.copyWith(
                 color: theme.brightness == Brightness.light
                     ? Colors.black54
@@ -574,7 +573,7 @@ class _DealDetailsState extends State<DealDetails> {
               avatar = snapshot.data!.avatar!;
               nickname = snapshot.data!.nickname!;
             } else if (snapshot.hasError) {
-              nickname = AppLocalizations.of(context)!.anErrorOccurred;
+              nickname = l(context).anErrorOccurred;
             }
 
             return GestureDetector(
@@ -604,7 +603,7 @@ class _DealDetailsState extends State<DealDetails> {
                           vertical: 1,
                         ),
                         child: Text(
-                          AppLocalizations.of(context)!.originalPoster,
+                          l(context).originalPoster,
                           style: textTheme.bodyText2!.copyWith(
                             color: Colors.white,
                             fontSize: 10,
@@ -634,7 +633,7 @@ class _DealDetailsState extends State<DealDetails> {
       final textTheme = Theme.of(context).textTheme;
 
       return Text(
-        AppLocalizations.of(context)!.commentCount(_commentsCount),
+        l(context).commentCount(_commentsCount),
         style: textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
       );
     }
@@ -669,7 +668,7 @@ class _DealDetailsState extends State<DealDetails> {
       return TextButton(
         onPressed: () => _onPostCommentTap(),
         child: Text(
-          AppLocalizations.of(context)!.postComment,
+          l(context).postComment,
           style: textTheme.subtitle2!.copyWith(
               color: theme.brightness == Brightness.light
                   ? theme.primaryColor
@@ -764,7 +763,7 @@ class _DealDetailsState extends State<DealDetails> {
             fixedSize: Size(deviceWidth, 50),
             primary: theme.colorScheme.secondary,
           ),
-          child: Text(AppLocalizations.of(context)!.seeDeal),
+          child: Text(l(context).seeDeal),
         ),
       );
     }

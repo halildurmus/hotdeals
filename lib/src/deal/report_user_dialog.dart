@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
@@ -7,6 +6,7 @@ import 'package:loggy/loggy.dart';
 import '../models/user_report.dart';
 import '../models/user_report_reason.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
@@ -70,14 +70,14 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
         Navigator.of(ctx).pop();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
-          text: AppLocalizations.of(context)!.successfullyReportedUser,
+          text: l(context).successfullyReportedUser,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
       } else {
         Navigator.of(ctx).pop();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-          text: AppLocalizations.of(context)!.anErrorOccurred,
+          text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
       }
@@ -95,12 +95,12 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  AppLocalizations.of(context)!.reportUser,
+                  l(context).reportUser,
                   style: textTheme.headline6,
                 ),
                 const SizedBox(height: 10),
                 CheckboxListTile(
-                  title: Text(AppLocalizations.of(context)!.harassing),
+                  title: Text(l(context).harassing),
                   value: harassingCheckbox,
                   onChanged: (bool? newValue) {
                     setState(() {
@@ -109,7 +109,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
                   },
                 ),
                 CheckboxListTile(
-                  title: Text(AppLocalizations.of(context)!.spam),
+                  title: Text(l(context).spam),
                   value: spamCheckbox,
                   onChanged: (bool? newValue) {
                     setState(() {
@@ -118,7 +118,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
                   },
                 ),
                 CheckboxListTile(
-                  title: Text(AppLocalizations.of(context)!.other),
+                  title: Text(l(context).other),
                   value: otherCheckbox,
                   onChanged: (bool? newValue) {
                     setState(() {
@@ -135,8 +135,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
                         color: theme.brightness == Brightness.light
                             ? Colors.black54
                             : Colors.grey),
-                    hintText: AppLocalizations.of(context)!
-                        .enterSomeDetailsAboutReport,
+                    hintText: l(context).enterSomeDetailsAboutReport,
                   ),
                   minLines: 1,
                   maxLines: 10,
@@ -155,7 +154,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(AppLocalizations.of(context)!.reportUser),
+                    child: Text(l(context).reportUser),
                   ),
                 )
               ],

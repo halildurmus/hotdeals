@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 
@@ -7,6 +6,7 @@ import '../deal/deal_details.dart';
 import '../models/categories.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
+import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 
 class DealItem extends StatefulWidget {
@@ -100,7 +100,7 @@ class _DealItemState extends State<DealItem> {
 
     Widget buildDealCategory() {
       return Text(
-        AppLocalizations.of(context)!.atCategory(
+        l(context).atCategory(
           _categories.getCategoryNameFromCategory(
             category: deal.category,
             locale: Localizations.localeOf(context),
@@ -257,7 +257,7 @@ class _DealItemState extends State<DealItem> {
             color: theme.primaryColor,
           ),
           child: Text(
-            AppLocalizations.of(context)!.newMark,
+            l(context).newMark,
             style: textTheme.bodyText2!
                 .copyWith(color: Colors.white, fontSize: 11),
           ),
