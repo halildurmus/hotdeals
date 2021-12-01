@@ -188,6 +188,7 @@ class _SearchBarState extends State<SearchBar> {
       body: FloatingSearchBarScrollNotifier(
         child: SearchResults(
           query: selectedQuery,
+          onSearchModeChanged: widget.onSearchModeChanged,
         ),
       ),
       builder: (_, __) => buildSearchBarContent(),

@@ -12,9 +12,14 @@ import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 
 class SearchResults extends StatefulWidget {
-  const SearchResults({Key? key, required this.query}) : super(key: key);
+  const SearchResults({
+    Key? key,
+    required this.query,
+    required this.onSearchModeChanged,
+  }) : super(key: key);
 
   final String query;
+  final ValueChanged<bool> onSearchModeChanged;
 
   @override
   State<SearchResults> createState() => _SearchResultsState();
@@ -68,14 +73,21 @@ class _SearchResultsState extends State<SearchResults> {
 
     final fsb = FloatingSearchBar.of(context)!;
 
-    return Padding(
-      padding: EdgeInsets.only(
-        top: fsb.widget.height + MediaQuery.of(context).viewPadding.top,
-      ),
-      child: DealPagedListView(
-        dealFuture: _dealFuture,
-        noDealsFound: buildNoDealsFound(context),
-        pagingController: _pagingController,
+    return WillPopScope(
+      onWillPop: () {
+        widget.onSearchModeChanged(false);
+        
+        return Future<bool>.value(false);
+      },
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: fsb.widget.height + MediaQuery.of(context).viewPadding.top,
+        ),
+        child: DealPagedListView(
+          dealFuture: _dealFuture,
+          noDealsFound: buildNoDealsFound(context),
+          pagingController: _pagingController,
+        ),
       ),
     );
   }
