@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../constants.dart';
+import '../utils/localization_util.dart';
 import '../widgets/radio_item.dart';
 import '../widgets/settings_list_item.dart';
 import '../widgets/settings_section.dart';
@@ -54,25 +55,6 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  Widget _getLanguageImage(Locale locale) {
-    late String svgLocation;
-    if (locale == localeTurkish) {
-      svgLocation = turkishSvg;
-    } else {
-      svgLocation = englishSvg;
-    }
-
-    return SvgPicture.asset(svgLocation);
-  }
-
-  String _getLanguageName(BuildContext context, Locale locale) {
-    if (locale == localeTurkish) {
-      return AppLocalizations.of(context)!.turkish;
-    }
-
-    return AppLocalizations.of(context)!.english;
-  }
-
   String _getThemeName(BuildContext context, ThemeMode themeMode) {
     if (themeMode == ThemeMode.dark) {
       return AppLocalizations.of(context)!.dark;
@@ -101,7 +83,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onChanged: widget.controller.updateLocale,
                     providerValue: widget.controller.locale,
                     radioValue: localeEnglish,
-                    leading: SvgPicture.asset('assets/icons/en.svg'),
+                    leading: SvgPicture.asset(assetEnglish),
                     text: AppLocalizations.of(context)!.english,
                   ),
                   RadioItem<Locale>(
@@ -109,7 +91,7 @@ class _SettingsViewState extends State<SettingsView> {
                     onChanged: widget.controller.updateLocale,
                     providerValue: widget.controller.locale,
                     radioValue: localeTurkish,
-                    leading: SvgPicture.asset('assets/icons/tr.svg'),
+                    leading: SvgPicture.asset(assetTurkish),
                     text: AppLocalizations.of(context)!.turkish,
                   ),
                   const SizedBox(height: 15),
@@ -203,9 +185,11 @@ class _SettingsViewState extends State<SettingsView> {
             children: [
               SettingsListItem(
                 onTap: () => _changeLanguage(context),
-                leading: _getLanguageImage(widget.controller.locale),
+                leading:
+                    LocalizationUtil.getLanguageImage(widget.controller.locale),
                 title: AppLocalizations.of(context)!.language,
-                subtitle: _getLanguageName(context, widget.controller.locale),
+                subtitle: LocalizationUtil.getLanguageName(
+                    context, widget.controller.locale),
               ),
               SettingsListItem(
                 onTap: () => _changeAppTheme(context),
