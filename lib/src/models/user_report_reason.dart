@@ -1,11 +1,8 @@
+import '../utils/enum_util.dart';
+export '../utils/enum_util.dart';
+
 enum UserReportReason { harassing, spam, other }
 
-extension AsString on UserReportReason {
-  String get asString => toString().toUpperCase().split('.').last;
-}
-
 /// Returns the proper [UserReportReason] for the given [str].
-UserReportReason userReportReasonFromString(String str) {
-  return UserReportReason.values.firstWhere(
-      (reason) => reason.toString().toUpperCase().split('.').last == str);
-}
+UserReportReason userReportReasonFromString(String str) =>
+    UserReportReason.values.firstWhere((reason) => reason.name == str);

@@ -1,5 +1,3 @@
-enum DealVoteType { up, down, unvote }
+export '../utils/enum_util.dart';
 
-extension AsString on DealVoteType {
-  String get asString => toString().toUpperCase().split('.').last;
-}
+enum DealVoteType { up, down, unvote }

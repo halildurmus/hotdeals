@@ -683,7 +683,7 @@ class SpringService with NetworkLoggy {
     required DealVoteType voteType,
   }) async {
     final String url = '$_baseUrl/deals/$dealId/votes';
-    final Json data = {'voteType': voteType.asString};
+    final Json data = {'voteType': voteType.name.toUpperCase()};
     try {
       late final Response response;
       if (voteType == DealVoteType.unvote) {

@@ -56,7 +56,7 @@ class PushNotification {
         'body': body,
         if (image != null) 'image': image,
         'data': <String, dynamic>{
-          'verb': verb.asString,
+          'verb': verb.name,
           'object': object,
           if (avatar != null) 'avatar': avatar,
           if (message != null) 'message': message,
@@ -72,7 +72,7 @@ class PushNotification {
         'title': title,
         'body': body,
         'actor': actor,
-        'verb': verb.asString,
+        'verb': verb.name,
         'object': object,
         'message': message,
         'uid': uid,
