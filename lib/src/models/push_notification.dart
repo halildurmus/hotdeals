@@ -28,7 +28,7 @@ class PushNotification {
         title: map['title']! as String,
         body: map['body']! as String,
         actor: map['actor']! as String,
-        verb: notificationVerbFromString(map['verb']! as String),
+        verb: NotificationVerb.values.byName(map['verb']! as String),
         object: map['object']! as String,
         message: map['message'] as String?,
         uid: map['uid'] as String?,

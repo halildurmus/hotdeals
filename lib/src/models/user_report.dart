@@ -18,7 +18,8 @@ class UserReport {
         reportedBy: json['reportedBy'] as String,
         reportedUser: json['reportedUser'] as String,
         reasons: (json['reasons'] as List<dynamic>)
-            .map((e) => userReportReasonFromString(e))
+            .map((e) =>
+                UserReportReason.values.byName((e as String).toLowerCase()))
             .toList(),
         message: json['message'] != null ? json['message'] as String : null,
         createdAt: DateTime.parse(json['createdAt'] as String),

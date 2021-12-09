@@ -18,7 +18,8 @@ class DealReport {
         reportedBy: json['reportedBy'] as String,
         reportedDeal: json['reportedDeal'] as String,
         reasons: (json['reasons'] as List<dynamic>)
-            .map((e) => dealReportReasonFromString(e))
+            .map((e) =>
+                DealReportReason.values.byName((e as String).toLowerCase()))
             .toList(),
         message: json['message'] != null ? json['message'] as String : null,
         createdAt: DateTime.parse(json['createdAt'] as String),
