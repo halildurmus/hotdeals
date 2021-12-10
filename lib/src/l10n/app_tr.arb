@@ -813,8 +813,8 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "discountPrice": "İndirimli Fiyat",
-  "@discountPrice": {
+  "price": "Fiyat",
+  "@price": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
@@ -925,22 +925,22 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "pleaseEnterTheDiscountPrice": "Lütfen fırsatın indirimli fiyatını girin.",
-  "@pleaseEnterTheDiscountPrice": {
+  "pleaseEnterThePrice": "Lütfen fırsatın fiyatını girin.",
+  "@pleaseEnterThePrice": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "originalPriceCannotBeLower": "Orijinal fiyat, indirimli fiyattan küçük olamaz.",
+  "originalPriceCannotBeLower": "Orijinal fiyat, fiyattan küçük olamaz.",
   "@originalPriceCannotBeLower": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "discountPriceCannotBeGreater": "İndirimli fiyat, orijinal fiyattan büyük olamaz.",
-  "@discountPriceCannotBeGreater": {
+  "priceCannotBeGreater": "İndirimli fiyat, fiyattan büyük olamaz.",
+  "@priceCannotBeGreater": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

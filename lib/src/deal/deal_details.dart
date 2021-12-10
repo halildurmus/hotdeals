@@ -422,14 +422,14 @@ class _DealDetailsState extends State<DealDetails> {
                     Row(
                       children: [
                         Text(
-                          r'$' + _deal.discountPrice.toStringAsFixed(0),
+                          r'$' + _deal.price.toStringAsFixed(0),
                           style: textTheme.headline5!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          r'$' + _deal.price.toStringAsFixed(0),
+                          r'$' + _deal.originalPrice.toStringAsFixed(0),
                           style: textTheme.subtitle2!.copyWith(
                             color: theme.errorColor,
                             decoration: TextDecoration.lineThrough,

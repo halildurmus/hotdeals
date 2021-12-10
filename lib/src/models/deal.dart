@@ -25,8 +25,8 @@ class Deal {
     this.views,
     required this.category,
     required this.store,
+    required this.originalPrice,
     required this.price,
-    required this.discountPrice,
     this.isNew,
     this.createdAt,
     this.updatedAt,
@@ -44,8 +44,8 @@ class Deal {
         description: json['description'] as String,
         category: json['category'] as String,
         store: json['store'] as String,
+        originalPrice: json['originalPrice'] as double,
         price: json['price'] as double,
-        discountPrice: json['discountPrice'] as double,
         dealScore: json['dealScore'] as int,
         views: json['views'] as int,
         isNew: DateTime.now()
@@ -68,8 +68,8 @@ class Deal {
   final int? views;
   final String category;
   final String store;
+  final double originalPrice;
   final double price;
-  final double discountPrice;
   final bool? isNew;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -84,13 +84,13 @@ class Deal {
       'description': description,
       'category': category,
       'store': store,
+      'originalPrice': originalPrice,
       'price': price,
-      'discountPrice': discountPrice,
     };
   }
 
   @override
   String toString() {
-    return 'Deal{id: $id, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, price: $price, discountPrice: $discountPrice, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'Deal{id: $id, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }

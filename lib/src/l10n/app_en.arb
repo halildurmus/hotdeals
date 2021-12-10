@@ -813,8 +813,8 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "discountPrice": "Discount Price",
-  "@discountPrice": {
+  "price": "Price",
+  "@price": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
@@ -925,22 +925,22 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "pleaseEnterTheDiscountPrice": "Please enter the deal discount price.",
-  "@pleaseEnterTheDiscountPrice": {
+  "pleaseEnterThePrice": "Please enter the deal price.",
+  "@pleaseEnterThePrice": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "originalPriceCannotBeLower": "The original price cannot be lower than the discount price.",
+  "originalPriceCannotBeLower": "The original price cannot be lower than the price.",
   "@originalPriceCannotBeLower": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "discountPriceCannotBeGreater": "The discount price cannot be greater than the original price.",
-  "@discountPriceCannotBeGreater": {
+  "priceCannotBeGreater": "The price cannot be greater than the original price.",
+  "@priceCannotBeGreater": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

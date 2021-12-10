@@ -30,8 +30,8 @@ class _PostDealState extends State<PostDeal> {
   late Store selectedStore;
   late TextEditingController dealUrlController;
   late TextEditingController titleController;
+  late TextEditingController originalPriceController;
   late TextEditingController priceController;
-  late TextEditingController discountPriceController;
   late TextEditingController descriptionController;
   List<UploadJob> dealImages = [];
 
@@ -50,8 +50,8 @@ class _PostDealState extends State<PostDeal> {
     selectedStore = stores.first;
     dealUrlController = TextEditingController();
     titleController = TextEditingController();
+    originalPriceController = TextEditingController();
     priceController = TextEditingController();
-    discountPriceController = TextEditingController();
     descriptionController = TextEditingController();
     super.initState();
   }
@@ -60,8 +60,8 @@ class _PostDealState extends State<PostDeal> {
   void dispose() {
     dealUrlController.dispose();
     titleController.dispose();
+    originalPriceController.dispose();
     priceController.dispose();
-    discountPriceController.dispose();
     descriptionController.dispose();
     super.dispose();
   }
@@ -212,8 +212,8 @@ class _PostDealState extends State<PostDeal> {
         coverPhoto: coverPhoto,
         photos: photos,
         dealUrl: dealUrlController.text,
+        originalPrice: double.parse(originalPriceController.text),
         price: double.parse(priceController.text),
-        discountPrice: double.parse(discountPriceController.text),
       );
 
       final Deal? postedDeal =
@@ -282,7 +282,7 @@ class _PostDealState extends State<PostDeal> {
 
     Widget buildOriginalPriceFormField() {
       return TextFormField(
-        controller: priceController,
+        controller: originalPriceController,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           labelText: l(context).originalPrice,
@@ -293,8 +293,8 @@ class _PostDealState extends State<PostDeal> {
         validator: (String? value) {
           if (value == null || value.isEmpty) {
             return l(context).pleaseEnterTheOriginalPrice;
-          } else if (discountPriceController.text.isNotEmpty &&
-              (int.parse(value) < int.parse(discountPriceController.text))) {
+          } else if (priceController.text.isNotEmpty &&
+              (int.parse(value) < int.parse(priceController.text))) {
             return l(context).originalPriceCannotBeLower;
           }
 
@@ -303,22 +303,22 @@ class _PostDealState extends State<PostDeal> {
       );
     }
 
-    Widget buildDiscountPriceFormField() {
+    Widget buildPriceFormField() {
       return TextFormField(
-        controller: discountPriceController,
+        controller: priceController,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
-          labelText: l(context).discountPrice,
+          labelText: l(context).price,
           prefixIcon: const Icon(Icons.attach_money, size: 20),
         ),
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
         validator: (String? value) {
           if (value == null || value.isEmpty) {
-            return l(context).pleaseEnterTheDiscountPrice;
-          } else if (priceController.text.isNotEmpty &&
-              (int.parse(value) > int.parse(priceController.text))) {
-            return l(context).discountPriceCannotBeGreater;
+            return l(context).pleaseEnterThePrice;
+          } else if (originalPriceController.text.isNotEmpty &&
+              (int.parse(value) > int.parse(originalPriceController.text))) {
+            return l(context).priceCannotBeGreater;
           }
 
           return null;
@@ -386,7 +386,7 @@ class _PostDealState extends State<PostDeal> {
             const SizedBox(height: 10),
             buildOriginalPriceFormField(),
             const SizedBox(height: 10),
-            buildDiscountPriceFormField(),
+            buildPriceFormField(),
             const SizedBox(height: 10),
             buildCategoryDropdown(),
             const SizedBox(height: 10),

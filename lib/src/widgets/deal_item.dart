@@ -117,7 +117,7 @@ class _DealItemState extends State<DealItem> {
       return Row(
         children: [
           Text(
-            '\$${deal.discountPrice.toStringAsFixed(0)}',
+            '\$${deal.price.toStringAsFixed(0)}',
             style: textTheme.headline5!.copyWith(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class _DealItemState extends State<DealItem> {
           ),
           const SizedBox(width: 4),
           Text(
-            '\$${deal.price.toStringAsFixed(0)}',
+            '\$${deal.originalPrice.toStringAsFixed(0)}',
             style: textTheme.subtitle2!.copyWith(
               color: theme.errorColor,
               decoration: TextDecoration.lineThrough,
