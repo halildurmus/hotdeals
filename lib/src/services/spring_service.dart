@@ -514,7 +514,7 @@ class SpringService with NetworkLoggy {
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deals = dealFromJson(response.body);
+        final deals = dealsFromJson(response.body);
 
         return deals;
       }
@@ -555,7 +555,7 @@ class SpringService with NetworkLoggy {
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deals = dealFromJson(response.body);
+        final deals = dealsFromJson(response.body);
 
         return deals;
       }
@@ -585,7 +585,7 @@ class SpringService with NetworkLoggy {
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deals = dealFromJson(response.body);
+        final deals = dealsFromJson(response.body);
 
         return deals;
       }

@@ -6,7 +6,7 @@ List<Deal> userDealsFromJson(String str) =>
     List<Deal>.from((json.decode(str) as List<dynamic>)
         .map<dynamic>((dynamic e) => Deal.fromJson(e as Json)));
 
-List<Deal> dealFromJson(String str) =>
+List<Deal> dealsFromJson(String str) =>
     List<Deal>.from((json.decode(str)['_embedded']['deals'] as List<dynamic>)
         .map<dynamic>((dynamic e) => Deal.fromJson(e as Json)));
 
