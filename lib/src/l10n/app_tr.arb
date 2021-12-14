@@ -729,13 +729,6 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "newest": "En Yeni",
-  "@newest": {
-    "description": "",
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
   "mostLiked": "En Beğenilen",
   "@mostLiked": {
     "description": "",
@@ -932,6 +925,62 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "latest": "En yeni",
+  "@latest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sort": "Sırala",
+  "@sort": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sortBy": "Sıralama ölçütü",
+  "@sortBy": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "relevant": "Alakalı",
+  "@relevant": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "newest": "En yeni",
+  "@newest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "oldest": "En eski",
+  "@oldest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "priceLowToHigh": "Fiyat: Ucuzdan pahalıya",
+  "@priceLowToHigh": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "priceHighToLow": "Fiyat: Pahalıdan ucuza",
+  "@priceHighToLow": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "resetAllFilters": "Filtreler sıfırlansın mı?",
   "@resetAllFilters": {
     "description": "",
@@ -1085,6 +1134,17 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "resultCount": "{count,plural, =0{Sonuç yok}=1{{count} sonuç}=2{{count} sonuç}few{{count} sonuç}many{{count} sonuç}other{{count} sonuç}}",
+  "@resultCount": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
   },
   "commentCount": "{count,plural, =0{Yorum yok}=1{{count} yorum}=2{{count} yorum}few{{count} yorum}many{{count} yorum}other{{count} yorum}}",
   "@commentCount": {

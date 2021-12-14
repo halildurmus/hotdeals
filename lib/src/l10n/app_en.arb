@@ -729,13 +729,6 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "newest": "Newest",
-  "@newest": {
-    "description": "",
-    "type": "text",
-    "placeholders_order": [],
-    "placeholders": {}
-  },
   "mostLiked": "Most Liked",
   "@mostLiked": {
     "description": "",
@@ -932,6 +925,62 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "latest": "Latest",
+  "@latest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sort": "Sort",
+  "@sort": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sortBy": "Sort by",
+  "@sortBy": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "relevant": "Relevant",
+  "@relevant": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "newest": "Newest",
+  "@newest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "oldest": "Oldest",
+  "@oldest": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "priceLowToHigh": "Price: Low to High",
+  "@priceLowToHigh": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "priceHighToLow": "Price: High to Low",
+  "@priceHighToLow": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "resetAllFilters": "Reset all filters?",
   "@resetAllFilters": {
     "description": "",
@@ -1085,6 +1134,17 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "resultCount": "{count,plural, =0{No results}=1{{count} results}=2{{count} results}few{{count} results}many{{count} results}other{{count} results}}",
+  "@resultCount": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [
+      "count"
+    ],
+    "placeholders": {
+      "count": {}
+    }
   },
   "commentCount": "{count,plural, =0{No comment}=1{{count} comments}=2{{count} comments}few{{count} comments}many{{count} comments}other{{count} comments}}",
   "@commentCount": {
