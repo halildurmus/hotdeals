@@ -55,6 +55,27 @@ class Deal {
         updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
+  factory Deal.fromJsonES(Json json) => Deal(
+    dealUrl: '',
+        id: json['id'] as String,
+        coverPhoto: json['coverPhoto'] as String,
+        title: json['title'] as String,
+        description: json['description'] as String,
+        category: (json['stringFacets'] as List<dynamic>).singleWhere(
+                (e) => (e['facetName'] as String) == 'category')['facetValue']
+            as String,
+        store: (json['stringFacets'] as List<dynamic>).singleWhere(
+                (e) => (e['facetName'] as String) == 'store')['facetValue']
+            as String,
+        originalPrice: json['originalPrice'] as double,
+        price: (json['numberFacets'] as List<dynamic>).singleWhere(
+                (e) => (e['facetName'] as String) == 'price')['facetValue']
+            as double,
+        isNew: DateTime.now()
+                .difference(DateTime.parse(json['createdAt'] as String)) <=
+            const Duration(days: 1),
+      );
+
   final String? id;
   final String? postedBy;
   final String coverPhoto;
