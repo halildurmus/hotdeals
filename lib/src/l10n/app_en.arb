@@ -472,6 +472,27 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "filterCategories": "Filter categories",
+  "@filterCategories": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterPrices": "Filter prices",
+  "@filterPrices": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterStores": "Filter stores",
+  "@filterStores": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "couldNotFindAnyDeal": "Couldn't find any deal",
   "@couldNotFindAnyDeal": {
     "description": "",
@@ -820,6 +841,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "prices": "Prices",
+  "@prices": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "title": "Title",
   "@title": {
     "description": "",
@@ -899,6 +927,34 @@
   },
   "postDeal": "Post Deal",
   "@postDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "resetAllFilters": "Reset all filters?",
+  "@resetAllFilters": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterByCategory": "Filter by Category",
+  "@filterByCategory": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterByPrice": "Filter by Price",
+  "@filterByPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterByStore": "Filter by Store",
+  "@filterByStore": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

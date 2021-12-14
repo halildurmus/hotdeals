@@ -472,6 +472,27 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "filterCategories": "Kategorileri filtrele",
+  "@filterCategories": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterPrices": "Fiyatları filtrele",
+  "@filterPrices": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterStores": "Mağazaları filtrele",
+  "@filterStores": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "couldNotFindAnyDeal": "Hiçbir fırsat bulunamadı",
   "@couldNotFindAnyDeal": {
     "description": "",
@@ -820,6 +841,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "prices": "Fiyatlar",
+  "@prices": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "title": "Başlık",
   "@title": {
     "description": "",
@@ -899,6 +927,34 @@
   },
   "postDeal": "Fırsat Paylaş",
   "@postDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "resetAllFilters": "Filtreler sıfırlansın mı?",
+  "@resetAllFilters": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterByCategory": "Kategoriye Göre filtrele",
+  "@filterByCategory": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterByPrice": "Fiyata göre filtrele",
+  "@filterByPrice": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "filterByStore": "Mağazaya göre filtrele",
+  "@filterByStore": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
