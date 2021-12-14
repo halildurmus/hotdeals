@@ -28,9 +28,8 @@ class Categories {
   String getCategoryNameFromCategory({
     required String category,
     required Locale locale,
-  }) {
-    return _categories!
-        .singleWhere((e) => e.category == category)
-        .localizedName(locale);
-  }
+  }) =>
+      _categories!
+          .singleWhere((e) => e.category == category)
+          .localizedName(locale);
 }
