@@ -14,12 +14,24 @@ import '../utils/localization_util.dart';
 /// Builds the signed-in or non signed-in UI, depending on the user snapshot.
 /// This widget should be below the [MaterialApp].
 /// An [AuthWidgetBuilder] ancestor is required for this widget to work.
-class AuthWidget extends StatelessWidget with UiLoggy {
+class AuthWidget extends StatefulWidget {
   const AuthWidget({Key? key, required this.userSnapshot}) : super(key: key);
 
   final AsyncSnapshot<MyUser?> userSnapshot;
 
-  Widget buildCircularProgressIndicator(BuildContext context) {
+  @override
+  State<AuthWidget> createState() => _AuthWidgetState();
+}
+
+class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
+  late Future<MyUser?> _userFuture;
+
+  Future<void> _saveFcmTokenToDatabase(String token) async {
+    await GetIt.I.get<SpringService>().addFcmToken(fcmToken: token);
+    await context.read<UserController>().getUser();
+  }
+
+  Widget buildCircularProgressIndicator() {
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -34,31 +46,24 @@ class AuthWidget extends StatelessWidget with UiLoggy {
     );
   }
 
-  Widget buildErrorWidget(BuildContext context) {
+  Widget buildErrorWidget() {
     return Scaffold(
       body: ErrorIndicatorUtil.buildFirstPageError(
         context,
-        onTryAgain: () => (context as Element).markNeedsBuild(),
+        onTryAgain: () => setState(() {}),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Future<void> _saveFcmTokenToDatabase(String token) async {
-      await GetIt.I.get<SpringService>().addFcmToken(fcmToken: token);
-      await context.read<UserController>().getUser();
-    }
-
-    if (!userSnapshot.hasData) {
+    if (!widget.userSnapshot.hasData) {
       return const HomeScreen();
     }
-
-    final userFuture =
-        Provider.of<UserController>(context, listen: false).getUser();
+    _userFuture = Provider.of<UserController>(context, listen: false).getUser();
 
     return FutureBuilder<MyUser?>(
-      future: userFuture,
+      future: _userFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           loggy.info(snapshot.data);
@@ -76,11 +81,12 @@ class AuthWidget extends StatelessWidget with UiLoggy {
         } else if (snapshot.hasError) {
           loggy.error(snapshot.error);
           return const HomeScreen();
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          return buildErrorWidget(context);
+        } else if (snapshot.connectionState == ConnectionState.active ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return buildCircularProgressIndicator();
+        } else {
+          return buildErrorWidget();
         }
-
-        return buildCircularProgressIndicator(context);
       },
     );
   }
