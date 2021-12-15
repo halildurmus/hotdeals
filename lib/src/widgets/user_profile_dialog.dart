@@ -167,15 +167,13 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
               future: GetIt.I
                   .get<FirestoreService>()
                   .getMessageDocument(usersArray: usersArray),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
+              builder: (context, snapshot) {
                 VoidCallback? onTap;
 
                 if (snapshot.hasData) {
-                  final List<DocumentSnapshot<Json>> _items =
-                      snapshot.data!.docs;
+                  final items = snapshot.data!.docs;
                   onTap = () async {
-                    if (_items.isEmpty) {
+                    if (items.isEmpty) {
                       await firestoreService.createMessageDocument(
                           user1Uid: loggedInUser!.uid, user2Uid: user.uid);
                     }
