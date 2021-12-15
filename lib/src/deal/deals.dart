@@ -7,7 +7,6 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart'
 import 'package:provider/provider.dart';
 
 import '../models/deal.dart';
-import '../models/deal_sortby.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../search/search_bar.dart';
@@ -25,18 +24,17 @@ class Deals extends StatefulWidget {
   _DealsState createState() => _DealsState();
 }
 
-class _DealsState extends State<Deals> {
-  late DealSortBy _dealSortBy;
+class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
   late PagingController<int, Deal> _pagingController;
-  int _selectedFilter = 0;
   bool _searchMode = false;
   late final FloatingSearchBarController _searchBarController;
+  late final TabController tabController;
 
   @override
   void initState() {
-    _dealSortBy = DealSortBy.createdAt;
     _pagingController = PagingController<int, Deal>(firstPageKey: 0);
     _searchBarController = FloatingSearchBarController();
+    tabController = TabController(vsync: this, length: 1);
     super.initState();
   }
 
@@ -47,23 +45,8 @@ class _DealsState extends State<Deals> {
     super.dispose();
   }
 
-  void _sortDeals(int index) {
-    if (index == 0) {
-      _dealSortBy = DealSortBy.createdAt;
-    } else if (index == 1) {
-      _dealSortBy = DealSortBy.dealScore;
-    } else if (index == 2) {
-      _dealSortBy = DealSortBy.price;
-    }
-    _pagingController.refresh();
-  }
-
-  Future<List<Deal>?> _dealFuture(int page, int size) =>
-      GetIt.I.get<SpringService>().getDealsSortedBy(
-            dealSortBy: _dealSortBy,
-            page: page,
-            size: size,
-          );
+  Future<List<Deal>> _dealFuture(int page, int size) =>
+      GetIt.I.get<SpringService>().getLatestDeals(page: page, size: size);
 
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
@@ -81,67 +64,18 @@ class _DealsState extends State<Deals> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDarkMode = theme.brightness == Brightness.dark;
     final MyUser? user = Provider.of<UserController>(context).user;
-    final List<String> _filterChoices = [
-      l(context).newest,
-      l(context).mostLiked,
-      l(context).cheapest,
-    ];
 
-    Widget _buildChoiceChips() {
-      return SizedBox(
-        height: kToolbarHeight,
-        child: Material(
-          color: theme.backgroundColor,
-          elevation: isDarkMode ? 0 : 4,
-          shadowColor: const Color(0xFF000000),
-          child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            scrollDirection: Axis.horizontal,
-            itemCount: 3,
-            itemBuilder: (context, index) {
-              return ChoiceChip(
-                labelStyle: TextStyle(
-                  color: _selectedFilter == index
-                      ? Colors.white
-                      : theme.primaryColorLight,
-                  fontWeight: FontWeight.bold,
-                ),
-                labelPadding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-                side: BorderSide(
-                  color: _selectedFilter == index
-                      ? Colors.transparent
-                      : theme.primaryColor,
-                ),
-                pressElevation: 0,
-                elevation: _selectedFilter == index ? 4 : 0,
-                backgroundColor: theme.backgroundColor,
-                selectedColor: theme.primaryColor,
-                label: Text(_filterChoices.elementAt(index)),
-                selected: _selectedFilter == index,
-                onSelected: (bool selected) {
-                  if (_selectedFilter != index) {
-                    _selectedFilter = index;
-                    setState(() {});
-                    _sortDeals(_selectedFilter);
-                  }
-                },
-              );
-            },
-            separatorBuilder: (context, index) => const SizedBox(width: 8),
+    Widget _buildTabBarView() {
+      return TabBarView(
+        controller: tabController,
+        children: [
+          DealPagedListView(
+            dealsFuture: _dealFuture,
+            pagingController: _pagingController,
+            noDealsFound: buildNoDealsFound(context),
           ),
-        ),
-      );
-    }
-
-    Widget _buildPagedListView() {
-      return DealPagedListView(
-        dealFuture: _dealFuture,
-        pagingController: _pagingController,
-        noDealsFound: buildNoDealsFound(context),
+        ],
       );
     }
 
@@ -172,15 +106,29 @@ class _DealsState extends State<Deals> {
         title: Text(l(context).appTitle),
         actions: _buildActions(),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: _buildChoiceChips(),
+          preferredSize: const Size.fromHeight(kToolbarHeight * 1),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 2),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: TabBar(
+                controller: tabController,
+                isScrollable: true,
+                labelStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                tabs: [Tab(text: l(context).latest)],
+              ),
+            ),
+          ),
         ),
       );
     }
 
     return Scaffold(
       appBar: _searchMode ? null : _buildAppBar(),
-      body: _searchMode ? _buildSearchBar() : _buildPagedListView(),
+      body: _searchMode ? _buildSearchBar() : _buildTabBarView(),
       resizeToAvoidBottomInset: false,
     );
   }

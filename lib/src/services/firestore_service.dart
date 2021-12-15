@@ -12,11 +12,10 @@ class FirestoreService with NetworkLoggy {
     required String user1Uid,
     required String user2Uid,
   }) async {
-    final CollectionReference<Json> messagesRef =
-        _firestore.collection('messages');
-    final String docId =
+    final messagesRef = _firestore.collection('messages');
+    final docId =
         ChatUtil.getConversationID(user1Uid: user1Uid, user2Uid: user2Uid);
-    final List<String> usersArray =
+    final usersArray =
         ChatUtil.getUsersArray(user1Uid: user1Uid, user2Uid: user2Uid);
 
     return messagesRef
@@ -27,7 +26,7 @@ class FirestoreService with NetworkLoggy {
         })
         .then((value) => loggy.info('Document created'))
         .catchError(
-          (dynamic error) => loggy.error('Failed to create document: $error'),
+          (error) => loggy.error('Failed to create document: $error'),
         );
   }
 

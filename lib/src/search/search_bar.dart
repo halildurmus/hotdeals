@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 import '../utils/localization_util.dart';
-import 'search_hit.dart';
+import 'search_params.dart';
 import 'search_results.dart';
 import 'search_service.dart';
 
@@ -24,15 +24,15 @@ class SearchBar extends StatefulWidget {
 class _SearchBarState extends State<SearchBar> {
   final searchService = GetIt.I.get<SearchService>();
   bool searchError = false;
-  final List<String> searchResults = [];
-  String selectedQuery = '';
+  final _suggestions = <String>[];
+  var searchParams = SearchParams();
 
-  Future<void> searchDeals(String query) async {
-    searchResults.clear();
+  Future<void> getSuggestions(String query) async {
+    _suggestions.clear();
     try {
-      final searchHits = await searchService.searchDeals(query);
-      for (SearchHit s in searchHits) {
-        searchResults.add(s.content.title);
+      final suggestionResponse = await searchService.getSuggestions(query);
+      if (suggestionResponse.suggestions.isNotEmpty) {
+        _suggestions.addAll(suggestionResponse.suggestions);
       }
       setState(() => searchError = false);
     } on Exception {
@@ -40,14 +40,15 @@ class _SearchBarState extends State<SearchBar> {
     }
   }
 
-  Widget buildSearchError() {
+  Widget buildError() {
     return ListTile(
       title: Text(l(context).anErrorOccurred),
     );
   }
 
   void onQueryTap(String query) {
-    setState(() => selectedQuery = query);
+    searchParams = searchParams.copyWith(query: query);
+    setState(() {});
     widget.controller.close();
     searchService.saveQuery(query);
   }
@@ -92,7 +93,7 @@ class _SearchBarState extends State<SearchBar> {
   Widget buildSuggestions() {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: searchResults
+      children: _suggestions
           .map(
             (query) => ListTile(
               onTap: () => onQueryTap(query),
@@ -112,8 +113,8 @@ class _SearchBarState extends State<SearchBar> {
     if (query.isEmpty) {
       child = buildRecentSearches();
     } else if (searchError) {
-      child = buildSearchError();
-    } else if (query.length >= 3 && searchResults.isNotEmpty) {
+      child = buildError();
+    } else if (query.length >= 3 && _suggestions.isNotEmpty) {
       child = buildSuggestions();
     } else {
       child = buildListTile(query);
@@ -143,9 +144,9 @@ class _SearchBarState extends State<SearchBar> {
 
   void onFocusChanged(bool value) {
     if (value) {
-      widget.controller.query = selectedQuery;
-    } else if (!value && selectedQuery.isEmpty ||
-        (selectedQuery.isEmpty && widget.controller.query.isEmpty)) {
+      widget.controller.query = searchParams.query;
+    } else if (!value && searchParams.query.isEmpty ||
+        (searchParams.query.isEmpty && widget.controller.query.isEmpty)) {
       setState(() => widget.onSearchModeChanged(false));
     }
   }
@@ -157,7 +158,7 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void onQueryChanged(String query) =>
-      query.length < 3 ? setState(() {}) : searchDeals(query);
+      query.length < 3 ? setState(() {}) : getSuggestions(query);
 
   Widget buildFloatingSearchBar() {
     final portraitMode =
@@ -168,9 +169,13 @@ class _SearchBarState extends State<SearchBar> {
       automaticallyImplyBackButton: false,
       axisAlignment: portraitMode ? 0 : -1,
       body: FloatingSearchBarScrollNotifier(
-        child: SearchResults(
-          query: selectedQuery,
-          onSearchModeChanged: widget.onSearchModeChanged,
+        child: WillPopScope(
+          onWillPop: () {
+            widget.onSearchModeChanged(false);
+
+            return Future<bool>.value(false);
+          },
+          child: SearchResults(searchParams: searchParams),
         ),
       ),
       builder: (_, __) => buildSearchBarContent(),
@@ -185,7 +190,7 @@ class _SearchBarState extends State<SearchBar> {
       physics: const BouncingScrollPhysics(),
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
       title: Text(
-        selectedQuery.isNotEmpty ? selectedQuery : 'hotdeals',
+        searchParams.query.isNotEmpty ? searchParams.query : 'hotdeals',
         style: Theme.of(context).textTheme.headline6,
       ),
       transition: CircularFloatingSearchBarTransition(),

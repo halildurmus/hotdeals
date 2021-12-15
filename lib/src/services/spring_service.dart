@@ -11,13 +11,14 @@ import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
-import '../models/deal_sortby.dart';
 import '../models/deal_vote_type.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/store.dart';
 import '../models/user_report.dart';
-import '../search/search_hit.dart';
+import '../search/search_params.dart';
+import '../search/search_response.dart';
+import '../search/suggestion_response.dart';
 import 'http_service.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -453,7 +454,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<List<Deal>?> getUserFavorites({int? page, int? size}) async {
+  Future<List<Deal>> getUserFavorites({int? page, int? size}) async {
     final String url = '$_baseUrl/users/me/favorites?page=$page&size=$size';
     try {
       final Response response = await _httpService.get(url);
@@ -463,21 +464,19 @@ class SpringService with NetworkLoggy {
         return deals;
       }
 
-      return null;
+      throw Exception('Could not get the user favorites!');
     } on Exception catch (e) {
       loggy.error(e, e);
-      return null;
+      throw Exception('Could not get the user favorites!');
     }
   }
 
-  Future<List<SearchHit>> getDealSuggestions({required String query}) async {
+  Future<SuggestionResponse> getDealSuggestions({required String query}) async {
     final String url = '$_baseUrl/deals/suggestions?query=$query';
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final searchHits = searchResultsFromJson(response.body);
-
-        return searchHits;
+        return SuggestionResponse.fromJson(jsonDecode(response.body));
       }
 
       throw Exception('An error occurred while searching deals!');
@@ -487,7 +486,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<List<Deal>?> getUserDeals({int? page, int? size}) async {
+  Future<List<Deal>> getUserDeals({int? page, int? size}) async {
     final String url = '$_baseUrl/users/me/deals?page=$page&size=$size';
     try {
       final Response response = await _httpService.get(url);
@@ -497,14 +496,14 @@ class SpringService with NetworkLoggy {
         return deals;
       }
 
-      return null;
+      throw Exception('Could not get the user deals!');
     } on Exception catch (e) {
       loggy.error(e, e);
-      return null;
+      throw Exception('Could not get the user deals!');
     }
   }
 
-  Future<List<Deal>?> getDealsByCategory({
+  Future<List<Deal>> getDealsByCategory({
     required String category,
     int? page,
     int? size,
@@ -519,33 +518,35 @@ class SpringService with NetworkLoggy {
         return deals;
       }
 
-      return null;
+      throw Exception('Could not get deals by category!');
     } on Exception catch (e) {
       loggy.error(e, e);
-      return null;
+      throw Exception('Could not get deals by category!');
     }
   }
 
-  Future<List<Deal>> getDealsByKeyword(
-      {required String keyword, int? page, int? size}) async {
-    final String url =
-        '$_baseUrl/deals/search/queryDeals?keyword=$keyword&page=$page&size=$size';
+  Future<SearchResponse> searchDeals({
+    required SearchParams searchParams,
+  }) async {
+    final url = Uri.http(
+      _baseUrl.replaceFirst(RegExp(r'(http[s]?://)'), ''),
+      '/deals/searches',
+      searchParams.queryParameters,
+    ).toString();
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deals = dealFromJson(response.body);
-
-        return deals;
+        return SearchResponse.fromJson(jsonDecode(response.body));
       }
 
-      throw Exception('Could not get deals by keyword!');
+      throw Exception('Could not get the search results!');
     } on Exception catch (e) {
       loggy.error(e, e);
-      throw Exception('Could not get deals by keyword!');
+      throw Exception('Could not get the search results!');
     }
   }
 
-  Future<List<Deal>?> getDealsByStore({
+  Future<List<Deal>> getDealsByStore({
     required String storeId,
     int? page,
     int? size,
@@ -560,28 +561,15 @@ class SpringService with NetworkLoggy {
         return deals;
       }
 
-      return null;
+      throw Exception('Could not get deals by store!');
     } on Exception catch (e) {
       loggy.error(e, e);
-      return null;
+      throw Exception('Could not get deals by store!');
     }
   }
 
-  Future<List<Deal>?> getDealsSortedBy({
-    required DealSortBy dealSortBy,
-    int? page,
-    int? size,
-  }) async {
-    String url = '$_baseUrl/deals/search/findAllByOrderBy';
-    if (dealSortBy == DealSortBy.createdAt) {
-      url += 'CreatedAtDesc';
-    } else if (dealSortBy == DealSortBy.dealScore) {
-      url += 'DealScoreDesc';
-    } else if (dealSortBy == DealSortBy.price) {
-      url += 'DiscountPrice';
-    }
-    url += '?page=$page&size=$size';
-
+  Future<List<Deal>> getLatestDeals({int? page, int? size}) async {
+    final url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
@@ -590,10 +578,10 @@ class SpringService with NetworkLoggy {
         return deals;
       }
 
-      return null;
+      throw Exception('Could not get the latest deals!');
     } on Exception catch (e) {
       loggy.error(e, e);
-      return null;
+      throw Exception('Could not get the latest deals!');
     }
   }
 

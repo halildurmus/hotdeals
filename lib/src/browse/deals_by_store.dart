@@ -47,7 +47,7 @@ class DealsByStore extends StatelessWidget {
     );
   }
 
-  Future<List<Deal>?> _dealFuture(int page, int size) =>
+  Future<List<Deal>> _dealFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getDealsByStore(
             storeId: store.id!,
             page: page,
@@ -66,7 +66,7 @@ class DealsByStore extends StatelessWidget {
     return Scaffold(
       appBar: buildAppBar(context),
       body: DealPagedListView(
-        dealFuture: _dealFuture,
+        dealsFuture: _dealFuture,
         noDealsFound: buildNoDealsFound(context),
       ),
     );

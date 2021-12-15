@@ -47,7 +47,7 @@ class _DealsByCategoryState extends State<DealsByCategory> {
     );
   }
 
-  Future<List<Deal>?> _dealFuture(int page, int size) =>
+  Future<List<Deal>> _dealFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getDealsByCategory(
             category: category.category,
             page: page,
@@ -75,7 +75,7 @@ class _DealsByCategoryState extends State<DealsByCategory> {
 
   Widget buildPagedListView() {
     return DealPagedListView(
-      dealFuture: _dealFuture,
+      dealsFuture: _dealFuture,
       noDealsFound: buildNoDealsFound(context),
       pagingController: _pagingController,
     );

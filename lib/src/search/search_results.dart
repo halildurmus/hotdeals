@@ -6,20 +6,17 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart'
     show FloatingSearchBar;
 
 import '../models/deal.dart';
+import '../search/search_response.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
 import '../widgets/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
+import 'search_params.dart';
 
 class SearchResults extends StatefulWidget {
-  const SearchResults({
-    Key? key,
-    required this.query,
-    required this.onSearchModeChanged,
-  }) : super(key: key);
+  const SearchResults({Key? key, required this.searchParams}) : super(key: key);
 
-  final String query;
-  final ValueChanged<bool> onSearchModeChanged;
+  final SearchParams searchParams;
 
   @override
   State<SearchResults> createState() => _SearchResultsState();
@@ -42,18 +39,15 @@ class _SearchResultsState extends State<SearchResults> {
 
   @override
   void didUpdateWidget(covariant SearchResults oldWidget) {
-    if (oldWidget.query != widget.query) {
+    if (oldWidget.searchParams != widget.searchParams) {
       _pagingController.refresh();
     }
     super.didUpdateWidget(oldWidget);
   }
 
-  Future<List<Deal>?> _dealFuture(int page, int size) =>
-      GetIt.I.get<SpringService>().getDealsByKeyword(
-            keyword: widget.query,
-            page: page,
-            size: size,
-          );
+  Future<SearchResponse> _searchResultsFuture(int page, int size) => GetIt.I
+      .get<SpringService>()
+      .searchDeals(searchParams: widget.searchParams);
 
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
@@ -64,7 +58,7 @@ class _SearchResultsState extends State<SearchResults> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.query.isEmpty) {
+    if (widget.searchParams.query.isEmpty) {
       return const ErrorIndicator(
         icon: Icons.search,
         title: 'Start searching',
@@ -73,21 +67,15 @@ class _SearchResultsState extends State<SearchResults> {
 
     final fsb = FloatingSearchBar.of(context)!;
 
-    return WillPopScope(
-      onWillPop: () {
-        widget.onSearchModeChanged(false);
-
-        return Future<bool>.value(false);
-      },
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: fsb.widget.height + MediaQuery.of(context).viewPadding.top,
-        ),
-        child: DealPagedListView(
-          dealFuture: _dealFuture,
-          noDealsFound: buildNoDealsFound(context),
-          pagingController: _pagingController,
-        ),
+    return Padding(
+      padding: EdgeInsets.only(
+        top: fsb.widget.height + MediaQuery.of(context).viewPadding.top,
+      ),
+      child: DealPagedListView.withFilterBar(
+        noDealsFound: buildNoDealsFound(context),
+        pagingController: _pagingController,
+        searchResultsFuture: _searchResultsFuture,
+        searchParams: widget.searchParams,
       ),
     );
   }

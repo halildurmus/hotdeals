@@ -18,6 +18,7 @@ import '../models/stores.dart';
 import '../models/user_controller.dart';
 import '../services/spring_service.dart';
 import '../utils/date_time_util.dart';
+import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/custom_snackbar.dart';
@@ -34,9 +35,9 @@ import 'report_deal_dialog.dart';
 enum _DealPopup { reportDeal }
 
 class DealDetails extends StatefulWidget {
-  const DealDetails({Key? key, required this.deal}) : super(key: key);
+  const DealDetails({Key? key, required this.dealId}) : super(key: key);
 
-  final Deal deal;
+  final String dealId;
 
   @override
   _DealDetailsState createState() => _DealDetailsState();
@@ -44,13 +45,15 @@ class DealDetails extends StatefulWidget {
 
 class _DealDetailsState extends State<DealDetails> {
   final _pagingController = PagingController<int, Comment>(firstPageKey: 0);
-  late Deal _deal;
-  late List<String> _images;
+  Deal? _deal;
+  late Future<Deal?> _dealFuture;
+  late Future<int?> _commentCountFuture;
+  List<String>? _images;
   int currentIndex = 0;
   late Categories _categories;
-  late Store _store;
+  Store? _store;
   late MyUser? _user;
-  int _commentsCount = 0;
+  int? _commentCount;
   bool isUpvoted = false;
   bool isDownvoted = false;
   bool _showScrollToTopButton = false;
@@ -58,30 +61,15 @@ class _DealDetailsState extends State<DealDetails> {
 
   @override
   void initState() {
-    _deal = widget.deal;
-    _updateCommentsCount();
-    _images = [_deal.coverPhoto, ..._deal.photos!];
-    // Prefetch and caches the images.
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      for (final String image in _images) {
-        precacheImage(NetworkImage(image), context);
-      }
-    });
+    _dealFuture = GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
+    _commentCountFuture = GetIt.I
+        .get<SpringService>()
+        .getNumberOfCommentsByDealId(dealId: widget.dealId);
     _categories = GetIt.I.get<Categories>();
-    final Stores stores = GetIt.I.get<Stores>();
-    _store = stores.getStoreByStoreId(_deal.store);
     _user = context.read<UserController>().user;
-    if (_user != null) {
-      isUpvoted = _deal.upvoters!.contains(_user!.id);
-      isDownvoted = _deal.downvoters!.contains(_user!.id);
-      _fetchDeal();
-    }
     _scrollController = ScrollController()
-      ..addListener(() {
-        setState(() {
-          _showScrollToTopButton = _scrollController.offset >= 1000;
-        });
-      });
+      ..addListener(() => setState(
+          () => _showScrollToTopButton = _scrollController.offset >= 1000));
     super.initState();
   }
 
@@ -95,28 +83,12 @@ class _DealDetailsState extends State<DealDetails> {
   void _updateCommentsCount() {
     GetIt.I
         .get<SpringService>()
-        .getNumberOfCommentsByDealId(dealId: widget.deal.id!)
-        .then((int? commentsCount) {
-      if (commentsCount != null) {
-        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+        .getNumberOfCommentsByDealId(dealId: widget.dealId)
+        .then((int? commentCount) {
+      if (commentCount != null) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
           if (mounted) {
-            setState(() {
-              _commentsCount = commentsCount;
-            });
-          }
-        });
-      }
-    });
-  }
-
-  void _fetchDeal() {
-    GetIt.I.get<SpringService>().getDeal(dealId: _deal.id!).then((Deal? deal) {
-      if (deal != null) {
-        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-          if (mounted) {
-            setState(() {
-              _deal = deal;
-            });
+            setState(() => _commentCount = commentCount);
           }
         });
       }
@@ -131,6 +103,30 @@ class _DealDetailsState extends State<DealDetails> {
     );
   }
 
+  List<Widget> getCarouselItems() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return _images!.map((String item) {
+      return GestureDetector(
+        onTap: () => NavigationUtil.navigate(
+          context,
+          ImageFullScreen(images: _images!, currentIndex: currentIndex),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
+            color: isDarkMode ? Colors.white : null,
+          ),
+          padding: isDarkMode ? const EdgeInsets.all(2) : null,
+          child: Hero(
+            tag: _deal!.id!,
+            child: Image.network(item, fit: BoxFit.cover),
+          ),
+        ),
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -138,33 +134,10 @@ class _DealDetailsState extends State<DealDetails> {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
 
-    final List<Widget> carouselItems = _images.map((String item) {
-      return GestureDetector(
-        onTap: () => NavigationUtil.navigate(
-          context,
-          ImageFullScreen(images: _images, currentIndex: currentIndex),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            color: theme.brightness == Brightness.dark ? Colors.white : null,
-          ),
-          padding: theme.brightness == Brightness.dark
-              ? const EdgeInsets.all(2)
-              : null,
-          child: Hero(
-            tag: _deal.id!,
-            child: Image.network(item, fit: BoxFit.cover),
-          ),
-        ),
-      );
-    }).toList();
-
     Future<void> _onPressedReport() async {
       return showDialog<void>(
         context: context,
-        builder: (BuildContext context) =>
-            ReportDealDialog(reportedDealId: _deal.id!),
+        builder: (context) => ReportDealDialog(reportedDealId: _deal!.id!),
       );
     }
 
@@ -173,7 +146,7 @@ class _DealDetailsState extends State<DealDetails> {
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
           centerTitle: true,
-          title: Text(_deal.title),
+          title: Text(_deal!.title),
           actions: [
             // TODO(halildurmus): Hide "Report Deal" button to the poster of the deal
             PopupMenuButton<_DealPopup>(
@@ -200,20 +173,17 @@ class _DealDetailsState extends State<DealDetails> {
         alignment: Alignment.bottomCenter,
         children: [
           CarouselSlider(
-            items: carouselItems,
+            items: getCarouselItems(),
             options: CarouselOptions(
               viewportFraction: 1,
               height: deviceHeight / 2,
               enlargeCenterPage: true,
-              onPageChanged: (int i, CarouselPageChangedReason reason) {
-                setState(() {
-                  currentIndex = i;
-                });
-              },
+              onPageChanged: (index, reason) =>
+                  setState(() => currentIndex = index),
             ),
           ),
-          if (_images.length > 1)
-            SliderIndicator(images: _images, currentIndex: currentIndex)
+          if (_images!.length > 1)
+            SliderIndicator(images: _images!, currentIndex: currentIndex)
         ],
       );
     }
@@ -221,7 +191,7 @@ class _DealDetailsState extends State<DealDetails> {
     Widget buildDealDescription() {
       return Card(
         margin: const EdgeInsets.fromLTRB(16, 0, 16, 30),
-        child: ExpandableText(text: _deal.description),
+        child: ExpandableText(text: _deal!.description),
       );
     }
 
@@ -237,27 +207,22 @@ class _DealDetailsState extends State<DealDetails> {
         height: 45,
         width: 45,
         child: CachedNetworkImage(
-          imageUrl: _store.logo,
-          imageBuilder:
-              (BuildContext ctx, ImageProvider<Object> imageProvider) {
-            return DecoratedBox(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: imageProvider),
-              ),
-            );
-          },
-          placeholder: (BuildContext context, String url) =>
-              const SizedBox.square(dimension: 40),
+          imageUrl: _store!.logo,
+          imageBuilder: (ctx, imageProvider) => DecoratedBox(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: imageProvider),
+            ),
+          ),
+          placeholder: (context, url) => const SizedBox.square(dimension: 40),
         ),
       );
     }
 
     Widget buildFavoriteButton() {
       return Consumer<UserController>(
-        builder:
-            (BuildContext context, UserController mongoUser, Widget? child) {
+        builder: (context, UserController mongoUser, Widget? child) {
           final MyUser? user = mongoUser.user;
-          final bool isFavorited = user?.favorites![widget.deal.id!] == true;
+          final bool isFavorited = user?.favorites![_deal!.id!] == true;
 
           return FloatingActionButton(
             onPressed: () {
@@ -266,11 +231,10 @@ class _DealDetailsState extends State<DealDetails> {
 
                 return;
               }
-
               if (!isFavorited) {
                 GetIt.I
                     .get<SpringService>()
-                    .favoriteDeal(dealId: widget.deal.id!)
+                    .favoriteDeal(dealId: _deal!.id!)
                     .then((bool result) {
                   if (result) {
                     Provider.of<UserController>(context, listen: false)
@@ -280,7 +244,7 @@ class _DealDetailsState extends State<DealDetails> {
               } else {
                 GetIt.I
                     .get<SpringService>()
-                    .unfavoriteDeal(dealId: widget.deal.id!)
+                    .unfavoriteDeal(dealId: _deal!.id!)
                     .then((bool result) {
                   if (result) {
                     Provider.of<UserController>(context, listen: false)
@@ -315,7 +279,7 @@ class _DealDetailsState extends State<DealDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      DateTimeUtil.formatDateTime(_deal.createdAt!,
+                      DateTimeUtil.formatDateTime(_deal!.createdAt!,
                           useShortMessages: false),
                       style: textTheme.bodyText2!.copyWith(
                         color: theme.brightness == Brightness.light
@@ -327,7 +291,7 @@ class _DealDetailsState extends State<DealDetails> {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        DealScoreBox(score: _deal.dealScore!),
+                        DealScoreBox(score: _deal!.dealScore!),
                         const SizedBox(width: 5),
                         Text(
                           l(context).dealScore,
@@ -350,7 +314,7 @@ class _DealDetailsState extends State<DealDetails> {
                           ),
                         ),
                         Text(
-                          l(context).commentCount(_commentsCount),
+                          l(context).commentCount(_commentCount!),
                           style: textTheme.bodyText2!.copyWith(
                             color: theme.primaryColor,
                             fontWeight: FontWeight.w500,
@@ -371,7 +335,7 @@ class _DealDetailsState extends State<DealDetails> {
                             color: theme.primaryColorLight, size: 14),
                         const SizedBox(width: 4),
                         Text(
-                          _deal.views.toString(),
+                          _deal!.views.toString(),
                           style: textTheme.subtitle2!.copyWith(
                             color: theme.brightness == Brightness.light
                                 ? Colors.black54
@@ -399,7 +363,7 @@ class _DealDetailsState extends State<DealDetails> {
                     SizedBox(
                       width: deviceWidth * .7,
                       child: Text(
-                        _deal.title,
+                        _deal!.title,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: textTheme.headline6!
@@ -409,7 +373,7 @@ class _DealDetailsState extends State<DealDetails> {
                     const SizedBox(height: 4),
                     Text(
                       _categories.getCategoryNameFromCategory(
-                        category: _deal.category,
+                        category: _deal!.category,
                         locale: Localizations.localeOf(context),
                       ),
                       style: textTheme.bodyText2!.copyWith(
@@ -422,14 +386,14 @@ class _DealDetailsState extends State<DealDetails> {
                     Row(
                       children: [
                         Text(
-                          r'$' + _deal.price.toStringAsFixed(0),
+                          r'$' + _deal!.price.toStringAsFixed(0),
                           style: textTheme.headline5!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          r'$' + _deal.originalPrice.toStringAsFixed(0),
+                          r'$' + _deal!.originalPrice.toStringAsFixed(0),
                           style: textTheme.subtitle2!.copyWith(
                             color: theme.errorColor,
                             decoration: TextDecoration.lineThrough,
@@ -455,9 +419,8 @@ class _DealDetailsState extends State<DealDetails> {
 
         return;
       }
-
       final Deal? deal = await GetIt.I.get<SpringService>().voteDeal(
-            dealId: _deal.id!,
+            dealId: _deal!.id!,
             voteType: voteType,
           );
       if (deal == null) {
@@ -470,15 +433,19 @@ class _DealDetailsState extends State<DealDetails> {
       } else {
         setState(() {
           _deal = deal;
-          if (voteType == DealVoteType.up) {
-            isUpvoted = true;
-            isDownvoted = false;
-          } else if (voteType == DealVoteType.down) {
-            isUpvoted = false;
-            isDownvoted = true;
-          } else if (voteType == DealVoteType.unvote) {
-            isUpvoted = false;
-            isDownvoted = false;
+          switch (voteType) {
+            case DealVoteType.up:
+              isUpvoted = true;
+              isDownvoted = false;
+              break;
+            case DealVoteType.down:
+              isUpvoted = false;
+              isDownvoted = true;
+              break;
+            case DealVoteType.unvote:
+              isUpvoted = false;
+              isDownvoted = false;
+              break;
           }
         });
       }
@@ -553,7 +520,7 @@ class _DealDetailsState extends State<DealDetails> {
     Future<void> _onUserTap(String userId) async {
       return showDialog<void>(
         context: context,
-        builder: (BuildContext context) => UserProfileDialog(userId: userId),
+        builder: (context) => UserProfileDialog(userId: userId),
       );
     }
 
@@ -561,7 +528,8 @@ class _DealDetailsState extends State<DealDetails> {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: FutureBuilder<MyUser>(
-          future: GetIt.I.get<SpringService>().getUserById(id: _deal.postedBy!),
+          future:
+              GetIt.I.get<SpringService>().getUserById(id: _deal!.postedBy!),
           builder: (context, snapshot) {
             String avatar = 'http://www.gravatar.com/avatar';
             String nickname = '...';
@@ -632,7 +600,7 @@ class _DealDetailsState extends State<DealDetails> {
       final textTheme = Theme.of(context).textTheme;
 
       return Text(
-        l(context).commentCount(_commentsCount),
+        l(context).commentCount(_commentCount!),
         style: textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
       );
     }
@@ -651,7 +619,7 @@ class _DealDetailsState extends State<DealDetails> {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-            child: PostComment(deal: widget.deal),
+            child: PostComment(deal: _deal!),
           );
         },
       ).then((_) {
@@ -718,7 +686,7 @@ class _DealDetailsState extends State<DealDetails> {
     SliverPadding _buildComments() {
       return SliverPadding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-        sliver: DealComments(deal: _deal, pagingController: _pagingController),
+        sliver: DealComments(deal: _deal!, pagingController: _pagingController),
       );
     }
 
@@ -749,9 +717,9 @@ class _DealDetailsState extends State<DealDetails> {
 
     Widget _buildSeeDealButton() {
       Future<void> launchURL() async {
-        await canLaunch(_deal.dealUrl)
-            ? await launch(_deal.dealUrl)
-            : throw 'Could not launch ${_deal.dealUrl}';
+        await canLaunch(_deal!.dealUrl)
+            ? await launch(_deal!.dealUrl)
+            : throw 'Could not launch ${_deal!.dealUrl}';
       }
 
       return Padding(
@@ -783,9 +751,58 @@ class _DealDetailsState extends State<DealDetails> {
       );
     }
 
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: _buildBody(),
+    Widget _buildError() {
+      return Scaffold(
+        body: ErrorIndicatorUtil.buildFirstPageError(
+          context,
+          onTryAgain: () async {
+            _dealFuture =
+                GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
+            _commentCountFuture = GetIt.I
+                .get<SpringService>()
+                .getNumberOfCommentsByDealId(dealId: widget.dealId);
+            setState(() {});
+          },
+        ),
+      );
+    }
+
+    return FutureBuilder<dynamic>(
+      future: Future.wait([_dealFuture, _commentCountFuture]),
+      builder: (context, snapshot) {
+        if (snapshot.data?[0] != null && snapshot.data?[1] != null) {
+          _deal ??= snapshot.data[0]!;
+          _commentCount ??= snapshot.data[1]!;
+          // Prefetch and caches the images.
+          if (_images == null) {
+            _images = [_deal!.coverPhoto, ..._deal!.photos!];
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              for (final image in _images!) {
+                precacheImage(NetworkImage(image), context);
+              }
+            });
+          }
+          if (_user != null) {
+            isUpvoted = _deal!.upvoters!.contains(_user!.id);
+            isDownvoted = _deal!.downvoters!.contains(_user!.id);
+          }
+          _store ??= GetIt.I.get<Stores>().getStoreByStoreId(_deal!.store);
+
+          return Scaffold(
+            appBar: _buildAppBar(),
+            body: _buildBody(),
+          );
+        } else if (snapshot.connectionState == ConnectionState.active ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          return _buildError();
+        }
+      },
     );
   }
 }
