@@ -33,25 +33,33 @@ class DealItem extends StatefulWidget {
 
 class _DealItemState extends State<DealItem> {
   int _commentsCount = 0;
-  late Categories _categories;
+  int _dealScore = 0;
+  int _viewsCount = 0;
+  late final Categories _categories;
 
   @override
   void initState() {
     _categories = GetIt.I.get<Categories>();
-    _updateCommentsCount();
+    _fetchDealDetails();
     super.initState();
   }
 
-  void _updateCommentsCount() {
-    GetIt.I
-        .get<SpringService>()
-        .getNumberOfCommentsByDealId(dealId: widget.deal.id!)
-        .then((int? commentsCount) {
-      if (commentsCount != null) {
-        WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+  void _fetchDealDetails() {
+    Future.wait([
+      GetIt.I.get<SpringService>().getDeal(dealId: widget.deal.id!),
+      GetIt.I
+          .get<SpringService>()
+          .getNumberOfCommentsByDealId(dealId: widget.deal.id!),
+    ]).then((values) {
+      final deal = values[0] as Deal?;
+      final commentCount = values[1] as int?;
+      if (commentCount != null && deal != null) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
           if (mounted) {
             setState(() {
-              _commentsCount = commentsCount;
+              _dealScore = deal.dealScore!;
+              _commentsCount = commentCount;
+              _viewsCount = deal.views!;
             });
           }
         });
@@ -142,7 +150,7 @@ class _DealItemState extends State<DealItem> {
           const Icon(FontAwesomeIcons.thumbsUp, size: 14),
           const SizedBox(width: 4),
           Text(
-            deal.dealScore.toString(),
+            _dealScore.toString(),
             style: textTheme.subtitle2!.copyWith(fontSize: 12),
           ),
         ],
@@ -178,7 +186,7 @@ class _DealItemState extends State<DealItem> {
           const Icon(FontAwesomeIcons.solidEye, size: 14),
           const SizedBox(width: 4),
           Text(
-            deal.views.toString(),
+            _viewsCount.toString(),
             style: textTheme.subtitle2!.copyWith(fontSize: 12),
           ),
         ],
@@ -272,7 +280,10 @@ class _DealItemState extends State<DealItem> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: InkWell(
             onTap: widget.onTap ??
-                () => NavigationUtil.navigate(context, DealDetails(deal: deal)),
+                () => NavigationUtil.navigate(
+                      context,
+                      DealDetails(dealId: deal.id!),
+                    ),
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             child: buildDealDetails(),
           ),
@@ -280,19 +291,21 @@ class _DealItemState extends State<DealItem> {
       );
     }
 
-    return Container(
-      height: 145,
-      width: deviceWidth,
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Opacity(
-        opacity: widget.inactiveMessage == null ? 1 : .6,
-        child: Stack(
-          children: [
-            buildDealContent(),
-            buildFavoriteButton(),
-            if (widget.inactiveMessage != null) buildInactiveMessage(),
-            if (deal.isNew!) buildSpecialMark()
-          ],
+      child: SizedBox(
+        height: 145,
+        width: deviceWidth,
+        child: Opacity(
+          opacity: widget.inactiveMessage == null ? 1 : .6,
+          child: Stack(
+            children: [
+              buildDealContent(),
+              buildFavoriteButton(),
+              if (widget.inactiveMessage != null) buildInactiveMessage(),
+              if (deal.isNew!) buildSpecialMark()
+            ],
+          ),
         ),
       ),
     );

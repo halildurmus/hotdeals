@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../search/suggestion_response.dart';
 import '../services/spring_service.dart';
-import 'search_hit.dart';
 
 /// A class used for search functionality.
 ///
@@ -14,7 +14,7 @@ class SearchService {
   final SharedPreferences _prefs;
   static const String _recentSearchesKey = 'recent-searches';
 
-  Future<List<SearchHit>> searchDeals(String query) async =>
+  Future<SuggestionResponse> getSuggestions(String query) async =>
       await GetIt.I.get<SpringService>().getDealSuggestions(query: query);
 
   /// Loads the user's search history from [SharedPreferences].

@@ -8,29 +8,52 @@ import 'package:provider/provider.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
+import '../search/search_params.dart';
+import '../search/search_response.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
 import '../widgets/deal_item.dart';
+import '../widgets/filter_bar.dart';
 import '../widgets/sign_in_dialog.dart';
 import 'custom_snackbar.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({
     Key? key,
-    required this.dealFuture,
+    this.dealsFuture,
     required this.noDealsFound,
     this.pageSize = 20,
     this.pagingController,
     this.removeDealWhenUnfavorited = false,
+    this.searchParams,
+    this.searchResultsFuture,
+    this.showFilterBar = false,
     this.useRefreshIndicator = true,
   }) : super(key: key);
 
-  final Future<List<Deal>?> Function(int page, int size) dealFuture;
+  const DealPagedListView.withFilterBar({
+    Key? key,
+    this.dealsFuture,
+    required this.noDealsFound,
+    this.pageSize = 20,
+    this.pagingController,
+    this.removeDealWhenUnfavorited = false,
+    required this.searchParams,
+    required this.searchResultsFuture,
+    this.showFilterBar = true,
+    this.useRefreshIndicator = false,
+  }) : super(key: key);
+
+  final Future<List<Deal>> Function(int page, int size)? dealsFuture;
   final Widget noDealsFound;
   final int pageSize;
   final PagingController<int, Deal>? pagingController;
   final bool removeDealWhenUnfavorited;
+  final SearchParams? searchParams;
+  final Future<SearchResponse> Function(int page, int size)?
+      searchResultsFuture;
+  final bool showFilterBar;
   final bool useRefreshIndicator;
 
   @override
@@ -40,12 +63,19 @@ class DealPagedListView extends StatefulWidget {
 class _DealPagedListViewState extends State<DealPagedListView>
     with NetworkLoggy {
   late final PagingController<int, Deal> _pagingController;
+  PagingStatus? _pagingStatus;
+  SearchResponse? _searchResponse;
 
   @override
   void initState() {
     _pagingController =
-        widget.pagingController ?? PagingController<int, Deal>(firstPageKey: 0);
-    _pagingController.addPageRequestListener((pageKey) => _fetchPage(pageKey));
+        widget.pagingController ?? PagingController<int, Deal>(firstPageKey: 0)
+          ..addStatusListener((status) {
+            if (mounted) {
+              setState(() => _pagingStatus = status);
+            }
+          })
+          ..addPageRequestListener((pageKey) => _fetchPage(pageKey));
     super.initState();
   }
 
@@ -59,8 +89,15 @@ class _DealPagedListViewState extends State<DealPagedListView>
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems = await widget.dealFuture(pageKey, widget.pageSize);
-      final isLastPage = newItems!.length < widget.pageSize;
+      late final List<Deal> newItems;
+      if (widget.dealsFuture != null) {
+        newItems = await widget.dealsFuture!(pageKey, widget.pageSize);
+      } else {
+        _searchResponse =
+            await widget.searchResultsFuture!(pageKey, widget.pageSize);
+        newItems = _searchResponse!.hits.hits;
+      }
+      final isLastPage = newItems.length < widget.pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
       } else {
@@ -119,6 +156,9 @@ class _DealPagedListViewState extends State<DealPagedListView>
   @override
   Widget build(BuildContext context) {
     final MyUser? user = Provider.of<UserController>(context).user;
+    final shouldShowFilterBar = widget.showFilterBar &&
+        _pagingStatus != null &&
+        _searchResponse?.hits.docCount != 0;
 
     Widget buildPagedListView() {
       return PagedListView(
@@ -152,13 +192,26 @@ class _DealPagedListViewState extends State<DealPagedListView>
       );
     }
 
-    if (!widget.useRefreshIndicator) {
-      return buildPagedListView();
-    }
-
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(() => _pagingController.refresh()),
-      child: buildPagedListView(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (shouldShowFilterBar)
+          FilterBar(
+            pagingController: _pagingController,
+            searchParams: widget.searchParams!,
+            searchResponse: _searchResponse,
+          ),
+        if (!widget.useRefreshIndicator)
+          Expanded(child: buildPagedListView())
+        else
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () => Future.sync(() => _pagingController.refresh()),
+              child: buildPagedListView(),
+            ),
+          )
+      ],
     );
   }
 }
