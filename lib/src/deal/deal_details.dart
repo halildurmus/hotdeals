@@ -51,9 +51,9 @@ class _DealDetailsState extends State<DealDetails> {
   List<String>? _images;
   int currentIndex = 0;
   late Categories _categories;
-  late Store _store;
+  Store? _store;
   late MyUser? _user;
-  int _commentCount = 0;
+  int? _commentCount;
   bool isUpvoted = false;
   bool isDownvoted = false;
   bool _showScrollToTopButton = false;
@@ -84,11 +84,11 @@ class _DealDetailsState extends State<DealDetails> {
     GetIt.I
         .get<SpringService>()
         .getNumberOfCommentsByDealId(dealId: widget.dealId)
-        .then((int? commentsCount) {
-      if (commentsCount != null) {
+        .then((int? commentCount) {
+      if (commentCount != null) {
         WidgetsBinding.instance!.addPostFrameCallback((_) {
           if (mounted) {
-            setState(() => _commentCount = commentsCount);
+            setState(() => _commentCount = commentCount);
           }
         });
       }
@@ -178,11 +178,8 @@ class _DealDetailsState extends State<DealDetails> {
               viewportFraction: 1,
               height: deviceHeight / 2,
               enlargeCenterPage: true,
-              onPageChanged: (int i, CarouselPageChangedReason reason) {
-                setState(() {
-                  currentIndex = i;
-                });
-              },
+              onPageChanged: (index, reason) =>
+                  setState(() => currentIndex = index),
             ),
           ),
           if (_images!.length > 1)
@@ -210,7 +207,7 @@ class _DealDetailsState extends State<DealDetails> {
         height: 45,
         width: 45,
         child: CachedNetworkImage(
-          imageUrl: _store.logo,
+          imageUrl: _store!.logo,
           imageBuilder: (ctx, imageProvider) => DecoratedBox(
             decoration: BoxDecoration(
               image: DecorationImage(image: imageProvider),
@@ -234,7 +231,6 @@ class _DealDetailsState extends State<DealDetails> {
 
                 return;
               }
-
               if (!isFavorited) {
                 GetIt.I
                     .get<SpringService>()
@@ -318,7 +314,7 @@ class _DealDetailsState extends State<DealDetails> {
                           ),
                         ),
                         Text(
-                          l(context).commentCount(_commentCount),
+                          l(context).commentCount(_commentCount!),
                           style: textTheme.bodyText2!.copyWith(
                             color: theme.primaryColor,
                             fontWeight: FontWeight.w500,
@@ -604,7 +600,7 @@ class _DealDetailsState extends State<DealDetails> {
       final textTheme = Theme.of(context).textTheme;
 
       return Text(
-        l(context).commentCount(_commentCount),
+        l(context).commentCount(_commentCount!),
         style: textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold),
       );
     }
@@ -776,6 +772,7 @@ class _DealDetailsState extends State<DealDetails> {
       builder: (context, snapshot) {
         if (snapshot.data?[0] != null && snapshot.data?[1] != null) {
           _deal ??= snapshot.data[0]!;
+          _commentCount ??= snapshot.data[1]!;
           // Prefetch and caches the images.
           if (_images == null) {
             _images = [_deal!.coverPhoto, ..._deal!.photos!];
@@ -789,8 +786,7 @@ class _DealDetailsState extends State<DealDetails> {
             isUpvoted = _deal!.upvoters!.contains(_user!.id);
             isDownvoted = _deal!.downvoters!.contains(_user!.id);
           }
-          _store = GetIt.I.get<Stores>().getStoreByStoreId(_deal!.store);
-          _commentCount = snapshot.data[1]!;
+          _store ??= GetIt.I.get<Stores>().getStoreByStoreId(_deal!.store);
 
           return Scaffold(
             appBar: _buildAppBar(),
