@@ -32,7 +32,7 @@ import 'image_fullscreen.dart';
 import 'post_comment.dart';
 import 'report_deal_dialog.dart';
 
-enum _DealPopup { reportDeal }
+enum _DealPopup { markAsExpired, reportDeal }
 
 class DealDetails extends StatefulWidget {
   const DealDetails({Key? key, required this.dealId}) : super(key: key);
@@ -127,6 +127,28 @@ class _DealDetailsState extends State<DealDetails> {
     }).toList();
   }
 
+  Future<void> _markAsExpired() async {
+    try {
+      final Deal deal = await GetIt.I.get<SpringService>().markDealAsExpired(
+            dealId: _deal!.id!,
+          );
+      setState(() => _deal = deal);
+    } catch (e) {
+      final snackBar = CustomSnackBar(
+        icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+        text: l(context).anErrorOccurred,
+      ).buildSnackBar(context);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> _onPressedReport() async {
+    return showDialog<void>(
+      context: context,
+      builder: (context) => ReportDealDialog(reportedDealId: _deal!.id!),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -134,36 +156,39 @@ class _DealDetailsState extends State<DealDetails> {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
 
-    Future<void> _onPressedReport() async {
-      return showDialog<void>(
-        context: context,
-        builder: (context) => ReportDealDialog(reportedDealId: _deal!.id!),
-      );
-    }
-
     PreferredSizeWidget _buildAppBar() {
+      final items = <PopupMenuItem<_DealPopup>>[
+        if (!_deal!.isExpired && (_user!.id! == _deal!.postedBy!))
+          PopupMenuItem<_DealPopup>(
+            value: _DealPopup.markAsExpired,
+            child: Text(l(context).markAsExpired),
+          ),
+        if (_user!.id! != _deal!.postedBy!)
+          PopupMenuItem<_DealPopup>(
+            value: _DealPopup.reportDeal,
+            child: Text(l(context).reportDeal),
+          ),
+      ];
+
       return PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
+          actions: [
+            if (items.isNotEmpty)
+              PopupMenuButton<_DealPopup>(
+                icon: const Icon(Icons.more_vert),
+                itemBuilder: (context) => items,
+                onSelected: (_DealPopup result) {
+                  if (result == _DealPopup.markAsExpired) {
+                    _markAsExpired();
+                  } else if (result == _DealPopup.reportDeal) {
+                    _onPressedReport();
+                  }
+                },
+              ),
+          ],
           centerTitle: true,
           title: Text(_deal!.title),
-          actions: [
-            // TODO(halildurmus): Hide "Report Deal" button to the poster of the deal
-            PopupMenuButton<_DealPopup>(
-              icon: const Icon(Icons.more_vert),
-              onSelected: (_DealPopup result) {
-                if (result == _DealPopup.reportDeal) {
-                  _onPressedReport();
-                }
-              },
-              itemBuilder: (BuildContext context) => [
-                PopupMenuItem<_DealPopup>(
-                  value: _DealPopup.reportDeal,
-                  child: Text(l(context).reportDeal),
-                ),
-              ],
-            ),
-          ],
         ),
       );
     }
@@ -738,6 +763,7 @@ class _DealDetailsState extends State<DealDetails> {
     Widget _buildBody() {
       return Column(
         children: [
+          if (_deal!.isExpired) const _DealIsExpiredBanner(),
           Expanded(
             child: Stack(
               children: [
@@ -803,6 +829,47 @@ class _DealDetailsState extends State<DealDetails> {
           return _buildError();
         }
       },
+    );
+  }
+}
+
+class _DealIsExpiredBanner extends StatefulWidget {
+  const _DealIsExpiredBanner({Key? key}) : super(key: key);
+
+  @override
+  _DealIsExpiredBannerState createState() => _DealIsExpiredBannerState();
+}
+
+class _DealIsExpiredBannerState extends State<_DealIsExpiredBanner> {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    return SizedBox(
+      height: 30,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: isDarkMode
+              ? theme.primaryColorDark
+              : theme.colorScheme.secondaryVariant,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.error,
+              color: Colors.white,
+              size: 18,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              l(context).thisDealHasExpired,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

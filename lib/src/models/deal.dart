@@ -13,6 +13,7 @@ List<Deal> dealsFromJson(String str) =>
 class Deal {
   const Deal({
     this.id,
+    this.isExpired = false,
     this.postedBy,
     required this.coverPhoto,
     required this.dealUrl,
@@ -34,6 +35,7 @@ class Deal {
 
   factory Deal.fromJson(Json json) => Deal(
         id: json['id'] as String,
+        isExpired: json['isExpired'] as bool,
         postedBy: json['postedBy'] as String,
         coverPhoto: json['coverPhoto'] as String,
         dealUrl: json['dealUrl'] as String,
@@ -56,8 +58,9 @@ class Deal {
       );
 
   factory Deal.fromJsonES(Json json) => Deal(
-    dealUrl: '',
+        dealUrl: '',
         id: json['id'] as String,
+        isExpired: json['isExpired'] as bool,
         coverPhoto: json['coverPhoto'] as String,
         title: json['title'] as String,
         description: json['description'] as String,
@@ -77,6 +80,7 @@ class Deal {
       );
 
   final String? id;
+  final bool isExpired;
   final String? postedBy;
   final String coverPhoto;
   final String dealUrl;
@@ -98,6 +102,7 @@ class Deal {
   Json toJson() {
     return <String, dynamic>{
       if (postedBy != null) 'postedBy': postedBy,
+      'isExpired': isExpired,
       'coverPhoto': coverPhoto,
       'dealUrl': dealUrl,
       if (photos != null) 'photos': photos,
@@ -112,6 +117,6 @@ class Deal {
 
   @override
   String toString() {
-    return 'Deal{id: $id, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
+    return 'Deal{id: $id, isExpired: $isExpired, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
   }
 }

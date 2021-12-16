@@ -400,7 +400,25 @@ class SpringService with NetworkLoggy {
       return response.statusCode == 204;
     } on Exception catch (e) {
       loggy.error(e, e);
-      throw Exception('An error occurred while logging out!');
+      throw Exception('An error occurred while removing fcm token!');
+    }
+  }
+
+    Future<Deal> markDealAsExpired({required String dealId}) async {
+    final url = '$_baseUrl/deals/$dealId';
+    final data = <Json>[
+      <String, dynamic>{'op': 'replace', 'path': '/isExpired', 'value': true}
+    ];
+    try {
+      final Response response = await _httpService.patch(url, data);
+      if (response.statusCode == 200) {
+        return Deal.fromJson(jsonDecode(response.body) as Json);
+      }
+
+      throw Exception('Failed to mark the deal as expired!');
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      throw Exception('Failed to mark the deal as expired!');
     }
   }
 
@@ -412,7 +430,6 @@ class SpringService with NetworkLoggy {
     final data = <Json>[
       <String, dynamic>{'op': 'replace', 'path': '/avatar', 'value': avatarUrl}
     ];
-
     try {
       final Response response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
@@ -436,7 +453,6 @@ class SpringService with NetworkLoggy {
     final data = <Json>[
       <String, dynamic>{'op': 'replace', 'path': '/nickname', 'value': nickname}
     ];
-
     try {
       final Response response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
@@ -569,7 +585,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<Deal>> getLatestDeals({int? page, int? size}) async {
-    final url = '$_baseUrl/deals/search/findAllByOrderByCreatedAtDesc';
+    final url = '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByCreatedAtDesc';
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {

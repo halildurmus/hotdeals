@@ -411,11 +411,11 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         stream: GetIt.I
             .get<FirestoreService>()
             .messagesStreamByDocID(docID: widget.docId),
-        builder: (context, AsyncSnapshot<QuerySnapshot<Json>> snapshot) {
+        builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            final List<DocumentSnapshot<Json>> items = snapshot.data!.docs;
+            final items = snapshot.data!.docs;
 
             final List<types.Message> messages = items
                 .map((DocumentSnapshot<Json> e) {
