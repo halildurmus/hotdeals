@@ -8,13 +8,13 @@ import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
+import 'grayscale_filtered.dart';
 
 class DealItem extends StatefulWidget {
   const DealItem({
     Key? key,
     this.onTap,
     required this.deal,
-    this.inactiveMessage,
     required this.index,
     required this.isFavorited,
     required this.onFavoriteButtonPressed,
@@ -22,7 +22,6 @@ class DealItem extends StatefulWidget {
 
   final VoidCallback? onTap;
   final Deal deal;
-  final String? inactiveMessage;
   final int index;
   final bool isFavorited;
   final VoidCallback onFavoriteButtonPressed;
@@ -246,28 +245,22 @@ class _DealItemState extends State<DealItem> {
       );
     }
 
-    Widget buildInactiveMessage() {
-      return Positioned(
-        left: 0,
-        top: 124,
-        child: Text(widget.inactiveMessage!),
-      );
-    }
-
     Widget buildSpecialMark() {
       return Positioned(
         left: 10,
         top: 10,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+        child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: theme.primaryColor,
           ),
-          child: Text(
-            l(context).newMark,
-            style: textTheme.bodyText2!
-                .copyWith(color: Colors.white, fontSize: 11),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: Text(
+              deal.isExpired ? l(context).expired : l(context).newMark,
+              style: textTheme.bodyText2!
+                  .copyWith(color: Colors.white, fontSize: 11),
+            ),
           ),
         ),
       );
@@ -291,22 +284,29 @@ class _DealItemState extends State<DealItem> {
       );
     }
 
+    Widget buildStack() {
+      return Stack(
+        children: [
+          buildDealContent(),
+          buildFavoriteButton(),
+          if (deal.isExpired || deal.isNew!) buildSpecialMark()
+        ],
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SizedBox(
         height: 145,
         width: deviceWidth,
-        child: Opacity(
-          opacity: widget.inactiveMessage == null ? 1 : .6,
-          child: Stack(
-            children: [
-              buildDealContent(),
-              buildFavoriteButton(),
-              if (widget.inactiveMessage != null) buildInactiveMessage(),
-              if (deal.isNew!) buildSpecialMark()
-            ],
-          ),
-        ),
+        child: deal.isExpired
+            ? Opacity(
+                opacity: deal.isExpired ? .7 : 1,
+                child: GrayscaleColorFiltered(
+                  child: buildStack(),
+                ),
+              )
+            : buildStack(),
       ),
     );
   }
