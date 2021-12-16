@@ -25,28 +25,34 @@ class Deals extends StatefulWidget {
 }
 
 class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
-  late PagingController<int, Deal> _pagingController;
+  late PagingController<int, Deal> _pagingControllerLatest;
+  late PagingController<int, Deal> _pagingControllerMostLiked;
   bool _searchMode = false;
   late final FloatingSearchBarController _searchBarController;
   late final TabController tabController;
 
   @override
   void initState() {
-    _pagingController = PagingController<int, Deal>(firstPageKey: 0);
+    _pagingControllerLatest = PagingController<int, Deal>(firstPageKey: 0);
+    _pagingControllerMostLiked = PagingController<int, Deal>(firstPageKey: 0);
     _searchBarController = FloatingSearchBarController();
-    tabController = TabController(vsync: this, length: 1);
+    tabController = TabController(vsync: this, length: 2);
     super.initState();
   }
 
   @override
   void dispose() {
     _searchBarController.dispose();
-    _pagingController.dispose();
+    _pagingControllerLatest.dispose();
+    _pagingControllerMostLiked.dispose();
     super.dispose();
   }
 
-  Future<List<Deal>> _dealFuture(int page, int size) =>
+  Future<List<Deal>> _latestDealsFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getLatestDeals(page: page, size: size);
+
+  Future<List<Deal>> _mostLikedDealsFuture(int page, int size) =>
+      GetIt.I.get<SpringService>().getMostLikedDeals(page: page, size: size);
 
   Widget buildNoDealsFound(BuildContext context) {
     return ErrorIndicator(
@@ -71,8 +77,13 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
         controller: tabController,
         children: [
           DealPagedListView(
-            dealsFuture: _dealFuture,
-            pagingController: _pagingController,
+            dealsFuture: _latestDealsFuture,
+            pagingController: _pagingControllerLatest,
+            noDealsFound: buildNoDealsFound(context),
+          ),
+          DealPagedListView(
+            dealsFuture: _mostLikedDealsFuture,
+            pagingController: _pagingControllerMostLiked,
             noDealsFound: buildNoDealsFound(context),
           ),
         ],
@@ -80,31 +91,26 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
     }
 
     PreferredSizeWidget _buildAppBar() {
-      List<Widget> _buildActions() {
-        return [
+      final actions = [
+        IconButton(
+          onPressed: () {
+            setState(() => _searchMode = true);
+            WidgetsBinding.instance!
+                .addPostFrameCallback((_) => _searchBarController.open());
+          },
+          icon: const Icon(Icons.search),
+        ),
+        if (user != null)
           IconButton(
-            onPressed: () {
-              setState(() {
-                _searchMode = true;
-              });
-              WidgetsBinding.instance!.addPostFrameCallback(
-                  (timeStamp) => _searchBarController.open());
-            },
-            icon: const Icon(Icons.search),
+            onPressed: () => NavigationUtil.navigate(context, const PostDeal())
+                .then((_) => _pagingControllerLatest.refresh()),
+            icon: const Icon(Icons.add_circle),
           ),
-          if (user != null)
-            IconButton(
-              onPressed: () =>
-                  NavigationUtil.navigate(context, const PostDeal())
-                      .then((_) => _pagingController.refresh()),
-              icon: const Icon(Icons.add_circle),
-            ),
-        ];
-      }
+      ];
 
       return AppBar(
+        actions: actions,
         title: Text(l(context).appTitle),
-        actions: _buildActions(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight * 1),
           child: Padding(
@@ -118,7 +124,10 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
-                tabs: [Tab(text: l(context).latest)],
+                tabs: [
+                  Tab(text: l(context).latest),
+                  Tab(text: l(context).mostLiked)
+                ],
               ),
             ),
           ),

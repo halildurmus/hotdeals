@@ -601,6 +601,23 @@ class SpringService with NetworkLoggy {
     }
   }
 
+   Future<List<Deal>> getMostLikedDeals({int? page, int? size}) async {
+    final url = '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByDealScoreDesc';
+    try {
+      final Response response = await _httpService.get(url, auth: false);
+      if (response.statusCode == 200) {
+        final deals = dealsFromJson(response.body);
+
+        return deals;
+      }
+
+      throw Exception('Could not get the most liked deals!');
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      throw Exception('Could not get the most liked deals!');
+    }
+  }
+
   Future<int?> getNumberOfCommentsByDealId({required String dealId}) async {
     final String url =
         '$_baseUrl/comments/search/countCommentsByDealId?dealId=$dealId';
