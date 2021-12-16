@@ -757,6 +757,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "startSearching": "Start searching",
+  "@startSearching": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "successfullyReportedDeal": "Successfully reported deal",
   "@successfullyReportedDeal": {
     "description": "",
@@ -1116,6 +1123,20 @@
   },
   "reportDeal": "Report Deal",
   "@reportDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "markAsExpired": "Mark as Expired",
+  "@markAsExpired": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "thisDealHasExpired": "Sorry, this deal has expired.",
+  "@thisDealHasExpired": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

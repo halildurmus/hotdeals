@@ -757,6 +757,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "startSearching": "Aramaya başlayın",
+  "@startSearching": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "successfullyReportedDeal": "Fırsat, başarıyla şikayet edildi",
   "@successfullyReportedDeal": {
     "description": "",
@@ -1116,6 +1123,20 @@
   },
   "reportDeal": "Fırsatı Şikayet Et",
   "@reportDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "markAsExpired": "Süresi doldu olarak işaretle",
+  "@markAsExpired": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "thisDealHasExpired": "Üzgünüz, bu fırsatın süresi doldu.",
+  "@thisDealHasExpired": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
