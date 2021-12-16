@@ -59,9 +59,9 @@ class _SearchResultsState extends State<SearchResults> {
   @override
   Widget build(BuildContext context) {
     if (widget.searchParams.query.isEmpty) {
-      return const ErrorIndicator(
+      return ErrorIndicator(
         icon: Icons.search,
-        title: 'Start searching',
+        title: l(context).startSearching,
       );
     }
 
