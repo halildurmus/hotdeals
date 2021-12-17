@@ -22,7 +22,7 @@ class AuthWidgetBuilder extends StatelessWidget with UiLoggy {
 
     return StreamBuilder<MyUser?>(
       stream: authService.onAuthStateChanged,
-      builder: (BuildContext context, AsyncSnapshot<MyUser?> snapshot) {
+      builder: (context, snapshot) {
         final MyUser? user = snapshot.data;
         loggy.info('User uid: ${user?.uid}');
 

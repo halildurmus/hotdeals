@@ -13,7 +13,9 @@ class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(l(context).appTitle)),
+      appBar: AppBar(
+        title: Text(l(context).appTitle),
+      ),
       body: ErrorIndicatorUtil.buildFirstPageError(
         context,
         onTryAgain: () async {

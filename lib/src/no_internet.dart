@@ -22,7 +22,7 @@ class _NoInternetState extends State<NoInternet> {
   void initState() {
     final ConnectionService connectionService =
         GetIt.I.get<ConnectionService>();
-    _connection = connectionService.connectionChange.listen((bool isConnected) {
+    _connection = connectionService.connectionChange.listen((isConnected) {
       _isConnected = isConnected;
       if (mounted) {
         setState(() {});
@@ -100,7 +100,13 @@ class _NoInternetState extends State<NoInternet> {
         centerTitle: true,
         title: Text(l(context).appTitle),
       ),
-      body: Stack(fit: StackFit.expand, children: [buildHeader(), buildBody()]),
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          buildHeader(),
+          buildBody(),
+        ],
+      ),
     );
   }
 }
