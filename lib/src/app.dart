@@ -7,6 +7,7 @@ import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
+import 'constants.dart';
 import 'error_screen.dart';
 import 'firebase_messaging_listener.dart';
 import 'models/categories.dart';
@@ -42,29 +43,25 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
     subscribeToFCM();
   }
 
-  void _fetchCategoriesAndStores({BuildContext? ctx}) {
+  void _fetchCategoriesAndStores([BuildContext? ctx]) {
     Future.wait<dynamic>([
       GetIt.I.get<Categories>().getCategories(),
       GetIt.I.get<Stores>().getStores(),
     ]).then((_) {
-      WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         // If ctx is provided, pops the LoadingDialog in the ErrorScreen.
         if (ctx != null) {
           Navigator.of(ctx).pop();
         }
-        setState(() {
-          _futureState = _FutureState.success;
-        });
+        setState(() => _futureState = _FutureState.success);
       });
     }).catchError((_) {
-      WidgetsBinding.instance!.addPostFrameCallback((Duration timeStamp) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         // If ctx is provided, pops the LoadingDialog in the ErrorScreen.
         if (ctx != null) {
           Navigator.of(ctx).pop();
         }
-        setState(() {
-          _futureState = _FutureState.error;
-        });
+        setState(() => _futureState = _FutureState.error);
       });
     });
   }
@@ -109,14 +106,19 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
     if (_futureState == _FutureState.loading) {
       // TODO(halildurmus): Replace this with a splash screen
       return _buildMaterialApp(
-        home: const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text(appTitle),
+          ),
+          body: const Center(
+            child: CircularProgressIndicator(),
+          ),
         ),
       );
     } else if (_futureState == _FutureState.error) {
       return _buildMaterialApp(
         home: ErrorScreen(
-          onTap: (ctx) => _fetchCategoriesAndStores(ctx: ctx),
+          onTap: (ctx) => _fetchCategoriesAndStores(ctx),
         ),
       );
     }

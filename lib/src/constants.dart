@@ -1,5 +1,7 @@
 import 'dart:ui' show Locale;
 
+const appTitle = 'hotdeals';
+
 // Assets
 const assetEnglish = 'assets/icons/en.svg';
 const assetTurkish = 'assets/icons/tr.svg';
