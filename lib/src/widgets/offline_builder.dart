@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:hotdeals/src/constants.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../services/connection_service.dart';
@@ -67,27 +69,37 @@ class OfflineBuilderState extends State<OfflineBuilder> with NetworkLoggy {
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
       stream: _connectivityStream,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+      builder: (context, snapshot) {
         if (!snapshot.hasData && !snapshot.hasError) {
-          return const SizedBox();
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text(appTitle),
+            ),
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         } else if (snapshot.hasError) {
           loggy.error(snapshot.error, snapshot.error);
           if (widget.errorBuilder != null) {
             return widget.errorBuilder!(context);
           }
 
-          throw OfflineBuilderError(snapshot.error!);
+          throw _OfflineBuilderError(snapshot.error!);
         }
 
         return widget.connectivityBuilder(
-            context, snapshot.data!, widget.child ?? widget.builder!(context));
+          context,
+          snapshot.data!,
+          widget.child ?? widget.builder!(context),
+        );
       },
     );
   }
 }
 
-class OfflineBuilderError extends Error {
-  OfflineBuilderError(this.error);
+class _OfflineBuilderError extends Error {
+  _OfflineBuilderError(this.error);
 
   final Object error;
 
