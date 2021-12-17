@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
+    show PagingController;
 
 import '../deal/deal_details.dart';
 import '../models/categories.dart';
@@ -13,18 +15,18 @@ import 'grayscale_filtered.dart';
 class DealItem extends StatefulWidget {
   const DealItem({
     Key? key,
-    this.onTap,
     required this.deal,
     required this.index,
     required this.isFavorited,
     required this.onFavoriteButtonPressed,
+    required this.pagingController,
   }) : super(key: key);
 
-  final VoidCallback? onTap;
   final Deal deal;
   final int index;
   final bool isFavorited;
   final VoidCallback onFavoriteButtonPressed;
+  final PagingController pagingController;
 
   @override
   _DealItemState createState() => _DealItemState();
@@ -272,11 +274,10 @@ class _DealItemState extends State<DealItem> {
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: InkWell(
-            onTap: widget.onTap ??
-                () => NavigationUtil.navigate(
-                      context,
-                      DealDetails(dealId: deal.id!),
-                    ),
+            onTap: () => NavigationUtil.navigate(
+              context,
+              DealDetails(dealId: deal.id!),
+            ).then((_) => widget.pagingController.refresh()),
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             child: buildDealDetails(),
           ),

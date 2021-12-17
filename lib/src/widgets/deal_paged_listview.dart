@@ -175,6 +175,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
               isFavorited: isFavorited,
               onFavoriteButtonPressed: () =>
                   onFavoriteButtonPressed(user, deal.id!, isFavorited),
+              pagingController: _pagingController,
             );
           },
           firstPageErrorIndicatorBuilder: (context) =>
