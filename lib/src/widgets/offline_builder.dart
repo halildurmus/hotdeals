@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:hotdeals/src/constants.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
+import '../constants.dart';
 import '../services/connection_service.dart';
 import '../utils/offline_builder_util.dart';
 
