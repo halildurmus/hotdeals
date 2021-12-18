@@ -25,8 +25,8 @@ class Deals extends StatefulWidget {
 }
 
 class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
-  late PagingController<int, Deal> _pagingControllerLatest;
-  late PagingController<int, Deal> _pagingControllerMostLiked;
+  late final PagingController<int, Deal> _pagingControllerLatest;
+  late final PagingController<int, Deal> _pagingControllerMostLiked;
   bool _searchMode = false;
   late final FloatingSearchBarController _searchBarController;
   late final TabController tabController;
