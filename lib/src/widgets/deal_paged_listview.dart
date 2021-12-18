@@ -17,6 +17,7 @@ import '../widgets/deal_item.dart';
 import '../widgets/filter_bar.dart';
 import '../widgets/sign_in_dialog.dart';
 import 'custom_snackbar.dart';
+import 'error_indicator.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({
@@ -156,9 +157,12 @@ class _DealPagedListViewState extends State<DealPagedListView>
   @override
   Widget build(BuildContext context) {
     final MyUser? user = Provider.of<UserController>(context).user;
-    final shouldShowFilterBar = widget.showFilterBar &&
-        _pagingStatus != null &&
-        _searchResponse?.hits.docCount != 0;
+    final searchHitsIsNotEmpty = _searchResponse?.hits.docCount != 0;
+    final itemListIsEmpty = _pagingController.itemList?.isEmpty ?? false;
+    final shouldShowFilterBar = widget.showFilterBar && _pagingStatus != null;
+    final shouldShowTryAgainButton = shouldShowFilterBar &&
+        widget.searchParams?.filterCount != 0 &&
+        itemListIsEmpty;
 
     Widget buildPagedListView() {
       return PagedListView(
@@ -195,17 +199,30 @@ class _DealPagedListViewState extends State<DealPagedListView>
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: shouldShowTryAgainButton
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (shouldShowFilterBar)
+        if (shouldShowFilterBar && searchHitsIsNotEmpty)
           FilterBar(
             pagingController: _pagingController,
             searchParams: widget.searchParams!,
             searchResponse: _searchResponse,
+          )
+        else if (shouldShowTryAgainButton)
+          ErrorIndicator(
+            icon: Icons.local_offer,
+            title: l(context).couldNotFindAnyDeal,
+            tryAgainText: l(context).resetFilters,
+            onTryAgain: () {
+              widget.searchParams!.reset();
+              _pagingController.refresh();
+            },
           ),
-        if (!widget.useRefreshIndicator)
+        if (!shouldShowTryAgainButton && !widget.useRefreshIndicator)
           Expanded(child: buildPagedListView())
-        else
+        else if (!shouldShowTryAgainButton)
           Expanded(
             child: RefreshIndicator(
               onRefresh: () => Future.sync(() => _pagingController.refresh()),

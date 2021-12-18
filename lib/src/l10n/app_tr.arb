@@ -1142,6 +1142,41 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "includeExpiredDeals": "Süresi bitmiş fırsatları göster",
+  "@includeExpiredDeals": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "show": "Göster",
+  "@show": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hide": "Gizle",
+  "@hide": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "resetFilters": "Filtreleri temizle",
+  "@resetFilters": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hideExpiredDeals": "Süresi bitmiş fırsatları gizle",
+  "@hideExpiredDeals": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "expired": "Süresi biten",
   "@expired": {
     "description": "",

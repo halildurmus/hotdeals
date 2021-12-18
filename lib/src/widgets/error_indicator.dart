@@ -11,6 +11,7 @@ class ErrorIndicator extends StatelessWidget {
     this.onTryAgain,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
     required this.title,
+    this.tryAgainIcon = Icons.refresh,
     this.tryAgainText,
     Key? key,
   }) : super(key: key);
@@ -22,6 +23,7 @@ class ErrorIndicator extends StatelessWidget {
   final VoidCallback? onTryAgain;
   final EdgeInsets padding;
   final String title;
+  final IconData tryAgainIcon;
   final String? tryAgainText;
 
   @override
@@ -55,7 +57,7 @@ class ErrorIndicator extends StatelessWidget {
             if (onTryAgain != null)
               ElevatedButton.icon(
                 onPressed: onTryAgain,
-                icon: const Icon(Icons.refresh),
+                icon: Icon(tryAgainIcon),
                 label: Text(
                   tryAgainText ?? l(context).tryAgain,
                 ),

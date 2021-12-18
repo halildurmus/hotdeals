@@ -1142,6 +1142,41 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "includeExpiredDeals": "Include expired deals",
+  "@includeExpiredDeals": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "show": "Show",
+  "@show": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hide": "Hide",
+  "@hide": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "resetFilters": "resetFilters",
+  "@resetFilters": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "hideExpiredDeals": "Hide expired deals",
+  "@hideExpiredDeals": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "expired": "Expired",
   "@expired": {
     "description": "",

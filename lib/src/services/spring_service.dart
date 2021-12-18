@@ -404,7 +404,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-    Future<Deal> markDealAsExpired({required String dealId}) async {
+  Future<Deal> markDealAsExpired({required String dealId}) async {
     final url = '$_baseUrl/deals/$dealId';
     final data = <Json>[
       <String, dynamic>{'op': 'replace', 'path': '/isExpired', 'value': true}
@@ -585,7 +585,8 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<Deal>> getLatestDeals({int? page, int? size}) async {
-    final url = '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByCreatedAtDesc';
+    final url =
+        '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByCreatedAtDesc';
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
@@ -601,8 +602,9 @@ class SpringService with NetworkLoggy {
     }
   }
 
-   Future<List<Deal>> getMostLikedDeals({int? page, int? size}) async {
-    final url = '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByDealScoreDesc';
+  Future<List<Deal>> getMostLikedDeals({int? page, int? size}) async {
+    final url =
+        '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByDealScoreDesc';
     try {
       final Response response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {

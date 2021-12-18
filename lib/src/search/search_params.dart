@@ -51,6 +51,7 @@ class SearchParams {
     List<String>? categories,
     List<PriceRange>? prices,
     List<String>? stores,
+    this.hideExpired = false,
     this.sortBy,
     this.order,
     this.page = 0,
@@ -66,6 +67,7 @@ class SearchParams {
   late List<String> categories;
   late List<PriceRange> prices;
   late List<String> stores;
+  bool hideExpired;
   DealSortBy? sortBy;
   Order? order;
   int page;
@@ -76,6 +78,7 @@ class SearchParams {
     List<String>? categories,
     List<PriceRange>? prices,
     List<String>? stores,
+    bool? hideExpired,
     DealSortBy? sortBy,
     Order? order,
     int? page,
@@ -86,6 +89,7 @@ class SearchParams {
       categories: categories ?? this.categories,
       prices: prices ?? this.prices,
       stores: stores ?? this.stores,
+      hideExpired: hideExpired ?? this.hideExpired,
       sortBy: sortBy ?? this.sortBy,
       order: order ?? this.order,
       page: page ?? this.page,
@@ -98,6 +102,7 @@ class SearchParams {
       (categories.isNotEmpty ? 1 : 0) +
       (prices.isNotEmpty ? 1 : 0) +
       (stores.isNotEmpty ? 1 : 0) +
+      (hideExpired ? 1 : 0) +
       (sortBy != null ? 1 : 0);
 
   /// Resets the applied filters.
@@ -105,6 +110,7 @@ class SearchParams {
     categories.clear();
     prices.clear();
     stores.clear();
+    hideExpired = false;
     sortBy = null;
     order = null;
   }
@@ -123,6 +129,9 @@ class SearchParams {
     }
     if (stores.isNotEmpty) {
       queryParameters.putIfAbsent('stores', () => stores.join(','));
+    }
+    if (hideExpired) {
+      queryParameters.putIfAbsent('hideExpired', () => 'true');
     }
     if (sortBy != null) {
       queryParameters.putIfAbsent('sortBy', () => sortBy!.name);

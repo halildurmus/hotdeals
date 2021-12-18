@@ -7,6 +7,8 @@ import '../search/search_response.dart';
 import '../utils/localization_util.dart';
 import 'custom_alert_dialog.dart';
 import 'custom_filter_chip.dart';
+import 'expired_filter_chip.dart';
+import 'expired_modal_bottom_sheet.dart';
 import 'filter_modal_bottom_sheet.dart';
 import 'sort_filter_chip.dart';
 import 'sort_modal_bottom_sheet.dart';
@@ -49,7 +51,7 @@ class _FilterBarState extends State<FilterBar> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Card(
@@ -85,8 +87,12 @@ class _FilterBarState extends State<FilterBar> {
                     onListTileTap: onListTileTap,
                     searchParams: widget.searchParams,
                   ),
+                  _ExpiredFilterChip(
+                    onListTileTap: onListTileTap,
+                    searchParams: widget.searchParams,
+                  ),
                   _SortFilterChip(
-                   onListTileTap: onListTileTap,
+                    onListTileTap: onListTileTap,
                     searchParams: widget.searchParams,
                   ),
                 ],
@@ -266,6 +272,39 @@ class _StoreFilterChip extends StatelessWidget {
           title: l(context).filterByStore,
         ),
       ),
+    );
+  }
+}
+
+class _ExpiredFilterChip extends StatelessWidget {
+  const _ExpiredFilterChip({
+    Key? key,
+    required this.onListTileTap,
+    required this.searchParams,
+  }) : super(key: key);
+
+  final VoidCallback onListTileTap;
+  final SearchParams searchParams;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpiredFilterChip(
+      label: l(context).expired,
+      onSelected: (value) => showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+        ),
+        builder: (context) => ExpiredModalBottomSheet(
+          onListTileTap: onListTileTap,
+          searchParams: searchParams,
+        ),
+      ),
+      hideExpired: searchParams.hideExpired,
     );
   }
 }
