@@ -63,6 +63,27 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "remove": "Sil",
+  "@remove": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "removeConfirm": "Fırsatı silmek istediğinizden emin misiniz?",
+  "@removeConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "removeDealError": "Fırsat silinemedi.",
+  "@removeDealError": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "somethingWentWrong": "Bir hata oluştu. Tekrar denemek için dokunun.",
   "@somethingWentWrong": {
     "description": "",

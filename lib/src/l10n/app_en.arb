@@ -63,6 +63,27 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "remove": "Remove",
+  "@remove": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "removeConfirm": "Are you sure you want to remove this deal?",
+  "@removeConfirm": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "removeDealError": "Could not remove the deal.",
+  "@removeDealError": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "somethingWentWrong": "Something went wrong. Tap to try again.",
   "@somethingWentWrong": {
     "description": "",
