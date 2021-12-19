@@ -115,7 +115,7 @@ class SpringService with NetworkLoggy {
     try {
       final Response response = await _httpService.delete(url);
 
-      return response.statusCode == 200;
+      return response.statusCode == 204;
     } on Exception catch (e) {
       loggy.error(e, e);
       return false;
