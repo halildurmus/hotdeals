@@ -779,6 +779,7 @@ class _DealDetailsState extends State<DealDetails> {
 
     Widget _buildError() {
       return Scaffold(
+        appBar: AppBar(),
         body: ErrorIndicatorUtil.buildFirstPageError(
           context,
           onTryAgain: () async {
