@@ -128,8 +128,7 @@ class SpringService with NetworkLoggy {
     if (notification.tokens.isEmpty) {
       return false;
     }
-
-    final String url = '$_baseUrl/notifications}';
+    final String url = '$_baseUrl/notifications';
     try {
       final Response response =
           await _httpService.post(url, notification.toJson());
