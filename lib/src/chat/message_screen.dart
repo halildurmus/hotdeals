@@ -80,7 +80,6 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   }
 
   Future<void> _sendPushNotification(MyUser user, types.Message message) async {
-    // TODO(halildurmus): Convert this to a switch case
     late final String messageTitle;
     late final String messageText;
     if (message is types.FileMessage) {
