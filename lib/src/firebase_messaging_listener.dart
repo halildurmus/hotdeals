@@ -26,23 +26,20 @@ void showNotification(
   Priority priority = Priority.max,
   NotificationVisibility visibility = NotificationVisibility.public,
 }) {
-  final AppLocalizations l = lookupAppLocalizations(settingsController.locale);
-  late final String title;
-  late final String body;
-  // TODO(halildurmus): Convert this into a switch case
-  if (notification.titleLocKey == 'comment_title') {
-    title = notification.titleLocArgs.first + l.commentedOnYourPost;
-    body = notification.bodyLocArgs.first;
-  } else if (notification.titleLocKey == 'file_message_title') {
-    title = notification.titleLocArgs.first + l.sentYouMessage;
-    body = notification.bodyLocArgs.first;
-  } else if (notification.titleLocKey == 'image_message_title') {
-    title = notification.titleLocArgs.first + l.sentYouMessage;
-    body = notification.bodyLocArgs.first;
-  } else if (notification.titleLocKey == 'text_message_title') {
-    title = notification.titleLocArgs.first + l.sentYouMessage;
-    body = notification.bodyLocArgs.first;
-  }
+  final l = lookupAppLocalizations(settingsController.locale);
+  final titles = <String, String>{
+    'comment_title': notification.titleLocArgs.first + l.commentedOnYourPost,
+    'file_message_title': notification.titleLocArgs.first + l.sentYouFile,
+    'image_message_title': notification.titleLocArgs.first + l.sentYouImage,
+    'text_message_title': notification.titleLocArgs.first + l.sentYouMessage
+  };
+  final bodies = <String, String>{
+    'body_string': notification.bodyLocArgs.first
+  };
+  final String title = titles[notification.titleLocKey] ??
+      'Unknown titleLocKey: ${notification.titleLocKey}';
+  final String body = bodies[notification.bodyLocKey] ??
+      'Unknown bodyLocKey: ${notification.bodyLocKey}';
 
   flutterLocalNotificationsPlugin.show(
     notification.hashCode,
