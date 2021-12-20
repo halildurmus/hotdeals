@@ -157,18 +157,23 @@ class _DealDetailsState extends State<DealDetails> {
     final deviceHeight = MediaQuery.of(context).size.height;
 
     PreferredSizeWidget _buildAppBar() {
-      final items = <PopupMenuItem<_DealPopup>>[
-        if (!_deal!.isExpired && (_user!.id! == _deal!.postedBy!))
-          PopupMenuItem<_DealPopup>(
-            value: _DealPopup.markAsExpired,
-            child: Text(l(context).markAsExpired),
-          ),
-        if (_user!.id! != _deal!.postedBy!)
-          PopupMenuItem<_DealPopup>(
-            value: _DealPopup.reportDeal,
-            child: Text(l(context).reportDeal),
-          ),
-      ];
+      late final List<PopupMenuItem<_DealPopup>> items;
+      if (_user == null) {
+        items = [];
+      } else {
+        items = <PopupMenuItem<_DealPopup>>[
+          if (!_deal!.isExpired && (_user!.id! == _deal!.postedBy!))
+            PopupMenuItem<_DealPopup>(
+              value: _DealPopup.markAsExpired,
+              child: Text(l(context).markAsExpired),
+            ),
+          if (_user!.id! != _deal!.postedBy!)
+            PopupMenuItem<_DealPopup>(
+              value: _DealPopup.reportDeal,
+              child: Text(l(context).reportDeal),
+            ),
+        ];
+      }
 
       return PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
