@@ -56,7 +56,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
 
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
-      final Comment comment = Comment(
+      final comment = Comment(
         dealId: widget.deal.id!,
         message: commentController.text,
       );
@@ -72,8 +72,10 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
             .getUserById(id: widget.deal.postedBy!);
 
         final notification = PushNotification(
-          title: '${user!.nickname} ${l(context).commentedOnYourPost}',
-          body: comment.message,
+          titleLocKey: 'comment_title',
+          titleLocArgs: [user!.nickname!],
+          bodyLocKey: 'body_string',
+          bodyLocArgs: [comment.message],
           verb: NotificationVerb.comment,
           object: widget.deal.id!,
           message: comment.message,
@@ -86,7 +88,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
             .get<SpringService>()
             .sendPushNotification(notification: notification);
         if (result) {
-          loggy.info('Push notification sent to: ${poster.nickname}');
+          loggy.debug('Push notification sent to: ${poster.nickname}');
         }
       }
 

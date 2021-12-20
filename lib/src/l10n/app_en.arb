@@ -624,6 +624,20 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "sentYouFile": " sent you a file",
+  "@sentYouFile": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sentYouImage": " sent you an image",
+  "@sentYouImage": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "sentYouMessage": " sent you a message",
   "@sentYouMessage": {
     "description": "",

@@ -80,18 +80,25 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   }
 
   Future<void> _sendPushNotification(MyUser user, types.Message message) async {
-    String messageText = '';
+    // TODO(halildurmus): Convert this to a switch case
+    late final String messageTitle;
+    late final String messageText;
     if (message is types.FileMessage) {
-      messageText = l(context).file;
+      messageTitle = 'file_message_title';
+      messageText = message.name;
     } else if (message is types.ImageMessage) {
-      messageText = l(context).image;
+      messageTitle = 'image_message_title';
+      messageText = message.name;
     } else if (message is types.TextMessage) {
+      messageTitle = 'text_message_title';
       messageText = message.text;
     }
 
     final notification = PushNotification(
-      title: '${user.nickname} ${l(context).sentYouMessage}',
-      body: messageText,
+      titleLocKey: messageTitle,
+      titleLocArgs: [user.nickname!],
+      bodyLocKey: 'body_string',
+      bodyLocArgs: [messageText],
       verb: NotificationVerb.message,
       object: widget.docId,
       message: messageText,
@@ -104,7 +111,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         .get<SpringService>()
         .sendPushNotification(notification: notification);
     if (result) {
-      loggy.info('Push notification sent to: ${widget.user2.nickname}');
+      loggy.debug('Push notification sent to: ${widget.user2.nickname}');
     }
   }
 

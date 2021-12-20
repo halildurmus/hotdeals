@@ -26,8 +26,10 @@ class PushNotificationService extends ChangeNotifier {
   static const String _tableNotification = '''
   CREATE TABLE IF NOT EXISTS Notification (
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        title TEXT,
-        body TEXT,
+        title_loc_key TEXT,
+        title_loc_args TEXT,
+        body_loc_key TEXT,
+        body_loc_args TEXT,
         actor TEXT,
         verb TEXT,
         object TEXT,

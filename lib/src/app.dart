@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
-import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
@@ -70,34 +69,35 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
     Widget? home,
     AsyncSnapshot<MyUser?>? userSnapshot,
   }) {
-    return OverlaySupport.global(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        locale: settingsController.locale,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        theme: FlexColorScheme.light(
-          scheme: usedFlexScheme,
-          visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        ).toTheme,
-        darkTheme: FlexColorScheme.dark(
-          scheme: usedFlexScheme,
-          visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        ).toTheme,
-        themeMode: settingsController.themeMode,
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-        home: home ?? AuthWidget(userSnapshot: userSnapshot!),
-        onGenerateRoute: (routeSettings) => AppRouter.onGenerateRoute(
-            routeSettings, userSnapshot!, settingsController),
-        builder: home == null
-            ? (context, child) => buildOfflineBuilder(context, child)
-            : null,
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      locale: settingsController.locale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      theme: FlexColorScheme.light(
+        scheme: usedFlexScheme,
+        visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      ).toTheme,
+      darkTheme: FlexColorScheme.dark(
+        scheme: usedFlexScheme,
+        visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      ).toTheme,
+      themeMode: settingsController.themeMode,
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+      home: home ?? AuthWidget(userSnapshot: userSnapshot!),
+      onGenerateRoute: (routeSettings) => AppRouter.onGenerateRoute(
+          routeSettings, userSnapshot!, settingsController),
+      // onUnknownRoute: (RouteSettings settings) {
+      //   // open your app when is executed from outside when is terminated.
+      // },
+      builder: home == null
+          ? (context, child) => buildOfflineBuilder(context, child)
+          : null,
     );
   }
 

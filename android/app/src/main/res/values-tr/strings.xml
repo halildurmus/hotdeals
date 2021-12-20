@@ -9,9 +9,9 @@
 -->
     <string name="fb_login_protocol_scheme">fb000000000000</string>
     <!-- Firebase Cloud Messaging translations -->
-    <string name="comment_title">%1$s commented on your post</string>
-    <string name="file_message_title">%1$s sent you a file</string>
-    <string name="image_message_title">%1$s sent you an image</string>
-    <string name="text_message_title">%1$s sent you a message</string>
+    <string name="comment_title">%1$s gönderine yorum yaptı</string>
+    <string name="file_message_title">%1$s sana bir dosya gönderdi</string>
+    <string name="image_message_title">%1$s sana bir fotoğraf gönderdi</string>
+    <string name="text_message_title">%1$s sana bir mesaj gönderdi</string>
     <string name="string_body">%1$s</string>
 </resources>
