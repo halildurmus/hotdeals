@@ -20,6 +20,7 @@ class DealItem extends StatefulWidget {
     required this.isFavorited,
     required this.onFavoriteButtonPressed,
     required this.pagingController,
+    required this.showControlButtons,
   }) : super(key: key);
 
   final Deal deal;
@@ -27,6 +28,7 @@ class DealItem extends StatefulWidget {
   final bool isFavorited;
   final VoidCallback onFavoriteButtonPressed;
   final PagingController pagingController;
+  final bool showControlButtons;
 
   @override
   _DealItemState createState() => _DealItemState();
