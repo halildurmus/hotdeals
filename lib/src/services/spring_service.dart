@@ -543,8 +543,9 @@ class SpringService with NetworkLoggy {
   Future<SearchResponse> searchDeals({
     required SearchParams searchParams,
   }) async {
+    final pattern = RegExp(r'(http[s]?://)');
     final url = Uri.http(
-      _baseUrl.replaceFirst(RegExp(r'(http[s]?://)'), ''),
+      _baseUrl.replaceFirst(pattern, ''),
       '/deals/searches',
       searchParams.queryParameters,
     ).toString();
