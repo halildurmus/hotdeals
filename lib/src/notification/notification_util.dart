@@ -8,8 +8,20 @@ import 'package:http/http.dart' as http;
 
 import '../settings/settings.controller.dart';
 
+/// A static class that contains useful utility functions for notification
+/// functionality.
 class NotificationUtil {
-  static Future<AndroidBitmap<Object>> getBitmapFromUrl(String imageUrl) async {
+  static void _validateImageUrl(String url) {
+    final pattern = RegExp(r'^http[s]?://');
+    final hasMatch = pattern.hasMatch(url);
+    if (!hasMatch) {
+      throw Exception('`imageUrl` must start with `http://` or `https://`');
+    }
+  }
+
+  static Future<AndroidBitmap<Object>> _createAndroidBitmap(
+      String imageUrl) async {
+    _validateImageUrl(imageUrl);
     final http.Response response = await http.get(Uri.parse(imageUrl));
     final base64Image = base64.encode(response.bodyBytes);
 
@@ -23,9 +35,9 @@ class NotificationUtil {
 
   static void showNotification(
     RemoteNotification notification, {
-      String? imageUrl,
-    String? largeIconUrl,
+    String? imageUrl,
     Importance importance = Importance.max,
+    String? largeIconUrl,
     String? payload,
     Priority priority = Priority.max,
     NotificationVisibility visibility = NotificationVisibility.public,
@@ -52,10 +64,11 @@ class NotificationUtil {
           icon: 'ic_launcher',
           importance: importance,
           largeIcon: largeIconUrl != null
-              ? await getBitmapFromUrl(largeIconUrl)
+              ? await _createAndroidBitmap(largeIconUrl)
               : null,
-              styleInformation:  imageUrl != null
-              ? BigPictureStyleInformation(await getBitmapFromUrl(imageUrl)) : null,
+          styleInformation: imageUrl != null
+              ? BigPictureStyleInformation(await _createAndroidBitmap(imageUrl))
+              : null,
           priority: priority,
           visibility: visibility,
         ),
