@@ -136,15 +136,17 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     // Initializes a new Firebase App instance.
     await Firebase.initializeApp();
-    await _setupCrashlytics();
-    // See https://github.com/FirebaseExtended/flutterfire/issues/6011
-    await FirebaseMessaging.instance.getToken();
+    _setupCrashlytics();
+    _initEnvConfig();
+    await Future.wait([
+      // See https://github.com/FirebaseExtended/flutterfire/issues/6011
+      FirebaseMessaging.instance.getToken(),
+      _setupLocalNotifications(),
+      _initSettings(),
+    ]);
     // Sets a message handler function which is called when the app is in the
     // background or terminated.
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    await _setupLocalNotifications();
-    _initEnvConfig();
-    await _initSettings();
     _registerSingletonClasses();
     // Registers Turkish messages for timeago.
     timeago.setLocaleMessages('tr', TrMessages());
