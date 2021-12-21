@@ -60,6 +60,7 @@ class Deal {
   factory Deal.fromJsonES(Json json) => Deal(
         dealUrl: '',
         id: json['id'] as String,
+        postedBy: json['postedBy'] as String,
         isExpired: json['isExpired'] as bool,
         coverPhoto: json['coverPhoto'] as String,
         title: json['title'] as String,
