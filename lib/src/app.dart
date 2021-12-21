@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 
 import 'constants.dart';
 import 'error_screen.dart';
-import 'firebase_messaging_listener.dart';
 import 'models/categories.dart';
 import 'models/my_user.dart';
 import 'models/stores.dart';
@@ -38,8 +37,6 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
     settingsController = GetIt.I.get<SettingsController>();
     _fetchCategoriesAndStores();
     super.initState();
-    // Subscribes to Firebase Cloud Messaging.
-    subscribeToFCM();
   }
 
   void _fetchCategoriesAndStores([BuildContext? ctx]) {

@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
 
+import '../firebase_messaging_listener.dart';
 import '../home/home.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
@@ -79,6 +80,8 @@ class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
             FirebaseMessaging.instance.onTokenRefresh
                 .listen(_saveFcmTokenToDatabase);
           });
+          // Subscribes to Firebase Cloud Messaging.
+          subscribeToFCM();
 
           return const HomeScreen();
         } else if (snapshot.hasError) {
