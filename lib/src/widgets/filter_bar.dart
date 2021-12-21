@@ -31,7 +31,9 @@ class FilterBar extends StatefulWidget {
 
 class _FilterBarState extends State<FilterBar> {
   void onListTileTap() {
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
     widget.pagingController.refresh();
   }
 
@@ -43,7 +45,10 @@ class _FilterBarState extends State<FilterBar> {
         ).show(context) ??
         false;
     if (didRequestReset) {
-      setState(() => widget.searchParams.reset());
+      if (mounted) {
+        setState(() {});
+      }
+      widget.searchParams.reset();
       widget.pagingController.refresh();
     }
   }
