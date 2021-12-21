@@ -80,29 +80,34 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   }
 
   Future<void> _sendPushNotification(MyUser user, types.Message message) async {
-    late final String messageTitle;
-    late final String messageText;
+    String? imageUrl;
+    late final String titleLocKey;
+    String? bodyLocKey;
+    String? body;
     if (message is types.FileMessage) {
-      messageTitle = 'file_message_title';
-      messageText = message.name;
+      titleLocKey = 'file_message_title';
+      body = '📄 ${message.name}';
     } else if (message is types.ImageMessage) {
-      messageTitle = 'image_message_title';
-      messageText = message.name;
+      titleLocKey = 'image_message_title';
+      bodyLocKey = 'image_message_body';
+      imageUrl = message.uri;
     } else if (message is types.TextMessage) {
-      messageTitle = 'text_message_title';
-      messageText = message.text;
+      titleLocKey = 'text_message_title';
+      body = message.text;
     }
 
     final notification = PushNotification(
-      titleLocKey: messageTitle,
+      titleLocKey: titleLocKey,
       titleLocArgs: [user.nickname!],
-      bodyLocKey: 'body_string',
-      bodyLocArgs: [messageText],
+      bodyLocKey: bodyLocKey,
+      body: body,
+      actor: user.id!,
       verb: NotificationVerb.message,
       object: widget.docId,
-      message: messageText,
+      message: message is types.ImageMessage ? '' : body!,
+      image: imageUrl,
       uid: widget.user2.uid,
-      avatar: user.avatar,
+      avatar: user.avatar!,
       tokens: widget.user2.fcmTokens!,
     );
 

@@ -74,13 +74,13 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
         final notification = PushNotification(
           titleLocKey: 'comment_title',
           titleLocArgs: [user!.nickname!],
-          bodyLocKey: 'body_string',
-          bodyLocArgs: [comment.message],
+          body: comment.message,
+          actor: user!.id!,
           verb: NotificationVerb.comment,
           object: widget.deal.id!,
           message: comment.message,
-          uid: poster.id,
-          avatar: user!.avatar,
+          uid: poster.id!,
+          avatar: user!.avatar!,
           tokens: poster.fcmTokens!,
         );
 

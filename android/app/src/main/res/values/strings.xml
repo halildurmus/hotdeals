@@ -12,6 +12,6 @@
     <string name="comment_title">%1$s commented on your post</string>
     <string name="file_message_title">%1$s sent you a file</string>
     <string name="image_message_title">%1$s sent you an image</string>
+    <string name="image_message_body">📷 Photo</string>
     <string name="text_message_title">%1$s sent you a message</string>
-    <string name="string_body">%1$s</string>
 </resources>

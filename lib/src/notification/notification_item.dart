@@ -35,9 +35,8 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
 
   @override
   void initState() {
-    _userFuture = GetIt.I
-        .get<SpringService>()
-        .getUserById(id: widget.notification.actor!);
+    _userFuture =
+        GetIt.I.get<SpringService>().getUserById(id: widget.notification.actor);
     super.initState();
   }
 
@@ -103,7 +102,7 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '"${widget.notification.message!}"',
+            '"${widget.notification.message}"',
             style: textTheme.bodyText2!
                 .copyWith(color: theme.colorScheme.secondary),
           ),

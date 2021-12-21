@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show logDebug;
@@ -11,71 +10,8 @@ import 'chat/message_screen.dart';
 import 'models/current_route.dart';
 import 'models/notification_verb.dart';
 import 'models/push_notification.dart';
+import 'notification/notification_util.dart';
 import 'services/push_notification_service.dart';
-import 'settings/settings.controller.dart';
-
-final flutterLocalNotificationsPlugin =
-    GetIt.I.get<FlutterLocalNotificationsPlugin>();
-final channel = GetIt.I.get<AndroidNotificationChannel>();
-final settingsController = GetIt.I.get<SettingsController>();
-
-void showNotification(
-  RemoteNotification notification, {
-  String? payload,
-  Importance importance = Importance.max,
-  Priority priority = Priority.max,
-  NotificationVisibility visibility = NotificationVisibility.public,
-}) {
-  final l = lookupAppLocalizations(settingsController.locale);
-  final titles = <String, String>{
-    'comment_title': notification.titleLocArgs.first + l.commentedOnYourPost,
-    'file_message_title': notification.titleLocArgs.first + l.sentYouFile,
-    'image_message_title': notification.titleLocArgs.first + l.sentYouImage,
-    'text_message_title': notification.titleLocArgs.first + l.sentYouMessage
-  };
-  final bodies = <String, String>{
-    'body_string': notification.bodyLocArgs.first
-  };
-  final String title = titles[notification.titleLocKey] ??
-      'Unknown titleLocKey: ${notification.titleLocKey}';
-  final String body = bodies[notification.bodyLocKey] ??
-      'Unknown bodyLocKey: ${notification.bodyLocKey}';
-
-  flutterLocalNotificationsPlugin.show(
-    notification.hashCode,
-    title,
-    body,
-    NotificationDetails(
-      android: AndroidNotificationDetails(
-        channel.id,
-        channel.name,
-        channelDescription: channel.description,
-        icon: 'ic_launcher',
-        importance: importance,
-        priority: priority,
-        visibility: visibility,
-      ),
-    ),
-    payload: payload,
-  );
-}
-
-void selectNotification(String? payload) async {
-  logDebug('Notification payload: $payload');
-  if (payload != null) {
-    // final String _docId = payload;
-    // final MyUser _user = context.read<UserController>().user!;
-    // final String _user2Id =
-    //     ChatUtil.getUser2Uid(docID: _docId, user1Uid: _user.uid);
-    // final MyUser user2 =
-    //     await GetIt.I.get<SpringService>().getUserByUid(uid: _user2Id);
-
-    // Navigator.of(context).pushNamed(
-    //   MessageScreen.routeName,
-    //   arguments: MessageArguments(docId: _docId, user2: user2),
-    // );
-  }
-}
 
 /// Sets a message handler function which is called when the app is in the
 /// foreground.
@@ -99,16 +35,19 @@ Future<void> subscribeToFCM() async {
       logDebug('Message also contained a notification: $notification');
       // Constructs a PushNotification from the RemoteMessage.
       final pushNotification = PushNotification(
-        titleLocKey: notification.titleLocKey!,
+        title: notification.title,
+        titleLocKey: notification.titleLocKey,
         titleLocArgs: notification.titleLocArgs,
-        bodyLocKey: notification.bodyLocKey!,
+        body: notification.body,
+        bodyLocKey: notification.bodyLocKey,
         bodyLocArgs: notification.bodyLocArgs,
         actor: message.data['actor'] as String,
         verb: NotificationVerb.values.byName(message.data['verb']! as String),
         object: message.data['object'] as String,
-        avatar: message.data['avatar'] as String?,
-        message: message.data['message'] as String?,
-        uid: FirebaseAuth.instance.currentUser?.uid,
+        avatar: message.data['avatar'] as String,
+        message: message.data['message'] as String,
+        image: message.data['image'] as String?,
+        uid: FirebaseAuth.instance.currentUser!.uid,
         createdAt: message.sentTime,
       );
 
@@ -118,8 +57,9 @@ Future<void> subscribeToFCM() async {
         pushNotificationService
             .insert(pushNotification)
             .then((value) => logDebug('Notification saved into the db.'));
-        showNotification(
+        NotificationUtil.showNotification(
           notification,
+          largeIconUrl: pushNotification.avatar,
           importance: Importance.defaultImportance,
           priority: Priority.defaultPriority,
         );
@@ -131,7 +71,12 @@ Future<void> subscribeToFCM() async {
         // Don't show notification if the conversation is on foreground.
         if (currentRoute != MessageScreen.routeName &&
             messageDocId != pushNotification.object) {
-          showNotification(notification, payload: pushNotification.object);
+          NotificationUtil.showNotification(
+            notification,
+            imageUrl: pushNotification.image,
+            largeIconUrl: pushNotification.avatar,
+            payload: pushNotification.object,
+          );
         }
       }
     }
@@ -159,15 +104,19 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     await pushNotificationService.load();
     // Constructs a PushNotification from the RemoteMessage.
     final pushNotification = PushNotification(
-      titleLocKey: notification.titleLocKey!,
+      title: notification.title,
+      titleLocKey: notification.titleLocKey,
       titleLocArgs: notification.titleLocArgs,
-      bodyLocKey: notification.bodyLocKey!,
+      body: notification.body,
+      bodyLocKey: notification.bodyLocKey,
       bodyLocArgs: notification.bodyLocArgs,
       actor: message.data['actor'] as String,
       verb: NotificationVerb.values.byName(message.data['verb']! as String),
       object: message.data['object'] as String,
-      message: message.data['message'] as String?,
-      uid: FirebaseAuth.instance.currentUser?.uid,
+      avatar: message.data['avatar'] as String,
+      message: message.data['message'] as String,
+        image: message.data['image'] as String?,
+      uid: FirebaseAuth.instance.currentUser!.uid,
       createdAt: message.sentTime,
     );
 
