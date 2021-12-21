@@ -115,7 +115,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       object: message.data['object'] as String,
       avatar: message.data['avatar'] as String,
       message: message.data['message'] as String,
-        image: message.data['image'] as String?,
+      image: message.data['image'] as String?,
       uid: FirebaseAuth.instance.currentUser!.uid,
       createdAt: message.sentTime,
     );
