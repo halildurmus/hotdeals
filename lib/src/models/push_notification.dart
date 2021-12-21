@@ -21,7 +21,8 @@ class PushNotification {
     required this.uid,
     this.isRead = false,
     this.createdAt,
-  }) {
+  })  : assert(title != null || titleLocKey != null),
+        assert(body != null || bodyLocKey != null) {
     createdAt ??= DateTime.now();
   }
 
