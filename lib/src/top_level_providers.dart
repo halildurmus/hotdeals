@@ -8,7 +8,7 @@ List<SingleChildStatelessWidget> buildTopLevelProviders() {
   return [
     Provider<AuthService>(
       create: (_) => AuthServiceAdapter(),
-      dispose: (_, AuthService authService) => authService.dispose(),
+      dispose: (_, authService) => authService.dispose(),
     ),
   ];
 }

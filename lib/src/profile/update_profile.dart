@@ -43,7 +43,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       Provider.of<UserController>(context, listen: false).getUser();
       // Pops the LoadingDialog.
       Navigator.of(context).pop();
-    } catch (e) {
+    } on Exception catch (e) {
       loggy.error(e);
       // Pops the LoadingDialog.
       Navigator.of(context).pop();
@@ -67,7 +67,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       Provider.of<UserController>(context, listen: false).getUser();
       // Pops the update nickname Dialog.
       Navigator.of(context).pop();
-    } catch (e) {
+    } on Exception catch (e) {
       loggy.error(e);
       // Pops the LoadingDialog.
       Navigator.of(context).pop();
@@ -113,7 +113,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
           topRight: Radius.circular(24),
         ),
       ),
-      builder: (BuildContext ctx) {
+      builder: (ctx) {
         final textTheme = Theme.of(ctx).textTheme;
 
         return Wrap(
@@ -174,7 +174,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
 
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return Dialog(
@@ -198,8 +198,8 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                         ),
                         maxLength: 25,
                         maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        onChanged: (String? text) => setState(() {}),
-                        validator: (String? value) {
+                        onChanged: (text) => setState(() {}),
+                        validator: (value) {
                           if (value == null || value.length < 5) {
                             return l(context).nicknameMustBe;
                           }

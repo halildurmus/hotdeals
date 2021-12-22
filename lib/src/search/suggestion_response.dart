@@ -6,7 +6,7 @@ class SuggestionResponse {
   factory SuggestionResponse.fromJson(dynamic json) {
     final list = List.from(json);
     final suggestions = <String>[];
-    for (var element in list) {
+    for (final element in list) {
       suggestions.add(element['_source']['title'] as String);
     }
 

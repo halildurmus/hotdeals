@@ -14,7 +14,7 @@ class AuthServiceAdapter implements AuthService {
 
   void _setup() {
     _firebaseAuthSubscription = _firebaseAuthService.onAuthStateChanged
-        .listen(_onAuthStateChangedController.add, onError: (Object error) {
+        .listen(_onAuthStateChangedController.add, onError: (error) {
       _onAuthStateChangedController.addError(error);
     });
   }

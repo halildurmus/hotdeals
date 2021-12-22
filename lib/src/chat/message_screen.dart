@@ -211,10 +211,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     }
 
     Future<void> _handleFileSelection() async {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.any,
-      );
-
+      final FilePickerResult? result = await FilePicker.platform.pickFiles();
       setState(() {
         _isAttachmentUploading = true;
       });
@@ -353,7 +350,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
             topRight: Radius.circular(24),
           ),
         ),
-        builder: (BuildContext context) => _buildAttachmentBottomSheet(),
+        builder: (context) => _buildAttachmentBottomSheet(),
       );
     }
 
@@ -429,8 +426,8 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
             final items = snapshot.data!.docs;
 
             final List<types.Message> messages = items
-                .map((DocumentSnapshot<Json> e) {
-                  final Json messageData = e.data()!;
+                .map((e) {
+                  final Json messageData = e.data();
                   final id = messageData['id'] as String;
                   final createdAt = messageData['createdAt'] as int;
                   final status =

@@ -123,7 +123,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
               ),
             ],
             selectedIndex: activeScreen,
-            onTabChange: (int index) {
+            onTabChange: (index) {
               setState(() {
                 activeScreen = index;
                 widget.activeScreenOnChanged(activeScreen);
@@ -148,8 +148,8 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
               return buildGNav();
             }
 
-            for (DocumentSnapshot e in items) {
-              final latestMessage = e.get('latestMessage') as Json;
+            for (final doc in items) {
+              final latestMessage = doc.get('latestMessage') as Json;
               final String senderId = latestMessage['author']['id'] as String;
               if (senderId != _user?.uid) {
                 final isRead = (latestMessage['status'] as String) == 'seen';

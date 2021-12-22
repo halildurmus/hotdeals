@@ -86,7 +86,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
         final nextPageKey = pageKey + newItems.length;
         _pagingController.appendPage(newItems, nextPageKey);
       }
-    } catch (error) {
+    } on Exception catch (error) {
       loggy.error(error);
       _pagingController.error = error;
     }
@@ -112,7 +112,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     final notifications = _getSelectedNotifications();
     final ids = <int>[];
     setState(() {
-      for (var notification in notifications) {
+      for (final notification in notifications) {
         if (!notification.isRead) {
           ids.add(notification.id!);
           updatedNotificationCount++;
@@ -135,7 +135,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     final notifications = _getSelectedNotifications();
     final ids = <int>[];
     setState(() {
-      for (var notification in notifications) {
+      for (final notification in notifications) {
         if (notification.isRead) {
           ids.add(notification.id!);
           updatedNotificationCount++;
@@ -261,7 +261,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
                 ),
               PopupMenuButton<_NotificationPopup>(
                 icon: const Icon(Icons.more_vert),
-                onSelected: (_NotificationPopup result) {
+                onSelected: (result) {
                   if (result == _NotificationPopup.selectAll) {
                     _onSelectAll(true);
                   } else if (result == _NotificationPopup.deselectAll) {

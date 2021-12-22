@@ -13,7 +13,7 @@ class SliderIndicator extends StatelessWidget {
   Widget buildDots() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: images.map((String url) {
+      children: images.map((url) {
         final index = images.indexOf(url);
 
         return Container(

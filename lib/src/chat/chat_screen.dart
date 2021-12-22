@@ -170,7 +170,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return [
       PopupMenuButton<_ChatPopup>(
         icon: const Icon(Icons.more_vert),
-        onSelected: (_ChatPopup result) {
+        onSelected: (result) {
           if (result == _ChatPopup.blockedUsers) {
             Navigator.of(context).pushNamed(BlockedUsers.routeName);
           }

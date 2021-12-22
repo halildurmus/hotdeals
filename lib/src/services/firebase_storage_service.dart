@@ -34,7 +34,7 @@ class FirebaseStorageService {
     required String userID,
   }) async {
     final Reference storageRef =
-        _storage.ref().child('avatars').child(userID + '-' + fileName);
+        _storage.ref().child('avatars').child('$userID-$fileName');
     final UploadTask uploadTask = storageRef.putFile(
       File(filePath),
       SettableMetadata(contentType: mimeType),

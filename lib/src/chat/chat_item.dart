@@ -87,9 +87,9 @@ class ChatItem extends StatelessWidget {
   Widget _buildUserAvatar() {
     return CachedNetworkImage(
       imageUrl: chat.user2.avatar!,
-      imageBuilder: (BuildContext ctx, ImageProvider<Object> imageProvider) =>
+      imageBuilder: (ctx, imageProvider) =>
           CircleAvatar(backgroundImage: imageProvider, radius: 24),
-      placeholder: (BuildContext context, String url) =>
+      placeholder: (context, url) =>
           const CircleAvatar(radius: 24),
     );
   }

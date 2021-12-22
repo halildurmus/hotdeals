@@ -83,7 +83,7 @@ Future<void> subscribeToFCM() async {
   });
 
   // Handle any interaction when the app is in the background.
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
     // TODO(halildurmus): Handle onMessageOpenedApp event
     logDebug('A new onMessageOpenedApp event was published!');
   });

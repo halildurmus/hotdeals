@@ -146,8 +146,8 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
           maxLines: 30,
           maxLength: 500,
           maxLengthEnforcement: MaxLengthEnforcement.enforced,
-          onChanged: (String? text) => setState(() {}),
-          validator: (String? value) {
+          onChanged: (text) => setState(() {}),
+          validator: (value) {
             if (value == null || value.isEmpty) {
               return l(context).nicknameMustBe;
             }

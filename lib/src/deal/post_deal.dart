@@ -94,8 +94,6 @@ class _PostDealState extends State<PostDeal> {
         onPicturesChange: dealImageCallback,
         settings: PictureUploadSettings(
           uploadDirectory: '/deal_images/',
-          minImageCount: 0,
-          maxImageCount: 5,
         ),
       );
     }
@@ -107,17 +105,17 @@ class _PostDealState extends State<PostDeal> {
           labelText: l(context).category,
         ),
         value: selectedCategory,
-        onChanged: (Category? newValue) {
+        onChanged: (newValue) {
           setState(() {
             selectedCategory = newValue!;
           });
         },
-        selectedItemBuilder: (BuildContext context) {
-          return categories.map<Widget>((Category item) {
+        selectedItemBuilder: (context) {
+          return categories.map<Widget>((item) {
             return Text(item.localizedName(Localizations.localeOf(context)));
           }).toList();
         },
-        items: categories.map((Category value) {
+        items: categories.map((value) {
           return DropdownMenuItem<Category>(
             value: value,
             child: Row(
@@ -142,14 +140,14 @@ class _PostDealState extends State<PostDeal> {
           labelText: l(context).store,
         ),
         value: selectedStore,
-        onChanged: (Store? newValue) {
+        onChanged: (newValue) {
           setState(() {
             selectedStore = newValue!;
           });
         },
         selectedItemBuilder: (context) =>
             stores.map<Widget>((store) => Text(store.name)).toList(),
-        items: stores.map((Store value) {
+        items: stores.map((value) {
           return DropdownMenuItem<Store>(
             value: value,
             child: Row(
@@ -227,7 +225,7 @@ class _PostDealState extends State<PostDeal> {
           text: l(context).successfullyPostedYourDeal,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Navigator.of(context).popUntil((Route<void> route) => route.isFirst);
+        Navigator.of(context).popUntil((route) => route.isFirst);
       } else {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
@@ -245,7 +243,7 @@ class _PostDealState extends State<PostDeal> {
           labelText: l(context).enterDealUrl,
         ),
         textInputAction: TextInputAction.next,
-        validator: (String? value) {
+        validator: (value) {
           if (value == null || value.isEmpty) {
             return l(context).pleaseEnterTheDealUrl;
           } else if (!isURL(value)) {
@@ -268,7 +266,7 @@ class _PostDealState extends State<PostDeal> {
         textInputAction: TextInputAction.next,
         maxLength: 100,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        validator: (String? value) {
+        validator: (value) {
           if (value == null || value.isEmpty) {
             return l(context).pleaseEnterTheDealTitle;
           } else if (value.length < 10) {
@@ -290,7 +288,7 @@ class _PostDealState extends State<PostDeal> {
         ),
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
-        validator: (String? value) {
+        validator: (value) {
           if (value == null || value.isEmpty) {
             return l(context).pleaseEnterTheOriginalPrice;
           } else if (priceController.text.isNotEmpty &&
@@ -313,7 +311,7 @@ class _PostDealState extends State<PostDeal> {
         ),
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
-        validator: (String? value) {
+        validator: (value) {
           if (value == null || value.isEmpty) {
             return l(context).pleaseEnterThePrice;
           } else if (originalPriceController.text.isNotEmpty &&
@@ -342,7 +340,7 @@ class _PostDealState extends State<PostDeal> {
         maxLines: 30,
         maxLength: 3000,
         maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        validator: (String? value) {
+        validator: (value) {
           if (value == null || value.isEmpty) {
             return l(context).pleaseEnterTheDealDescription;
           } else if (value.length < 10) {

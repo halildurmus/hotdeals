@@ -183,32 +183,33 @@ class _ModalHeaderState extends State<_ModalHeader> {
                   ),
                   iconSize: 20,
                 ),
-                widget.searchMode
-                    ? Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: TextField(
-                            controller: widget.searchTextController,
-                            decoration: InputDecoration(
-                              hintStyle: textTheme.bodyText1!.copyWith(
-                                color: theme.brightness == Brightness.light
-                                    ? Colors.black54
-                                    : Colors.grey,
-                              ),
-                              hintText: widget.hintText,
-                              suffixIcon: widget
-                                      .searchTextController.text.isNotEmpty
+                if (widget.searchMode)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: TextField(
+                        controller: widget.searchTextController,
+                        decoration: InputDecoration(
+                          hintStyle: textTheme.bodyText1!.copyWith(
+                            color: theme.brightness == Brightness.light
+                                ? Colors.black54
+                                : Colors.grey,
+                          ),
+                          hintText: widget.hintText,
+                          suffixIcon:
+                              widget.searchTextController.text.isNotEmpty
                                   ? IconButton(
                                       onPressed: widget.onClearButtonPressed,
                                       icon: const Icon(Icons.clear),
                                     )
                                   : null,
-                            ),
-                            focusNode: widget.searchFocusNode,
-                          ),
                         ),
-                      )
-                    : Text(widget.title, style: textTheme.headline6),
+                        focusNode: widget.searchFocusNode,
+                      ),
+                    ),
+                  )
+                else
+                  Text(widget.title, style: textTheme.headline6),
               ],
             ),
           ),
@@ -256,13 +257,13 @@ class _ModalBody extends StatelessWidget {
   String getTitle(BuildContext context, Bucket bucket) {
     switch (filterType) {
       case FilterType.category:
-        return getCategoryName(context, bucket.key) + ' (${bucket.docCount})';
+        return '${getCategoryName(context, bucket.key)} (${bucket.docCount})';
       case FilterType.price:
         final priceRange = PriceRange.fromString(bucket.key);
 
-        return priceRange.formattedString + ' (${bucket.docCount})';
+        return '${priceRange.formattedString} (${bucket.docCount})';
       case FilterType.store:
-        return getStoreName(bucket.key) + ' (${bucket.docCount})';
+        return '${getStoreName(bucket.key)} (${bucket.docCount})';
       default:
         throw Exception('Invalid filterType: $filterType');
     }

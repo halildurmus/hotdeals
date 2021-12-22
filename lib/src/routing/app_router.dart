@@ -19,7 +19,7 @@ class AppRouter {
   ) {
     return MaterialPageRoute(
       settings: routeSettings,
-      builder: (BuildContext context) {
+      builder: (context) {
         switch (routeSettings.name) {
           case BlockedUsers.routeName:
             return const BlockedUsers();

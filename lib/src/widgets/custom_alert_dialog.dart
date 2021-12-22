@@ -21,7 +21,7 @@ class CustomAlertDialog extends StatelessWidget {
   Future<bool?> show(BuildContext context) async {
     return showDialog<bool>(
       context: context,
-      builder: (BuildContext context) => this,
+      builder: (context) => this,
     );
   }
 

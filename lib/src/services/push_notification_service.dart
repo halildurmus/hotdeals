@@ -49,7 +49,7 @@ class PushNotificationService extends ChangeNotifier {
     _db = await openDatabase(
       path,
       version: 1,
-      onCreate: (Database db, int version) async {
+      onCreate: (db, version) async {
         await db.execute(_tableNotification);
       },
     );
@@ -94,7 +94,7 @@ class PushNotificationService extends ChangeNotifier {
 
     return List<PushNotification>.generate(
       maps.length,
-      (int i) => PushNotification.fromMap(maps[i]),
+      (i) => PushNotification.fromMap(maps[i]),
     );
   }
 

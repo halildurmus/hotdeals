@@ -64,7 +64,7 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
   Widget _buildSearchBar() {
     return SearchBar(
       controller: _searchBarController,
-      onSearchModeChanged: (bool value) => setState(() => _searchMode = value),
+      onSearchModeChanged: (value) => setState(() => _searchMode = value),
     );
   }
 

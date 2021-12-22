@@ -15,7 +15,7 @@ class SearchService {
   static const String _recentSearchesKey = 'recent-searches';
 
   Future<SuggestionResponse> getSuggestions(String query) async =>
-      await GetIt.I.get<SpringService>().getDealSuggestions(query: query);
+      GetIt.I.get<SpringService>().getDealSuggestions(query: query);
 
   /// Loads the user's search history from [SharedPreferences].
   List<String> recentSearches() =>

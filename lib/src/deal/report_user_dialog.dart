@@ -102,7 +102,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
                 CheckboxListTile(
                   title: Text(l(context).harassing),
                   value: harassingCheckbox,
-                  onChanged: (bool? newValue) {
+                  onChanged: (newValue) {
                     setState(() {
                       harassingCheckbox = newValue!;
                     });
@@ -111,7 +111,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
                 CheckboxListTile(
                   title: Text(l(context).spam),
                   value: spamCheckbox,
-                  onChanged: (bool? newValue) {
+                  onChanged: (newValue) {
                     setState(() {
                       spamCheckbox = newValue!;
                     });
@@ -120,7 +120,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
                 CheckboxListTile(
                   title: Text(l(context).other),
                   value: otherCheckbox,
-                  onChanged: (bool? newValue) {
+                  onChanged: (newValue) {
                     setState(() {
                       otherCheckbox = newValue!;
                     });

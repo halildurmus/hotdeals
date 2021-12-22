@@ -30,7 +30,7 @@ StreamTransformer<bool, bool> startsWith(bool data) {
       controller = StreamController<bool>(
         sync: true,
         onListen: () => controller?.add(data),
-        onPause: ([Future<dynamic>? resumeSignal]) =>
+        onPause: ([resumeSignal]) =>
             subscription.pause(resumeSignal),
         onResume: () => subscription.resume(),
         onCancel: () => subscription.cancel(),

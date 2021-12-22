@@ -20,11 +20,11 @@ class SignInPageBuilder extends StatelessWidget {
     return ChangeNotifierProvider<ValueNotifier<bool>>(
       create: (_) => ValueNotifier<bool>(false),
       child: Consumer<ValueNotifier<bool>>(
-        builder: (_, ValueNotifier<bool> isLoading, __) =>
+        builder: (_, isLoading, __) =>
             Provider<SignInManager>(
           create: (_) => SignInManager(auth: auth, isLoading: isLoading),
           child: Consumer<SignInManager>(
-            builder: (_, SignInManager manager, __) => SignInPage._(
+            builder: (_, manager, __) => SignInPage._(
               isLoading: isLoading.value,
               manager: manager,
             ),

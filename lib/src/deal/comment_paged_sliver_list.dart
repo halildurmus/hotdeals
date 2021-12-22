@@ -54,7 +54,7 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
         final nextPageKey = pageKey + 1;
         _pagingController.appendPage(newItems, nextPageKey);
       }
-    } catch (error) {
+    } on Exception catch (error) {
       loggy.error(error);
       _pagingController.error = error;
     }

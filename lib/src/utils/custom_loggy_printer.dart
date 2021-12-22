@@ -43,7 +43,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
     // Translate excludeBox map (constant if default) to includeBox map with all
     // LogLevel enum possibilities
     includeBox = {};
-    for (var l in LogLevel.values) {
+    for (final l in LogLevel.values) {
       includeBox[l] = !noBoxingByDefault;
     }
     excludeBox.forEach((k, v) => includeBox[k] = !v);
@@ -121,7 +121,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
   @override
   void onLog(LogRecord record) {
     var messageStr =
-        record.loggerName + ' - ' + _stringifyMessage(record.message);
+        '${record.loggerName} - ${_stringifyMessage(record.message)}';
 
     String? stackTraceStr;
     if (record.stackTrace != null && errorMethodCount > 0) {
@@ -155,7 +155,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
 
     var formatted = <String>[];
     var count = 0;
-    for (var line in lines) {
+    for (final line in lines) {
       if (_discardDeviceStacktraceLine(line) ||
           _discardWebStacktraceLine(line) ||
           _discardBrowserStacktraceLine(line) ||
@@ -257,13 +257,13 @@ class CustomLoggyPrinter extends LoggyPrinter {
     // This code is non trivial and a type annotation here helps understanding.
     // ignore: omit_local_variable_types
     List<String> buffer = [];
-    var verticalLineAtLevel = (includeBox[level]!) ? (_verticalLine + ' ') : '';
+    var verticalLineAtLevel = (includeBox[level]!) ? ('$_verticalLine ') : '';
     var color = _getLevelColor(level);
     if (includeBox[level]!) buffer.add(color(_topBorder));
 
     if (error != null) {
       var errorColor = _getErrorColor(level);
-      for (var line in error.split('\n')) {
+      for (final line in error.split('\n')) {
         buffer.add(
           color(verticalLineAtLevel) +
               errorColor.resetForeground +
@@ -275,7 +275,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
     }
 
     if (stacktrace != null) {
-      for (var line in stacktrace.split('\n')) {
+      for (final line in stacktrace.split('\n')) {
         buffer.add(color('$verticalLineAtLevel$line'));
       }
       if (includeBox[level]!) buffer.add(color(_middleBorder));
@@ -287,7 +287,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
     }
 
     var emoji = _getEmoji(level);
-    for (var line in message.split('\n')) {
+    for (final line in message.split('\n')) {
       buffer.add(color('$verticalLineAtLevel$emoji$line'));
     }
     if (includeBox[level]!) buffer.add(color(_bottomBorder));

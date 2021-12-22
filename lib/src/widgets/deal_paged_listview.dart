@@ -14,10 +14,10 @@ import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
 import '../widgets/deal_item.dart';
-import '../widgets/filter_bar.dart';
 import '../widgets/sign_in_dialog.dart';
 import 'custom_snackbar.dart';
 import 'error_indicator.dart';
+import 'filter_bar.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({
@@ -105,7 +105,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         final nextPageKey = pageKey + 1;
         _pagingController.appendPage(newItems, nextPageKey);
       }
-    } catch (error) {
+    } on Exception catch (error) {
       loggy.error(error);
       _pagingController.error = error;
     }
@@ -122,7 +122,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
       GetIt.I
           .get<SpringService>()
           .favoriteDeal(dealId: dealId)
-          .then((bool result) {
+          .then((result) {
         if (result) {
           Provider.of<UserController>(context, listen: false).getUser();
         } else {
@@ -137,7 +137,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
       GetIt.I
           .get<SpringService>()
           .unfavoriteDeal(dealId: dealId)
-          .then((bool result) {
+          .then((result) {
         if (result) {
           Provider.of<UserController>(context, listen: false).getUser();
           if (widget.removeDealWhenUnfavorited) {

@@ -124,7 +124,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
       actions: [
         PopupMenuButton<_MessagePopup>(
           icon: const Icon(Icons.more_vert),
-          onSelected: (_MessagePopup result) {
+          onSelected: (result) {
             if (result == _MessagePopup.blockUser) {
               _confirmBlockUser(context);
             } else if (result == _MessagePopup.unblockUser) {

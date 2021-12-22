@@ -84,7 +84,7 @@ class _DealDetailsState extends State<DealDetails> {
     GetIt.I
         .get<SpringService>()
         .getNumberOfCommentsByDealId(dealId: widget.dealId)
-        .then((int? commentCount) {
+        .then((commentCount) {
       if (commentCount != null) {
         WidgetsBinding.instance!.addPostFrameCallback((_) {
           if (mounted) {
@@ -106,7 +106,7 @@ class _DealDetailsState extends State<DealDetails> {
   List<Widget> getCarouselItems() {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return _images!.map((String item) {
+    return _images!.map((item) {
       return GestureDetector(
         onTap: () => NavigationUtil.navigate(
           context,
@@ -133,7 +133,7 @@ class _DealDetailsState extends State<DealDetails> {
             dealId: _deal!.id!,
           );
       setState(() => _deal = deal);
-    } catch (e) {
+    } on Exception {
       final snackBar = CustomSnackBar(
         icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
         text: l(context).anErrorOccurred,
@@ -183,7 +183,7 @@ class _DealDetailsState extends State<DealDetails> {
               PopupMenuButton<_DealPopup>(
                 icon: const Icon(Icons.more_vert),
                 itemBuilder: (context) => items,
-                onSelected: (_DealPopup result) {
+                onSelected: (result) {
                   if (result == _DealPopup.markAsExpired) {
                     _markAsExpired();
                   } else if (result == _DealPopup.reportDeal) {
@@ -250,7 +250,7 @@ class _DealDetailsState extends State<DealDetails> {
 
     Widget buildFavoriteButton() {
       return Consumer<UserController>(
-        builder: (context, UserController mongoUser, Widget? child) {
+        builder: (context, mongoUser, child) {
           final MyUser? user = mongoUser.user;
           final bool isFavorited = user?.favorites![_deal!.id!] ?? false;
 
@@ -265,7 +265,7 @@ class _DealDetailsState extends State<DealDetails> {
                 GetIt.I
                     .get<SpringService>()
                     .favoriteDeal(dealId: _deal!.id!)
-                    .then((bool result) {
+                    .then((result) {
                   if (result) {
                     Provider.of<UserController>(context, listen: false)
                         .getUser();
@@ -275,7 +275,7 @@ class _DealDetailsState extends State<DealDetails> {
                 GetIt.I
                     .get<SpringService>()
                     .unfavoriteDeal(dealId: _deal!.id!)
-                    .then((bool result) {
+                    .then((result) {
                   if (result) {
                     Provider.of<UserController>(context, listen: false)
                         .getUser();

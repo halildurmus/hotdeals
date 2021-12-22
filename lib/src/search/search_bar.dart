@@ -25,7 +25,7 @@ class _SearchBarState extends State<SearchBar> {
   final searchService = GetIt.I.get<SearchService>();
   bool searchError = false;
   final _suggestions = <String>[];
-  var searchParams = SearchParams();
+  SearchParams searchParams = SearchParams();
 
   Future<void> getSuggestions(String query) async {
     _suggestions.clear();

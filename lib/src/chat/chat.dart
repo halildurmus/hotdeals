@@ -25,9 +25,8 @@ class Chat {
         break;
     }
     final _sentBy = lastMessage['author']['id'] as String;
-    lastMessageIsRead = _sentBy != loggedInUserUid
-        ? lastMessage['status'] as String == 'seen'
-        : true;
+    lastMessageIsRead =
+        _sentBy == loggedInUserUid || lastMessage['status'] as String == 'seen';
     user1IsBlocked = user2.blockedUsers!.containsKey(user1.id!);
     user2IsBlocked = user1.blockedUsers!.containsKey(user2.id!);
     createdAt = DateTime.fromMillisecondsSinceEpoch(

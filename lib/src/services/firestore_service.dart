@@ -41,7 +41,7 @@ class FirestoreService with NetworkLoggy {
         .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
     await _firestore.runTransaction(
-      (Transaction transaction) async {
+      (transaction) async {
         transaction.set(documentReference, message);
       },
     );
@@ -50,7 +50,7 @@ class FirestoreService with NetworkLoggy {
         _firestore.collection('messages').doc(docID);
 
     await _firestore.runTransaction(
-      (Transaction transaction) async {
+      (transaction) async {
         transaction.set(
           _latestMessage,
           <String, dynamic>{'latestMessage': message},
@@ -99,14 +99,14 @@ class FirestoreService with NetworkLoggy {
         .get();
 
     final Iterable<QueryDocumentSnapshot<Json>> docs =
-        doc.docs.where((QueryDocumentSnapshot<Json> element) {
+        doc.docs.where((element) {
       final String messageAuthorId = element.data()['author']['id'] as String;
 
       return messageAuthorId == user2Uid;
     });
 
     if (docs.isNotEmpty) {
-      for (QueryDocumentSnapshot<Json> doc in docs) {
+      for (final doc in docs) {
         doc.reference.update(<String, dynamic>{
           'status': 'seen',
         });

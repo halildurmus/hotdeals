@@ -18,8 +18,8 @@ class ChatUtil {
     required String user2Uid,
   }) =>
       user1Uid.hashCode <= user2Uid.hashCode
-          ? user1Uid + '_' + user2Uid
-          : user2Uid + '_' + user1Uid;
+          ? '${user1Uid}_$user2Uid'
+          : '${user2Uid}_$user1Uid';
 
   /// Extracts the user2's [uid] from the given [docID] using user1's [uid].
   ///

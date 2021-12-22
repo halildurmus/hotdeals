@@ -33,7 +33,7 @@ class _MyImageScreen extends State<ImageFullScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final List<Widget> items = widget.images.map((String item) {
+    final List<Widget> items = widget.images.map((item) {
       return PhotoView(
         imageProvider: NetworkImage(item),
         backgroundDecoration: BoxDecoration(color: theme.backgroundColor),

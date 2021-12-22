@@ -25,11 +25,7 @@ class PriceRange {
       PriceRange(from: from ?? this.from, to: to ?? this.to);
 
   String get formattedString =>
-      r'$' +
-      from!.toStringAsFixed(0) +
-      ' - ' +
-      r'$' +
-      (to?.toStringAsFixed(0) ?? '*');
+      '\$${from!.toStringAsFixed(0)} - \$${to?.toStringAsFixed(0) ?? '*'}';
 
   @override
   String toString() => '$from:$to';

@@ -79,7 +79,7 @@ class _FilterChipsState extends State<FilterChips> {
             ),
             selectedColor: theme.primaryColor,
             selected: selectedFilter == index,
-            onSelected: (bool selected) {
+            onSelected: (selected) {
               if (selected) {
                 selectedFilter = index;
                 widget.onFilterChange(subcategory);

@@ -107,7 +107,7 @@ class AggregationAllFilters {
 class Bucket {
   const Bucket({required this.docCount, required this.key});
 
-  factory Bucket.fromJson(Json json) => Bucket(
+  factory Bucket.fromJson(dynamic json) => Bucket(
         docCount: json['doc_count'] as int,
         key: json['key'].toString(),
       );
@@ -126,7 +126,7 @@ class Aggregation {
     required this.facetName,
   });
 
-  factory Aggregation.fromJson(Json json) {
+  factory Aggregation.fromJson(dynamic json) {
     return Aggregation(
       buckets: List<Bucket>.from(
         json['values']['buckets'].map(Bucket.fromJson),

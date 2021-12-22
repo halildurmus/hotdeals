@@ -72,8 +72,7 @@ class MyUser {
 
 Map<String, bool> _blockedUsersFromJson(Json json) {
   final blockedUsers = <String, bool>{};
-
-  json.forEach((String k, dynamic v) {
+  json.forEach((k, dynamic v) {
     blockedUsers.putIfAbsent(k, () => v as bool);
   });
 
@@ -82,8 +81,7 @@ Map<String, bool> _blockedUsersFromJson(Json json) {
 
 Map<String, bool> _favoritesFromJson(Json json) {
   final favorites = <String, bool>{};
-
-  json.forEach((String k, dynamic v) {
+  json.forEach((k, dynamic v) {
     favorites.putIfAbsent(k, () => v as bool);
   });
 

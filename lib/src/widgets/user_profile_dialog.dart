@@ -61,7 +61,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
   Future<void> _onReportUserPressed() async {
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) =>
+      builder: (context) =>
           ReportUserDialog(reportedUserId: user.id!),
     ).then((_) => Navigator.of(context).pop());
   }
@@ -258,9 +258,9 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
     }
 
     Widget _buildFutureBuilder() {
-      return FutureBuilder(
+      return FutureBuilder<List<dynamic>>(
         future: future,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.hasData) {
             user = snapshot.data![0];
             postedCommentsCount = snapshot.data![1];

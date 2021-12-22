@@ -58,7 +58,7 @@ class OfflineBuilderState extends State<OfflineBuilder> with NetworkLoggy {
 
     _connectivityStream =
         Stream<bool>.fromFuture(widget.connectionService.checkConnection())
-            .asyncExpand((bool data) => widget
+            .asyncExpand((data) => widget
                 .connectionService.connectionChange
                 .transform(startsWith(data)))
             .transform(debounce(widget.debounceDuration));

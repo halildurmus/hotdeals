@@ -17,6 +17,6 @@ class DateTimeUtil {
   }) =>
       format(
         dateTime,
-        locale: useShortMessages ? _languageCode + '_short' : _languageCode,
+        locale: useShortMessages ? '${_languageCode}_short' : _languageCode,
       );
 }
