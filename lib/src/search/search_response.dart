@@ -5,9 +5,6 @@ typedef Json = Map<String, dynamic>;
 class Hits {
   const Hits({required this.docCount, required this.hits});
 
-  final int docCount;
-  final List<Deal> hits;
-
   factory Hits.fromJson(Json json) => Hits(
         docCount: json['total']['value'] as int,
         hits: (json['hits'] as List<dynamic>).isNotEmpty
@@ -16,6 +13,9 @@ class Hits {
               )
             : [],
       );
+
+  final int docCount;
+  final List<Deal> hits;
 
   @override
   String toString() => 'Hits(docCount: $docCount, hits: $hits)';
@@ -29,12 +29,6 @@ class SearchResponse {
     required this.aggStore,
     required this.hits,
   });
-
-  final AggregationAllFilters? aggAllFilters;
-  final Aggregation? aggCategory;
-  final Aggregation? aggPrice;
-  final Aggregation? aggStore;
-  final Hits hits;
 
   factory SearchResponse.fromJson(Json json) {
     return SearchResponse(
@@ -62,6 +56,12 @@ class SearchResponse {
     );
   }
 
+  final AggregationAllFilters? aggAllFilters;
+  final Aggregation? aggCategory;
+  final Aggregation? aggPrice;
+  final Aggregation? aggStore;
+  final Hits hits;
+
   @override
   String toString() {
     return 'SearchResponse(aggAllFilters: $aggAllFilters, aggCategory: $aggCategory, aggPrice: $aggPrice, aggStore: $aggStore, hits: $hits)';
@@ -75,10 +75,6 @@ class AggregationAllFilters {
     required this.stringFacets,
   });
 
-  final int docCount;
-  final List<Aggregation>? numberFacets;
-  final List<Aggregation>? stringFacets;
-
   factory AggregationAllFilters.fromJson(Json json) => AggregationAllFilters(
         docCount: json['doc_count'] as int,
         numberFacets:
@@ -86,7 +82,7 @@ class AggregationAllFilters {
                     .isNotEmpty
                 ? List<Aggregation>.from(
                     json['numberFacets']['names']['buckets']
-                        .map((x) => Aggregation.fromJson(x)),
+                        .map(Aggregation.fromJson),
                   )
                 : null,
         stringFacets:
@@ -94,10 +90,14 @@ class AggregationAllFilters {
                     .isNotEmpty
                 ? List<Aggregation>.from(
                     json['stringFacets']['names']['buckets']
-                        .map((x) => Aggregation.fromJson(x)),
+                        .map(Aggregation.fromJson),
                   )
                 : null,
       );
+
+  final int docCount;
+  final List<Aggregation>? numberFacets;
+  final List<Aggregation>? stringFacets;
 
   @override
   String toString() =>
@@ -107,13 +107,13 @@ class AggregationAllFilters {
 class Bucket {
   const Bucket({required this.docCount, required this.key});
 
-  final int docCount;
-  final String key;
-
   factory Bucket.fromJson(Json json) => Bucket(
         docCount: json['doc_count'] as int,
         key: json['key'].toString(),
       );
+
+  final int docCount;
+  final String key;
 
   @override
   String toString() => 'Bucket(docCount: $docCount, key: $key)';
@@ -126,19 +126,19 @@ class Aggregation {
     required this.facetName,
   });
 
-  final List<Bucket> buckets;
-  final int docCount;
-  final String facetName;
-
   factory Aggregation.fromJson(Json json) {
     return Aggregation(
       buckets: List<Bucket>.from(
-        json['values']['buckets'].map((x) => Bucket.fromJson(x)),
+        json['values']['buckets'].map(Bucket.fromJson),
       )..sort((a, b) => a.key.compareTo(b.key)),
       docCount: json['doc_count'] as int,
       facetName: json['key'] as String,
     );
   }
+
+  final List<Bucket> buckets;
+  final int docCount;
+  final String facetName;
 
   @override
   String toString() =>

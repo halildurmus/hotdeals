@@ -29,7 +29,7 @@ class ExpiredFilterChip extends StatelessWidget {
     final isSelected = hideExpired;
 
     return FilterChip(
-      onSelected: (value) => onSelected(value),
+      onSelected: onSelected,
       label: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,

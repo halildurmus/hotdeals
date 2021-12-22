@@ -32,7 +32,7 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
   void initState() {
     _pagingController = widget.pagingController ??
         PagingController<int, Comment>(firstPageKey: 0);
-    _pagingController.addPageRequestListener((pageKey) => _fetchPage(pageKey));
+    _pagingController.addPageRequestListener(_fetchPage);
     super.initState();
   }
 
@@ -70,12 +70,12 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
         firstPageErrorIndicatorBuilder: (context) =>
             ErrorIndicatorUtil.buildFirstPageError(
           context,
-          onTryAgain: () => _pagingController.refresh(),
+          onTryAgain: _pagingController.refresh,
         ),
         newPageErrorIndicatorBuilder: (context) =>
             ErrorIndicatorUtil.buildNewPageError(
           context,
-          onTryAgain: () => _pagingController.refresh(),
+          onTryAgain: _pagingController.refresh,
         ),
         noItemsFoundIndicatorBuilder: (context) => widget.noCommentsFound,
       ),

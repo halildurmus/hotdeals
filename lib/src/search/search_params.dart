@@ -7,12 +7,6 @@ typedef Json = Map<String, dynamic>;
 class PriceRange {
   PriceRange({this.from, this.to});
 
-  double? from;
-  double? to;
-
-  PriceRange copyWith({double? from, double? to}) =>
-      PriceRange(from: from ?? this.from, to: to ?? this.to);
-
   factory PriceRange.fromString(String str) {
     final list = str.split('-');
     final from = double.parse(list[0]);
@@ -23,6 +17,12 @@ class PriceRange {
 
     return PriceRange(from: from, to: to);
   }
+
+  double? from;
+  double? to;
+
+  PriceRange copyWith({double? from, double? to}) =>
+      PriceRange(from: from ?? this.from, to: to ?? this.to);
 
   String get formattedString =>
       r'$' +

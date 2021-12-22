@@ -39,7 +39,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   @override
   void initState() {
     _user = context.read<UserController>().user;
-    _pagingController.addPageRequestListener((pageKey) => _fetchPage(pageKey));
+    _pagingController.addPageRequestListener(_fetchPage);
     _pushNotificationService = GetIt.I.get<PushNotificationService>();
     _notification = _pushNotificationService.notification.listen((event) {
       if (_pagingController.itemList != null &&
@@ -196,15 +196,14 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
         firstPageErrorIndicatorBuilder: (context) =>
             ErrorIndicatorUtil.buildFirstPageError(
           context,
-          onTryAgain: () => _pagingController.refresh(),
+          onTryAgain: _pagingController.refresh,
         ),
         newPageErrorIndicatorBuilder: (context) =>
             ErrorIndicatorUtil.buildNewPageError(
           context,
-          onTryAgain: () => _pagingController.refresh(),
+          onTryAgain: _pagingController.refresh,
         ),
-        noItemsFoundIndicatorBuilder: (context) =>
-            buildNoNotificationsFound(context),
+        noItemsFoundIndicatorBuilder: buildNoNotificationsFound,
       ),
       separatorBuilder: (context, index) => const Divider(
         height: 0,
@@ -314,7 +313,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
       child: Scaffold(
         appBar: _buildAppBar(),
         body: RefreshIndicator(
-          onRefresh: () => Future.sync(() => _pagingController.refresh()),
+          onRefresh: () => Future.sync(_pagingController.refresh),
           child: _user == null ? _buildSignIn() : _buildPagedListView(),
         ),
       ),

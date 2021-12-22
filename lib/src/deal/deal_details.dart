@@ -252,7 +252,7 @@ class _DealDetailsState extends State<DealDetails> {
       return Consumer<UserController>(
         builder: (context, UserController mongoUser, Widget? child) {
           final MyUser? user = mongoUser.user;
-          final bool isFavorited = user?.favorites![_deal!.id!] == true;
+          final bool isFavorited = user?.favorites![_deal!.id!] ?? false;
 
           return FloatingActionButton(
             onPressed: () {
@@ -663,7 +663,7 @@ class _DealDetailsState extends State<DealDetails> {
       final textTheme = theme.textTheme;
 
       return TextButton(
-        onPressed: () => _onPostCommentTap(),
+        onPressed: _onPostCommentTap,
         child: Text(
           l(context).postComment,
           style: textTheme.subtitle2!.copyWith(

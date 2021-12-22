@@ -3,8 +3,6 @@ typedef Json = Map<String, dynamic>;
 class SuggestionResponse {
   SuggestionResponse({required this.suggestions});
 
-  final List<String> suggestions;
-
   factory SuggestionResponse.fromJson(dynamic json) {
     final list = List.from(json);
     final suggestions = <String>[];
@@ -14,6 +12,8 @@ class SuggestionResponse {
 
     return SuggestionResponse(suggestions: suggestions);
   }
+
+  final List<String> suggestions;
 
   @override
   String toString() => 'SuggestionResponse(suggestions: $suggestions)';

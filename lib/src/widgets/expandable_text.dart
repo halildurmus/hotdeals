@@ -60,14 +60,14 @@ class _ExpandableTextState extends State<ExpandableText> {
           Positioned(
             bottom: 5,
             child: InkWell(
-              onTap: () => controller.toggle(),
+              onTap: controller.toggle,
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton.icon(
-                    onPressed: () => controller.toggle(),
+                    onPressed: controller.toggle,
                     icon: Icon(
                       Icons.arrow_downward,
                       color:

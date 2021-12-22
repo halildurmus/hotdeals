@@ -87,7 +87,7 @@ class CustomFilterChip extends StatelessWidget {
     final isSelected = filters.isNotEmpty;
 
     return FilterChip(
-      onSelected: (value) => onSelected(value),
+      onSelected: onSelected,
       label: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,

@@ -17,7 +17,7 @@ class SignInDialog extends StatelessWidget {
     return showDialog<bool>(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext ctx) => _buildSignInDialog(ctx),
+      builder: _buildSignInDialog,
     );
   }
 

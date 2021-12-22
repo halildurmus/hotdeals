@@ -503,7 +503,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                 onAttachmentPressed: _handleAttachmentPressed,
                 onMessageTap: _handleMessageTap,
                 onPreviewDataFetched: _handlePreviewDataFetched,
-                onTextFieldTap: () => _markAsSeen(),
+                onTextFieldTap: _markAsSeen,
                 onSendPressed: _handleSendPressed,
                 user: types.User(id: _user.uid, imageUrl: _user.avatar),
               ),

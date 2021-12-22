@@ -12,13 +12,13 @@ import 'auth_service.dart';
 import 'spring_service.dart';
 
 class FirebaseAuthService with NetworkLoggy implements AuthService {
-  final _firebaseAuth = FirebaseAuth.instance;
-  final _springService = GetIt.I.get<SpringService>();
-  final _authStateController = StreamController<User?>();
-
   FirebaseAuthService() {
     _authStateController.add(_firebaseAuth.currentUser);
   }
+
+  final _firebaseAuth = FirebaseAuth.instance;
+  final _springService = GetIt.I.get<SpringService>();
+  final _authStateController = StreamController<User?>();
 
   MyUser? _userFromFirebase(User? user) =>
       user != null ? MyUser(uid: user.uid) : null;

@@ -76,7 +76,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         setState(() => _pagingStatus = status);
       }
     });
-    _pagingController.addPageRequestListener((pageKey) => _fetchPage(pageKey));
+    _pagingController.addPageRequestListener(_fetchPage);
     super.initState();
   }
 
@@ -171,7 +171,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         builderDelegate: PagedChildBuilderDelegate<Deal>(
           animateTransitions: true,
           itemBuilder: (context, deal, index) {
-            final bool isFavorited = user?.favorites![deal.id!] == true;
+            final bool isFavorited = user?.favorites![deal.id!] ?? false;
 
             return DealItem(
               deal: deal,
@@ -186,12 +186,12 @@ class _DealPagedListViewState extends State<DealPagedListView>
           firstPageErrorIndicatorBuilder: (context) =>
               ErrorIndicatorUtil.buildFirstPageError(
             context,
-            onTryAgain: () => _pagingController.refresh(),
+            onTryAgain: _pagingController.refresh,
           ),
           newPageErrorIndicatorBuilder: (context) =>
               ErrorIndicatorUtil.buildNewPageError(
             context,
-            onTryAgain: () => _pagingController.refresh(),
+            onTryAgain: _pagingController.refresh,
           ),
           noItemsFoundIndicatorBuilder: (context) => widget.noDealsFound,
         ),
@@ -226,7 +226,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         else if (!shouldShowTryAgainButton)
           Expanded(
             child: RefreshIndicator(
-              onRefresh: () => Future.sync(() => _pagingController.refresh()),
+              onRefresh: () => Future.sync(_pagingController.refresh),
               child: buildPagedListView(),
             ),
           )

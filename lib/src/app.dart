@@ -92,9 +92,7 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
       // onUnknownRoute: (RouteSettings settings) {
       //   // open your app when is executed from outside when is terminated.
       // },
-      builder: home == null
-          ? (context, child) => buildOfflineBuilder(context, child)
-          : null,
+      builder: home == null ? buildOfflineBuilder : null,
     );
   }
 
@@ -115,7 +113,7 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
     } else if (_futureState == _FutureState.error) {
       return _buildMaterialApp(
         home: ErrorScreen(
-          onTap: (ctx) => _fetchCategoriesAndStores(ctx),
+          onTap: _fetchCategoriesAndStores,
         ),
       );
     }

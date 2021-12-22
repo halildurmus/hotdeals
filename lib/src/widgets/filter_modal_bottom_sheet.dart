@@ -95,7 +95,7 @@ class _FilterModalBottomSheetState extends State<FilterModalBottomSheet> {
                 filterType: widget._filterType,
                 hintText: widget.title,
                 onClearButtonPressed: () =>
-                    modalSetState(() => searchTextController.clear()),
+                    modalSetState(searchTextController.clear),
                 onCloseButtonPressed: () =>
                     modalSetState(() => searchMode = !searchMode),
                 onSearchButtonPressed: () {

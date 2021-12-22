@@ -44,7 +44,7 @@ class SortFilterChip extends StatelessWidget {
     final isSelected = sortBy != null;
 
     return FilterChip(
-      onSelected: (value) => onSelected(value),
+      onSelected: onSelected,
       label: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
