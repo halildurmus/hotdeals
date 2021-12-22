@@ -377,29 +377,32 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<bool> addFcmToken({required String fcmToken}) async {
-    final String url = '$_baseUrl/users/me/fcm-tokens';
-    final Json data = <String, dynamic>{'fcmToken': fcmToken};
+  Future<bool> addFCMToken({
+    required String deviceId,
+    required String token,
+  }) async {
+    final url = '$_baseUrl/users/me/fcm-tokens';
+    final data = <String, dynamic>{'deviceId': deviceId, 'token': token};
     try {
-      final Response response = await _httpService.put(url, data);
+      final response = await _httpService.put(url, data);
 
       return response.statusCode == 200;
     } on Exception catch (e) {
       loggy.error(e);
-      throw Exception('An error occurred while adding fcm token!');
+      throw Exception('An error occurred while adding FCM token!');
     }
   }
 
-  Future<bool> removeFcmToken({required String fcmToken}) async {
-    final String url = '$_baseUrl/users/me/fcm-tokens';
-    final Json data = <String, dynamic>{'fcmToken': fcmToken};
+  Future<bool> removeFCMToken({required String token}) async {
+    final url = '$_baseUrl/users/me/fcm-tokens';
+    final data = <String, dynamic>{'token': token};
     try {
-      final Response response = await _httpService.delete(url, data);
+      final response = await _httpService.delete(url, data);
 
       return response.statusCode == 204;
     } on Exception catch (e) {
       loggy.error(e, e);
-      throw Exception('An error occurred while removing fcm token!');
+      throw Exception('An error occurred while removing FCM token!');
     }
   }
 

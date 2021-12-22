@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -27,8 +28,12 @@ class AuthWidget extends StatefulWidget {
 class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
   late Future<MyUser?> _userFuture;
 
-  Future<void> _saveFcmTokenToDatabase(String token) async {
-    await GetIt.I.get<SpringService>().addFcmToken(fcmToken: token);
+  Future<void> _saveFCMTokenToDatabase(String token) async {
+    final androidDeviceInfo = GetIt.I.get<AndroidDeviceInfo>();
+    final deviceId = androidDeviceInfo.androidId!;
+    await GetIt.I
+        .get<SpringService>()
+        .addFCMToken(deviceId: deviceId, token: token);
     await context.read<UserController>().getUser();
   }
 
@@ -71,14 +76,12 @@ class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           loggy.info(snapshot.data);
-          // Gets the token each time the user logs in.
-          FirebaseMessaging.instance.getToken().then((String? token) async {
-            // Saves the initial token to the database.
-            await _saveFcmTokenToDatabase(token!);
-
-            // Any time the token refreshes, store this in the database too.
+          // Gets the FCM token each time the user logs in.
+          FirebaseMessaging.instance.getToken().then((token) async {
+            await _saveFCMTokenToDatabase(token!);
+            // Any time the token refreshes, store it in the database.
             FirebaseMessaging.instance.onTokenRefresh
-                .listen(_saveFcmTokenToDatabase);
+                .listen(_saveFCMTokenToDatabase);
           });
           // Subscribes to Firebase Cloud Messaging.
           subscribeToFCM();

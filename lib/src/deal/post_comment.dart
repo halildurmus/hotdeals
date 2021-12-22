@@ -81,7 +81,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
           message: comment.message,
           uid: poster.id!,
           avatar: user!.avatar!,
-          tokens: poster.fcmTokens!,
+          tokens: poster.fcmTokens!.values.toList(),
         );
 
         final bool result = await GetIt.I

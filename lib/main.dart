@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -138,12 +139,15 @@ void main() async {
     await Firebase.initializeApp();
     _setupCrashlytics();
     _initEnvConfig();
-    await Future.wait([
+    final futures = await Future.wait<dynamic>([
+      DeviceInfoPlugin().androidInfo,
       // See https://github.com/FirebaseExtended/flutterfire/issues/6011
       FirebaseMessaging.instance.getToken(),
       _setupLocalNotifications(),
       _initSettings(),
     ]);
+    final androidDeviceInfo = futures[0] as AndroidDeviceInfo;
+    GetIt.I.registerSingleton<AndroidDeviceInfo>(androidDeviceInfo);
     // Sets a message handler function which is called when the app is in the
     // background or terminated.
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);

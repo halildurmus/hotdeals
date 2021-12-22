@@ -38,7 +38,7 @@ class MyUser {
         email: json['email'] as String,
         nickname: json['nickname'] as String,
         blockedUsers: _blockedUsersFromJson(json['blockedUsers'] as Json),
-        fcmTokens: List<String>.from(json['fcmTokens'] as List<dynamic>),
+        fcmTokens: _fcmTokensFromJson(json['fcmTokens'] as Json),
         favorites: _favoritesFromJson(json['favorites'] as Json),
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
@@ -50,7 +50,7 @@ class MyUser {
   String? email;
   String? nickname;
   Map<String, bool>? blockedUsers;
-  List<String>? fcmTokens;
+  Map<String, String>? fcmTokens;
   Map<String, bool>? favorites;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -86,4 +86,13 @@ Map<String, bool> _favoritesFromJson(Json json) {
   });
 
   return favorites;
+}
+
+Map<String, String> _fcmTokensFromJson(Json json) {
+  final fcmTokens = <String, String>{};
+  json.forEach((k, dynamic v) {
+    fcmTokens.putIfAbsent(k, () => v as String);
+  });
+
+  return fcmTokens;
 }

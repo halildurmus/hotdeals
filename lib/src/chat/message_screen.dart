@@ -108,7 +108,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
       image: imageUrl,
       uid: widget.user2.uid,
       avatar: user.avatar!,
-      tokens: widget.user2.fcmTokens!,
+      tokens: widget.user2.fcmTokens!.values.toList(),
     );
 
     final bool result = await GetIt.I
