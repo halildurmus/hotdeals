@@ -5,7 +5,11 @@ linter:
     directives_ordering: true
     prefer_relative_imports: true
     prefer_single_quotes: true
+    sort_constructors_first: true
     sort_pub_dependencies: true
+    unnecessary_constructor_name: true
+    unnecessary_lambdas: true
+    unnecessary_parenthesis: true
 
 analyzer:
   exclude:
