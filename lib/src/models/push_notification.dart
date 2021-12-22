@@ -33,6 +33,7 @@ class PushNotification {
         title: map['title'] as String?,
         titleLocKey: map['title_loc_key'] as String?,
         titleLocArgs: (map['title_loc_args'] as String?)?.split(','),
+        body: map['body'] as String?,
         bodyLocKey: map['body_loc_key'] as String?,
         bodyLocArgs: (map['body_loc_args'] as String?)?.split(','),
         actor: map['actor']! as String,
