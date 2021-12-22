@@ -47,7 +47,7 @@ class PushNotification {
         createdAt: DateTime.parse(map['created_at']! as String),
       );
 
-  final int? id;
+  int? id;
   final String? title;
   final String? titleLocKey;
   final List<String>? titleLocArgs;

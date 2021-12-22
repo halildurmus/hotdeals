@@ -70,14 +70,14 @@ class PushNotificationService extends ChangeNotifier {
     // `conflictAlgorithm` to use in case the same record is inserted twice.
     //
     // In this case, replace any previous data.
-    await _db.insert(
+    final id = await _db.insert(
       _tableNotificationName,
       notification.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
     _unreadNotifications++;
-    _notificationController.add(notification);
+    _notificationController.add(notification..id = id);
     notifyListeners();
   }
 
