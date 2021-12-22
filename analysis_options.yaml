@@ -9,7 +9,30 @@ linter:
     avoid_setters_without_getters: true
     avoid_slow_async_io: true
     avoid_types_on_closure_parameters: true
+    avoid_unused_constructor_parameters: true
+    avoid_void_async: true
+    cancel_subscriptions: true
+    cascade_invocations: true
     directives_ordering: true
+    flutter_style_todos: true
+    join_return_with_assignment: true
+    missing_whitespace_between_adjacent_strings: true
+    no_leading_underscores_for_local_identifiers: true
+    omit_local_variable_types: true
+    one_member_abstracts: true
+    only_throw_errors: true
+    parameter_assignments: true
+    prefer_asserts_in_initializer_lists: true
+    prefer_asserts_with_message: true
+    prefer_constructors_over_static_methods: true
+    prefer_expression_function_bodies: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    prefer_foreach: true
+    prefer_if_elements_to_conditional_expressions: true
+    prefer_interpolation_to_compose_strings: true
+    prefer_int_literals: true
+    prefer_null_aware_method_calls: true
     prefer_relative_imports: true
     prefer_single_quotes: true
     sized_box_shrink_expand: true
@@ -26,5 +49,5 @@ linter:
 
 analyzer:
   exclude:
-    - "**/*.g.dart"
     - "**/*.freezed.dart"
+    - "**/*.g.dart"
