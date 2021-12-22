@@ -2,7 +2,7 @@ import 'dart:async';
 
 StreamTransformer<bool, bool> debounce(Duration debounceDuration) {
   Timer? _debounceTimer;
-  bool seenFirstData = false;
+  var seenFirstData = false;
 
   return StreamTransformer<bool, bool>.fromHandlers(
     handleData: (data, sink) {
@@ -21,29 +21,27 @@ StreamTransformer<bool, bool> debounce(Duration debounceDuration) {
   );
 }
 
-StreamTransformer<bool, bool> startsWith(bool data) {
-  return StreamTransformer<bool, bool>(
-    (input, cancelOnError) {
-      StreamController<bool>? controller;
-      late StreamSubscription<bool> subscription;
+StreamTransformer<bool, bool> startsWith(bool data) =>
+    StreamTransformer<bool, bool>(
+      (input, cancelOnError) {
+        StreamController<bool>? controller;
+        late StreamSubscription<bool> subscription;
 
-      controller = StreamController<bool>(
-        sync: true,
-        onListen: () => controller?.add(data),
-        onPause: ([resumeSignal]) =>
-            subscription.pause(resumeSignal),
-        onResume: () => subscription.resume(),
-        onCancel: () => subscription.cancel(),
-      );
+        controller = StreamController<bool>(
+          sync: true,
+          onListen: () => controller?.add(data),
+          onPause: ([resumeSignal]) => subscription.pause(resumeSignal),
+          onResume: () => subscription.resume(),
+          onCancel: () => subscription.cancel(),
+        );
 
-      subscription = input.listen(
-        controller.add,
-        onError: controller.addError,
-        onDone: controller.close,
-        cancelOnError: cancelOnError,
-      );
+        subscription = input.listen(
+          controller.add,
+          onError: controller.addError,
+          onDone: controller.close,
+          cancelOnError: cancelOnError,
+        );
 
-      return controller.stream.listen(null);
-    },
-  );
-}
+        return controller.stream.listen(null);
+      },
+    );

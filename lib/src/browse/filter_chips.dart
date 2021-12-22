@@ -54,7 +54,7 @@ class _FilterChipsState extends State<FilterChips> {
         scrollDirection: Axis.horizontal,
         itemCount: subcategories.length,
         itemBuilder: (context, index) {
-          final Category subcategory = subcategories.elementAt(index);
+          final subcategory = subcategories.elementAt(index);
 
           return FilterChip(
             checkmarkColor: Colors.white,

@@ -61,13 +61,13 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
         message: commentController.text,
       );
 
-      final Comment? postedComment =
+      final postedComment =
           await GetIt.I.get<SpringService>().postComment(comment: comment);
 
       // Send push notification to the poster if the commentator is not
       // the poster.
       if (user!.id! != widget.deal.postedBy) {
-        final MyUser poster = await GetIt.I
+        final poster = await GetIt.I
             .get<SpringService>()
             .getUserById(id: widget.deal.postedBy!);
 
@@ -84,7 +84,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
           tokens: poster.fcmTokens!.values.toList(),
         );
 
-        final bool result = await GetIt.I
+        final result = await GetIt.I
             .get<SpringService>()
             .sendPushNotification(notification: notification);
         if (result) {
@@ -110,53 +110,49 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
       }
     }
 
-    Widget buildPostButton() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: ElevatedButton(
-          onPressed:
-              (_formKey.currentState?.validate() ?? false) ? onPressed : null,
-          style: ElevatedButton.styleFrom(
-            fixedSize: Size(deviceWidth, 45),
-            primary: theme.colorScheme.secondary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+    Widget buildPostButton() => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: ElevatedButton(
+            onPressed:
+                (_formKey.currentState?.validate() ?? false) ? onPressed : null,
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(deviceWidth, 45),
+              primary: theme.colorScheme.secondary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
             ),
+            child: Text(l(context).postComment),
           ),
-          child: Text(l(context).postComment),
-        ),
-      );
-    }
+        );
 
-    Widget buildForm() {
-      return Form(
-        key: _formKey,
-        child: TextFormField(
-          controller: commentController,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            errorMaxLines: 2,
-            hintStyle: textTheme.bodyText2!.copyWith(
-                color: theme.brightness == Brightness.light
-                    ? Colors.black54
-                    : Colors.grey),
-            hintText: l(context).enterYourComment,
+    Widget buildForm() => Form(
+          key: _formKey,
+          child: TextFormField(
+            controller: commentController,
+            decoration: InputDecoration(
+              border: const OutlineInputBorder(),
+              errorMaxLines: 2,
+              hintStyle: textTheme.bodyText2!.copyWith(
+                  color: theme.brightness == Brightness.light
+                      ? Colors.black54
+                      : Colors.grey),
+              hintText: l(context).enterYourComment,
+            ),
+            minLines: 4,
+            maxLines: 30,
+            maxLength: 500,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            onChanged: (text) => setState(() {}),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return l(context).nicknameMustBe;
+              }
+
+              return null;
+            },
           ),
-          minLines: 4,
-          maxLines: 30,
-          maxLength: 500,
-          maxLengthEnforcement: MaxLengthEnforcement.enforced,
-          onChanged: (text) => setState(() {}),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return l(context).nicknameMustBe;
-            }
-
-            return null;
-          },
-        ),
-      );
-    }
+        );
 
     return Padding(
       padding: const EdgeInsets.all(16),

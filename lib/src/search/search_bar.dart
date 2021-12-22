@@ -40,11 +40,9 @@ class _SearchBarState extends State<SearchBar> {
     }
   }
 
-  Widget buildError() {
-    return ListTile(
-      title: Text(l(context).anErrorOccurred),
-    );
-  }
+  Widget buildError() => ListTile(
+        title: Text(l(context).anErrorOccurred),
+      );
 
   void onQueryTap(String query) {
     searchParams = searchParams.copyWith(query: query);
@@ -82,28 +80,24 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
-  Widget buildListTile(String query) {
-    return ListTile(
-      onTap: () => onQueryTap(query),
-      leading: const Icon(Icons.search),
-      title: Text(query),
-    );
-  }
+  Widget buildListTile(String query) => ListTile(
+        onTap: () => onQueryTap(query),
+        leading: const Icon(Icons.search),
+        title: Text(query),
+      );
 
-  Widget buildSuggestions() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: _suggestions
-          .map(
-            (query) => ListTile(
-              onTap: () => onQueryTap(query),
-              leading: const Icon(Icons.search),
-              title: Text(query),
-            ),
-          )
-          .toList(),
-    );
-  }
+  Widget buildSuggestions() => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: _suggestions
+            .map(
+              (query) => ListTile(
+                onTap: () => onQueryTap(query),
+                leading: const Icon(Icons.search),
+                title: Text(query),
+              ),
+            )
+            .toList(),
+      );
 
   List<Widget> buildActions() => [FloatingSearchBarAction.searchToClear()];
 

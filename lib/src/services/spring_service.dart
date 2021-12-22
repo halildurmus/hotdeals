@@ -46,9 +46,9 @@ class SpringService with NetworkLoggy {
   late HttpService _httpService;
 
   Future<bool> blockUser({required String userId}) async {
-    final String url = '$_baseUrl/users/me/blocks/$userId';
+    final url = '$_baseUrl/users/me/blocks/$userId';
     try {
-      final Response response = await _httpService.put(url);
+      final response = await _httpService.put(url);
 
       return response.statusCode == 200;
     } on Exception catch (e) {
@@ -58,9 +58,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> unblockUser({required String userId}) async {
-    final String url = '$_baseUrl/users/me/blocks/$userId';
+    final url = '$_baseUrl/users/me/blocks/$userId';
     try {
-      final Response response = await _httpService.delete(url);
+      final response = await _httpService.delete(url);
 
       return response.statusCode == 204;
     } on Exception catch (e) {
@@ -70,9 +70,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> favoriteDeal({required String dealId}) async {
-    final String url = '$_baseUrl/users/me/favorites/$dealId';
+    final url = '$_baseUrl/users/me/favorites/$dealId';
     try {
-      final Response response = await _httpService.put(url);
+      final response = await _httpService.put(url);
 
       return response.statusCode == 200;
     } on Exception catch (e) {
@@ -82,9 +82,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> unfavoriteDeal({required String dealId}) async {
-    final String url = '$_baseUrl/users/me/favorites/$dealId';
+    final url = '$_baseUrl/users/me/favorites/$dealId';
     try {
-      final Response response = await _httpService.delete(url);
+      final response = await _httpService.delete(url);
 
       return response.statusCode == 204;
     } on Exception catch (e) {
@@ -94,9 +94,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<Deal?> postDeal({required Deal deal}) async {
-    final String url = '$_baseUrl/deals';
+    final url = '$_baseUrl/deals';
     try {
-      final Response response = await _httpService.post(url, deal.toJson());
+      final response = await _httpService.post(url, deal.toJson());
       if (response.statusCode == 201) {
         final createdDeal = Deal.fromJson(jsonDecode(response.body) as Json);
 
@@ -111,9 +111,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<bool> removeDeal({required String dealId}) async {
-    final String url = '$_baseUrl/deals/$dealId';
+    final url = '$_baseUrl/deals/$dealId';
     try {
-      final Response response = await _httpService.delete(url);
+      final response = await _httpService.delete(url);
 
       return response.statusCode == 204;
     } on Exception catch (e) {
@@ -128,10 +128,9 @@ class SpringService with NetworkLoggy {
     if (notification.tokens.isEmpty) {
       return false;
     }
-    final String url = '$_baseUrl/notifications';
+    final url = '$_baseUrl/notifications';
     try {
-      final Response response =
-          await _httpService.post(url, notification.toJson());
+      final response = await _httpService.post(url, notification.toJson());
 
       return response.statusCode == 201;
     } on Exception catch (e) {
@@ -141,9 +140,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<DealReport?> sendDealReport({required DealReport report}) async {
-    final String url = '$_baseUrl/deal-reports';
+    final url = '$_baseUrl/deal-reports';
     try {
-      final Response response = await _httpService.post(url, report.toJson());
+      final response = await _httpService.post(url, report.toJson());
       if (response.statusCode == 201) {
         final dealReport =
             DealReport.fromJson(jsonDecode(response.body) as Json);
@@ -159,9 +158,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<UserReport?> sendUserReport({required UserReport report}) async {
-    final String url = '$_baseUrl/user-reports';
+    final url = '$_baseUrl/user-reports';
     try {
-      final Response response = await _httpService.post(url, report.toJson());
+      final response = await _httpService.post(url, report.toJson());
       if (response.statusCode == 201) {
         final userReport =
             UserReport.fromJson(jsonDecode(response.body) as Json);
@@ -181,10 +180,10 @@ class SpringService with NetworkLoggy {
     int? page,
     int? size,
   }) async {
-    final String url =
+    final url =
         '$_baseUrl/comments/search/findByDealId?dealId=$dealId&page=$page&size=$size';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final comments = commentFromJson(response.body);
 
@@ -199,9 +198,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<Comment?> postComment({required Comment comment}) async {
-    final String url = '$_baseUrl/comments';
+    final url = '$_baseUrl/comments';
     try {
-      final Response response = await _httpService.post(url, comment.toJson());
+      final response = await _httpService.post(url, comment.toJson());
       if (response.statusCode == 201) {
         final comment = Comment.fromJson(jsonDecode(response.body) as Json);
 
@@ -216,9 +215,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<Category>> getCategories() async {
-    final String url = '$_baseUrl/categories';
+    final url = '$_baseUrl/categories';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final categories = categoryFromJson(response.body);
 
@@ -233,9 +232,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<Category?> createCategory({required Category category}) async {
-    final String url = '$_baseUrl/categories';
+    final url = '$_baseUrl/categories';
     try {
-      final Response response = await _httpService.post(url, category.toJson());
+      final response = await _httpService.post(url, category.toJson());
       if (response.statusCode == 201) {
         final category = Category.fromJson(jsonDecode(response.body) as Json);
 
@@ -250,9 +249,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<Store?> getStore({required String storeId}) async {
-    final String url = '$_baseUrl/stores/$storeId';
+    final url = '$_baseUrl/stores/$storeId';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final store = Store.fromJson(jsonDecode(response.body) as Json);
 
@@ -267,9 +266,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<Store>> getStores() async {
-    final String url = '$_baseUrl/stores';
+    final url = '$_baseUrl/stores';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final stores = storeFromJson(response.body);
 
@@ -284,9 +283,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<MyUser> createMongoUser(User user) async {
-    final String url = '$_baseUrl/users';
-    final String? fcmToken = await FirebaseMessaging.instance.getToken();
-    final Json data = <String, dynamic>{
+    final url = '$_baseUrl/users';
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    final data = <String, dynamic>{
       'uid': user.uid,
       'email': user.email,
       'avatar': user.photoURL ??
@@ -295,7 +294,7 @@ class SpringService with NetworkLoggy {
     };
 
     try {
-      final Response response = await _httpService.post(url, data, auth: false);
+      final response = await _httpService.post(url, data, auth: false);
       if (response.statusCode == 201) {
         final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
@@ -310,9 +309,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<MyUser?> getMongoUser() async {
-    final String url = '$_baseUrl/users/me';
+    final url = '$_baseUrl/users/me';
     try {
-      final Response response = await _httpService.get(url);
+      final response = await _httpService.get(url);
       if (response.statusCode == 200) {
         final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
@@ -327,9 +326,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<MyUser>?> getBlockedUsers() async {
-    final String url = '$_baseUrl/users/me/blocks';
+    final url = '$_baseUrl/users/me/blocks';
     try {
-      final Response response = await _httpService.get(url);
+      final response = await _httpService.get(url);
       if (response.statusCode == 200) {
         final blockedUsers = blockedUsersFromJson(response.body);
 
@@ -344,9 +343,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<MyUser> getUserById({required String id}) async {
-    final String url = '$_baseUrl/users/$id';
+    final url = '$_baseUrl/users/$id';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
@@ -361,9 +360,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<MyUser> getUserByUid({required String uid}) async {
-    final String url = '$_baseUrl/users/search/findByUid?uid=$uid';
+    final url = '$_baseUrl/users/search/findByUid?uid=$uid';
     try {
-      final Response response = await _httpService.get(url);
+      final response = await _httpService.get(url);
       if (response.statusCode == 200) {
         final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
@@ -412,7 +411,7 @@ class SpringService with NetworkLoggy {
       <String, dynamic>{'op': 'replace', 'path': '/isExpired', 'value': true}
     ];
     try {
-      final Response response = await _httpService.patch(url, data);
+      final response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
         return Deal.fromJson(jsonDecode(response.body) as Json);
       }
@@ -433,7 +432,7 @@ class SpringService with NetworkLoggy {
       <String, dynamic>{'op': 'replace', 'path': '/avatar', 'value': avatarUrl}
     ];
     try {
-      final Response response = await _httpService.patch(url, data);
+      final response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
         final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
@@ -456,7 +455,7 @@ class SpringService with NetworkLoggy {
       <String, dynamic>{'op': 'replace', 'path': '/nickname', 'value': nickname}
     ];
     try {
-      final Response response = await _httpService.patch(url, data);
+      final response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
         final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
 
@@ -473,9 +472,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<Deal>> getUserFavorites({int? page, int? size}) async {
-    final String url = '$_baseUrl/users/me/favorites?page=$page&size=$size';
+    final url = '$_baseUrl/users/me/favorites?page=$page&size=$size';
     try {
-      final Response response = await _httpService.get(url);
+      final response = await _httpService.get(url);
       if (response.statusCode == 200) {
         final deals = userDealsFromJson(response.body);
 
@@ -490,9 +489,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<SuggestionResponse> getDealSuggestions({required String query}) async {
-    final String url = '$_baseUrl/deals/suggestions?query=$query';
+    final url = '$_baseUrl/deals/suggestions?query=$query';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return SuggestionResponse.fromJson(jsonDecode(response.body));
       }
@@ -505,9 +504,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<List<Deal>> getUserDeals({int? page, int? size}) async {
-    final String url = '$_baseUrl/users/me/deals?page=$page&size=$size';
+    final url = '$_baseUrl/users/me/deals?page=$page&size=$size';
     try {
-      final Response response = await _httpService.get(url);
+      final response = await _httpService.get(url);
       if (response.statusCode == 200) {
         final deals = userDealsFromJson(response.body);
 
@@ -526,10 +525,10 @@ class SpringService with NetworkLoggy {
     int? page,
     int? size,
   }) async {
-    final String url =
+    final url =
         '$_baseUrl/deals/search/findAllByCategoryStartsWith?category=$category&page=$page&size=$size';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final deals = dealsFromJson(response.body);
 
@@ -553,7 +552,7 @@ class SpringService with NetworkLoggy {
       searchParams.queryParameters,
     ).toString();
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return SearchResponse.fromJson(jsonDecode(response.body));
       }
@@ -570,10 +569,10 @@ class SpringService with NetworkLoggy {
     int? page,
     int? size,
   }) async {
-    final String url =
+    final url =
         '$_baseUrl/deals/search/findAllByStore?storeId=$storeId&page=$page&size=$size';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final deals = dealsFromJson(response.body);
 
@@ -591,7 +590,7 @@ class SpringService with NetworkLoggy {
     final url =
         '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByCreatedAtDesc';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final deals = dealsFromJson(response.body);
 
@@ -609,7 +608,7 @@ class SpringService with NetworkLoggy {
     final url =
         '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByDealScoreDesc';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final deals = dealsFromJson(response.body);
 
@@ -624,10 +623,10 @@ class SpringService with NetworkLoggy {
   }
 
   Future<int?> getNumberOfCommentsByDealId({required String dealId}) async {
-    final String url =
+    final url =
         '$_baseUrl/comments/search/countCommentsByDealId?dealId=$dealId';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return int.parse(response.body);
       }
@@ -640,10 +639,10 @@ class SpringService with NetworkLoggy {
   }
 
   Future<int?> getNumberOfCommentsPostedByUser({required String userId}) async {
-    final String url =
+    final url =
         '$_baseUrl/comments/search/countCommentsByPostedBy?postedBy=$userId';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return int.parse(response.body);
       }
@@ -656,10 +655,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<int?> getNumberOfDealsByStore({required String storeId}) async {
-    final String url =
-        '$_baseUrl/deals/search/countDealsByStore?storeId=$storeId';
+    final url = '$_baseUrl/deals/search/countDealsByStore?storeId=$storeId';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return int.parse(response.body);
       }
@@ -672,10 +670,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<int?> getNumberOfDealsPostedByUser({required String userId}) async {
-    final String url =
-        '$_baseUrl/deals/search/countDealsByPostedBy?postedBy=$userId';
+    final url = '$_baseUrl/deals/search/countDealsByPostedBy?postedBy=$userId';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return int.parse(response.body);
       }
@@ -688,9 +685,9 @@ class SpringService with NetworkLoggy {
   }
 
   Future<Deal?> getDeal({required String dealId}) async {
-    final String url = '$_baseUrl/deals/$dealId';
+    final url = '$_baseUrl/deals/$dealId';
     try {
-      final Response response = await _httpService.get(url, auth: false);
+      final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         final deal = Deal.fromJson(jsonDecode(response.body) as Json);
 
@@ -708,8 +705,8 @@ class SpringService with NetworkLoggy {
     required String dealId,
     required DealVoteType voteType,
   }) async {
-    final String url = '$_baseUrl/deals/$dealId/votes';
-    final Json data = {'voteType': voteType.name.toUpperCase()};
+    final url = '$_baseUrl/deals/$dealId/votes';
+    final data = {'voteType': voteType.name.toUpperCase()};
     try {
       late final Response response;
       if (voteType == DealVoteType.unvote) {

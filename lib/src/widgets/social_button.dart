@@ -68,24 +68,22 @@ class SocialButton extends StatelessWidget {
   final MaterialTapTargetSize? tapTargetSize;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: onPressed,
-      disabledColor: backgroundColor!.withOpacity(.5),
-      disabledElevation: elevation,
-      materialTapTargetSize: _mini ? tapTargetSize : null,
-      key: key,
-      minWidth: _mini ? width : null,
-      height: height,
-      elevation: elevation,
-      highlightElevation: highlightElevation,
-      padding: padding,
-      color: backgroundColor,
-      splashColor: splashColor,
-      shape: shape,
-      child: _getButtonChild(context),
-    );
-  }
+  Widget build(BuildContext context) => MaterialButton(
+        onPressed: onPressed,
+        disabledColor: backgroundColor!.withOpacity(.5),
+        disabledElevation: elevation,
+        materialTapTargetSize: _mini ? tapTargetSize : null,
+        key: key,
+        minWidth: _mini ? width : null,
+        height: height,
+        elevation: elevation,
+        highlightElevation: highlightElevation,
+        padding: padding,
+        color: backgroundColor,
+        splashColor: splashColor,
+        shape: shape,
+        child: _getButtonChild(context),
+      );
 
   Widget _getButtonChild(BuildContext context) {
     if (_mini) {

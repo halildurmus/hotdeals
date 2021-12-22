@@ -30,16 +30,14 @@ class DealsByStore extends StatelessWidget {
           width: 55,
           child: CachedNetworkImage(
             imageUrl: store.logo,
-            imageBuilder: (ctx, imageProvider) {
-              return Hero(
-                tag: store.id!,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: imageProvider),
-                  ),
+            imageBuilder: (ctx, imageProvider) => Hero(
+              tag: store.id!,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: imageProvider),
                 ),
-              );
-            },
+              ),
+            ),
             placeholder: (context, url) => const SizedBox.square(dimension: 50),
           ),
         ),
@@ -54,21 +52,17 @@ class DealsByStore extends StatelessWidget {
             size: size,
           );
 
-  Widget buildNoDealsFound(BuildContext context) {
-    return ErrorIndicator(
-      icon: Icons.local_offer,
-      title: l(context).couldNotFindAnyDeal,
-    );
-  }
+  Widget buildNoDealsFound(BuildContext context) => ErrorIndicator(
+        icon: Icons.local_offer,
+        title: l(context).couldNotFindAnyDeal,
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(context),
-      body: DealPagedListView(
-        dealsFuture: _dealFuture,
-        noDealsFound: buildNoDealsFound(context),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: buildAppBar(context),
+        body: DealPagedListView(
+          dealsFuture: _dealFuture,
+          noDealsFound: buildNoDealsFound(context),
+        ),
+      );
 }

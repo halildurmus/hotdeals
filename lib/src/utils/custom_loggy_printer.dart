@@ -29,8 +29,8 @@ class CustomLoggyPrinter extends LoggyPrinter {
   }) : super() {
     _startTime ??= DateTime.now();
 
-    var doubleDividerLine = StringBuffer();
-    var singleDividerLine = StringBuffer();
+    final doubleDividerLine = StringBuffer();
+    final singleDividerLine = StringBuffer();
     for (var i = 0; i < lineLength - 1; i++) {
       doubleDividerLine.write(_doubleDivider);
       singleDividerLine.write(_singleDivider);
@@ -120,7 +120,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
 
   @override
   void onLog(LogRecord record) {
-    var messageStr =
+    final messageStr =
         '${record.loggerName} - ${_stringifyMessage(record.message)}';
 
     String? stackTraceStr;
@@ -128,23 +128,21 @@ class CustomLoggyPrinter extends LoggyPrinter {
       stackTraceStr = _formatStackTrace(record.stackTrace, errorMethodCount);
     }
 
-    var errorStr = record.error?.toString();
+    final errorStr = record.error?.toString();
 
     String? timeStr;
     if (printTime) {
       timeStr = _getTime();
     }
 
-    final List<String> _logs = _formatLog(
+    // Prints logs to the console
+    _formatLog(
       record.level,
       messageStr,
       timeStr,
       errorStr,
       stackTraceStr,
-    );
-
-    // Prints logs to the console.
-    _logs.forEach(print);
+    ).forEach(print);
   }
 
   String? _formatStackTrace(StackTrace? stackTrace, int methodCount) {
@@ -153,7 +151,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
       lines = lines.sublist(stackTraceBeginIndex);
     }
 
-    var formatted = <String>[];
+    final formatted = <String>[];
     var count = 0;
     for (final line in lines) {
       if (_discardDeviceStacktraceLine(line) ||
@@ -173,7 +171,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
   }
 
   bool _discardDeviceStacktraceLine(String line) {
-    var match = _deviceStackTraceRegex.matchAsPrefix(line);
+    final match = _deviceStackTraceRegex.matchAsPrefix(line);
     if (match == null) {
       return false;
     }
@@ -182,7 +180,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
   }
 
   bool _discardWebStacktraceLine(String line) {
-    var match = _webStackTraceRegex.matchAsPrefix(line);
+    final match = _webStackTraceRegex.matchAsPrefix(line);
     if (match == null) {
       return false;
     }
@@ -192,7 +190,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
   }
 
   bool _discardBrowserStacktraceLine(String line) {
-    var match = _browserStackTraceRegex.matchAsPrefix(line);
+    final match = _browserStackTraceRegex.matchAsPrefix(line);
     if (match == null) {
       return false;
     }
@@ -211,12 +209,12 @@ class CustomLoggyPrinter extends LoggyPrinter {
 
     String _twoDigits(int n) => (n >= 10) ? '$n' : '0$n';
 
-    var now = DateTime.now();
-    var h = _twoDigits(now.hour);
-    var min = _twoDigits(now.minute);
-    var sec = _twoDigits(now.second);
-    var ms = _threeDigits(now.millisecond);
-    var timeSinceStart = now.difference(_startTime!).toString();
+    final now = DateTime.now();
+    final h = _twoDigits(now.hour);
+    final min = _twoDigits(now.minute);
+    final sec = _twoDigits(now.second);
+    final ms = _threeDigits(now.millisecond);
+    final timeSinceStart = now.difference(_startTime!).toString();
 
     return '$h:$min:$sec.$ms (+$timeSinceStart)';
   }
@@ -227,23 +225,20 @@ class CustomLoggyPrinter extends LoggyPrinter {
   String _stringifyMessage(dynamic message) {
     final finalMessage = message is Function ? message() : message;
     if (finalMessage is Map || finalMessage is Iterable) {
-      var encoder = JsonEncoder.withIndent('  ', _toEncodableFallback);
+      final encoder = JsonEncoder.withIndent('  ', _toEncodableFallback);
       return encoder.convert(finalMessage);
     }
 
     return finalMessage.toString();
   }
 
-  AnsiColor _getLevelColor(LogLevel level) {
-    return colors ? _levelColors[level]! : AnsiColor();
-  }
+  AnsiColor _getLevelColor(LogLevel level) =>
+      colors ? _levelColors[level]! : AnsiColor();
 
-  AnsiColor _getErrorColor(LogLevel level) {
-    return colors
-        ? AnsiColor(
-            backgroundColor: _levelColors[LogLevel.error]!.foregroundColor)
-        : AnsiColor();
-  }
+  AnsiColor _getErrorColor(LogLevel level) => colors
+      ? AnsiColor(
+          backgroundColor: _levelColors[LogLevel.error]!.foregroundColor)
+      : AnsiColor();
 
   String _getEmoji(LogLevel level) => printEmojis ? _levelEmojis[level]! : '';
 
@@ -256,13 +251,13 @@ class CustomLoggyPrinter extends LoggyPrinter {
   ) {
     // This code is non trivial and a type annotation here helps understanding.
     // ignore: omit_local_variable_types
-    List<String> buffer = [];
-    var verticalLineAtLevel = (includeBox[level]!) ? ('$_verticalLine ') : '';
-    var color = _getLevelColor(level);
+    final List<String> buffer = [];
+    final verticalLineAtLevel = (includeBox[level]!) ? ('$_verticalLine ') : '';
+    final color = _getLevelColor(level);
     if (includeBox[level]!) buffer.add(color(_topBorder));
 
     if (error != null) {
-      var errorColor = _getErrorColor(level);
+      final errorColor = _getErrorColor(level);
       for (final line in error.split('\n')) {
         buffer.add(
           color(verticalLineAtLevel) +
@@ -286,7 +281,7 @@ class CustomLoggyPrinter extends LoggyPrinter {
       if (includeBox[level]!) buffer.add(color(_middleBorder));
     }
 
-    var emoji = _getEmoji(level);
+    final emoji = _getEmoji(level);
     for (final line in message.split('\n')) {
       buffer.add(color('$verticalLineAtLevel$emoji$line'));
     }

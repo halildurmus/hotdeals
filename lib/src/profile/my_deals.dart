@@ -13,19 +13,15 @@ class MyDeals extends StatelessWidget {
   Future<List<Deal>> _dealFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getUserDeals(page: page, size: size);
 
-  Widget buildNoDealsFound(BuildContext context) {
-    return ErrorIndicator(
-      icon: Icons.local_offer,
-      title: l(context).noPostsYet,
-    );
-  }
+  Widget buildNoDealsFound(BuildContext context) => ErrorIndicator(
+        icon: Icons.local_offer,
+        title: l(context).noPostsYet,
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return DealPagedListView(
-      dealsFuture: _dealFuture,
-      noDealsFound: buildNoDealsFound(context),
-      pageSize: 8,
-    );
-  }
+  Widget build(BuildContext context) => DealPagedListView(
+        dealsFuture: _dealFuture,
+        noDealsFound: buildNoDealsFound(context),
+        pageSize: 8,
+      );
 }

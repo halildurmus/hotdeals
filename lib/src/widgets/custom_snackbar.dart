@@ -14,24 +14,21 @@ class CustomSnackBar extends StatelessWidget {
   final Widget? icon;
   final String text;
 
-  Widget _buildContent(BuildContext context) {
-    return content ??
-        Row(
-          children: [
-            if (icon != null) icon!,
-            if (icon != null) const SizedBox(width: 8),
-            _buildText(context),
-          ],
-        );
-  }
+  Widget _buildContent(BuildContext context) =>
+      content ??
+      Row(
+        children: [
+          if (icon != null) icon!,
+          if (icon != null) const SizedBox(width: 8),
+          _buildText(context),
+        ],
+      );
 
-  Widget _buildText(BuildContext context) {
-    return Text(
-      text,
-      overflow: TextOverflow.ellipsis,
-      style: Theme.of(context).textTheme.bodyText2,
-    );
-  }
+  Widget _buildText(BuildContext context) => Text(
+        text,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.bodyText2,
+      );
 
   SnackBar buildSnackBar(BuildContext context) {
     final theme = Theme.of(context);

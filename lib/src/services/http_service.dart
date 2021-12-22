@@ -26,7 +26,7 @@ class HttpService {
   late Client _client;
 
   Future<Response> delete(String url, [Json? data]) async {
-    final String idToken = await _firebaseAuth.currentUser!.getIdToken();
+    final idToken = await _firebaseAuth.currentUser!.getIdToken();
 
     Response response;
     try {
@@ -78,7 +78,7 @@ class HttpService {
   }
 
   Future<Response> patch(String url, List<Json> data) async {
-    final String idToken = await _firebaseAuth.currentUser!.getIdToken();
+    final idToken = await _firebaseAuth.currentUser!.getIdToken();
 
     Response response;
     try {
@@ -133,7 +133,7 @@ class HttpService {
   }
 
   Future<Response> put(String url, [Json? data]) async {
-    final String idToken = await _firebaseAuth.currentUser!.getIdToken();
+    final idToken = await _firebaseAuth.currentUser!.getIdToken();
     data ??= <String, dynamic>{};
 
     Response response;

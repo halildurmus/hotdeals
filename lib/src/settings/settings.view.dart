@@ -32,10 +32,10 @@ class _SettingsViewState extends State<SettingsView> {
 
   Future<void> _initPackageInfo() async {
     final packageInfo = await PackageInfo.fromPlatform();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      setState(() {
-        _packageInfo = packageInfo;
-      });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() => _packageInfo = packageInfo);
+      }
     });
   }
 
@@ -69,87 +69,26 @@ class _SettingsViewState extends State<SettingsView> {
 
     return showDialog<void>(
       context: context,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return SettingsDialog(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  RadioItem<Locale>(
-                    onTap: () => widget.controller.updateLocale(localeEnglish),
-                    onChanged: widget.controller.updateLocale,
-                    providerValue: widget.controller.locale,
-                    radioValue: localeEnglish,
-                    leading: SvgPicture.asset(assetEnglish),
-                    text: l(context).english,
-                  ),
-                  RadioItem<Locale>(
-                    onTap: () => widget.controller.updateLocale(localeTurkish),
-                    onChanged: widget.controller.updateLocale,
-                    providerValue: widget.controller.locale,
-                    radioValue: localeTurkish,
-                    leading: SvgPicture.asset(assetTurkish),
-                    text: l(context).turkish,
-                  ),
-                  const SizedBox(height: 15),
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(deviceWidth, 45),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Text(
-                      l(context).ok,
-                      style: textTheme.bodyText1!.copyWith(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Future<void> _changeAppTheme(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final deviceWidth = MediaQuery.of(context).size.width;
-
-    return showDialog<void>(
-      context: context,
-      builder: (ctx) {
-        return SettingsDialog(
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setState) => SettingsDialog(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              RadioItem<ThemeMode>(
-                onTap: () =>
-                    widget.controller.updateThemeMode(ThemeMode.system),
-                onChanged: widget.controller.updateThemeMode,
-                providerValue: widget.controller.themeMode,
-                radioValue: ThemeMode.system,
-                leading: const Icon(Icons.brightness_auto, size: 30),
-                text: l(context).system,
+              RadioItem<Locale>(
+                onTap: () => widget.controller.updateLocale(localeEnglish),
+                onChanged: widget.controller.updateLocale,
+                providerValue: widget.controller.locale,
+                radioValue: localeEnglish,
+                leading: SvgPicture.asset(assetEnglish),
+                text: l(context).english,
               ),
-              RadioItem<ThemeMode>(
-                onTap: () => widget.controller.updateThemeMode(ThemeMode.light),
-                onChanged: widget.controller.updateThemeMode,
-                providerValue: widget.controller.themeMode,
-                radioValue: ThemeMode.light,
-                leading: const Icon(Icons.light_mode, size: 30),
-                text: l(context).light,
-              ),
-              RadioItem<ThemeMode>(
-                onTap: () => widget.controller.updateThemeMode(ThemeMode.dark),
-                onChanged: widget.controller.updateThemeMode,
-                providerValue: widget.controller.themeMode,
-                radioValue: ThemeMode.dark,
-                leading: const Icon(Icons.dark_mode, size: 30),
-                text: l(context).dark,
+              RadioItem<Locale>(
+                onTap: () => widget.controller.updateLocale(localeTurkish),
+                onChanged: widget.controller.updateLocale,
+                providerValue: widget.controller.locale,
+                radioValue: localeTurkish,
+                leading: SvgPicture.asset(assetTurkish),
+                text: l(context).turkish,
               ),
               const SizedBox(height: 15),
               ElevatedButton(
@@ -167,40 +106,92 @@ class _SettingsViewState extends State<SettingsView> {
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
+    );
+  }
+
+  Future<void> _changeAppTheme(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final deviceWidth = MediaQuery.of(context).size.width;
+
+    return showDialog<void>(
+      context: context,
+      builder: (ctx) => SettingsDialog(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioItem<ThemeMode>(
+              onTap: () => widget.controller.updateThemeMode(ThemeMode.system),
+              onChanged: widget.controller.updateThemeMode,
+              providerValue: widget.controller.themeMode,
+              radioValue: ThemeMode.system,
+              leading: const Icon(Icons.brightness_auto, size: 30),
+              text: l(context).system,
+            ),
+            RadioItem<ThemeMode>(
+              onTap: () => widget.controller.updateThemeMode(ThemeMode.light),
+              onChanged: widget.controller.updateThemeMode,
+              providerValue: widget.controller.themeMode,
+              radioValue: ThemeMode.light,
+              leading: const Icon(Icons.light_mode, size: 30),
+              text: l(context).light,
+            ),
+            RadioItem<ThemeMode>(
+              onTap: () => widget.controller.updateThemeMode(ThemeMode.dark),
+              onChanged: widget.controller.updateThemeMode,
+              providerValue: widget.controller.themeMode,
+              radioValue: ThemeMode.dark,
+              leading: const Icon(Icons.dark_mode, size: 30),
+              text: l(context).dark,
+            ),
+            const SizedBox(height: 15),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: ElevatedButton.styleFrom(
+                fixedSize: Size(deviceWidth, 45),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              child: Text(
+                l(context).ok,
+                style: textTheme.bodyText1!.copyWith(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(l(context).settings)),
-      body: Column(
-        children: [
-          SettingsSection(
-            title: l(context).general,
-            children: [
-              SettingsListItem(
-                onTap: () => _changeLanguage(context),
-                leading: SvgPicture.asset(
-                  LocalizationUtil.getAssetName(widget.controller.locale),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: Text(l(context).settings)),
+        body: Column(
+          children: [
+            SettingsSection(
+              title: l(context).general,
+              children: [
+                SettingsListItem(
+                  onTap: () => _changeLanguage(context),
+                  leading: SvgPicture.asset(
+                    LocalizationUtil.getAssetName(widget.controller.locale),
+                  ),
+                  title: l(context).language,
+                  subtitle: LocalizationUtil.getLocaleName(
+                      context, widget.controller.locale),
                 ),
-                title: l(context).language,
-                subtitle: LocalizationUtil.getLocaleName(
-                    context, widget.controller.locale),
-              ),
-              SettingsListItem(
-                onTap: () => _changeAppTheme(context),
-                leading: const Icon(Icons.settings_brightness),
-                title: l(context).theme,
-                subtitle: _getThemeName(context, widget.controller.themeMode),
-              ),
-            ],
-          ),
-          if (_packageInfo != null) _buildAppInfoText(),
-        ],
-      ),
-    );
-  }
+                SettingsListItem(
+                  onTap: () => _changeAppTheme(context),
+                  leading: const Icon(Icons.settings_brightness),
+                  title: l(context).theme,
+                  subtitle: _getThemeName(context, widget.controller.themeMode),
+                ),
+              ],
+            ),
+            if (_packageInfo != null) _buildAppInfoText(),
+          ],
+        ),
+      );
 }

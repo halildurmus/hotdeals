@@ -24,27 +24,21 @@ class BlockedUsers extends StatefulWidget {
 }
 
 class _BlockedUsersState extends State<BlockedUsers> {
-  Future<void> _onUserTap(String userId) async {
-    return showDialog<void>(
-      context: context,
-      builder: (context) =>
-          UserProfileDialog(userId: userId, hideButtons: true),
-    );
-  }
+  Future<void> _onUserTap(String userId) async => showDialog<void>(
+        context: context,
+        builder: (context) =>
+            UserProfileDialog(userId: userId, hideButtons: true),
+      );
 
-  Widget buildNoBlockedUsersFound(BuildContext context) {
-    return ErrorIndicator(
-      icon: Icons.person_outline,
-      title: l(context).noBlockedUsers,
-    );
-  }
+  Widget buildNoBlockedUsersFound(BuildContext context) => ErrorIndicator(
+        icon: Icons.person_outline,
+        title: l(context).noBlockedUsers,
+      );
 
-  Widget buildErrorWidget() {
-    return ErrorIndicatorUtil.buildFirstPageError(
-      context,
-      onTryAgain: () => setState(() {}),
-    );
-  }
+  Widget buildErrorWidget() => ErrorIndicatorUtil.buildFirstPageError(
+        context,
+        onTryAgain: () => setState(() {}),
+      );
 
   Widget buildCard(MyUser user, BuildContext context) {
     final theme = Theme.of(context);
@@ -84,7 +78,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
   }
 
   Future<void> confirmUnblockUser(BuildContext context, String userId) async {
-    final bool didRequestUnblockUser = await CustomAlertDialog(
+    final didRequestUnblockUser = await CustomAlertDialog(
           title: l(context).unblockUser,
           content: l(context).unblockConfirm,
           cancelActionText: l(context).cancel,
@@ -92,7 +86,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
         ).show(context) ??
         false;
     if (didRequestUnblockUser == true) {
-      final bool result =
+      final result =
           await GetIt.I.get<SpringService>().unblockUser(userId: userId);
       if (result) {
         await Provider.of<UserController>(context, listen: false).getUser();
@@ -113,33 +107,31 @@ class _BlockedUsersState extends State<BlockedUsers> {
     }
   }
 
-  Widget buildBlockedUsers(MyUser user) {
-    return FutureBuilder<List<MyUser>?>(
-      future: GetIt.I.get<SpringService>().getBlockedUsers(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final List<MyUser> users = snapshot.data!;
+  Widget buildBlockedUsers(MyUser user) => FutureBuilder<List<MyUser>?>(
+        future: GetIt.I.get<SpringService>().getBlockedUsers(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final users = snapshot.data!;
 
-          return ListView.builder(
-            itemCount: users.length,
-            itemBuilder: (context, index) {
-              final user = users.elementAt(index);
+            return ListView.builder(
+              itemCount: users.length,
+              itemBuilder: (context, index) {
+                final user = users.elementAt(index);
 
-              return buildCard(user, context);
-            },
-          );
-        } else if (snapshot.hasError) {
-          return buildErrorWidget();
-        }
+                return buildCard(user, context);
+              },
+            );
+          } else if (snapshot.hasError) {
+            return buildErrorWidget();
+          }
 
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
 
   @override
   Widget build(BuildContext context) {
-    final MyUser user = Provider.of<UserController>(context).user!;
+    final user = Provider.of<UserController>(context).user!;
 
     return Scaffold(
       appBar: AppBar(

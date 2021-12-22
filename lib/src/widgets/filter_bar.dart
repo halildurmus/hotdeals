@@ -37,8 +37,8 @@ class _FilterBarState extends State<FilterBar> {
     widget.pagingController.refresh();
   }
 
-  void onPressedReset() async {
-    final bool didRequestReset = await CustomAlertDialog(
+  Future<void> onPressedReset() async {
+    final didRequestReset = await CustomAlertDialog(
           title: l(context).resetAllFilters,
           cancelActionText: l(context).cancel,
           defaultActionText: l(context).ok,
@@ -54,60 +54,58 @@ class _FilterBarState extends State<FilterBar> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Card(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 8,
-                children: [
-                  Text(
-                    l(context)
-                        .resultCount(widget.searchResponse?.hits.docCount ?? 0),
-                  ),
-                  if (widget.searchParams.filterCount > 0)
-                    _ResetFiltersChip(
-                      filterCount: widget.searchParams.filterCount,
-                      onPressed: onPressedReset,
+  Widget build(BuildContext context) => SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Card(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
+                  children: [
+                    Text(
+                      l(context).resultCount(
+                          widget.searchResponse?.hits.docCount ?? 0),
                     ),
-                  _CategoryFilterChip(
-                    buckets: widget.searchResponse!.aggCategory!.buckets,
-                    onListTileTap: onListTileTap,
-                    searchParams: widget.searchParams,
-                  ),
-                  _PriceFilterChip(
-                    buckets: widget.searchResponse!.aggPrice!.buckets,
-                    onListTileTap: onListTileTap,
-                    searchParams: widget.searchParams,
-                  ),
-                  _StoreFilterChip(
-                    buckets: widget.searchResponse!.aggStore!.buckets,
-                    onListTileTap: onListTileTap,
-                    searchParams: widget.searchParams,
-                  ),
-                  _ExpiredFilterChip(
-                    onListTileTap: onListTileTap,
-                    searchParams: widget.searchParams,
-                  ),
-                  _SortFilterChip(
-                    onListTileTap: onListTileTap,
-                    searchParams: widget.searchParams,
-                  ),
-                ],
+                    if (widget.searchParams.filterCount > 0)
+                      _ResetFiltersChip(
+                        filterCount: widget.searchParams.filterCount,
+                        onPressed: onPressedReset,
+                      ),
+                    _CategoryFilterChip(
+                      buckets: widget.searchResponse!.aggCategory!.buckets,
+                      onListTileTap: onListTileTap,
+                      searchParams: widget.searchParams,
+                    ),
+                    _PriceFilterChip(
+                      buckets: widget.searchResponse!.aggPrice!.buckets,
+                      onListTileTap: onListTileTap,
+                      searchParams: widget.searchParams,
+                    ),
+                    _StoreFilterChip(
+                      buckets: widget.searchResponse!.aggStore!.buckets,
+                      onListTileTap: onListTileTap,
+                      searchParams: widget.searchParams,
+                    ),
+                    _ExpiredFilterChip(
+                      onListTileTap: onListTileTap,
+                      searchParams: widget.searchParams,
+                    ),
+                    _SortFilterChip(
+                      onListTileTap: onListTileTap,
+                      searchParams: widget.searchParams,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class _ResetFiltersChip extends StatelessWidget {
@@ -174,31 +172,29 @@ class _CategoryFilterChip extends StatelessWidget {
   final SearchParams searchParams;
 
   @override
-  Widget build(BuildContext context) {
-    return CustomFilterChip.category(
-      filters: searchParams.categories,
-      icon: Icons.category,
-      label: l(context).category,
-      labelPlural: l(context).categories,
-      onSelected: (value) => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+  Widget build(BuildContext context) => CustomFilterChip.category(
+        filters: searchParams.categories,
+        icon: Icons.category,
+        label: l(context).category,
+        labelPlural: l(context).categories,
+        onSelected: (value) => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          builder: (context) => FilterModalBottomSheet.category(
+            buckets: buckets,
+            filters: searchParams.categories,
+            hintText: l(context).filterCategories,
+            onListTileTap: onListTileTap,
+            title: l(context).filterByCategory,
           ),
         ),
-        builder: (context) => FilterModalBottomSheet.category(
-          buckets: buckets,
-          filters: searchParams.categories,
-          hintText: l(context).filterCategories,
-          onListTileTap: onListTileTap,
-          title: l(context).filterByCategory,
-        ),
-      ),
-    );
-  }
+      );
 }
 
 class _PriceFilterChip extends StatelessWidget {
@@ -214,31 +210,29 @@ class _PriceFilterChip extends StatelessWidget {
   final SearchParams searchParams;
 
   @override
-  Widget build(BuildContext context) {
-    return CustomFilterChip.price(
-      filters: searchParams.prices,
-      icon: Icons.sell,
-      label: l(context).price,
-      labelPlural: l(context).prices,
-      onSelected: (value) => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+  Widget build(BuildContext context) => CustomFilterChip.price(
+        filters: searchParams.prices,
+        icon: Icons.sell,
+        label: l(context).price,
+        labelPlural: l(context).prices,
+        onSelected: (value) => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          builder: (context) => FilterModalBottomSheet.price(
+            buckets: buckets,
+            filters: searchParams.prices,
+            hintText: l(context).filterPrices,
+            onListTileTap: onListTileTap,
+            title: l(context).filterByPrice,
           ),
         ),
-        builder: (context) => FilterModalBottomSheet.price(
-          buckets: buckets,
-          filters: searchParams.prices,
-          hintText: l(context).filterPrices,
-          onListTileTap: onListTileTap,
-          title: l(context).filterByPrice,
-        ),
-      ),
-    );
-  }
+      );
 }
 
 class _StoreFilterChip extends StatelessWidget {
@@ -254,31 +248,29 @@ class _StoreFilterChip extends StatelessWidget {
   final SearchParams searchParams;
 
   @override
-  Widget build(BuildContext context) {
-    return CustomFilterChip.store(
-      filters: searchParams.stores,
-      icon: Icons.store,
-      label: l(context).store,
-      labelPlural: l(context).stores,
-      onSelected: (value) => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+  Widget build(BuildContext context) => CustomFilterChip.store(
+        filters: searchParams.stores,
+        icon: Icons.store,
+        label: l(context).store,
+        labelPlural: l(context).stores,
+        onSelected: (value) => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          builder: (context) => FilterModalBottomSheet.store(
+            buckets: buckets,
+            filters: searchParams.stores,
+            hintText: l(context).filterStores,
+            onListTileTap: onListTileTap,
+            title: l(context).filterByStore,
           ),
         ),
-        builder: (context) => FilterModalBottomSheet.store(
-          buckets: buckets,
-          filters: searchParams.stores,
-          hintText: l(context).filterStores,
-          onListTileTap: onListTileTap,
-          title: l(context).filterByStore,
-        ),
-      ),
-    );
-  }
+      );
 }
 
 class _ExpiredFilterChip extends StatelessWidget {
@@ -292,26 +284,24 @@ class _ExpiredFilterChip extends StatelessWidget {
   final SearchParams searchParams;
 
   @override
-  Widget build(BuildContext context) {
-    return ExpiredFilterChip(
-      label: l(context).expired,
-      onSelected: (value) => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+  Widget build(BuildContext context) => ExpiredFilterChip(
+        label: l(context).expired,
+        onSelected: (value) => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          builder: (context) => ExpiredModalBottomSheet(
+            onListTileTap: onListTileTap,
+            searchParams: searchParams,
           ),
         ),
-        builder: (context) => ExpiredModalBottomSheet(
-          onListTileTap: onListTileTap,
-          searchParams: searchParams,
-        ),
-      ),
-      hideExpired: searchParams.hideExpired,
-    );
-  }
+        hideExpired: searchParams.hideExpired,
+      );
 }
 
 class _SortFilterChip extends StatelessWidget {
@@ -325,25 +315,23 @@ class _SortFilterChip extends StatelessWidget {
   final SearchParams searchParams;
 
   @override
-  Widget build(BuildContext context) {
-    return SortFilterChip(
-      label: l(context).sort,
-      onSelected: (value) => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+  Widget build(BuildContext context) => SortFilterChip(
+        label: l(context).sort,
+        onSelected: (value) => showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          builder: (context) => SortModalBottomSheet(
+            onListTileTap: onListTileTap,
+            searchParams: searchParams,
           ),
         ),
-        builder: (context) => SortModalBottomSheet(
-          onListTileTap: onListTileTap,
-          searchParams: searchParams,
-        ),
-      ),
-      order: searchParams.order,
-      sortBy: searchParams.sortBy,
-    );
-  }
+        order: searchParams.order,
+        sortBy: searchParams.sortBy,
+      );
 }

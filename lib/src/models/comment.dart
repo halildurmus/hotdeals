@@ -36,15 +36,12 @@ class Comment {
   final String message;
   final DateTime? createdAt;
 
-  Json toJson() {
-    return <String, dynamic>{
-      'dealId': dealId,
-      'message': message,
-    };
-  }
+  Json toJson() => <String, dynamic>{
+        'dealId': dealId,
+        'message': message,
+      };
 
   @override
-  String toString() {
-    return 'Comment{id: $id, dealId: $dealId, postedBy: $postedBy, poster: $poster, message: $message, createdAt: $createdAt}';
-  }
+  String toString() =>
+      'Comment{id: $id, dealId: $dealId, postedBy: $postedBy, poster: $poster, message: $message, createdAt: $createdAt}';
 }

@@ -52,17 +52,15 @@ class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
     );
   }
 
-  Widget buildErrorWidget() {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l(context).appTitle),
-      ),
-      body: ErrorIndicatorUtil.buildFirstPageError(
-        context,
-        onTryAgain: () => setState(() {}),
-      ),
-    );
-  }
+  Widget buildErrorWidget() => Scaffold(
+        appBar: AppBar(
+          title: Text(l(context).appTitle),
+        ),
+        body: ErrorIndicatorUtil.buildFirstPageError(
+          context,
+          onTryAgain: () => setState(() {}),
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {

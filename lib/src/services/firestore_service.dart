@@ -34,7 +34,7 @@ class FirestoreService with NetworkLoggy {
     required String docID,
     required Json message,
   }) async {
-    final DocumentReference<Json> documentReference = _firestore
+    final documentReference = _firestore
         .collection('messages')
         .doc(docID)
         .collection(docID)
@@ -46,8 +46,7 @@ class FirestoreService with NetworkLoggy {
       },
     );
 
-    final DocumentReference<Json> _latestMessage =
-        _firestore.collection('messages').doc(docID);
+    final _latestMessage = _firestore.collection('messages').doc(docID);
 
     await _firestore.runTransaction(
       (transaction) async {
@@ -64,15 +63,15 @@ class FirestoreService with NetworkLoggy {
     required String docID,
     required String user2Uid,
   }) async {
-    final DocumentSnapshot<Json> latestMessage =
+    final latestMessage =
         await _firestore.collection('messages').doc(docID).get();
-    final bool isLatestMessageEmpty =
+    final isLatestMessageEmpty =
         (latestMessage.get('latestMessage') as Json).isEmpty;
     if (isLatestMessageEmpty) {
       return;
     }
 
-    final String latestMessageAuthorId =
+    final latestMessageAuthorId =
         latestMessage.get('latestMessage')['author']['id'] as String;
 
     if (latestMessageAuthorId == user2Uid) {
@@ -92,15 +91,14 @@ class FirestoreService with NetworkLoggy {
           );
     }
 
-    final QuerySnapshot<Json> doc = await _firestore
+    final doc = await _firestore
         .collection('messages')
         .doc(docID)
         .collection(docID)
         .get();
 
-    final Iterable<QueryDocumentSnapshot<Json>> docs =
-        doc.docs.where((element) {
-      final String messageAuthorId = element.data()['author']['id'] as String;
+    final docs = doc.docs.where((element) {
+      final messageAuthorId = element.data()['author']['id'] as String;
 
       return messageAuthorId == user2Uid;
     });
@@ -116,36 +114,33 @@ class FirestoreService with NetworkLoggy {
 
   Future<QuerySnapshot<Json>> getMessageDocument({
     required List<String> usersArray,
-  }) {
-    return _firestore
-        .collection('messages')
-        .where('users', isEqualTo: usersArray)
-        .get();
-  }
+  }) =>
+      _firestore
+          .collection('messages')
+          .where('users', isEqualTo: usersArray)
+          .get();
 
-  Stream<QuerySnapshot<Json>> messagesStreamByDocID({required String docID}) {
-    return _firestore
-        .collection('messages')
-        .doc(docID)
-        .collection(docID)
-        .snapshots();
-  }
+  Stream<QuerySnapshot<Json>> messagesStreamByDocID({required String docID}) =>
+      _firestore
+          .collection('messages')
+          .doc(docID)
+          .collection(docID)
+          .snapshots();
 
   Stream<QuerySnapshot<Json>> messagesStreamByUserUid(
-      {required String userUid}) {
-    return _firestore
-        .collection('messages')
-        .where('users', arrayContains: userUid)
-        .orderBy('latestMessage.createdAt', descending: true)
-        .snapshots();
-  }
+          {required String userUid}) =>
+      _firestore
+          .collection('messages')
+          .where('users', arrayContains: userUid)
+          .orderBy('latestMessage.createdAt', descending: true)
+          .snapshots();
 
   Future<void> updateMessagePreview({
     required String docID,
     required String messageID,
     required Json previewData,
   }) async {
-    final QuerySnapshot<Json> _doc = await FirebaseFirestore.instance
+    final _doc = await FirebaseFirestore.instance
         .collection('messages')
         .doc(docID)
         .collection(docID)

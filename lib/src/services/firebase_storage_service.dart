@@ -14,15 +14,15 @@ class FirebaseStorageService {
     required String fileName,
     required String mimeType,
   }) async {
-    final Reference storageRef = _storage
+    final storageRef = _storage
         .ref()
         .child('uploads')
         .child('${DateTime.now().millisecondsSinceEpoch}-$fileName');
-    final UploadTask uploadTask = storageRef.putFile(
+    final uploadTask = storageRef.putFile(
       File(filePath),
       SettableMetadata(contentType: mimeType),
     );
-    final TaskSnapshot snapshot = await uploadTask;
+    final snapshot = await uploadTask;
 
     return snapshot.ref.getDownloadURL();
   }
@@ -33,13 +33,13 @@ class FirebaseStorageService {
     required String mimeType,
     required String userID,
   }) async {
-    final Reference storageRef =
+    final storageRef =
         _storage.ref().child('avatars').child('$userID-$fileName');
-    final UploadTask uploadTask = storageRef.putFile(
+    final uploadTask = storageRef.putFile(
       File(filePath),
       SettableMetadata(contentType: mimeType),
     );
-    final TaskSnapshot snapshot = await uploadTask;
+    final snapshot = await uploadTask;
 
     return snapshot.ref.getDownloadURL();
   }

@@ -12,27 +12,25 @@ class AvatarFullScreen extends StatelessWidget {
   final String avatarURL;
   final String heroTag;
 
-  Widget _buildImage(BuildContext ctx, ImageProvider<Object> imageProvider) {
-    return PhotoView(
-      backgroundDecoration: BoxDecoration(color: Theme.of(ctx).backgroundColor),
-      filterQuality: FilterQuality.low,
-      heroAttributes: PhotoViewHeroAttributes(tag: heroTag),
-      imageProvider: imageProvider,
-    );
-  }
+  Widget _buildImage(BuildContext ctx, ImageProvider<Object> imageProvider) =>
+      PhotoView(
+        backgroundDecoration:
+            BoxDecoration(color: Theme.of(ctx).backgroundColor),
+        filterQuality: FilterQuality.low,
+        heroAttributes: PhotoViewHeroAttributes(tag: heroTag),
+        imageProvider: imageProvider,
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: CachedNetworkImage(
-        imageUrl: avatarURL,
-        imageBuilder: _buildImage,
-        placeholder: (context, url) =>
-            const Center(child: CircularProgressIndicator()),
-        errorWidget: (context, url, error) =>
-            const Center(child: Icon(Icons.error)),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(),
+        body: CachedNetworkImage(
+          imageUrl: avatarURL,
+          imageBuilder: _buildImage,
+          placeholder: (context, url) =>
+              const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) =>
+              const Center(child: Icon(Icons.error)),
+        ),
+      );
 }

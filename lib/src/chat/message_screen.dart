@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -111,7 +110,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
       tokens: widget.user2.fcmTokens!.values.toList(),
     );
 
-    final bool result = await GetIt.I
+    final result = await GetIt.I
         .get<SpringService>()
         .sendPushNotification(notification: notification);
     if (result) {
@@ -126,25 +125,23 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   Future<void> _onImageTap(types.ImageMessage message) async {
     Navigator.of(context).push<void>(
       MaterialPageRoute<void>(
-        builder: (_) {
-          return Scaffold(
-            appBar: AppBar(
-              elevation: 0,
-              title: Text(message.name),
-              titleSpacing: 0,
-              leading: IconButton(
-                onPressed: () => Navigator.of(context).pop(),
-                icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
-              ),
+        builder: (_) => Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text(message.name),
+            titleSpacing: 0,
+            leading: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
             ),
-            body: PhotoView(
-              backgroundDecoration:
-                  BoxDecoration(color: Theme.of(context).backgroundColor),
-              filterQuality: FilterQuality.low,
-              imageProvider: NetworkImage(message.uri),
-            ),
-          );
-        },
+          ),
+          body: PhotoView(
+            backgroundDecoration:
+                BoxDecoration(color: Theme.of(context).backgroundColor),
+            filterQuality: FilterQuality.low,
+            imageProvider: NetworkImage(message.uri),
+          ),
+        ),
       ),
     );
   }
@@ -160,31 +157,29 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final MyUser _user = Provider.of<UserController>(context).user!;
+    final _user = Provider.of<UserController>(context).user!;
     final _isUserBlocked = widget.user2.blockedUsers!.containsKey(_user.id!);
     final _isUser2Blocked = _user.blockedUsers!.containsKey(widget.user2.id!);
 
-    Widget _buildBlockedText() {
-      return Container(
-        margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
-          color: theme.brightness == Brightness.dark
-              ? theme.colorScheme.secondary.withOpacity(.5)
-              : theme.colorScheme.secondary.withOpacity(.9),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: _isUser2Blocked
-            ? Text(
-                l(context).youHaveBlockedThisUser,
-                style: const TextStyle(color: Colors.white),
-              )
-            : Text(
-                l(context).youHaveBeenBlockedByThisUser,
-                style: const TextStyle(color: Colors.white),
-              ),
-      );
-    }
+    Widget _buildBlockedText() => Container(
+          margin: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            color: theme.brightness == Brightness.dark
+                ? theme.colorScheme.secondary.withOpacity(.5)
+                : theme.colorScheme.secondary.withOpacity(.9),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: _isUser2Blocked
+              ? Text(
+                  l(context).youHaveBlockedThisUser,
+                  style: const TextStyle(color: Colors.white),
+                )
+              : Text(
+                  l(context).youHaveBeenBlockedByThisUser,
+                  style: const TextStyle(color: Colors.white),
+                ),
+        );
 
     Future<void> _sendMessage(types.Message message) async {
       await GetIt.I.get<FirestoreService>().sendMessage(
@@ -199,7 +194,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     }
 
     void _handleSendPressed(types.PartialText message) {
-      final types.TextMessage textMessage = types.TextMessage(
+      final textMessage = types.TextMessage(
         id: uuid.v4(),
         createdAt: DateTime.now().millisecondsSinceEpoch,
         status: types.Status.sent,
@@ -211,22 +206,21 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     }
 
     Future<void> _handleFileSelection() async {
-      final FilePickerResult? result = await FilePicker.platform.pickFiles();
+      final result = await FilePicker.platform.pickFiles();
       setState(() {
         _isAttachmentUploading = true;
       });
 
       if (result != null) {
-        final PlatformFile pickedFile = result.files.single;
-        final String mimeType = lookupMimeType(pickedFile.name) ?? '';
-        final String url =
-            await GetIt.I.get<FirebaseStorageService>().uploadFile(
-                  filePath: pickedFile.path!,
-                  fileName: pickedFile.name,
-                  mimeType: mimeType,
-                );
+        final pickedFile = result.files.single;
+        final mimeType = lookupMimeType(pickedFile.name) ?? '';
+        final url = await GetIt.I.get<FirebaseStorageService>().uploadFile(
+              filePath: pickedFile.path!,
+              fileName: pickedFile.name,
+              mimeType: mimeType,
+            );
 
-        final types.FileMessage fileMessage = types.FileMessage(
+        final fileMessage = types.FileMessage(
           id: uuid.v4(),
           createdAt: DateTime.now().millisecondsSinceEpoch,
           status: types.Status.sent,
@@ -246,29 +240,27 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     }
 
     Future<void> _handleImageSelection() async {
-      final XFile? pickedFile =
-          await GetIt.I.get<ImagePickerService>().pickImage(
-                imageQuality: 70,
-                maxWidth: 1440,
-                source: ImageSource.camera,
-              );
+      final pickedFile = await GetIt.I.get<ImagePickerService>().pickImage(
+            imageQuality: 70,
+            maxWidth: 1440,
+            source: ImageSource.camera,
+          );
 
       setState(() {
         _isAttachmentUploading = true;
       });
 
       if (pickedFile != null) {
-        final Uint8List bytes = await pickedFile.readAsBytes();
+        final bytes = await pickedFile.readAsBytes();
         final image = await decodeImageFromList(bytes);
-        final String mimeType = lookupMimeType(pickedFile.name) ?? '';
-        final String url =
-            await GetIt.I.get<FirebaseStorageService>().uploadFile(
-                  filePath: pickedFile.path,
-                  fileName: pickedFile.name,
-                  mimeType: mimeType,
-                );
+        final mimeType = lookupMimeType(pickedFile.name) ?? '';
+        final url = await GetIt.I.get<FirebaseStorageService>().uploadFile(
+              filePath: pickedFile.path,
+              fileName: pickedFile.name,
+              mimeType: mimeType,
+            );
 
-        final types.ImageMessage imageMessage = types.ImageMessage(
+        final imageMessage = types.ImageMessage(
           id: uuid.v4(),
           createdAt: DateTime.now().millisecondsSinceEpoch,
           status: types.Status.sent,
@@ -288,58 +280,56 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
       }
     }
 
-    Widget _buildAttachmentBottomSheet() {
-      return SafeArea(
-        child: Wrap(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(
-                      FontAwesomeIcons.times,
-                      color: Color.fromRGBO(148, 148, 148, 1),
-                      size: 20,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: Text(
-                      l(context).selectSource,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.subtitle1!.copyWith(
-                        fontWeight: FontWeight.bold,
+    Widget _buildAttachmentBottomSheet() => SafeArea(
+          child: Wrap(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(
+                        FontAwesomeIcons.times,
+                        color: Color.fromRGBO(148, 148, 148, 1),
+                        size: 20,
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(
+                        l(context).selectSource,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.subtitle1!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            ListTile(
-              horizontalTitleGap: 0,
-              leading: const Icon(Icons.photo_camera),
-              title: Text(l(context).image),
-              onTap: () {
-                Navigator.pop(context);
-                _handleImageSelection();
-              },
-            ),
-            ListTile(
-              horizontalTitleGap: 0,
-              leading: const Icon(Icons.description),
-              title: Text(l(context).file),
-              onTap: () {
-                Navigator.pop(context);
-                _handleFileSelection();
-              },
-            ),
-          ],
-        ),
-      );
-    }
+              ListTile(
+                horizontalTitleGap: 0,
+                leading: const Icon(Icons.photo_camera),
+                title: Text(l(context).image),
+                onTap: () {
+                  Navigator.pop(context);
+                  _handleImageSelection();
+                },
+              ),
+              ListTile(
+                horizontalTitleGap: 0,
+                leading: const Icon(Icons.description),
+                title: Text(l(context).file),
+                onTap: () {
+                  Navigator.pop(context);
+                  _handleFileSelection();
+                },
+              ),
+            ],
+          ),
+        );
 
     void _handleAttachmentPressed() {
       showModalBottomSheet<void>(
@@ -365,11 +355,9 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
           );
     }
 
-    ChatL10n _getChatL10n() {
-      return _currentLocale == localeTurkish
-          ? const ChatL10nTr()
-          : const ChatL10nEn();
-    }
+    ChatL10n _getChatL10n() => _currentLocale == localeTurkish
+        ? const ChatL10nTr()
+        : const ChatL10nEn();
 
     ChatTheme _chatTheme(ThemeData theme) {
       final isLightMode = theme.brightness == Brightness.light;
@@ -425,9 +413,9 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
           } else {
             final items = snapshot.data!.docs;
 
-            final List<types.Message> messages = items
+            final messages = items
                 .map((e) {
-                  final Json messageData = e.data();
+                  final messageData = e.data();
                   final id = messageData['id'] as String;
                   final createdAt = messageData['createdAt'] as int;
                   final status =
@@ -440,11 +428,10 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                         : widget.user2.avatar!,
                   );
                   final type = messageData['type'] as String;
-                  final types.PreviewData? previewData =
-                      messageData['previewData'] != null
-                          ? types.PreviewData.fromJson(
-                              messageData['previewData'] as Json)
-                          : null;
+                  final previewData = messageData['previewData'] != null
+                      ? types.PreviewData.fromJson(
+                          messageData['previewData'] as Json)
+                      : null;
 
                   if (type == 'file') {
                     return types.FileMessage(

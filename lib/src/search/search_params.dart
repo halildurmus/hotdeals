@@ -79,19 +79,18 @@ class SearchParams {
     Order? order,
     int? page,
     int? size,
-  }) {
-    return SearchParams(
-      query: query ?? this.query,
-      categories: categories ?? this.categories,
-      prices: prices ?? this.prices,
-      stores: stores ?? this.stores,
-      hideExpired: hideExpired ?? this.hideExpired,
-      sortBy: sortBy ?? this.sortBy,
-      order: order ?? this.order,
-      page: page ?? this.page,
-      size: size ?? this.size,
-    );
-  }
+  }) =>
+      SearchParams(
+        query: query ?? this.query,
+        categories: categories ?? this.categories,
+        prices: prices ?? this.prices,
+        stores: stores ?? this.stores,
+        hideExpired: hideExpired ?? this.hideExpired,
+        sortBy: sortBy ?? this.sortBy,
+        order: order ?? this.order,
+        page: page ?? this.page,
+        size: size ?? this.size,
+      );
 
   /// Returns the applied filter count.
   int get filterCount =>
@@ -135,8 +134,9 @@ class SearchParams {
     if (order != null) {
       queryParameters.putIfAbsent('order', () => order!.name);
     }
-    queryParameters.putIfAbsent('page', () => '$page');
-    queryParameters.putIfAbsent('size', () => '$size');
+    queryParameters
+      ..putIfAbsent('page', () => '$page')
+      ..putIfAbsent('size', () => '$size');
 
     return queryParameters;
   }

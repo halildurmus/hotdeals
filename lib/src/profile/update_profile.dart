@@ -82,7 +82,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   }
 
   Future<void> getImg(String userID, ImageSource imageSource) async {
-    final XFile? pickedFile = await GetIt.I
+    final pickedFile = await GetIt.I
         .get<ImagePickerService>()
         .pickImage(source: imageSource, maxWidth: 1000);
 
@@ -104,69 +104,67 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     }
   }
 
-  Future<void> showImagePicker(String userID) {
-    return showModalBottomSheet<void>(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+  Future<void> showImagePicker(String userID) => showModalBottomSheet<void>(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
         ),
-      ),
-      builder: (ctx) {
-        final textTheme = Theme.of(ctx).textTheme;
+        builder: (ctx) {
+          final textTheme = Theme.of(ctx).textTheme;
 
-        return Wrap(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(
-                      FontAwesomeIcons.times,
-                      color: Color.fromRGBO(148, 148, 148, 1),
-                      size: 20,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: Text(
-                      l(context).selectSource,
-                      textAlign: TextAlign.center,
-                      style: textTheme.subtitle1!.copyWith(
-                        fontWeight: FontWeight.bold,
+          return Wrap(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(
+                        FontAwesomeIcons.times,
+                        color: Color.fromRGBO(148, 148, 148, 1),
+                        size: 20,
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(
+                        l(context).selectSource,
+                        textAlign: TextAlign.center,
+                        style: textTheme.subtitle1!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            ListTile(
-              horizontalTitleGap: 0,
-              leading: const Icon(Icons.photo_camera),
-              title: Text(l(context).camera),
-              onTap: () async {
-                await getImg(userID, ImageSource.camera);
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              horizontalTitleGap: 0,
-              leading: const Icon(Icons.photo_library),
-              title: Text(l(context).gallery),
-              onTap: () async {
-                await getImg(userID, ImageSource.gallery);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+              ListTile(
+                horizontalTitleGap: 0,
+                leading: const Icon(Icons.photo_camera),
+                title: Text(l(context).camera),
+                onTap: () async {
+                  await getImg(userID, ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                horizontalTitleGap: 0,
+                leading: const Icon(Icons.photo_library),
+                title: Text(l(context).gallery),
+                onTap: () async {
+                  await getImg(userID, ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
 
   Future<void> nicknameOnTap() {
     final deviceWidth = MediaQuery.of(context).size.width;
@@ -174,65 +172,60 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
 
     return showDialog<void>(
       context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: TextFormField(
-                        controller: nicknameController,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          errorMaxLines: 2,
-                          labelText: l(context).nickname,
-                        ),
-                        maxLength: 25,
-                        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                        onChanged: (text) => setState(() {}),
-                        validator: (value) {
-                          if (value == null || value.length < 5) {
-                            return l(context).nicknameMustBe;
-                          }
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => Dialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: nicknameController,
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      errorMaxLines: 2,
+                      labelText: l(context).nickname,
+                    ),
+                    maxLength: 25,
+                    maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    onChanged: (text) => setState(() {}),
+                    validator: (value) {
+                      if (value == null || value.length < 5) {
+                        return l(context).nicknameMustBe;
+                      }
 
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: nicknameController.text != user.nickname &&
-                              (_formKey.currentState?.validate() ?? false)
-                          ? () =>
-                              updateNickname(user.id!, nicknameController.text)
-                          : null,
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(deviceWidth, 45),
-                        primary: theme.colorScheme.secondary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Text(
-                        l(context).updateNickname,
-                      ),
-                    ),
-                  ],
+                      return null;
+                    },
+                  ),
                 ),
-              ),
-            );
-          },
-        );
-      },
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: nicknameController.text != user.nickname &&
+                          (_formKey.currentState?.validate() ?? false)
+                      ? () => updateNickname(user.id!, nicknameController.text)
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(deviceWidth, 45),
+                    primary: theme.colorScheme.secondary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: Text(
+                    l(context).updateNickname,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -240,7 +233,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   void initState() {
     showLoadingDialog =
         () => GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
-    final MyUser user = context.read<UserController>().user!;
+    final user = context.read<UserController>().user!;
     nicknameController = TextEditingController(text: user.nickname);
     super.initState();
   }
@@ -252,7 +245,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   }
 
   Future<void> _confirmSignOut(BuildContext context) async {
-    final bool _didRequestSignOut = await CustomAlertDialog(
+    final _didRequestSignOut = await CustomAlertDialog(
           title: l(context).logoutConfirm,
           cancelActionText: l(context).cancel,
           defaultActionText: l(context).logout,

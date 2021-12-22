@@ -58,23 +58,18 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
     super.initState();
   }
 
-  Future<void> _onReportUserPressed() async {
-    return showDialog<void>(
-      context: context,
-      builder: (context) =>
-          ReportUserDialog(reportedUserId: user.id!),
-    ).then((_) => Navigator.of(context).pop());
-  }
+  Future<void> _onReportUserPressed() async => showDialog<void>(
+        context: context,
+        builder: (context) => ReportUserDialog(reportedUserId: user.id!),
+      ).then((_) => Navigator.of(context).pop());
 
-  Widget _buildErrorWidget() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: ErrorIndicatorUtil.buildFirstPageError(
-        context,
-        onTryAgain: () => setState(() {}),
-      ),
-    );
-  }
+  Widget _buildErrorWidget() => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: ErrorIndicatorUtil.buildFirstPageError(
+          context,
+          onTryAgain: () => setState(() {}),
+        ),
+      );
 
   Widget _buildCircularProgressIndicator() {
     final theme = Theme.of(context);
@@ -102,46 +97,40 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
       fontSize: 13,
     );
 
-    Widget _buildJoinedSection() {
-      return Row(
-        children: [
-          Icon(Icons.date_range, color: iconColor, size: 18),
-          const SizedBox(width: 6),
-          Text(
-            l(context).joined(DateFormat.yMMM().format(user.createdAt!)),
-            style: textStyle,
-          ),
-        ],
-      );
-    }
+    Widget _buildJoinedSection() => Row(
+          children: [
+            Icon(Icons.date_range, color: iconColor, size: 18),
+            const SizedBox(width: 6),
+            Text(
+              l(context).joined(DateFormat.yMMM().format(user.createdAt!)),
+              style: textStyle,
+            ),
+          ],
+        );
 
-    Widget _buildNumberOfPostedDealsSection() {
-      return Row(
-        children: [
-          Icon(Icons.local_offer, color: iconColor, size: 18),
-          const SizedBox(width: 6),
-          Text(
-            '$postedDealsCount',
-            style: textStyle.copyWith(fontWeight: FontWeight.bold),
-          ),
-          Text(l(context).dealsPosted, style: textStyle),
-        ],
-      );
-    }
+    Widget _buildNumberOfPostedDealsSection() => Row(
+          children: [
+            Icon(Icons.local_offer, color: iconColor, size: 18),
+            const SizedBox(width: 6),
+            Text(
+              '$postedDealsCount',
+              style: textStyle.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Text(l(context).dealsPosted, style: textStyle),
+          ],
+        );
 
-    Widget _buildNumberOfPostedCommentsSection() {
-      return Row(
-        children: [
-          Icon(Icons.chat, color: iconColor, size: 18),
-          const SizedBox(width: 6),
-          Text(
-            '$postedCommentsCount',
-            style: textStyle.copyWith(fontWeight: FontWeight.bold),
-          ),
-          Text(l(context).commentsPosted, style: textStyle),
-        ],
-      );
-    }
+    Widget _buildNumberOfPostedCommentsSection() => Row(
+          children: [
+            Icon(Icons.chat, color: iconColor, size: 18),
+            const SizedBox(width: 6),
+            Text(
+              '$postedCommentsCount',
+              style: textStyle.copyWith(fontWeight: FontWeight.bold),
+            ),
+            Text(l(context).commentsPosted, style: textStyle),
+          ],
+        );
 
     Widget _buildButtons() {
       final usersArray = ChatUtil.getUsersArray(
@@ -178,7 +167,7 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
                           user1Uid: loggedInUser!.uid, user2Uid: user.uid);
                     }
 
-                    final String conversationId = ChatUtil.getConversationID(
+                    final conversationId = ChatUtil.getConversationID(
                         user1Uid: loggedInUser!.uid, user2Uid: user.uid);
 
                     Navigator.of(context).pushNamed(
@@ -209,72 +198,64 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
       );
     }
 
-    Widget _buildAvatar() {
-      return CachedNetworkImage(
-        imageUrl: user.avatar!,
-        imageBuilder: (ctx, imageProvider) =>
-            CircleAvatar(backgroundImage: imageProvider, radius: 30),
-        placeholder: (context, url) => const CircleAvatar(radius: 30),
-      );
-    }
+    Widget _buildAvatar() => CachedNetworkImage(
+          imageUrl: user.avatar!,
+          imageBuilder: (ctx, imageProvider) =>
+              CircleAvatar(backgroundImage: imageProvider, radius: 30),
+          placeholder: (context, url) => const CircleAvatar(radius: 30),
+        );
 
-    Widget _buildNickname() {
-      return Text(
-        user.nickname!,
-        style: textTheme.headline6!.copyWith(fontSize: 18),
-      );
-    }
+    Widget _buildNickname() => Text(
+          user.nickname!,
+          style: textTheme.headline6!.copyWith(fontSize: 18),
+        );
 
-    Widget _buildUserDetails() {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildAvatar(),
-              const SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildNickname(),
-                  const SizedBox(height: 8),
-                  _buildJoinedSection(),
-                  const SizedBox(height: 8),
-                  _buildNumberOfPostedDealsSection(),
-                  const SizedBox(height: 8),
-                  _buildNumberOfPostedCommentsSection(),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          if (!widget.hideButtons &&
-              loggedInUser != null &&
-              loggedInUser?.id != user.id)
-            _buildButtons(),
-        ],
-      );
-    }
+    Widget _buildUserDetails() => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildAvatar(),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildNickname(),
+                    const SizedBox(height: 8),
+                    _buildJoinedSection(),
+                    const SizedBox(height: 8),
+                    _buildNumberOfPostedDealsSection(),
+                    const SizedBox(height: 8),
+                    _buildNumberOfPostedCommentsSection(),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            if (!widget.hideButtons &&
+                loggedInUser != null &&
+                loggedInUser?.id != user.id)
+              _buildButtons(),
+          ],
+        );
 
-    Widget _buildFutureBuilder() {
-      return FutureBuilder<List<dynamic>>(
-        future: future,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            user = snapshot.data![0];
-            postedCommentsCount = snapshot.data![1];
-            postedDealsCount = snapshot.data![2];
+    Widget _buildFutureBuilder() => FutureBuilder<List<dynamic>>(
+          future: future,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              user = snapshot.data![0];
+              postedCommentsCount = snapshot.data![1];
+              postedDealsCount = snapshot.data![2];
 
-            return _buildUserDetails();
-          } else if (snapshot.hasError) {
-            return _buildErrorWidget();
-          }
+              return _buildUserDetails();
+            } else if (snapshot.hasError) {
+              return _buildErrorWidget();
+            }
 
-          return _buildCircularProgressIndicator();
-        },
-      );
-    }
+            return _buildCircularProgressIndicator();
+          },
+        );
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 16),

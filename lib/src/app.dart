@@ -65,36 +65,35 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
   Widget _buildMaterialApp({
     Widget? home,
     AsyncSnapshot<MyUser?>? userSnapshot,
-  }) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      locale: settingsController.locale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: FlexColorScheme.light(
-        scheme: usedFlexScheme,
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-      ).toTheme,
-      darkTheme: FlexColorScheme.dark(
-        scheme: usedFlexScheme,
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-      ).toTheme,
-      themeMode: settingsController.themeMode,
-      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-      home: home ?? AuthWidget(userSnapshot: userSnapshot!),
-      onGenerateRoute: (routeSettings) => AppRouter.onGenerateRoute(
-          routeSettings, userSnapshot!, settingsController),
-      // onUnknownRoute: (RouteSettings settings) {
-      //   // open your app when is executed from outside when is terminated.
-      // },
-      builder: home == null ? buildOfflineBuilder : null,
-    );
-  }
+  }) =>
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale: settingsController.locale,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: FlexColorScheme.light(
+          scheme: usedFlexScheme,
+          visualDensity: FlexColorScheme.comfortablePlatformDensity,
+        ).toTheme,
+        darkTheme: FlexColorScheme.dark(
+          scheme: usedFlexScheme,
+          visualDensity: FlexColorScheme.comfortablePlatformDensity,
+        ).toTheme,
+        themeMode: settingsController.themeMode,
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+        home: home ?? AuthWidget(userSnapshot: userSnapshot!),
+        onGenerateRoute: (routeSettings) => AppRouter.onGenerateRoute(
+          routeSettings,
+          userSnapshot!,
+          settingsController,
+        ),
+        builder: home == null ? buildOfflineBuilder : null,
+      );
 
   @override
   Widget build(BuildContext context) {

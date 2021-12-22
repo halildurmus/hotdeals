@@ -18,12 +18,10 @@ class CustomAlertDialog extends StatelessWidget {
   final String? defaultActionText;
   final String title;
 
-  Future<bool?> show(BuildContext context) async {
-    return showDialog<bool>(
-      context: context,
-      builder: (context) => this,
-    );
-  }
+  Future<bool?> show(BuildContext context) async => showDialog<bool>(
+        context: context,
+        builder: (context) => this,
+      );
 
   Widget _buildContent(BuildContext context) {
     final theme = Theme.of(context);

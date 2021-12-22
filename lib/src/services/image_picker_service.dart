@@ -9,13 +9,12 @@ class ImagePickerService {
     double? maxWidth,
     int? imageQuality,
     CameraDevice preferredCameraDevice = CameraDevice.rear,
-  }) async {
-    return _picker.pickImage(
-      source: source,
-      maxHeight: maxHeight,
-      maxWidth: maxWidth,
-      imageQuality: imageQuality,
-      preferredCameraDevice: preferredCameraDevice,
-    );
-  }
+  }) async =>
+      _picker.pickImage(
+        source: source,
+        maxHeight: maxHeight,
+        maxWidth: maxWidth,
+        imageQuality: imageQuality,
+        preferredCameraDevice: preferredCameraDevice,
+      );
 }

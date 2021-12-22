@@ -30,11 +30,10 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   @override
   Future<MyUser> signInWithFacebook() async {
     // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
+    final loginResult = await FacebookAuth.instance.login();
     if (loginResult.status == LoginStatus.success) {
       // Create an user credential from the access token
-      final UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(
+      final userCredential = await _firebaseAuth.signInWithCredential(
         FacebookAuthProvider.credential(loginResult.accessToken!.token),
       );
 
@@ -77,14 +76,12 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   @override
   Future<MyUser> signInWithGoogle() async {
     // Trigger the sign-in flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final googleUser = await GoogleSignIn().signIn();
     if (googleUser != null) {
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final googleAuth = await googleUser.authentication;
       if (googleAuth.accessToken != null && googleAuth.idToken != null) {
         // Create an user credential from the access token
-        final UserCredential userCredential =
-            await _firebaseAuth.signInWithCredential(
+        final userCredential = await _firebaseAuth.signInWithCredential(
           GoogleAuthProvider.credential(
             idToken: googleAuth.idToken,
             accessToken: googleAuth.accessToken,

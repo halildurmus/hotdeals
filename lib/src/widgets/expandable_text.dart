@@ -44,62 +44,59 @@ class _ExpandableTextState extends State<ExpandableText> {
       fontSize: 15,
     );
 
-    Widget buildCollapsed() {
-      return Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Padding(
-            padding: widget.padding,
-            child: Text(
-              widget.text,
-              maxLines: widget.maxLines,
-              overflow: TextOverflow.fade,
-              style: textStyle,
-            ),
-          ),
-          Positioned(
-            bottom: 5,
-            child: InkWell(
-              onTap: controller.toggle,
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: controller.toggle,
-                    icon: Icon(
-                      Icons.arrow_downward,
-                      color:
-                          isDarkMode ? null : theme.textTheme.bodyText2!.color,
-                      size: 16,
-                    ),
-                    label: Text(
-                      l(context).readMore,
-                      style: textTheme.bodyText2!.copyWith(fontSize: 15),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary:
-                          isDarkMode ? const Color(0xFF2e2d2d) : Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                  ),
-                ],
+    Widget buildCollapsed() => Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Padding(
+              padding: widget.padding,
+              child: Text(
+                widget.text,
+                maxLines: widget.maxLines,
+                overflow: TextOverflow.fade,
+                style: textStyle,
               ),
             ),
-          ),
-        ],
-      );
-    }
+            Positioned(
+              bottom: 5,
+              child: InkWell(
+                onTap: controller.toggle,
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: controller.toggle,
+                      icon: Icon(
+                        Icons.arrow_downward,
+                        color: isDarkMode
+                            ? null
+                            : theme.textTheme.bodyText2!.color,
+                        size: 16,
+                      ),
+                      label: Text(
+                        l(context).readMore,
+                        style: textTheme.bodyText2!.copyWith(fontSize: 15),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            isDarkMode ? const Color(0xFF2e2d2d) : Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
 
-    Widget buildExpanded() {
-      return Padding(
-        padding: widget.padding,
-        child: SelectableText(widget.text, style: textStyle),
-      );
-    }
+    Widget buildExpanded() => Padding(
+          padding: widget.padding,
+          child: SelectableText(widget.text, style: textStyle),
+        );
 
     return LayoutBuilder(
       builder: (context, constraints) {

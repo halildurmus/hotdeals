@@ -25,7 +25,6 @@ class CurrentRoute {
   }
 
   @override
-  String toString() {
-    return 'CurrentRoute{routeName: $routeName, messageArguments: $messageArguments}';
-  }
+  String toString() =>
+      'CurrentRoute{routeName: $routeName, messageArguments: $messageArguments}';
 }

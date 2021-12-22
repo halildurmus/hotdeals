@@ -42,16 +42,14 @@ class _StoreItemState extends State<StoreItem> {
       width: 55,
       child: CachedNetworkImage(
         imageUrl: widget.store.logo,
-        imageBuilder: (ctx, imageProvider) {
-          return Hero(
-            tag: widget.store.id!,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: imageProvider),
-              ),
+        imageBuilder: (ctx, imageProvider) => Hero(
+          tag: widget.store.id!,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: imageProvider),
             ),
-          );
-        },
+          ),
+        ),
         placeholder: (context, url) => const SizedBox.square(dimension: 50),
       ),
     );
@@ -80,7 +78,7 @@ class _StoreItemState extends State<StoreItem> {
     return FutureBuilder<int?>(
       future: numberOfDealsFuture,
       builder: (context, snapshot) {
-        int dealsCount = 0;
+        var dealsCount = 0;
         if (snapshot.hasData) {
           dealsCount = snapshot.data!;
         }

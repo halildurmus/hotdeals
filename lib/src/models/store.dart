@@ -29,15 +29,12 @@ class Store {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  Json toJson() {
-    return <String, dynamic>{
-      'name': name,
-      'logo': logo,
-    };
-  }
+  Json toJson() => <String, dynamic>{
+        'name': name,
+        'logo': logo,
+      };
 
   @override
-  String toString() {
-    return 'Store{id: $id, name: $name, logo: $logo, createdAt: $createdAt, updatedAt: $updatedAt}';
-  }
+  String toString() =>
+      'Store{id: $id, name: $name, logo: $logo, createdAt: $createdAt, updatedAt: $updatedAt}';
 }

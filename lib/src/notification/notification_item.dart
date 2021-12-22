@@ -44,49 +44,45 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    Widget _buildLeading() {
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.isSelectionMode)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  widget.isSelected
-                      ? Icons.check_circle
-                      : Icons.radio_button_unchecked,
-                  color: theme.primaryColor,
-                ),
-              ],
-            ),
-          if (widget.isSelectionMode) const SizedBox(width: 16),
-          CachedNetworkImage(
-            imageUrl: user.avatar!,
-            imageBuilder: (ctx, imageProvider) =>
-                CircleAvatar(backgroundImage: imageProvider),
-            placeholder: (context, url) => const CircleAvatar(),
-          ),
-        ],
-      );
-    }
-
-    Widget _buildTitle() {
-      return RichText(
-        text: TextSpan(
-          text: user.nickname,
-          style: textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w500),
+    Widget _buildLeading() => Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            if (widget.notification.verb == NotificationVerb.comment)
-              TextSpan(
-                text: l(context).commentedOnYourPost,
-                style: textTheme.bodyText2,
+            if (widget.isSelectionMode)
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    widget.isSelected
+                        ? Icons.check_circle
+                        : Icons.radio_button_unchecked,
+                    color: theme.primaryColor,
+                  ),
+                ],
               ),
+            if (widget.isSelectionMode) const SizedBox(width: 16),
+            CachedNetworkImage(
+              imageUrl: user.avatar!,
+              imageBuilder: (ctx, imageProvider) =>
+                  CircleAvatar(backgroundImage: imageProvider),
+              placeholder: (context, url) => const CircleAvatar(),
+            ),
           ],
-        ),
-      );
-    }
+        );
+
+    Widget _buildTitle() => RichText(
+          text: TextSpan(
+            text: user.nickname,
+            style: textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w500),
+            children: [
+              if (widget.notification.verb == NotificationVerb.comment)
+                TextSpan(
+                  text: l(context).commentedOnYourPost,
+                  style: textTheme.bodyText2,
+                ),
+            ],
+          ),
+        );
 
     Widget _buildSubtitle() {
       if (widget.notification.verb == NotificationVerb.message) {
@@ -117,19 +113,17 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
       );
     }
 
-    Widget _buildTrailing() {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: theme.brightness == Brightness.dark
-                ? theme.primaryColor
-                : theme.primaryColorLight,
-            radius: 6,
-          ),
-        ],
-      );
-    }
+    Widget _buildTrailing() => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor: theme.brightness == Brightness.dark
+                  ? theme.primaryColor
+                  : theme.primaryColorLight,
+              radius: 6,
+            ),
+          ],
+        );
 
     return ListTile(
       onLongPress: widget.onLongPress,
@@ -157,36 +151,32 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
     );
   }
 
-  Widget _buildErrorWidget(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Text(
-        l(context).anErrorOccurred,
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
+  Widget _buildErrorWidget(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Text(
+          l(context).anErrorOccurred,
+          textAlign: TextAlign.center,
+        ),
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<MyUser>(
-      future: _userFuture,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final MyUser user = snapshot.data!;
+  Widget build(BuildContext context) => FutureBuilder<MyUser>(
+        future: _userFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final user = snapshot.data!;
 
-          return _buildCard(context, user);
-        } else if (snapshot.hasError) {
-          loggy.error(snapshot.error, snapshot.error);
+            return _buildCard(context, user);
+          } else if (snapshot.hasError) {
+            loggy.error(snapshot.error, snapshot.error);
 
-          return _buildErrorWidget(context);
-        }
+            return _buildErrorWidget(context);
+          }
 
-        return const Padding(
-          padding: EdgeInsets.symmetric(vertical: 25),
-          child: Center(child: CircularProgressIndicator()),
-        );
-      },
-    );
-  }
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 25),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        },
+      );
 }

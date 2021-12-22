@@ -13,21 +13,17 @@ class MyFavorites extends StatelessWidget {
   Future<List<Deal>> _dealFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getUserFavorites(page: page, size: size);
 
-  Widget buildNoDealsFound(BuildContext context) {
-    return ErrorIndicator(
-      icon: Icons.favorite_outline,
-      title: l(context).noFavoritesYet,
-      message: l(context).noFavoritesYetDescription,
-    );
-  }
+  Widget buildNoDealsFound(BuildContext context) => ErrorIndicator(
+        icon: Icons.favorite_outline,
+        title: l(context).noFavoritesYet,
+        message: l(context).noFavoritesYetDescription,
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return DealPagedListView(
-      dealsFuture: _dealFuture,
-      noDealsFound: buildNoDealsFound(context),
-      pageSize: 8,
-      removeDealWhenUnfavorited: true,
-    );
-  }
+  Widget build(BuildContext context) => DealPagedListView(
+        dealsFuture: _dealFuture,
+        noDealsFound: buildNoDealsFound(context),
+        pageSize: 8,
+        removeDealWhenUnfavorited: true,
+      );
 }

@@ -49,12 +49,10 @@ class _SearchResultsState extends State<SearchResults> {
       .get<SpringService>()
       .searchDeals(searchParams: widget.searchParams);
 
-  Widget buildNoDealsFound(BuildContext context) {
-    return ErrorIndicator(
-      icon: Icons.local_offer,
-      title: l(context).couldNotFindAnyDeal,
-    );
-  }
+  Widget buildNoDealsFound(BuildContext context) => ErrorIndicator(
+        icon: Icons.local_offer,
+        title: l(context).couldNotFindAnyDeal,
+      );
 
   @override
   Widget build(BuildContext context) {

@@ -100,24 +100,21 @@ class Deal {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  Json toJson() {
-    return <String, dynamic>{
-      if (postedBy != null) 'postedBy': postedBy,
-      'isExpired': isExpired,
-      'coverPhoto': coverPhoto,
-      'dealUrl': dealUrl,
-      if (photos != null) 'photos': photos,
-      'title': title,
-      'description': description,
-      'category': category,
-      'store': store,
-      'originalPrice': originalPrice,
-      'price': price,
-    };
-  }
+  Json toJson() => <String, dynamic>{
+        if (postedBy != null) 'postedBy': postedBy,
+        'isExpired': isExpired,
+        'coverPhoto': coverPhoto,
+        'dealUrl': dealUrl,
+        if (photos != null) 'photos': photos,
+        'title': title,
+        'description': description,
+        'category': category,
+        'store': store,
+        'originalPrice': originalPrice,
+        'price': price,
+      };
 
   @override
-  String toString() {
-    return 'Deal{id: $id, isExpired: $isExpired, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
-  }
+  String toString() =>
+      'Deal{id: $id, isExpired: $isExpired, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
 }

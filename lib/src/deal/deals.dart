@@ -7,7 +7,6 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart'
 import 'package:provider/provider.dart';
 
 import '../models/deal.dart';
-import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../search/search_bar.dart';
 import '../services/spring_service.dart';
@@ -54,41 +53,35 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
   Future<List<Deal>> _mostLikedDealsFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getMostLikedDeals(page: page, size: size);
 
-  Widget buildNoDealsFound(BuildContext context) {
-    return ErrorIndicator(
-      icon: Icons.local_offer,
-      title: l(context).couldNotFindAnyDeal,
-    );
-  }
+  Widget buildNoDealsFound(BuildContext context) => ErrorIndicator(
+        icon: Icons.local_offer,
+        title: l(context).couldNotFindAnyDeal,
+      );
 
-  Widget _buildSearchBar() {
-    return SearchBar(
-      controller: _searchBarController,
-      onSearchModeChanged: (value) => setState(() => _searchMode = value),
-    );
-  }
+  Widget _buildSearchBar() => SearchBar(
+        controller: _searchBarController,
+        onSearchModeChanged: (value) => setState(() => _searchMode = value),
+      );
 
   @override
   Widget build(BuildContext context) {
-    final MyUser? user = Provider.of<UserController>(context).user;
+    final user = Provider.of<UserController>(context).user;
 
-    Widget _buildTabBarView() {
-      return TabBarView(
-        controller: tabController,
-        children: [
-          DealPagedListView(
-            dealsFuture: _latestDealsFuture,
-            pagingController: _pagingControllerLatest,
-            noDealsFound: buildNoDealsFound(context),
-          ),
-          DealPagedListView(
-            dealsFuture: _mostLikedDealsFuture,
-            pagingController: _pagingControllerMostLiked,
-            noDealsFound: buildNoDealsFound(context),
-          ),
-        ],
-      );
-    }
+    Widget _buildTabBarView() => TabBarView(
+          controller: tabController,
+          children: [
+            DealPagedListView(
+              dealsFuture: _latestDealsFuture,
+              pagingController: _pagingControllerLatest,
+              noDealsFound: buildNoDealsFound(context),
+            ),
+            DealPagedListView(
+              dealsFuture: _mostLikedDealsFuture,
+              pagingController: _pagingControllerMostLiked,
+              noDealsFound: buildNoDealsFound(context),
+            ),
+          ],
+        );
 
     PreferredSizeWidget _buildAppBar() {
       final actions = [

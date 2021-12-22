@@ -106,30 +106,30 @@ class _DealDetailsState extends State<DealDetails> {
   List<Widget> getCarouselItems() {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return _images!.map((item) {
-      return GestureDetector(
-        onTap: () => NavigationUtil.navigate(
-          context,
-          ImageFullScreen(images: _images!, currentIndex: currentIndex),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            color: isDarkMode ? Colors.white : null,
-          ),
-          padding: isDarkMode ? const EdgeInsets.all(2) : null,
-          child: Hero(
-            tag: _deal!.id!,
-            child: Image.network(item, fit: BoxFit.cover),
-          ),
-        ),
-      );
-    }).toList();
+    return _images!
+        .map((item) => GestureDetector(
+              onTap: () => NavigationUtil.navigate(
+                context,
+                ImageFullScreen(images: _images!, currentIndex: currentIndex),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  color: isDarkMode ? Colors.white : null,
+                ),
+                padding: isDarkMode ? const EdgeInsets.all(2) : null,
+                child: Hero(
+                  tag: _deal!.id!,
+                  child: Image.network(item, fit: BoxFit.cover),
+                ),
+              ),
+            ))
+        .toList();
   }
 
   Future<void> _markAsExpired() async {
     try {
-      final Deal deal = await GetIt.I.get<SpringService>().markDealAsExpired(
+      final deal = await GetIt.I.get<SpringService>().markDealAsExpired(
             dealId: _deal!.id!,
           );
       setState(() => _deal = deal);
@@ -142,12 +142,10 @@ class _DealDetailsState extends State<DealDetails> {
     }
   }
 
-  Future<void> _onPressedReport() async {
-    return showDialog<void>(
-      context: context,
-      builder: (context) => ReportDealDialog(reportedDealId: _deal!.id!),
-    );
-  }
+  Future<void> _onPressedReport() async => showDialog<void>(
+        context: context,
+        builder: (context) => ReportDealDialog(reportedDealId: _deal!.id!),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -198,250 +196,240 @@ class _DealDetailsState extends State<DealDetails> {
       );
     }
 
-    Widget buildDealImages() {
-      return Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          CarouselSlider(
-            items: getCarouselItems(),
-            options: CarouselOptions(
-              viewportFraction: 1,
-              height: deviceHeight / 2,
-              enlargeCenterPage: true,
-              onPageChanged: (index, reason) =>
-                  setState(() => currentIndex = index),
+    Widget buildDealImages() => Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            CarouselSlider(
+              items: getCarouselItems(),
+              options: CarouselOptions(
+                viewportFraction: 1,
+                height: deviceHeight / 2,
+                enlargeCenterPage: true,
+                onPageChanged: (index, reason) =>
+                    setState(() => currentIndex = index),
+              ),
             ),
+            if (_images!.length > 1)
+              SliderIndicator(images: _images!, currentIndex: currentIndex)
+          ],
+        );
+
+    Widget buildDealDescription() => Card(
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 30),
+          child: ExpandableText(text: _deal!.description),
+        );
+
+    Widget buildStoreImage() => Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
+            color: theme.brightness == Brightness.dark ? Colors.white : null,
           ),
-          if (_images!.length > 1)
-            SliderIndicator(images: _images!, currentIndex: currentIndex)
-        ],
-      );
-    }
-
-    Widget buildDealDescription() {
-      return Card(
-        margin: const EdgeInsets.fromLTRB(16, 0, 16, 30),
-        child: ExpandableText(text: _deal!.description),
-      );
-    }
-
-    Widget buildStoreImage() {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
-          color: theme.brightness == Brightness.dark ? Colors.white : null,
-        ),
-        padding: theme.brightness == Brightness.dark
-            ? const EdgeInsets.all(3)
-            : null,
-        height: 45,
-        width: 45,
-        child: CachedNetworkImage(
-          imageUrl: _store!.logo,
-          imageBuilder: (ctx, imageProvider) => DecoratedBox(
-            decoration: BoxDecoration(
-              image: DecorationImage(image: imageProvider),
+          padding: theme.brightness == Brightness.dark
+              ? const EdgeInsets.all(3)
+              : null,
+          height: 45,
+          width: 45,
+          child: CachedNetworkImage(
+            imageUrl: _store!.logo,
+            imageBuilder: (ctx, imageProvider) => DecoratedBox(
+              decoration: BoxDecoration(
+                image: DecorationImage(image: imageProvider),
+              ),
             ),
+            placeholder: (context, url) => const SizedBox.square(dimension: 40),
           ),
-          placeholder: (context, url) => const SizedBox.square(dimension: 40),
-        ),
-      );
-    }
+        );
 
-    Widget buildFavoriteButton() {
-      return Consumer<UserController>(
-        builder: (context, mongoUser, child) {
-          final MyUser? user = mongoUser.user;
-          final bool isFavorited = user?.favorites![_deal!.id!] ?? false;
+    Widget buildFavoriteButton() => Consumer<UserController>(
+          builder: (context, mongoUser, child) {
+            final user = mongoUser.user;
+            final isFavorited = user?.favorites![_deal!.id!] ?? false;
 
-          return FloatingActionButton(
-            onPressed: () {
-              if (_user == null) {
-                GetIt.I.get<SignInDialog>().showSignInDialog(context);
+            return FloatingActionButton(
+              onPressed: () {
+                if (_user == null) {
+                  GetIt.I.get<SignInDialog>().showSignInDialog(context);
 
-                return;
-              }
-              if (!isFavorited) {
-                GetIt.I
-                    .get<SpringService>()
-                    .favoriteDeal(dealId: _deal!.id!)
-                    .then((result) {
-                  if (result) {
-                    Provider.of<UserController>(context, listen: false)
-                        .getUser();
-                  }
-                });
-              } else {
-                GetIt.I
-                    .get<SpringService>()
-                    .unfavoriteDeal(dealId: _deal!.id!)
-                    .then((result) {
-                  if (result) {
-                    Provider.of<UserController>(context, listen: false)
-                        .getUser();
-                  }
-                });
-              }
-            },
-            heroTag: 'favoriteFAB',
-            backgroundColor: theme.backgroundColor,
-            elevation: 3,
-            child: Icon(
-              isFavorited
-                  ? FontAwesomeIcons.solidHeart
-                  : FontAwesomeIcons.heart,
-              color: theme.primaryColor,
-            ),
-          );
-        },
-      );
-    }
+                  return;
+                }
+                if (!isFavorited) {
+                  GetIt.I
+                      .get<SpringService>()
+                      .favoriteDeal(dealId: _deal!.id!)
+                      .then((result) {
+                    if (result) {
+                      Provider.of<UserController>(context, listen: false)
+                          .getUser();
+                    }
+                  });
+                } else {
+                  GetIt.I
+                      .get<SpringService>()
+                      .unfavoriteDeal(dealId: _deal!.id!)
+                      .then((result) {
+                    if (result) {
+                      Provider.of<UserController>(context, listen: false)
+                          .getUser();
+                    }
+                  });
+                }
+              },
+              heroTag: 'favoriteFAB',
+              backgroundColor: theme.backgroundColor,
+              elevation: 3,
+              child: Icon(
+                isFavorited
+                    ? FontAwesomeIcons.solidHeart
+                    : FontAwesomeIcons.heart,
+                color: theme.primaryColor,
+              ),
+            );
+          },
+        );
 
-    Widget buildDealDetails() {
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      DateTimeUtil.formatDateTime(_deal!.createdAt!,
-                          useShortMessages: false),
-                      style: textTheme.bodyText2!.copyWith(
-                        color: theme.brightness == Brightness.light
-                            ? Colors.black54
-                            : Colors.grey,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        DealScoreBox(score: _deal!.dealScore!),
-                        const SizedBox(width: 5),
-                        Text(
-                          l(context).dealScore,
-                          style: textTheme.bodyText2!.copyWith(
-                            color: theme.brightness == Brightness.light
-                                ? Colors.black54
-                                : Colors.grey,
-                            fontSize: 13,
-                          ),
+    Widget buildDealDetails() => Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        DateTimeUtil.formatDateTime(_deal!.createdAt!,
+                            useShortMessages: false),
+                        style: textTheme.bodyText2!.copyWith(
+                          color: theme.brightness == Brightness.light
+                              ? Colors.black54
+                              : Colors.grey,
+                          fontSize: 12,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            '•',
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          DealScoreBox(score: _deal!.dealScore!),
+                          const SizedBox(width: 5),
+                          Text(
+                            l(context).dealScore,
                             style: textTheme.bodyText2!.copyWith(
                               color: theme.brightness == Brightness.light
                                   ? Colors.black54
                                   : Colors.grey,
+                              fontSize: 13,
                             ),
                           ),
-                        ),
-                        Text(
-                          l(context).commentCount(_commentCount!),
-                          style: textTheme.bodyText2!.copyWith(
-                            color: theme.primaryColor,
-                            fontWeight: FontWeight.w500,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              '•',
+                              style: textTheme.bodyText2!.copyWith(
+                                color: theme.brightness == Brightness.light
+                                    ? Colors.black54
+                                    : Colors.grey,
+                              ),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            '•',
+                          Text(
+                            l(context).commentCount(_commentCount!),
                             style: textTheme.bodyText2!.copyWith(
+                              color: theme.primaryColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              '•',
+                              style: textTheme.bodyText2!.copyWith(
+                                color: theme.brightness == Brightness.light
+                                    ? Colors.black54
+                                    : Colors.grey,
+                              ),
+                            ),
+                          ),
+                          Icon(FontAwesomeIcons.solidEye,
+                              color: theme.primaryColorLight, size: 14),
+                          const SizedBox(width: 4),
+                          Text(
+                            _deal!.views.toString(),
+                            style: textTheme.subtitle2!.copyWith(
                               color: theme.brightness == Brightness.light
                                   ? Colors.black54
                                   : Colors.grey,
+                              fontSize: 13,
                             ),
                           ),
-                        ),
-                        Icon(FontAwesomeIcons.solidEye,
-                            color: theme.primaryColorLight, size: 14),
-                        const SizedBox(width: 4),
-                        Text(
-                          _deal!.views.toString(),
-                          style: textTheme.subtitle2!.copyWith(
-                            color: theme.brightness == Brightness.light
-                                ? Colors.black54
-                                : Colors.grey,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                buildStoreImage(),
-              ],
+                        ],
+                      ),
+                    ],
+                  ),
+                  buildStoreImage(),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: deviceWidth * .7,
-                      child: Text(
-                        _deal!.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: textTheme.headline6!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      _categories.getCategoryNameFromCategory(
-                        category: _deal!.category,
-                        locale: Localizations.localeOf(context),
-                      ),
-                      style: textTheme.bodyText2!.copyWith(
-                        color: theme.brightness == Brightness.light
-                            ? Colors.black54
-                            : Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Text(
-                          r'$' + _deal!.price.toStringAsFixed(0),
-                          style: textTheme.headline5!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: deviceWidth * .7,
+                        child: Text(
+                          _deal!.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.headline6!
+                              .copyWith(fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          r'$' + _deal!.originalPrice.toStringAsFixed(0),
-                          style: textTheme.subtitle2!.copyWith(
-                            color: theme.errorColor,
-                            decoration: TextDecoration.lineThrough,
-                            fontSize: 16,
-                          ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _categories.getCategoryNameFromCategory(
+                          category: _deal!.category,
+                          locale: Localizations.localeOf(context),
                         ),
-                      ],
-                    )
-                  ],
-                ),
-                buildFavoriteButton(),
-              ],
+                        style: textTheme.bodyText2!.copyWith(
+                          color: theme.brightness == Brightness.light
+                              ? Colors.black54
+                              : Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
+                        children: [
+                          Text(
+                            r'$' + _deal!.price.toStringAsFixed(0),
+                            style: textTheme.headline5!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            r'$' + _deal!.originalPrice.toStringAsFixed(0),
+                            style: textTheme.subtitle2!.copyWith(
+                              color: theme.errorColor,
+                              decoration: TextDecoration.lineThrough,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  buildFavoriteButton(),
+                ],
+              ),
             ),
-          ),
-          buildDealDescription(),
-        ],
-      );
-    }
+            buildDealDescription(),
+          ],
+        );
 
     Future<void> voteDeal(DealVoteType voteType) async {
       if (_user == null) {
@@ -449,7 +437,7 @@ class _DealDetailsState extends State<DealDetails> {
 
         return;
       }
-      final Deal? deal = await GetIt.I.get<SpringService>().voteDeal(
+      final deal = await GetIt.I.get<SpringService>().voteDeal(
             dealId: _deal!.id!,
             voteType: voteType,
           );
@@ -481,150 +469,146 @@ class _DealDetailsState extends State<DealDetails> {
       }
     }
 
-    Widget buildRateDeal() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: [
-            Text(
-              l(context).didYouLikeTheDeal,
-              style: textTheme.bodyText2!.copyWith(
-                color: theme.brightness == Brightness.light
-                    ? Colors.black54
-                    : Colors.grey,
-              ),
-            ),
-            const SizedBox(width: 20),
-            GestureDetector(
-              onTap: () =>
-                  voteDeal(isUpvoted ? DealVoteType.unvote : DealVoteType.up),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: isUpvoted ? Colors.green : Colors.transparent,
-                    width: 1.5,
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+    Widget buildRateDeal() => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              Text(
+                l(context).didYouLikeTheDeal,
+                style: textTheme.bodyText2!.copyWith(
                   color: theme.brightness == Brightness.light
-                      ? Colors.grey.shade300 //theme.primaryColor
-                      : theme.primaryColor.withOpacity(.5),
-                ),
-                padding: const EdgeInsets.all(12),
-                child: Icon(
-                  FontAwesomeIcons.solidThumbsUp,
-                  color: isUpvoted ? Colors.green : Colors.grey,
-                  size: 16,
+                      ? Colors.black54
+                      : Colors.grey,
                 ),
               ),
-            ),
-            const SizedBox(width: 20),
-            GestureDetector(
-              onTap: () => voteDeal(
-                  isDownvoted ? DealVoteType.unvote : DealVoteType.down),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: isDownvoted
-                        ? Colors.pinkAccent.shade100
-                        : Colors.transparent,
-                    width: 1.5,
+              const SizedBox(width: 20),
+              GestureDetector(
+                onTap: () =>
+                    voteDeal(isUpvoted ? DealVoteType.unvote : DealVoteType.up),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: isUpvoted ? Colors.green : Colors.transparent,
+                      width: 1.5,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                    color: theme.brightness == Brightness.light
+                        ? Colors.grey.shade300 //theme.primaryColor
+                        : theme.primaryColor.withOpacity(.5),
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
-                  color: theme.brightness == Brightness.light
-                      ? Colors.grey.shade300 //theme.primaryColor
-                      : theme.primaryColor.withOpacity(.5),
-                ),
-                padding: const EdgeInsets.all(12),
-                child: Icon(
-                  FontAwesomeIcons.solidThumbsDown,
-                  color: isDownvoted ? Colors.pinkAccent.shade100 : Colors.grey,
-                  size: 16,
+                  padding: const EdgeInsets.all(12),
+                  child: Icon(
+                    FontAwesomeIcons.solidThumbsUp,
+                    color: isUpvoted ? Colors.green : Colors.grey,
+                    size: 16,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Future<void> _onUserTap(String userId) async {
-      return showDialog<void>(
-        context: context,
-        builder: (context) => UserProfileDialog(userId: userId),
-      );
-    }
-
-    Widget buildUserDetails() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: FutureBuilder<MyUser>(
-          future:
-              GetIt.I.get<SpringService>().getUserById(id: _deal!.postedBy!),
-          builder: (context, snapshot) {
-            String avatar = 'http://www.gravatar.com/avatar';
-            String nickname = '...';
-            VoidCallback? onTap;
-
-            if (snapshot.hasData) {
-              onTap = () => _onUserTap(snapshot.data!.id!);
-              avatar = snapshot.data!.avatar!;
-              nickname = snapshot.data!.nickname!;
-            } else if (snapshot.hasError) {
-              nickname = l(context).anErrorOccurred;
-            }
-
-            return GestureDetector(
-              onTap: _user == null
-                  ? () => GetIt.I.get<SignInDialog>().showSignInDialog(context)
-                  : onTap,
-              child: Row(
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: avatar,
-                    imageBuilder: (ctx, imageProvider) =>
-                        CircleAvatar(backgroundImage: imageProvider),
-                    placeholder: (context, url) => const CircleAvatar(),
+              const SizedBox(width: 20),
+              GestureDetector(
+                onTap: () => voteDeal(
+                    isDownvoted ? DealVoteType.unvote : DealVoteType.down),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: isDownvoted
+                          ? Colors.pinkAccent.shade100
+                          : Colors.transparent,
+                      width: 1.5,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                    color: theme.brightness == Brightness.light
+                        ? Colors.grey.shade300 //theme.primaryColor
+                        : theme.primaryColor.withOpacity(.5),
                   ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(2)),
-                          color: Colors.green.shade600,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 3,
-                          vertical: 1,
-                        ),
-                        child: Text(
-                          l(context).originalPoster,
-                          style: textTheme.bodyText2!.copyWith(
-                            color: Colors.white,
-                            fontSize: 10,
+                  padding: const EdgeInsets.all(12),
+                  child: Icon(
+                    FontAwesomeIcons.solidThumbsDown,
+                    color:
+                        isDownvoted ? Colors.pinkAccent.shade100 : Colors.grey,
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+
+    Future<void> _onUserTap(String userId) async => showDialog<void>(
+          context: context,
+          builder: (context) => UserProfileDialog(userId: userId),
+        );
+
+    Widget buildUserDetails() => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: FutureBuilder<MyUser>(
+            future:
+                GetIt.I.get<SpringService>().getUserById(id: _deal!.postedBy!),
+            builder: (context, snapshot) {
+              var avatar = 'http://www.gravatar.com/avatar';
+              var nickname = '...';
+              VoidCallback? onTap;
+
+              if (snapshot.hasData) {
+                onTap = () => _onUserTap(snapshot.data!.id!);
+                avatar = snapshot.data!.avatar!;
+                nickname = snapshot.data!.nickname!;
+              } else if (snapshot.hasError) {
+                nickname = l(context).anErrorOccurred;
+              }
+
+              return GestureDetector(
+                onTap: _user == null
+                    ? () =>
+                        GetIt.I.get<SignInDialog>().showSignInDialog(context)
+                    : onTap,
+                child: Row(
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: avatar,
+                      imageBuilder: (ctx, imageProvider) =>
+                          CircleAvatar(backgroundImage: imageProvider),
+                      placeholder: (context, url) => const CircleAvatar(),
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(2)),
+                            color: Colors.green.shade600,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 3,
+                            vertical: 1,
+                          ),
+                          child: Text(
+                            l(context).originalPoster,
+                            style: textTheme.bodyText2!.copyWith(
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        nickname,
-                        style: textTheme.subtitle2!.copyWith(
-                          color: theme.brightness == Brightness.light
-                              ? theme.primaryColor
-                              : null,
+                        const SizedBox(height: 3),
+                        Text(
+                          nickname,
+                          style: textTheme.subtitle2!.copyWith(
+                            color: theme.brightness == Brightness.light
+                                ? theme.primaryColor
+                                : null,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      );
-    }
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
 
     Widget buildCommentCounts() {
       final textTheme = Theme.of(context).textTheme;
@@ -644,14 +628,12 @@ class _DealDetailsState extends State<DealDetails> {
 
       showDialog<void>(
         context: context,
-        builder: (context) {
-          return Dialog(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            child: PostComment(deal: _deal!),
-          );
-        },
+        builder: (context) => Dialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          child: PostComment(deal: _deal!),
+        ),
       ).then((_) {
         _updateCommentsCount();
         _pagingController.refresh();
@@ -674,82 +656,73 @@ class _DealDetailsState extends State<DealDetails> {
       );
     }
 
-    SliverToBoxAdapter _buildMainContent() {
-      return SliverToBoxAdapter(
-        child: Column(
-          children: [
-            buildDealImages(),
-            buildDealDetails(),
-            buildRateDeal(),
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Divider(),
-            ),
-            buildUserDetails(),
-          ],
-        ),
-      );
-    }
-
-    SliverPadding _buildCommentsHeader() {
-      return SliverPadding(
-        padding: const EdgeInsets.all(16),
-        sliver: SliverToBoxAdapter(
+    SliverToBoxAdapter _buildMainContent() => SliverToBoxAdapter(
           child: Column(
             children: [
-              const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  buildCommentCounts(),
-                  const SizedBox(width: 10),
-                  buildPostCommentButton(),
-                ],
+              buildDealImages(),
+              buildDealDetails(),
+              buildRateDeal(),
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Divider(),
               ),
-              const Divider(),
+              buildUserDetails(),
             ],
           ),
-        ),
-      );
-    }
+        );
 
-    SliverPadding _buildComments() {
-      return SliverPadding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-        sliver: DealComments(deal: _deal!, pagingController: _pagingController),
-      );
-    }
-
-    Widget _buildCustomScrollView() {
-      return CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          _buildMainContent(),
-          _buildCommentsHeader(),
-          _buildComments(),
-        ],
-      );
-    }
-
-    Widget _buildScrollToTopButton() {
-      return Padding(
-        padding: const EdgeInsets.only(right: 12),
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: FloatingActionButton(
-            onPressed: _scrollToTop,
-            mini: true,
-            child: const Icon(Icons.expand_less),
+    SliverPadding _buildCommentsHeader() => SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              children: [
+                const Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    buildCommentCounts(),
+                    const SizedBox(width: 10),
+                    buildPostCommentButton(),
+                  ],
+                ),
+                const Divider(),
+              ],
+            ),
           ),
-        ),
-      );
-    }
+        );
+
+    SliverPadding _buildComments() => SliverPadding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+          sliver:
+              DealComments(deal: _deal!, pagingController: _pagingController),
+        );
+
+    Widget _buildCustomScrollView() => CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            _buildMainContent(),
+            _buildCommentsHeader(),
+            _buildComments(),
+          ],
+        );
+
+    Widget _buildScrollToTopButton() => Padding(
+          padding: const EdgeInsets.only(right: 12),
+          child: Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              onPressed: _scrollToTop,
+              mini: true,
+              child: const Icon(Icons.expand_less),
+            ),
+          ),
+        );
 
     Widget _buildSeeDealButton() {
       Future<void> launchURL() async {
         await canLaunch(_deal!.dealUrl)
             ? await launch(_deal!.dealUrl)
-            : throw 'Could not launch ${_deal!.dealUrl}';
+            : throw Exception('Could not launch ${_deal!.dealUrl}');
       }
 
       return Padding(
@@ -765,39 +738,35 @@ class _DealDetailsState extends State<DealDetails> {
       );
     }
 
-    Widget _buildBody() {
-      return Column(
-        children: [
-          if (_deal!.isExpired) const _DealIsExpiredBanner(),
-          Expanded(
-            child: Stack(
-              children: [
-                _buildCustomScrollView(),
-                if (_showScrollToTopButton) _buildScrollToTopButton(),
-              ],
+    Widget _buildBody() => Column(
+          children: [
+            if (_deal!.isExpired) const _DealIsExpiredBanner(),
+            Expanded(
+              child: Stack(
+                children: [
+                  _buildCustomScrollView(),
+                  if (_showScrollToTopButton) _buildScrollToTopButton(),
+                ],
+              ),
             ),
-          ),
-          _buildSeeDealButton(),
-        ],
-      );
-    }
+            _buildSeeDealButton(),
+          ],
+        );
 
-    Widget _buildError() {
-      return Scaffold(
-        appBar: AppBar(),
-        body: ErrorIndicatorUtil.buildFirstPageError(
-          context,
-          onTryAgain: () async {
-            _dealFuture =
-                GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
-            _commentCountFuture = GetIt.I
-                .get<SpringService>()
-                .getNumberOfCommentsByDealId(dealId: widget.dealId);
-            setState(() {});
-          },
-        ),
-      );
-    }
+    Widget _buildError() => Scaffold(
+          appBar: AppBar(),
+          body: ErrorIndicatorUtil.buildFirstPageError(
+            context,
+            onTryAgain: () async {
+              _dealFuture =
+                  GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
+              _commentCountFuture = GetIt.I
+                  .get<SpringService>()
+                  .getNumberOfCommentsByDealId(dealId: widget.dealId);
+              setState(() {});
+            },
+          ),
+        );
 
     return FutureBuilder<dynamic>(
       future: Future.wait([_dealFuture, _commentCountFuture]),

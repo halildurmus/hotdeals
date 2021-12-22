@@ -32,20 +32,16 @@ class _DealCommentsState extends State<DealComments> {
             size: size,
           );
 
-  Widget buildNoCommentsFound() {
-    return ErrorIndicator(
-      icon: Icons.comment_outlined,
-      title: l(context).noComments,
-      message: l(context).startTheConversation,
-    );
-  }
+  Widget buildNoCommentsFound() => ErrorIndicator(
+        icon: Icons.comment_outlined,
+        title: l(context).noComments,
+        message: l(context).startTheConversation,
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return CommentPagedListView(
-      commentFuture: _commentFuture,
-      noCommentsFound: buildNoCommentsFound(),
-      pagingController: widget.pagingController,
-    );
-  }
+  Widget build(BuildContext context) => CommentPagedListView(
+        commentFuture: _commentFuture,
+        noCommentsFound: buildNoCommentsFound(),
+        pagingController: widget.pagingController,
+      );
 }

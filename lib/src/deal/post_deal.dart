@@ -72,107 +72,101 @@ class _PostDealState extends State<PostDeal> {
     final textTheme = theme.textTheme;
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    Widget buildPictureUploadWidget() {
-      return PictureUploadWidget(
-        buttonText: l(context).uploadImage,
-        buttonStyle: PictureUploadButtonStyle(
-          backgroundColor: theme.primaryColor,
-          closeIconBackgroundColor: theme.brightness == Brightness.dark
-              ? theme.primaryColorLight
-              : Colors.white,
-          closeIconColor: theme.brightness == Brightness.dark
-              ? theme.primaryColorDark
-              : theme.primaryColorLight,
-        ),
-        initialImages: dealImages,
-        localization: PictureUploadLocalization(
-          abort: l(context).cancel,
-          camera: l(context).camera,
-          gallery: l(context).gallery,
-          selectSource: l(context).selectSource,
-        ),
-        onPicturesChange: dealImageCallback,
-        settings: PictureUploadSettings(
-          uploadDirectory: '/deal_images/',
-        ),
-      );
-    }
+    Widget buildPictureUploadWidget() => PictureUploadWidget(
+          buttonText: l(context).uploadImage,
+          buttonStyle: PictureUploadButtonStyle(
+            backgroundColor: theme.primaryColor,
+            closeIconBackgroundColor: theme.brightness == Brightness.dark
+                ? theme.primaryColorLight
+                : Colors.white,
+            closeIconColor: theme.brightness == Brightness.dark
+                ? theme.primaryColorDark
+                : theme.primaryColorLight,
+          ),
+          initialImages: dealImages,
+          localization: PictureUploadLocalization(
+            abort: l(context).cancel,
+            camera: l(context).camera,
+            gallery: l(context).gallery,
+            selectSource: l(context).selectSource,
+          ),
+          onPicturesChange: dealImageCallback,
+          settings: PictureUploadSettings(
+            uploadDirectory: '/deal_images/',
+          ),
+        );
 
-    Widget buildCategoryDropdown() {
-      return DropdownButtonFormField<Category>(
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: l(context).category,
-        ),
-        value: selectedCategory,
-        onChanged: (newValue) {
-          setState(() {
-            selectedCategory = newValue!;
-          });
-        },
-        selectedItemBuilder: (context) {
-          return categories.map<Widget>((item) {
-            return Text(item.localizedName(Localizations.localeOf(context)));
-          }).toList();
-        },
-        items: categories.map((value) {
-          return DropdownMenuItem<Category>(
-            value: value,
-            child: Row(
-              children: [
-                if (selectedCategory == value)
-                  Icon(Icons.check, color: theme.primaryColor)
-                else
-                  const SizedBox(width: 24),
-                const SizedBox(width: 10),
-                Text(value.localizedName(Localizations.localeOf(context))),
-              ],
-            ),
-          );
-        }).toList(),
-      );
-    }
+    Widget buildCategoryDropdown() => DropdownButtonFormField<Category>(
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: l(context).category,
+          ),
+          value: selectedCategory,
+          onChanged: (newValue) {
+            setState(() {
+              selectedCategory = newValue!;
+            });
+          },
+          selectedItemBuilder: (context) => categories
+              .map<Widget>((item) =>
+                  Text(item.localizedName(Localizations.localeOf(context))))
+              .toList(),
+          items: categories
+              .map((value) => DropdownMenuItem<Category>(
+                    value: value,
+                    child: Row(
+                      children: [
+                        if (selectedCategory == value)
+                          Icon(Icons.check, color: theme.primaryColor)
+                        else
+                          const SizedBox(width: 24),
+                        const SizedBox(width: 10),
+                        Text(value
+                            .localizedName(Localizations.localeOf(context))),
+                      ],
+                    ),
+                  ))
+              .toList(),
+        );
 
-    Widget buildStoreDropdown() {
-      return DropdownButtonFormField<Store>(
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: l(context).store,
-        ),
-        value: selectedStore,
-        onChanged: (newValue) {
-          setState(() {
-            selectedStore = newValue!;
-          });
-        },
-        selectedItemBuilder: (context) =>
-            stores.map<Widget>((store) => Text(store.name)).toList(),
-        items: stores.map((value) {
-          return DropdownMenuItem<Store>(
-            value: value,
-            child: Row(
-              children: [
-                if (selectedStore == value)
-                  Icon(Icons.check, color: theme.primaryColor)
-                else
-                  const SizedBox(width: 24),
-                const SizedBox(width: 10),
-                Text(value.name),
-              ],
-            ),
-          );
-        }).toList(),
-      );
-    }
+    Widget buildStoreDropdown() => DropdownButtonFormField<Store>(
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: l(context).store,
+          ),
+          value: selectedStore,
+          onChanged: (newValue) {
+            setState(() {
+              selectedStore = newValue!;
+            });
+          },
+          selectedItemBuilder: (context) =>
+              stores.map<Widget>((store) => Text(store.name)).toList(),
+          items: stores
+              .map((value) => DropdownMenuItem<Store>(
+                    value: value,
+                    child: Row(
+                      children: [
+                        if (selectedStore == value)
+                          Icon(Icons.check, color: theme.primaryColor)
+                        else
+                          const SizedBox(width: 24),
+                        const SizedBox(width: 10),
+                        Text(value.name),
+                      ],
+                    ),
+                  ))
+              .toList(),
+        );
 
     bool areImagesReady() {
-      bool value = false;
+      var value = false;
 
       if (dealImages.first.storageReference == null) {
         return value;
       }
 
-      for (int i = 0; i < dealImages.length; i++) {
+      for (var i = 0; i < dealImages.length; i++) {
         if (dealImages[i].uploadProcessing) {
           value = false;
           break;
@@ -195,14 +189,14 @@ class _PostDealState extends State<PostDeal> {
       }
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
-      final String coverPhoto =
+      final coverPhoto =
           await dealImages.first.storageReference!.getDownloadURL();
-      final List<String> photos = [];
-      for (int i = 1; i < dealImages.length - 1; i++) {
+      final photos = <String>[];
+      for (var i = 1; i < dealImages.length - 1; i++) {
         photos.add(await dealImages[i].storageReference!.getDownloadURL());
       }
 
-      final Deal deal = Deal(
+      final deal = Deal(
         title: titleController.text,
         description: descriptionController.text,
         category: selectedCategory.category,
@@ -214,7 +208,7 @@ class _PostDealState extends State<PostDeal> {
         price: double.parse(priceController.text),
       );
 
-      final Deal? postedDeal =
+      final postedDeal =
           await GetIt.I.get<SpringService>().postDeal(deal: deal);
 
       // Pops the loading dialog.
@@ -235,177 +229,161 @@ class _PostDealState extends State<PostDeal> {
       }
     }
 
-    Widget buildUrlFormField() {
-      return TextFormField(
-        controller: dealUrlController,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: l(context).enterDealUrl,
-        ),
-        textInputAction: TextInputAction.next,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return l(context).pleaseEnterTheDealUrl;
-          } else if (!isURL(value)) {
-            return l(context).pleaseEnterValidUrl;
-          }
-
-          return null;
-        },
-      );
-    }
-
-    Widget buildTitleFormField() {
-      return TextFormField(
-        controller: titleController,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          errorMaxLines: 2,
-          labelText: l(context).title,
-        ),
-        textInputAction: TextInputAction.next,
-        maxLength: 100,
-        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return l(context).pleaseEnterTheDealTitle;
-          } else if (value.length < 10) {
-            return l(context).titleMustBe;
-          }
-
-          return null;
-        },
-      );
-    }
-
-    Widget buildOriginalPriceFormField() {
-      return TextFormField(
-        controller: originalPriceController,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: l(context).originalPrice,
-          prefixIcon: const Icon(Icons.attach_money, size: 20),
-        ),
-        keyboardType: TextInputType.number,
-        textInputAction: TextInputAction.next,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return l(context).pleaseEnterTheOriginalPrice;
-          } else if (priceController.text.isNotEmpty &&
-              (int.parse(value) < int.parse(priceController.text))) {
-            return l(context).originalPriceCannotBeLower;
-          }
-
-          return null;
-        },
-      );
-    }
-
-    Widget buildPriceFormField() {
-      return TextFormField(
-        controller: priceController,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: l(context).price,
-          prefixIcon: const Icon(Icons.attach_money, size: 20),
-        ),
-        keyboardType: TextInputType.number,
-        textInputAction: TextInputAction.next,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return l(context).pleaseEnterThePrice;
-          } else if (originalPriceController.text.isNotEmpty &&
-              (int.parse(value) > int.parse(originalPriceController.text))) {
-            return l(context).priceCannotBeGreater;
-          }
-
-          return null;
-        },
-      );
-    }
-
-    Widget buildDescriptionFormField() {
-      return TextFormField(
-        controller: descriptionController,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          errorMaxLines: 2,
-          hintStyle: textTheme.bodyText2!.copyWith(
-              color: theme.brightness == Brightness.light
-                  ? Colors.black54
-                  : Colors.grey),
-          hintText: l(context).enterSomeDetailsAboutDeal,
-        ),
-        minLines: 4,
-        maxLines: 30,
-        maxLength: 3000,
-        maxLengthEnforcement: MaxLengthEnforcement.enforced,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return l(context).pleaseEnterTheDealDescription;
-          } else if (value.length < 10) {
-            return l(context).descriptionMustBe;
-          }
-
-          return null;
-        },
-      );
-    }
-
-    Widget buildPostDealButton() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: ElevatedButton(
-          onPressed:
-              (_formKey.currentState?.validate() ?? false) ? onPressed : null,
-          style: ElevatedButton.styleFrom(
-            fixedSize: Size(deviceWidth, 50),
-            primary: theme.colorScheme.secondary,
+    Widget buildUrlFormField() => TextFormField(
+          controller: dealUrlController,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: l(context).enterDealUrl,
           ),
-          child: Text(l(context).postDeal),
-        ),
-      );
-    }
+          textInputAction: TextInputAction.next,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return l(context).pleaseEnterTheDealUrl;
+            } else if (!isURL(value)) {
+              return l(context).pleaseEnterValidUrl;
+            }
 
-    Widget buildForm() {
-      return Form(
-        key: _formKey,
-        onChanged: () => setState(() {}),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 5),
-            buildPictureUploadWidget(),
-            const SizedBox(height: 20),
-            buildUrlFormField(),
-            const SizedBox(height: 10),
-            buildTitleFormField(),
-            const SizedBox(height: 10),
-            buildOriginalPriceFormField(),
-            const SizedBox(height: 10),
-            buildPriceFormField(),
-            const SizedBox(height: 10),
-            buildCategoryDropdown(),
-            const SizedBox(height: 10),
-            buildStoreDropdown(),
-            const SizedBox(height: 10),
-            buildDescriptionFormField(),
-            const SizedBox(height: 10),
-            buildPostDealButton(),
-          ],
-        ),
-      );
-    }
+            return null;
+          },
+        );
 
-    Widget buildBody() {
-      return SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: buildForm(),
-        ),
-      );
-    }
+    Widget buildTitleFormField() => TextFormField(
+          controller: titleController,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            errorMaxLines: 2,
+            labelText: l(context).title,
+          ),
+          textInputAction: TextInputAction.next,
+          maxLength: 100,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return l(context).pleaseEnterTheDealTitle;
+            } else if (value.length < 10) {
+              return l(context).titleMustBe;
+            }
+
+            return null;
+          },
+        );
+
+    Widget buildOriginalPriceFormField() => TextFormField(
+          controller: originalPriceController,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: l(context).originalPrice,
+            prefixIcon: const Icon(Icons.attach_money, size: 20),
+          ),
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.next,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return l(context).pleaseEnterTheOriginalPrice;
+            } else if (priceController.text.isNotEmpty &&
+                (int.parse(value) < int.parse(priceController.text))) {
+              return l(context).originalPriceCannotBeLower;
+            }
+
+            return null;
+          },
+        );
+
+    Widget buildPriceFormField() => TextFormField(
+          controller: priceController,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: l(context).price,
+            prefixIcon: const Icon(Icons.attach_money, size: 20),
+          ),
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.next,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return l(context).pleaseEnterThePrice;
+            } else if (originalPriceController.text.isNotEmpty &&
+                (int.parse(value) > int.parse(originalPriceController.text))) {
+              return l(context).priceCannotBeGreater;
+            }
+
+            return null;
+          },
+        );
+
+    Widget buildDescriptionFormField() => TextFormField(
+          controller: descriptionController,
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            errorMaxLines: 2,
+            hintStyle: textTheme.bodyText2!.copyWith(
+                color: theme.brightness == Brightness.light
+                    ? Colors.black54
+                    : Colors.grey),
+            hintText: l(context).enterSomeDetailsAboutDeal,
+          ),
+          minLines: 4,
+          maxLines: 30,
+          maxLength: 3000,
+          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return l(context).pleaseEnterTheDealDescription;
+            } else if (value.length < 10) {
+              return l(context).descriptionMustBe;
+            }
+
+            return null;
+          },
+        );
+
+    Widget buildPostDealButton() => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: ElevatedButton(
+            onPressed:
+                (_formKey.currentState?.validate() ?? false) ? onPressed : null,
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(deviceWidth, 50),
+              primary: theme.colorScheme.secondary,
+            ),
+            child: Text(l(context).postDeal),
+          ),
+        );
+
+    Widget buildForm() => Form(
+          key: _formKey,
+          onChanged: () => setState(() {}),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 5),
+              buildPictureUploadWidget(),
+              const SizedBox(height: 20),
+              buildUrlFormField(),
+              const SizedBox(height: 10),
+              buildTitleFormField(),
+              const SizedBox(height: 10),
+              buildOriginalPriceFormField(),
+              const SizedBox(height: 10),
+              buildPriceFormField(),
+              const SizedBox(height: 10),
+              buildCategoryDropdown(),
+              const SizedBox(height: 10),
+              buildStoreDropdown(),
+              const SizedBox(height: 10),
+              buildDescriptionFormField(),
+              const SizedBox(height: 10),
+              buildPostDealButton(),
+            ],
+          ),
+        );
+
+    Widget buildBody() => SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: buildForm(),
+          ),
+        );
 
     return Scaffold(
       appBar: AppBar(

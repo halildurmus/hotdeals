@@ -42,11 +42,9 @@ class Category {
       };
 
   @override
-  String toString() {
-    return 'Category{id: $id, names: $names, parent: $parent, '
-        'category: $category, iconLigature: $iconLigature, '
-        'iconFontFamily: $iconFontFamily}';
-  }
+  String toString() => 'Category{id: $id, names: $names, parent: $parent, '
+      'category: $category, iconLigature: $iconLigature, '
+      'iconFontFamily: $iconFontFamily}';
 }
 
 extension LocalizedName on Category {
@@ -54,7 +52,6 @@ extension LocalizedName on Category {
   ///
   /// Set [locale] parameter to `Localizations.localeOf(context)` to get the
   /// app's current locale.
-  String localizedName(Locale locale) {
-    return names[locale.languageCode] ?? names['en'];
-  }
+  String localizedName(Locale locale) =>
+      names[locale.languageCode] ?? names['en'];
 }

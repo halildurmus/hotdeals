@@ -21,8 +21,10 @@ class PushNotification {
     required this.uid,
     this.isRead = false,
     this.createdAt,
-  })  : assert(title != null || titleLocKey != null),
-        assert(body != null || bodyLocKey != null) {
+  })  : assert(title != null || titleLocKey != null,
+            'You need to provide either a title or a titleLocKey'),
+        assert(body != null || bodyLocKey != null,
+            'You need to provide either a body or a bodyLocKey') {
     createdAt ??= DateTime.now();
   }
 
@@ -106,7 +108,6 @@ class PushNotification {
       };
 
   @override
-  String toString() {
-    return 'PushNotification{id: $id, title: $title, titleLocKey: $titleLocKey, titleLocArgs: $titleLocArgs, body: $body, bodyLocKey: $bodyLocKey, bodyLocArgs: $bodyLocArgs, actor: $actor, verb: $verb, object: $object, tokens: $tokens, avatar: $avatar, message: $message, image: $image, uid: $uid, isRead: $isRead, createdAt: $createdAt}';
-  }
+  String toString() =>
+      'PushNotification{id: $id, title: $title, titleLocKey: $titleLocKey, titleLocArgs: $titleLocArgs, body: $body, bodyLocKey: $bodyLocKey, bodyLocArgs: $bodyLocArgs, actor: $actor, verb: $verb, object: $object, tokens: $tokens, avatar: $avatar, message: $message, image: $image, uid: $uid, isRead: $isRead, createdAt: $createdAt}';
 }

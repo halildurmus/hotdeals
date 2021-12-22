@@ -37,15 +37,13 @@ class _DealsByCategoryState extends State<DealsByCategory> {
     super.dispose();
   }
 
-  PreferredSizeWidget buildAppBar() {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(70),
-      child: AppBar(
-        centerTitle: true,
-        title: Text(category.localizedName(Localizations.localeOf(context))),
-      ),
-    );
-  }
+  PreferredSizeWidget buildAppBar() => PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: AppBar(
+          centerTitle: true,
+          title: Text(category.localizedName(Localizations.localeOf(context))),
+        ),
+      );
 
   Future<List<Deal>> _dealFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getDealsByCategory(
@@ -54,43 +52,35 @@ class _DealsByCategoryState extends State<DealsByCategory> {
             size: size,
           );
 
-  Widget buildFilterChips() {
-    return FilterChips(
-      category: widget.category,
-      onFilterChange: (newCategory) {
-        setState(() {
-          category = newCategory;
-          _pagingController.refresh();
-        });
-      },
-    );
-  }
+  Widget buildFilterChips() => FilterChips(
+        category: widget.category,
+        onFilterChange: (newCategory) {
+          setState(() {
+            category = newCategory;
+            _pagingController.refresh();
+          });
+        },
+      );
 
-  Widget buildNoDealsFound(BuildContext context) {
-    return ErrorIndicator(
-      icon: Icons.local_offer,
-      title: l(context).couldNotFindAnyDeal,
-    );
-  }
+  Widget buildNoDealsFound(BuildContext context) => ErrorIndicator(
+        icon: Icons.local_offer,
+        title: l(context).couldNotFindAnyDeal,
+      );
 
-  Widget buildPagedListView() {
-    return DealPagedListView(
-      dealsFuture: _dealFuture,
-      noDealsFound: buildNoDealsFound(context),
-      pagingController: _pagingController,
-    );
-  }
+  Widget buildPagedListView() => DealPagedListView(
+        dealsFuture: _dealFuture,
+        noDealsFound: buildNoDealsFound(context),
+        pagingController: _pagingController,
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(),
-      body: Column(
-        children: [
-          buildFilterChips(),
-          Expanded(child: buildPagedListView()),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: buildAppBar(),
+        body: Column(
+          children: [
+            buildFilterChips(),
+            Expanded(child: buildPagedListView()),
+          ],
+        ),
+      );
 }

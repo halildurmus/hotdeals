@@ -22,7 +22,7 @@ class NotificationUtil {
   static Future<AndroidBitmap<Object>> _createAndroidBitmap(
       String imageUrl) async {
     _validateImageUrl(imageUrl);
-    final http.Response response = await http.get(Uri.parse(imageUrl));
+    final response = await http.get(Uri.parse(imageUrl));
     final base64Image = base64.encode(response.bodyBytes);
 
     return ByteArrayAndroidBitmap.fromBase64String(base64Image);
@@ -33,7 +33,7 @@ class NotificationUtil {
   static final _channel = GetIt.I.get<AndroidNotificationChannel>();
   static final _settingsController = GetIt.I.get<SettingsController>();
 
-  static void showNotification(
+  static Future<void> showNotification(
     RemoteNotification notification, {
     String? imageUrl,
     Importance importance = Importance.max,
@@ -49,7 +49,7 @@ class NotificationUtil {
       'image_message_title': notification.titleLocArgs.first + l.sentYouImage,
       'text_message_title': notification.titleLocArgs.first + l.sentYouMessage
     };
-    final String title = titles[notification.titleLocKey] ??
+    final title = titles[notification.titleLocKey] ??
         'Unknown titleLocKey: ${notification.titleLocKey}';
 
     _flutterLocalNotificationsPlugin.show(

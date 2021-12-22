@@ -46,7 +46,6 @@ class Chat {
   late final bool user2IsBlocked;
 
   @override
-  String toString() {
-    return 'Chat(createdAt: $createdAt, id: $id, lastMessage: $lastMessage, lastMessageIsRead: $lastMessageIsRead, lastMessageType: $lastMessageType, loggedInUserUid: $loggedInUserUid, user1: $user1, user1IsBlocked: $user1IsBlocked, user2: $user2, user2IsBlocked: $user2IsBlocked)';
-  }
+  String toString() =>
+      'Chat(createdAt: $createdAt, id: $id, lastMessage: $lastMessage, lastMessageIsRead: $lastMessageIsRead, lastMessageType: $lastMessageType, loggedInUserUid: $loggedInUserUid, user1: $user1, user1IsBlocked: $user1IsBlocked, user2: $user2, user2IsBlocked: $user2IsBlocked)';
 }

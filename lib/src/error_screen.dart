@@ -11,18 +11,16 @@ class ErrorScreen extends StatelessWidget {
   final Function(BuildContext ctx) onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l(context).appTitle),
-      ),
-      body: ErrorIndicatorUtil.buildFirstPageError(
-        context,
-        onTryAgain: () async {
-          GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
-          onTap(context);
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: Text(l(context).appTitle),
+        ),
+        body: ErrorIndicatorUtil.buildFirstPageError(
+          context,
+          onTryAgain: () async {
+            GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
+            onTap(context);
+          },
+        ),
+      );
 }

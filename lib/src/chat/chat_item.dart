@@ -14,18 +14,16 @@ class ChatItem extends StatelessWidget {
   final Chat chat;
   final VoidCallback onTap;
 
-  Widget _buildBlockedText(BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.error, size: 18, color: Theme.of(context).errorColor),
-        const SizedBox(width: 4),
-        Text(
-          l(context).youCannotChatWithThisUser,
-          style: TextStyle(color: Theme.of(context).errorColor, fontSize: 15),
-        ),
-      ],
-    );
-  }
+  Widget _buildBlockedText(BuildContext context) => Row(
+        children: [
+          Icon(Icons.error, size: 18, color: Theme.of(context).errorColor),
+          const SizedBox(width: 4),
+          Text(
+            l(context).youCannotChatWithThisUser,
+            style: TextStyle(color: Theme.of(context).errorColor, fontSize: 15),
+          ),
+        ],
+      );
 
   Widget _buildFileText(BuildContext context) {
     final fileName = chat.lastMessage['name'] as String;
@@ -52,22 +50,20 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-  Widget _buildImageText(BuildContext context) {
-    return Row(
-      children: [
-        Icon(
-          FontAwesomeIcons.solidImage,
-          color: Theme.of(context).primaryColorLight,
-          size: 16,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          l(context).image,
-          style: const TextStyle(fontSize: 15),
-        ),
-      ],
-    );
-  }
+  Widget _buildImageText(BuildContext context) => Row(
+        children: [
+          Icon(
+            FontAwesomeIcons.solidImage,
+            color: Theme.of(context).primaryColorLight,
+            size: 16,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            l(context).image,
+            style: const TextStyle(fontSize: 15),
+          ),
+        ],
+      );
 
   Widget _buildMessageText(BuildContext context) {
     final text = chat.lastMessage['text'] as String;
@@ -84,28 +80,23 @@ class ChatItem extends StatelessWidget {
     );
   }
 
-  Widget _buildUserAvatar() {
-    return CachedNetworkImage(
-      imageUrl: chat.user2.avatar!,
-      imageBuilder: (ctx, imageProvider) =>
-          CircleAvatar(backgroundImage: imageProvider, radius: 24),
-      placeholder: (context, url) =>
-          const CircleAvatar(radius: 24),
-    );
-  }
+  Widget _buildUserAvatar() => CachedNetworkImage(
+        imageUrl: chat.user2.avatar!,
+        imageBuilder: (ctx, imageProvider) =>
+            CircleAvatar(backgroundImage: imageProvider, radius: 24),
+        placeholder: (context, url) => const CircleAvatar(radius: 24),
+      );
 
-  Widget _buildUserNickname(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * .55,
-      child: Text(
-        chat.user2.nickname!,
-        maxLines: 1,
-        softWrap: false,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
+  Widget _buildUserNickname(BuildContext context) => SizedBox(
+        width: MediaQuery.of(context).size.width * .55,
+        child: Text(
+          chat.user2.nickname!,
+          maxLines: 1,
+          softWrap: false,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      );
 
   Widget _messageTextBuilder(BuildContext context) {
     if (chat.user1IsBlocked || chat.user2IsBlocked) {
@@ -122,52 +113,46 @@ class ChatItem extends StatelessWidget {
     }
   }
 
-  Widget _buildMessageTime(BuildContext context) {
-    return Text(
-      DateTimeUtil.formatDateTime(chat.createdAt),
-      style: TextStyle(
-        color: chat.lastMessageIsRead
-            ? Colors.grey
-            : Theme.of(context).primaryColor,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-
-  Widget _buildUnreadIndicator(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 10),
-      child: CircleAvatar(
-        backgroundColor: Theme.of(context).primaryColor,
-        radius: 6,
-      ),
-    );
-  }
-
-  Widget _buildContent(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            if (!chat.lastMessageIsRead) _buildUnreadIndicator(context),
-            _buildUserAvatar(),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildUserNickname(context),
-                const SizedBox(height: 4),
-                _messageTextBuilder(context),
-              ],
-            ),
-          ],
+  Widget _buildMessageTime(BuildContext context) => Text(
+        DateTimeUtil.formatDateTime(chat.createdAt),
+        style: TextStyle(
+          color: chat.lastMessageIsRead
+              ? Colors.grey
+              : Theme.of(context).primaryColor,
+          fontWeight: FontWeight.w500,
         ),
-        _buildMessageTime(context),
-      ],
-    );
-  }
+      );
+
+  Widget _buildUnreadIndicator(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(right: 10),
+        child: CircleAvatar(
+          backgroundColor: Theme.of(context).primaryColor,
+          radius: 6,
+        ),
+      );
+
+  Widget _buildContent(BuildContext context) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              if (!chat.lastMessageIsRead) _buildUnreadIndicator(context),
+              _buildUserAvatar(),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildUserNickname(context),
+                  const SizedBox(height: 4),
+                  _messageTextBuilder(context),
+                ],
+              ),
+            ],
+          ),
+          _buildMessageTime(context),
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {

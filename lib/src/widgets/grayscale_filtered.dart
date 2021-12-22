@@ -16,10 +16,8 @@ class GrayscaleColorFiltered extends StatelessWidget {
   );
 
   @override
-  Widget build(BuildContext context) {
-    return ColorFiltered(
-      colorFilter: _grayscale,
-      child: child,
-    );
-  }
+  Widget build(BuildContext context) => ColorFiltered(
+        colorFilter: _grayscale,
+        child: child,
+      );
 }

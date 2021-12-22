@@ -63,11 +63,10 @@ class MyUser {
       };
 
   @override
-  String toString() {
-    return 'MyUser{id: $id, uid: $uid, avatar: $avatar, email: $email, '
-        'nickname: $nickname, blockedUsers: $blockedUsers, '
-        'fcmTokens: $fcmTokens, favorites: $favorites}';
-  }
+  String toString() =>
+      'MyUser{id: $id, uid: $uid, avatar: $avatar, email: $email, '
+      'nickname: $nickname, blockedUsers: $blockedUsers, '
+      'fcmTokens: $fcmTokens, favorites: $favorites}';
 }
 
 Map<String, bool> _blockedUsersFromJson(Json json) {

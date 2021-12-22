@@ -28,7 +28,7 @@ class ChatUtil {
   /// print(user2Uid); // '1236'
   /// ```
   static String getUser2Uid({required String docID, required String user1Uid}) {
-    final List<String> userUidList = docID.split('_');
+    final userUidList = docID.split('_');
 
     return user1Uid == userUidList[0] ? userUidList[1] : userUidList[0];
   }
@@ -54,9 +54,9 @@ class ChatUtil {
 
   /// Constructs a [Json] from the given [message].
   static Json messageToJson({required types.Message message}) {
-    final bool isFileMessage = message is types.FileMessage;
-    final bool isImageMessage = message is types.ImageMessage;
-    final bool isTextMessage = message is types.TextMessage;
+    final isFileMessage = message is types.FileMessage;
+    final isImageMessage = message is types.ImageMessage;
+    final isTextMessage = message is types.TextMessage;
 
     return <String, dynamic>{
       'id': message.id,

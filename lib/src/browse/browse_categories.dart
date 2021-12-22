@@ -23,28 +23,24 @@ class _BrowseCategoriesState extends State<BrowseCategories> {
     super.initState();
   }
 
-  Widget buildCategories() {
-    return ListView.builder(
-      itemCount: categories.length,
-      itemBuilder: (context, index) {
-        final Category category = categories[index];
+  Widget buildCategories() => ListView.builder(
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final category = categories[index];
 
-        return CategoryItem(
-          onTap: () => NavigationUtil.navigate(
-            context,
-            DealsByCategory(category: category),
-          ),
-          category: category,
-        );
-      },
-    );
-  }
+          return CategoryItem(
+            onTap: () => NavigationUtil.navigate(
+              context,
+              DealsByCategory(category: category),
+            ),
+            category: category,
+          );
+        },
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-      child: buildCategories(),
-    );
-  }
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        child: buildCategories(),
+      );
 }

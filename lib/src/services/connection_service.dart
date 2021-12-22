@@ -36,11 +36,10 @@ class ConnectionService {
 
   // Checks if there is a connection.
   Future<bool> checkConnection() async {
-    final bool previousConnection = hasConnection;
+    final previousConnection = hasConnection;
 
     try {
-      final List<InternetAddress> result =
-          await InternetAddress.lookup('google.com');
+      final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         hasConnection = true;
       } else {

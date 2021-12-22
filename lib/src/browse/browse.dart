@@ -20,41 +20,35 @@ class _BrowseState extends State<Browse> with SingleTickerProviderStateMixin {
     super.initState();
   }
 
-  PreferredSizeWidget buildAppBar() {
-    return AppBar(
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(0),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 2),
-          child: TabBar(
-            controller: tabController,
-            isScrollable: true,
-            labelStyle: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+  PreferredSizeWidget buildAppBar() => AppBar(
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(0),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 2),
+            child: TabBar(
+              controller: tabController,
+              isScrollable: true,
+              labelStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              tabs: [
+                Tab(text: l(context).categories),
+                Tab(text: l(context).stores),
+              ],
             ),
-            tabs: [
-              Tab(text: l(context).categories),
-              Tab(text: l(context).stores),
-            ],
           ),
         ),
-      ),
-    );
-  }
+      );
 
-  Widget buildBody() {
-    return TabBarView(
-      controller: tabController,
-      children: const [BrowseCategories(), BrowseStores()],
-    );
-  }
+  Widget buildBody() => TabBarView(
+        controller: tabController,
+        children: const [BrowseCategories(), BrowseStores()],
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(),
-      body: buildBody(),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: buildAppBar(),
+        body: buildBody(),
+      );
 }

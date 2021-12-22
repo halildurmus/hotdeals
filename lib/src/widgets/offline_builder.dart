@@ -24,7 +24,7 @@ class OfflineBuilder extends StatefulWidget {
   })  : assert(
             !(builder is WidgetBuilder && child is Widget) &&
                 !(builder == null && child == null),
-            'You should specify either a builder or a child'),
+            'You need to provide either a builder or a child'),
         super(key: key);
 
   /// Override connectivity service used for testing
@@ -58,43 +58,40 @@ class OfflineBuilderState extends State<OfflineBuilder> with NetworkLoggy {
 
     _connectivityStream =
         Stream<bool>.fromFuture(widget.connectionService.checkConnection())
-            .asyncExpand((data) => widget
-                .connectionService.connectionChange
+            .asyncExpand((data) => widget.connectionService.connectionChange
                 .transform(startsWith(data)))
             .transform(debounce(widget.debounceDuration));
   }
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<bool>(
-      stream: _connectivityStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData && !snapshot.hasError) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text(appTitle),
-            ),
-            body: const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else if (snapshot.hasError) {
-          loggy.error(snapshot.error, snapshot.error);
-          if (widget.errorBuilder != null) {
-            return widget.errorBuilder!(context);
+  Widget build(BuildContext context) => StreamBuilder<bool>(
+        stream: _connectivityStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData && !snapshot.hasError) {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text(appTitle),
+              ),
+              body: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            loggy.error(snapshot.error, snapshot.error);
+            if (widget.errorBuilder != null) {
+              return widget.errorBuilder!(context);
+            }
+
+            throw _OfflineBuilderError(snapshot.error!);
           }
 
-          throw _OfflineBuilderError(snapshot.error!);
-        }
-
-        return widget.connectivityBuilder(
-          context,
-          snapshot.data!,
-          widget.child ?? widget.builder!(context),
-        );
-      },
-    );
-  }
+          return widget.connectivityBuilder(
+            context,
+            snapshot.data!,
+            widget.child ?? widget.builder!(context),
+          );
+        },
+      );
 }
 
 class _OfflineBuilderError extends Error {

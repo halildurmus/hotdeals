@@ -62,7 +62,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
             messageController.text.isNotEmpty ? messageController.text : null,
       );
 
-      final DealReport? sentReport =
+      final sentReport =
           await GetIt.I.get<SpringService>().sendDealReport(report: report);
       loggy.info(sentReport);
 
@@ -90,90 +90,88 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: StatefulBuilder(
-        builder: (context, setState) {
-          return Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  l(context).reportDeal,
-                  style: textTheme.headline6,
+        builder: (context, setState) => Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l(context).reportDeal,
+                style: textTheme.headline6,
+              ),
+              const SizedBox(height: 10),
+              CheckboxListTile(
+                title: Text(l(context).expired),
+                value: expiredCheckbox,
+                onChanged: (newValue) {
+                  setState(() {
+                    expiredCheckbox = newValue!;
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: Text(l(context).repost),
+                value: repostCheckbox,
+                onChanged: (newValue) {
+                  setState(() {
+                    repostCheckbox = newValue!;
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: Text(l(context).spam),
+                value: spamCheckbox,
+                onChanged: (newValue) {
+                  setState(() {
+                    spamCheckbox = newValue!;
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: Text(l(context).other),
+                value: otherCheckbox,
+                onChanged: (newValue) {
+                  setState(() {
+                    otherCheckbox = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: messageController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintStyle: textTheme.bodyText2!.copyWith(
+                      color: theme.brightness == Brightness.light
+                          ? Colors.black54
+                          : Colors.grey),
+                  hintText: l(context).enterSomeDetailsAboutReport,
                 ),
-                const SizedBox(height: 10),
-                CheckboxListTile(
-                  title: Text(l(context).expired),
-                  value: expiredCheckbox,
-                  onChanged: (newValue) {
-                    setState(() {
-                      expiredCheckbox = newValue!;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  title: Text(l(context).repost),
-                  value: repostCheckbox,
-                  onChanged: (newValue) {
-                    setState(() {
-                      repostCheckbox = newValue!;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  title: Text(l(context).spam),
-                  value: spamCheckbox,
-                  onChanged: (newValue) {
-                    setState(() {
-                      spamCheckbox = newValue!;
-                    });
-                  },
-                ),
-                CheckboxListTile(
-                  title: Text(l(context).other),
-                  value: otherCheckbox,
-                  onChanged: (newValue) {
-                    setState(() {
-                      otherCheckbox = newValue!;
-                    });
-                  },
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: messageController,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintStyle: textTheme.bodyText2!.copyWith(
-                        color: theme.brightness == Brightness.light
-                            ? Colors.black54
-                            : Colors.grey),
-                    hintText: l(context).enterSomeDetailsAboutReport,
-                  ),
-                  minLines: 1,
-                  maxLines: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: ElevatedButton(
-                    onPressed: expiredCheckbox ||
-                            repostCheckbox ||
-                            spamCheckbox ||
-                            otherCheckbox
-                        ? sendReport
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(deviceWidth, 45),
-                      primary: theme.colorScheme.secondary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+                minLines: 1,
+                maxLines: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: ElevatedButton(
+                  onPressed: expiredCheckbox ||
+                          repostCheckbox ||
+                          spamCheckbox ||
+                          otherCheckbox
+                      ? sendReport
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(deviceWidth, 45),
+                    primary: theme.colorScheme.secondary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    child: Text(l(context).reportDeal),
                   ),
-                )
-              ],
-            ),
-          );
-        },
+                  child: Text(l(context).reportDeal),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

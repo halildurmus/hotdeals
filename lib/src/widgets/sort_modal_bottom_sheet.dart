@@ -38,8 +38,9 @@ class SortModalBottomSheet extends StatelessWidget {
       if (isSelected) {
         return;
       }
-      searchParams.sortBy = filter.value['sortBy'];
-      searchParams.order = filter.value['order'];
+      searchParams
+        ..sortBy = filter.value['sortBy']
+        ..order = filter.value['order'];
       modalSetState(() {});
       onListTileTap.call();
     }

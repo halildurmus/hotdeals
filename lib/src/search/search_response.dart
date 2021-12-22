@@ -30,31 +30,29 @@ class SearchResponse {
     required this.hits,
   });
 
-  factory SearchResponse.fromJson(Json json) {
-    return SearchResponse(
-      aggAllFilters:
-          AggregationAllFilters.fromJson(json['aggregations']['aggAllFilters']),
-      aggCategory: (json['aggregations']['aggCategory']['stringFacets']
-                  ['aggSpecial']['names']['buckets'] as List<dynamic>)
-              .isNotEmpty
-          ? Aggregation.fromJson(json['aggregations']['aggCategory']
-              ['stringFacets']['aggSpecial']['names']['buckets'][0])
-          : null,
-      aggPrice: (json['aggregations']['aggPrice']['numberFacets']['aggSpecial']
-                  ['names']['buckets'] as List<dynamic>)
-              .isNotEmpty
-          ? Aggregation.fromJson(json['aggregations']['aggPrice']
-              ['numberFacets']['aggSpecial']['names']['buckets'][0])
-          : null,
-      aggStore: (json['aggregations']['aggStore']['stringFacets']['aggSpecial']
-                  ['names']['buckets'] as List<dynamic>)
-              .isNotEmpty
-          ? Aggregation.fromJson(json['aggregations']['aggStore']
-              ['stringFacets']['aggSpecial']['names']['buckets'][0])
-          : null,
-      hits: Hits.fromJson(json['hits']),
-    );
-  }
+  factory SearchResponse.fromJson(Json json) => SearchResponse(
+        aggAllFilters: AggregationAllFilters.fromJson(
+            json['aggregations']['aggAllFilters']),
+        aggCategory: (json['aggregations']['aggCategory']['stringFacets']
+                    ['aggSpecial']['names']['buckets'] as List<dynamic>)
+                .isNotEmpty
+            ? Aggregation.fromJson(json['aggregations']['aggCategory']
+                ['stringFacets']['aggSpecial']['names']['buckets'][0])
+            : null,
+        aggPrice: (json['aggregations']['aggPrice']['numberFacets']
+                    ['aggSpecial']['names']['buckets'] as List<dynamic>)
+                .isNotEmpty
+            ? Aggregation.fromJson(json['aggregations']['aggPrice']
+                ['numberFacets']['aggSpecial']['names']['buckets'][0])
+            : null,
+        aggStore: (json['aggregations']['aggStore']['stringFacets']
+                    ['aggSpecial']['names']['buckets'] as List<dynamic>)
+                .isNotEmpty
+            ? Aggregation.fromJson(json['aggregations']['aggStore']
+                ['stringFacets']['aggSpecial']['names']['buckets'][0])
+            : null,
+        hits: Hits.fromJson(json['hits']),
+      );
 
   final AggregationAllFilters? aggAllFilters;
   final Aggregation? aggCategory;
@@ -63,9 +61,8 @@ class SearchResponse {
   final Hits hits;
 
   @override
-  String toString() {
-    return 'SearchResponse(aggAllFilters: $aggAllFilters, aggCategory: $aggCategory, aggPrice: $aggPrice, aggStore: $aggStore, hits: $hits)';
-  }
+  String toString() =>
+      'SearchResponse(aggAllFilters: $aggAllFilters, aggCategory: $aggCategory, aggPrice: $aggPrice, aggStore: $aggStore, hits: $hits)';
 }
 
 class AggregationAllFilters {
@@ -126,15 +123,13 @@ class Aggregation {
     required this.facetName,
   });
 
-  factory Aggregation.fromJson(dynamic json) {
-    return Aggregation(
-      buckets: List<Bucket>.from(
-        json['values']['buckets'].map(Bucket.fromJson),
-      )..sort((a, b) => a.key.compareTo(b.key)),
-      docCount: json['doc_count'] as int,
-      facetName: json['key'] as String,
-    );
-  }
+  factory Aggregation.fromJson(dynamic json) => Aggregation(
+        buckets: List<Bucket>.from(
+          json['values']['buckets'].map(Bucket.fromJson),
+        )..sort((a, b) => a.key.compareTo(b.key)),
+        docCount: json['doc_count'] as int,
+        facetName: json['key'] as String,
+      );
 
   final List<Bucket> buckets;
   final int docCount;

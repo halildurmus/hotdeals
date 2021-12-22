@@ -25,7 +25,7 @@ class MessageAppBar extends StatefulWidget {
 
 class _MessageAppBarState extends State<MessageAppBar> {
   Future<void> _confirmBlockUser(BuildContext context) async {
-    final bool _didRequestBlockUser = await CustomAlertDialog(
+    final _didRequestBlockUser = await CustomAlertDialog(
           title: l(context).blockUser,
           content: l(context).blockConfirm,
           cancelActionText: l(context).cancel,
@@ -33,7 +33,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
         ).show(context) ??
         false;
     if (_didRequestBlockUser == true) {
-      final bool _result = await GetIt.I
+      final _result = await GetIt.I
           .get<SpringService>()
           .blockUser(userId: widget.user2.id!);
       if (_result) {
@@ -54,7 +54,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
   }
 
   Future<void> _confirmUnblockUser(BuildContext context) async {
-    final bool _didRequestUnblockUser = await CustomAlertDialog(
+    final _didRequestUnblockUser = await CustomAlertDialog(
           title: l(context).unblockUser,
           content: l(context).unblockConfirm,
           cancelActionText: l(context).cancel,
@@ -62,7 +62,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
         ).show(context) ??
         false;
     if (_didRequestUnblockUser == true) {
-      final bool _result = await GetIt.I
+      final _result = await GetIt.I
           .get<SpringService>()
           .unblockUser(userId: widget.user2.id!);
       if (_result) {
@@ -84,13 +84,11 @@ class _MessageAppBarState extends State<MessageAppBar> {
     final _user = Provider.of<UserController>(context).user!;
     final _isUserBlocked = _user.blockedUsers!.containsKey(widget.user2.id!);
 
-    Future<void> _onPressedReport() async {
-      return showDialog<void>(
-        context: context,
-        builder: (context) =>
-            ReportUserDialog(reportedUserId: widget.user2.id!),
-      );
-    }
+    Future<void> _onPressedReport() async => showDialog<void>(
+          context: context,
+          builder: (context) =>
+              ReportUserDialog(reportedUserId: widget.user2.id!),
+        );
 
     return AppBar(
       titleSpacing: 0,

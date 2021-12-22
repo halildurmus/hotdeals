@@ -48,7 +48,7 @@ Future<void> _setupCrashlytics() async {
     // Disable Crashlytics collection while doing every day development.
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
   }
-  Function originalOnError = FlutterError.onError!;
+  final Function originalOnError = FlutterError.onError!;
   FlutterError.onError = (errorDetails) async {
     logError(errorDetails.toString());
     if (kReleaseMode) {
@@ -105,7 +105,7 @@ void _initEnvConfig() {
 
 Future<void> _initSettings() async {
   // Initializes a new SharedPreferences instance.
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final prefs = await SharedPreferences.getInstance();
   // Sets up the SearchService, and registers it as a Singleton class.
   GetIt.I.registerSingleton<SearchService>(SearchService(prefs));
   // Sets up the SettingsController, and registers it as a Singleton class.
@@ -116,22 +116,22 @@ Future<void> _initSettings() async {
 }
 
 void _registerSingletonClasses() {
-  final GetIt getIt = GetIt.I;
-  getIt.registerSingleton<CurrentRoute>(CurrentRoute());
-  getIt.registerSingleton<ConnectionService>(ConnectionService()..initialize());
-  getIt.registerSingleton<PushNotificationService>(
-      PushNotificationService()..load());
-  getIt.registerSingleton<FirebaseStorageService>(FirebaseStorageService());
-  getIt.registerSingleton<FirestoreService>(FirestoreService());
-  getIt.registerSingleton<ImagePickerService>(ImagePickerService());
-  getIt.registerSingleton<SpringService>(SpringService());
-  getIt.registerSingleton<Categories>(Categories());
-  getIt.registerSingleton<Stores>(Stores());
-  getIt.registerSingleton<LoadingDialog>(const LoadingDialog());
-  getIt.registerSingleton<SignInDialog>(const SignInDialog());
+  GetIt.I
+    ..registerSingleton<CurrentRoute>(CurrentRoute())
+    ..registerSingleton<ConnectionService>(ConnectionService()..initialize())
+    ..registerSingleton<PushNotificationService>(
+        PushNotificationService()..load())
+    ..registerSingleton<FirebaseStorageService>(FirebaseStorageService())
+    ..registerSingleton<FirestoreService>(FirestoreService())
+    ..registerSingleton<ImagePickerService>(ImagePickerService())
+    ..registerSingleton<SpringService>(SpringService())
+    ..registerSingleton<Categories>(Categories())
+    ..registerSingleton<Stores>(Stores())
+    ..registerSingleton<LoadingDialog>(const LoadingDialog())
+    ..registerSingleton<SignInDialog>(const SignInDialog());
 }
 
-void main() async {
+Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {
     _initLoggy();
     WidgetsFlutterBinding.ensureInitialized();

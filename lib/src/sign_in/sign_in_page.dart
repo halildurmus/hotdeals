@@ -15,13 +15,12 @@ class SignInPageBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService auth = Provider.of<AuthService>(context, listen: false);
+    final auth = Provider.of<AuthService>(context, listen: false);
 
     return ChangeNotifierProvider<ValueNotifier<bool>>(
       create: (_) => ValueNotifier<bool>(false),
       child: Consumer<ValueNotifier<bool>>(
-        builder: (_, isLoading, __) =>
-            Provider<SignInManager>(
+        builder: (_, isLoading, __) => Provider<SignInManager>(
           create: (_) => SignInManager(auth: auth, isLoading: isLoading),
           child: Consumer<SignInManager>(
             builder: (_, manager, __) => SignInPage._(
@@ -118,20 +117,18 @@ class SignInPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(l(context).signIn),
-        actions: [
-          IconButton(
-            onPressed: () =>
-                Navigator.of(context).pushNamed(SettingsView.routeName),
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
-      body: isLoading ? buildLoadingIndicator(context) : buildSignIn(context),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(l(context).signIn),
+          actions: [
+            IconButton(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed(SettingsView.routeName),
+              icon: const Icon(Icons.settings),
+            ),
+          ],
+        ),
+        body: isLoading ? buildLoadingIndicator(context) : buildSignIn(context),
+      );
 }

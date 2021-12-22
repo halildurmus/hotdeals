@@ -61,25 +61,24 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
   }
 
   @override
-  Widget build(BuildContext context) {
-    return PagedSliverList.separated(
-      pagingController: _pagingController,
-      builderDelegate: PagedChildBuilderDelegate<Comment>(
-        animateTransitions: true,
-        itemBuilder: (context, comment, index) => CommentItem(comment: comment),
-        firstPageErrorIndicatorBuilder: (context) =>
-            ErrorIndicatorUtil.buildFirstPageError(
-          context,
-          onTryAgain: _pagingController.refresh,
+  Widget build(BuildContext context) => PagedSliverList.separated(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<Comment>(
+          animateTransitions: true,
+          itemBuilder: (context, comment, index) =>
+              CommentItem(comment: comment),
+          firstPageErrorIndicatorBuilder: (context) =>
+              ErrorIndicatorUtil.buildFirstPageError(
+            context,
+            onTryAgain: _pagingController.refresh,
+          ),
+          newPageErrorIndicatorBuilder: (context) =>
+              ErrorIndicatorUtil.buildNewPageError(
+            context,
+            onTryAgain: _pagingController.refresh,
+          ),
+          noItemsFoundIndicatorBuilder: (context) => widget.noCommentsFound,
         ),
-        newPageErrorIndicatorBuilder: (context) =>
-            ErrorIndicatorUtil.buildNewPageError(
-          context,
-          onTryAgain: _pagingController.refresh,
-        ),
-        noItemsFoundIndicatorBuilder: (context) => widget.noCommentsFound,
-      ),
-      separatorBuilder: (context, index) => const SizedBox(height: 10),
-    );
-  }
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+      );
 }

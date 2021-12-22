@@ -19,7 +19,7 @@ class SettingsService {
   ///
   /// If the preferred language is not found then [Platform.localeName] is used.
   Future<Locale> locale() async {
-    final String languageTag =
+    final languageTag =
         _prefs.getString(_languageKey) ?? Platform.localeName.split('_')[0];
 
     return Locale(languageTag);
@@ -32,7 +32,7 @@ class SettingsService {
 
   /// Loads the user's preferred [ThemeMode] from [SharedPreferences].
   Future<ThemeMode> themeMode() async {
-    final String? appThemeValue = _prefs.getString(_themeKey);
+    final appThemeValue = _prefs.getString(_themeKey);
     if (appThemeValue == 'light') {
       return ThemeMode.light;
     } else if (appThemeValue == 'dark') {

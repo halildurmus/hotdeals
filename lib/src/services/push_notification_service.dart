@@ -45,7 +45,7 @@ class PushNotificationService extends ChangeNotifier {
 
   /// Opens the database and sets the database reference.
   Future<void> load() async {
-    final String path = join(await getDatabasesPath(), 'core.db');
+    final path = join(await getDatabasesPath(), 'core.db');
     _db = await openDatabase(
       path,
       version: 1,

@@ -34,16 +34,13 @@ class DealReport {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  Json toJson() {
-    return <String, dynamic>{
-      'reportedDeal': reportedDeal,
-      'reasons': reasons.map((e) => e.name.toUpperCase()).toList(),
-      if (message != null) 'message': message,
-    };
-  }
+  Json toJson() => <String, dynamic>{
+        'reportedDeal': reportedDeal,
+        'reasons': reasons.map((e) => e.name.toUpperCase()).toList(),
+        if (message != null) 'message': message,
+      };
 
   @override
-  String toString() {
-    return 'DealReport{id: $id, reportedBy: $reportedBy, reportedDeal: $reportedDeal, reasons: $reasons, message: $message, createdAt: $createdAt, updatedAt: $updatedAt}';
-  }
+  String toString() =>
+      'DealReport{id: $id, reportedBy: $reportedBy, reportedDeal: $reportedDeal, reasons: $reasons, message: $message, createdAt: $createdAt, updatedAt: $updatedAt}';
 }

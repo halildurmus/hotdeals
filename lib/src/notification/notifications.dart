@@ -92,12 +92,10 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     }
   }
 
-  Widget buildNoNotificationsFound(BuildContext context) {
-    return ErrorIndicator(
-      icon: Icons.notifications_none_outlined,
-      title: l(context).noNotifications,
-    );
-  }
+  Widget buildNoNotificationsFound(BuildContext context) => ErrorIndicator(
+        icon: Icons.notifications_none_outlined,
+        title: l(context).noNotifications,
+      );
 
   List<PushNotification> _getSelectedNotifications() {
     final selectedItems = Map.from(_items)..removeWhere((k, v) => v == false);
@@ -108,7 +106,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   }
 
   Future<void> _markSelectedAsRead() async {
-    int updatedNotificationCount = 0;
+    var updatedNotificationCount = 0;
     final notifications = _getSelectedNotifications();
     final ids = <int>[];
     setState(() {
@@ -131,7 +129,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   }
 
   Future<void> _markSelectedAsUnread() async {
-    int updatedNotificationCount = 0;
+    var updatedNotificationCount = 0;
     final notifications = _getSelectedNotifications();
     final ids = <int>[];
     setState(() {
@@ -175,50 +173,48 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     });
   }
 
-  Widget _buildPagedListView() {
-    return PagedListView.separated(
-      pagingController: _pagingController,
-      builderDelegate: PagedChildBuilderDelegate<PushNotification>(
-        animateTransitions: true,
-        itemBuilder: (context, notification, index) {
-          final notificationId = notification.id!;
-          _items[notificationId] ??= false;
-          final isSelected = _items[notificationId]!;
+  Widget _buildPagedListView() => PagedListView.separated(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<PushNotification>(
+          animateTransitions: true,
+          itemBuilder: (context, notification, index) {
+            final notificationId = notification.id!;
+            _items[notificationId] ??= false;
+            final isSelected = _items[notificationId]!;
 
-          return NotificationItem(
-            isSelectionMode: _isSelectionMode,
-            isSelected: isSelected,
-            notification: notification,
-            onLongPress: () => _onLongPress(isSelected, notification),
-            onTap: () => _onTap(isSelected, notification),
-          );
-        },
-        firstPageErrorIndicatorBuilder: (context) =>
-            ErrorIndicatorUtil.buildFirstPageError(
-          context,
-          onTryAgain: _pagingController.refresh,
+            return NotificationItem(
+              isSelectionMode: _isSelectionMode,
+              isSelected: isSelected,
+              notification: notification,
+              onLongPress: () => _onLongPress(isSelected, notification),
+              onTap: () => _onTap(isSelected, notification),
+            );
+          },
+          firstPageErrorIndicatorBuilder: (context) =>
+              ErrorIndicatorUtil.buildFirstPageError(
+            context,
+            onTryAgain: _pagingController.refresh,
+          ),
+          newPageErrorIndicatorBuilder: (context) =>
+              ErrorIndicatorUtil.buildNewPageError(
+            context,
+            onTryAgain: _pagingController.refresh,
+          ),
+          noItemsFoundIndicatorBuilder: buildNoNotificationsFound,
         ),
-        newPageErrorIndicatorBuilder: (context) =>
-            ErrorIndicatorUtil.buildNewPageError(
-          context,
-          onTryAgain: _pagingController.refresh,
+        separatorBuilder: (context, index) => const Divider(
+          height: 0,
+          indent: 16,
+          endIndent: 16,
         ),
-        noItemsFoundIndicatorBuilder: buildNoNotificationsFound,
-      ),
-      separatorBuilder: (context, index) => const Divider(
-        height: 0,
-        indent: 16,
-        endIndent: 16,
-      ),
-    );
-  }
+      );
 
   PreferredSizeWidget _buildAppBar() {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
-    bool isSelectedItemAvailable = false;
-    bool isSelectedUnreadItemAvailable = false;
-    int selectedItemCount = 0;
+    var isSelectedItemAvailable = false;
+    var isSelectedUnreadItemAvailable = false;
+    var selectedItemCount = 0;
     if (_isSelectionMode) {
       isSelectedItemAvailable = _items.containsValue(true);
       selectedItemCount = _items.values.where((e) => e == true).length;
@@ -299,24 +295,20 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     return Future<bool>.value(true);
   }
 
-  Widget _buildSignIn() {
-    return ErrorIndicator(
-      icon: Icons.notifications_none_outlined,
-      title: l(context).youNeedToSignIn,
-    );
-  }
+  Widget _buildSignIn() => ErrorIndicator(
+        icon: Icons.notifications_none_outlined,
+        title: l(context).youNeedToSignIn,
+      );
 
   @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        appBar: _buildAppBar(),
-        body: RefreshIndicator(
-          onRefresh: () => Future.sync(_pagingController.refresh),
-          child: _user == null ? _buildSignIn() : _buildPagedListView(),
+  Widget build(BuildContext context) => WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          appBar: _buildAppBar(),
+          body: RefreshIndicator(
+            onRefresh: () => Future.sync(_pagingController.refresh),
+            child: _user == null ? _buildSignIn() : _buildPagedListView(),
+          ),
         ),
-      ),
-    );
-  }
+      );
 }

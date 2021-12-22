@@ -10,7 +10,5 @@ class MessageArguments {
   final MyUser user2;
 
   @override
-  String toString() {
-    return 'MessageArguments{docId: $docId, user2: $user2}';
-  }
+  String toString() => 'MessageArguments{docId: $docId, user2: $user2}';
 }

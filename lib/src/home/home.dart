@@ -28,14 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: screens.elementAt(activeScreen),
-      bottomNavigationBar: MyBottomNavigationBar(
-        activeScreen,
-        (value) => setState(() => activeScreen = value),
-      ),
-      resizeToAvoidBottomInset: false,
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        body: screens.elementAt(activeScreen),
+        bottomNavigationBar: MyBottomNavigationBar(
+          activeScreen,
+          (value) => setState(() => activeScreen = value),
+        ),
+        resizeToAvoidBottomInset: false,
+      );
 }

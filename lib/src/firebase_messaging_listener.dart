@@ -5,7 +5,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show logDebug;
 
-import 'chat/message_arguments.dart';
 import 'chat/message_screen.dart';
 import 'models/current_route.dart';
 import 'models/notification_verb.dart';
@@ -19,8 +18,7 @@ Future<void> subscribeToFCM() async {
   final pushNotificationService = GetIt.I.get<PushNotificationService>();
   // Get any messages which caused the application to open from
   // a terminated state.
-  final RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
+  final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
     // TODO(halildurmus): Handle initialMessage
     logDebug('Initial message: $initialMessage');
@@ -64,10 +62,9 @@ Future<void> subscribeToFCM() async {
           priority: Priority.defaultPriority,
         );
       } else if (pushNotification.verb == NotificationVerb.message) {
-        final String currentRoute = GetIt.I.get<CurrentRoute>().routeName;
-        final MessageArguments? messageArguments =
-            GetIt.I.get<CurrentRoute>().messageArguments;
-        final String? messageDocId = messageArguments?.docId;
+        final currentRoute = GetIt.I.get<CurrentRoute>().routeName;
+        final messageArguments = GetIt.I.get<CurrentRoute>().messageArguments;
+        final messageDocId = messageArguments?.docId;
         // Don't show notification if the conversation is on foreground.
         if (currentRoute != MessageScreen.routeName &&
             messageDocId != pushNotification.object) {

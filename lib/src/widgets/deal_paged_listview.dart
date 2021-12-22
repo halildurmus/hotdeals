@@ -71,12 +71,13 @@ class _DealPagedListViewState extends State<DealPagedListView>
   void initState() {
     _pagingController =
         widget.pagingController ?? PagingController<int, Deal>(firstPageKey: 0);
-    _pagingController.addStatusListener((status) {
-      if (mounted) {
-        setState(() => _pagingStatus = status);
-      }
-    });
-    _pagingController.addPageRequestListener(_fetchPage);
+    _pagingController
+      ..addStatusListener((status) {
+        if (mounted) {
+          setState(() => _pagingStatus = status);
+        }
+      })
+      ..addPageRequestListener(_fetchPage);
     super.initState();
   }
 
@@ -119,10 +120,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
     }
 
     if (!isFavorited) {
-      GetIt.I
-          .get<SpringService>()
-          .favoriteDeal(dealId: dealId)
-          .then((result) {
+      GetIt.I.get<SpringService>().favoriteDeal(dealId: dealId).then((result) {
         if (result) {
           Provider.of<UserController>(context, listen: false).getUser();
         } else {
@@ -156,7 +154,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
 
   @override
   Widget build(BuildContext context) {
-    final MyUser? user = Provider.of<UserController>(context).user;
+    final user = Provider.of<UserController>(context).user;
     final searchHitsIsNotEmpty = _searchResponse?.hits.docCount != 0;
     final itemListIsEmpty = _pagingController.itemList?.isEmpty ?? false;
     final shouldShowFilterBar = widget.showFilterBar && _pagingStatus != null;
@@ -164,39 +162,38 @@ class _DealPagedListViewState extends State<DealPagedListView>
         widget.searchParams?.filterCount != 0 &&
         itemListIsEmpty;
 
-    Widget buildPagedListView() {
-      return PagedListView(
-        pagingController: _pagingController,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        builderDelegate: PagedChildBuilderDelegate<Deal>(
-          animateTransitions: true,
-          itemBuilder: (context, deal, index) {
-            final bool isFavorited = user?.favorites![deal.id!] ?? false;
+    Widget buildPagedListView() => PagedListView(
+          pagingController: _pagingController,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          builderDelegate: PagedChildBuilderDelegate<Deal>(
+            animateTransitions: true,
+            itemBuilder: (context, deal, index) {
+              final isFavorited = user?.favorites![deal.id!] ?? false;
 
-            return DealItem(
-              deal: deal,
-              index: index,
-              isFavorited: isFavorited,
-              onFavoriteButtonPressed: () =>
-                  onFavoriteButtonPressed(user, deal.id!, isFavorited),
-              pagingController: _pagingController,
-              showControlButtons: user != null && (deal.postedBy! == user.id!),
-            );
-          },
-          firstPageErrorIndicatorBuilder: (context) =>
-              ErrorIndicatorUtil.buildFirstPageError(
-            context,
-            onTryAgain: _pagingController.refresh,
+              return DealItem(
+                deal: deal,
+                index: index,
+                isFavorited: isFavorited,
+                onFavoriteButtonPressed: () =>
+                    onFavoriteButtonPressed(user, deal.id!, isFavorited),
+                pagingController: _pagingController,
+                showControlButtons:
+                    user != null && (deal.postedBy! == user.id!),
+              );
+            },
+            firstPageErrorIndicatorBuilder: (context) =>
+                ErrorIndicatorUtil.buildFirstPageError(
+              context,
+              onTryAgain: _pagingController.refresh,
+            ),
+            newPageErrorIndicatorBuilder: (context) =>
+                ErrorIndicatorUtil.buildNewPageError(
+              context,
+              onTryAgain: _pagingController.refresh,
+            ),
+            noItemsFoundIndicatorBuilder: (context) => widget.noDealsFound,
           ),
-          newPageErrorIndicatorBuilder: (context) =>
-              ErrorIndicatorUtil.buildNewPageError(
-            context,
-            onTryAgain: _pagingController.refresh,
-          ),
-          noItemsFoundIndicatorBuilder: (context) => widget.noDealsFound,
-        ),
-      );
-    }
+        );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
