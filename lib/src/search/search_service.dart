@@ -34,8 +34,8 @@ class SearchService {
     _prefs.setStringList(_recentSearchesKey, _recentSearches);
   }
 
-  /// Removes the query from local storage.
-  void removeQuery(String query) {
+  /// Deletes the query from local storage.
+  void deleteQuery(String query) {
     final _recentSearches = recentSearches();
     if (_recentSearches.contains(query)) {
       _recentSearches.remove(query);

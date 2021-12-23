@@ -110,7 +110,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<bool> removeDeal({required String dealId}) async {
+  Future<bool> deleteDeal({required String dealId}) async {
     final url = '$_baseUrl/deals/$dealId';
     try {
       final response = await _httpService.delete(url);
@@ -392,7 +392,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<bool> removeFCMToken({required String token}) async {
+  Future<bool> deleteFCMToken({required String token}) async {
     final url = '$_baseUrl/users/me/fcm-tokens';
     final data = <String, dynamic>{'token': token};
     try {
@@ -401,7 +401,7 @@ class SpringService with NetworkLoggy {
       return response.statusCode == 204;
     } on Exception catch (e) {
       loggy.error(e, e);
-      throw Exception('An error occurred while removing FCM token!');
+      throw Exception('An error occurred while deleting FCM token!');
     }
   }
 

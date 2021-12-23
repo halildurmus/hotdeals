@@ -53,7 +53,7 @@ class _SearchBarState extends State<SearchBar> {
 
   Widget buildRecentSearches() {
     void onIconButtonPressed(String query) =>
-        setState(() => searchService.removeQuery(query));
+        setState(() => searchService.deleteQuery(query));
 
     final recentSearches = searchService.recentSearches();
     if (recentSearches.isEmpty) return const SizedBox();
