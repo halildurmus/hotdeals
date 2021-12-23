@@ -24,8 +24,8 @@ class PostDeal extends StatefulWidget {
 
 class _PostDealState extends State<PostDeal> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late List<Category> categories;
-  late List<Store> stores;
+  late final List<Category> categories;
+  late final List<Store> stores;
   late Category selectedCategory;
   late Store selectedStore;
   late TextEditingController dealUrlController;
