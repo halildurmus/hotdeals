@@ -160,25 +160,6 @@ class _PostDealState extends State<PostDeal> {
               .toList(),
         );
 
-    bool areImagesReady() {
-      var value = false;
-
-      if (dealImages.first.storageReference == null) {
-        return value;
-      }
-
-      for (var i = 0; i < dealImages.length; i++) {
-        if (dealImages[i].uploadProcessing) {
-          value = false;
-          break;
-        } else {
-          value = true;
-        }
-      }
-
-      return value;
-    }
-
     Future<void> onPressed() async {
       if (dealImages.first.storageReference == null) {
         final snackBar = CustomSnackBar(
@@ -197,20 +178,14 @@ class _PostDealState extends State<PostDeal> {
       }
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
-      final coverPhoto =
-          await dealImages.first.storageReference!.getDownloadURL();
-      final photos = <String>[];
-      for (var i = 1; i < dealImages.length - 1; i++) {
-        photos.add(await dealImages[i].storageReference!.getDownloadURL());
-      }
-
+      final photos = await DealUtil.getDownloadUrls(dealImages);
       final deal = Deal(
         title: titleController.text,
         description: descriptionController.text,
         category: selectedCategory.category,
         store: selectedStore.id!,
-        coverPhoto: coverPhoto,
-        photos: photos,
+        coverPhoto: photos.first,
+        photos: photos.skip(1).toList(),
         dealUrl: dealUrlController.text,
         originalPrice: double.parse(originalPriceController.text),
         price: double.parse(priceController.text),
