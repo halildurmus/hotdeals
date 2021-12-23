@@ -14,6 +14,7 @@ import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
+import 'deal_util.dart';
 
 class PostDeal extends StatefulWidget {
   const PostDeal({Key? key}) : super(key: key);
@@ -179,10 +180,17 @@ class _PostDealState extends State<PostDeal> {
     }
 
     Future<void> onPressed() async {
-      if (!areImagesReady()) {
+      if (dealImages.first.storageReference == null) {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
           text: l(context).pleaseUploadAtLeastOneImage,
+        ).buildSnackBar(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      } else if (DealUtil.isUploadInProgress(dealImages)) {
+        final snackBar = CustomSnackBar(
+          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          text: l(context).pleaseWaitForImageUploads,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return;
