@@ -14,6 +14,7 @@ import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
+import 'deal_details.dart';
 import 'deal_util.dart';
 
 class PostDeal extends StatefulWidget {
@@ -202,7 +203,11 @@ class _PostDealState extends State<PostDeal> {
           text: l(context).successfullyPostedYourDeal,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => DealDetails(dealId: postedDeal.id!),
+          ),
+        );
       } else {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
