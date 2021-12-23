@@ -88,10 +88,7 @@ class _DealItemState extends State<DealItem> {
             color: theme.brightness == Brightness.dark ? Colors.white : null,
             borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
-          child: Hero(
-            tag: deal.id!,
-            child: Image.network(deal.coverPhoto, fit: BoxFit.cover),
-          ),
+          child: Image.network(deal.coverPhoto, fit: BoxFit.cover),
         );
 
     Widget buildDealTitle() => SizedBox(

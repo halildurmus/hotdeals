@@ -118,10 +118,7 @@ class _DealDetailsState extends State<DealDetails> {
                   color: isDarkMode ? Colors.white : null,
                 ),
                 padding: isDarkMode ? const EdgeInsets.all(2) : null,
-                child: Hero(
-                  tag: _deal!.id!,
-                  child: Image.network(item, fit: BoxFit.cover),
-                ),
+                child: Image.network(item, fit: BoxFit.cover),
               ),
             ))
         .toList();
