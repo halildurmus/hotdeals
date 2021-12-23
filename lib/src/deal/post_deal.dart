@@ -281,7 +281,7 @@ class _PostDealState extends State<PostDeal> {
             if (value == null || value.isEmpty) {
               return l(context).pleaseEnterTheOriginalPrice;
             } else if (priceController.text.isNotEmpty &&
-                (int.parse(value) < int.parse(priceController.text))) {
+                (double.parse(value) < double.parse(priceController.text))) {
               return l(context).originalPriceCannotBeLower;
             }
 
@@ -302,7 +302,8 @@ class _PostDealState extends State<PostDeal> {
             if (value == null || value.isEmpty) {
               return l(context).pleaseEnterThePrice;
             } else if (originalPriceController.text.isNotEmpty &&
-                (int.parse(value) > int.parse(originalPriceController.text))) {
+                (double.parse(value) >
+                    double.parse(originalPriceController.text))) {
               return l(context).priceCannotBeGreater;
             }
 
