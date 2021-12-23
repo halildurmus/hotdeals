@@ -271,7 +271,7 @@ class _DealDetailsState extends State<DealDetails> {
                   });
                 }
               },
-              heroTag: 'favoriteFAB',
+              heroTag: null,
               backgroundColor: theme.backgroundColor,
               elevation: 3,
               child: Icon(

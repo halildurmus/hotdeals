@@ -214,7 +214,7 @@ class _DealItemState extends State<DealItem> {
           child: FloatingActionButton(
             onPressed: widget.onFavoriteButtonPressed,
             backgroundColor: theme.backgroundColor,
-            heroTag: 'fav-btn${widget.index}',
+            heroTag: null,
             mini: true,
             child: Icon(
               widget.isFavorited
