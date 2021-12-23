@@ -6,6 +6,7 @@ class DealUtil {
       jobs.where((e) => e.uploadProcessing == true).isNotEmpty;
 
   static Future<List<String>> getDownloadUrls(List<UploadJob> jobs) async =>
-      Future.wait<String>(
-          jobs.map((e) => e.storageReference!.getDownloadURL()));
+      Future.wait<String>(jobs
+          .where((e) => e.storageReference != null)
+          .map((e) => e.storageReference!.getDownloadURL()));
 }
