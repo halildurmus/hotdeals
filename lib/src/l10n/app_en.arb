@@ -960,6 +960,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "pleaseWaitForImageUploads": "Please wait for the image uploads to complete.",
+  "@pleaseWaitForImageUploads": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "postDeal": "Post Deal",
   "@postDeal": {
     "description": "",
@@ -1102,6 +1109,13 @@
   },
   "postedYourComment": "Successfully posted your comment",
   "@postedYourComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "updateDeal": "Update Deal",
+  "@updateDeal": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
