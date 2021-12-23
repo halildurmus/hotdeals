@@ -161,7 +161,7 @@ class _PostDealState extends State<PostDeal> {
         );
 
     Future<void> onPressed() async {
-      if (dealImages.first.storageReference == null) {
+      if (dealImages.length == 1) {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
           text: l(context).pleaseUploadAtLeastOneImage,
