@@ -30,8 +30,9 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController nicknameController;
+  late FocusNode nicknameFocusNode;
   late VoidCallback showLoadingDialog;
   late MyUser user;
 
@@ -184,7 +185,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Form(
-                  key: _formKey,
+                  key: formKey,
                   child: TextFormField(
                     controller: nicknameController,
                     decoration: InputDecoration(
@@ -192,6 +193,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                       errorMaxLines: 2,
                       labelText: l(context).nickname,
                     ),
+                    focusNode: nicknameFocusNode,
                     maxLength: 25,
                     maxLengthEnforcement: MaxLengthEnforcement.enforced,
                     onChanged: (text) => setState(() {}),
@@ -207,7 +209,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: nicknameController.text != user.nickname &&
-                          (_formKey.currentState?.validate() ?? false)
+                          (formKey.currentState?.validate() ?? false)
                       ? () => updateNickname(user.id!, nicknameController.text)
                       : null,
                   style: ElevatedButton.styleFrom(
@@ -235,12 +237,14 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
         () => GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
     final user = context.read<UserController>().user!;
     nicknameController = TextEditingController(text: user.nickname);
+    nicknameFocusNode = FocusNode()..requestFocus();
     super.initState();
   }
 
   @override
   void dispose() {
     nicknameController.dispose();
+    nicknameFocusNode.dispose();
     super.dispose();
   }
 
