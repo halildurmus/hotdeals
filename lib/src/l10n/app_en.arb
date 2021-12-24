@@ -1065,6 +1065,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "successfullyUpdatedYourDeal": "Successfully updated your deal",
+  "@successfullyUpdatedYourDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "pleaseEnterValidUrl": "Please enter a valid URL.",
   "@pleaseEnterValidUrl": {
     "description": "",

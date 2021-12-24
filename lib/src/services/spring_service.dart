@@ -110,6 +110,23 @@ class SpringService with NetworkLoggy {
     }
   }
 
+  Future<Deal?> updateDeal({required Deal deal}) async {
+    final url = '$_baseUrl/deals/${deal.id!}';
+    try {
+      final response = await _httpService.put(url, deal.toJson());
+      if (response.statusCode == 200) {
+        final updatedDeal = Deal.fromJson(jsonDecode(response.body) as Json);
+
+        return updatedDeal;
+      }
+
+      return null;
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      return null;
+    }
+  }
+
   Future<bool> deleteDeal({required String dealId}) async {
     final url = '$_baseUrl/deals/$dealId';
     try {

@@ -18,7 +18,9 @@ class DealItem extends StatefulWidget {
     required this.deal,
     required this.index,
     required this.isFavorited,
+    required this.onEditButtonPressed,
     required this.onFavoriteButtonPressed,
+    required this.onRemoveButtonPressed,
     required this.pagingController,
     required this.showControlButtons,
   }) : super(key: key);
@@ -26,7 +28,9 @@ class DealItem extends StatefulWidget {
   final Deal deal;
   final int index;
   final bool isFavorited;
+  final VoidCallback onEditButtonPressed;
   final VoidCallback onFavoriteButtonPressed;
+  final VoidCallback onRemoveButtonPressed;
   final PagingController pagingController;
   final bool showControlButtons;
 
@@ -73,6 +77,7 @@ class _DealItemState extends State<DealItem> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     final textTheme = theme.textTheme;
     final deviceWidth = MediaQuery.of(context).size.width;
     final deal = widget.deal;
@@ -99,6 +104,37 @@ class _DealItemState extends State<DealItem> {
             overflow: TextOverflow.ellipsis,
             softWrap: false,
             style: textTheme.headline6!.copyWith(fontSize: 18),
+          ),
+        );
+
+    Widget buildControlButtons() => Positioned(
+          right: 48,
+          top: 88,
+          child: Row(
+            children: [
+              FloatingActionButton(
+                onPressed: widget.onEditButtonPressed,
+                backgroundColor: theme.backgroundColor,
+                heroTag: null,
+                mini: true,
+                child: Icon(
+                  Icons.edit,
+                  color: isDarkMode ? null : theme.primaryColor,
+                  size: 18,
+                ),
+              ),
+              FloatingActionButton(
+                onPressed: widget.onRemoveButtonPressed,
+                backgroundColor: theme.backgroundColor,
+                heroTag: null,
+                mini: true,
+                child: Icon(
+                  Icons.delete_forever,
+                  color: theme.errorColor,
+                  size: 18,
+                ),
+              ),
+            ],
           ),
         );
 
@@ -265,6 +301,7 @@ class _DealItemState extends State<DealItem> {
           clipBehavior: Clip.none,
           children: [
             buildDealContent(),
+            if (widget.showControlButtons) buildControlButtons(),
             buildFavoriteButton(),
             if (deal.isExpired || deal.isNew!) buildSpecialMark(),
           ],

@@ -1065,6 +1065,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "successfullyUpdatedYourDeal": "Fırsat, başarıyla güncellendi",
+  "@successfullyUpdatedYourDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "pleaseEnterValidUrl": "Lütfen geçerli bir URL girin.",
   "@pleaseEnterValidUrl": {
     "description": "",

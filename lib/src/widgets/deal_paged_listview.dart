@@ -5,16 +5,20 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:provider/provider.dart';
 
+import '../deal/update_deal.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../search/search_params.dart';
 import '../search/search_response.dart';
+import '../services/firebase_storage_service.dart';
 import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
+import '../utils/navigation_util.dart';
 import '../widgets/deal_item.dart';
 import '../widgets/sign_in_dialog.dart';
+import 'custom_alert_dialog.dart';
 import 'custom_snackbar.dart';
 import 'error_indicator.dart';
 import 'filter_bar.dart';
@@ -112,6 +116,10 @@ class _DealPagedListViewState extends State<DealPagedListView>
     }
   }
 
+  void onEditButtonPressed(Deal deal) =>
+    NavigationUtil.navigate(context, UpdateDeal(deal: deal));
+
+
   void onFavoriteButtonPressed(MyUser? user, String dealId, bool isFavorited) {
     if (user == null) {
       GetIt.I.get<SignInDialog>().showSignInDialog(context);
@@ -152,6 +160,37 @@ class _DealPagedListViewState extends State<DealPagedListView>
     }
   }
 
+  Future<void> onRemoveButtonPressed(MyUser? user, Deal deal) async {
+    if (user == null) {
+      GetIt.I.get<SignInDialog>().showSignInDialog(context);
+      return;
+    }
+
+    final didRequestRemove = await CustomAlertDialog(
+          title: l(context).removeConfirm,
+          cancelActionText: l(context).cancel,
+          defaultActionText: l(context).remove,
+        ).show(context) ??
+        false;
+    if (didRequestRemove) {
+      GetIt.I.get<SpringService>().deleteDeal(dealId: deal.id!).then((result) {
+        // Deletes the deal images.
+        GetIt.I
+            .get<FirebaseStorageService>()
+            .deleteImagesFromUrl(urls: [deal.coverPhoto, ...deal.photos!]);
+        if (result) {
+          _pagingController.refresh();
+        } else {
+          final snackBar = CustomSnackBar(
+            icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+            text: l(context).removeDealError,
+          ).buildSnackBar(context);
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserController>(context).user;
@@ -174,8 +213,10 @@ class _DealPagedListViewState extends State<DealPagedListView>
                 deal: deal,
                 index: index,
                 isFavorited: isFavorited,
+                onEditButtonPressed: () => onEditButtonPressed(deal),
                 onFavoriteButtonPressed: () =>
                     onFavoriteButtonPressed(user, deal.id!, isFavorited),
+                onRemoveButtonPressed: () => onRemoveButtonPressed(user, deal),
                 pagingController: _pagingController,
                 showControlButtons:
                     user != null && (deal.postedBy! == user.id!),
