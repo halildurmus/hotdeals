@@ -58,10 +58,10 @@ class PictureUploadSettings {
   });
 
   /// The function which shall be called to delete the image, if you don't want to use the default one
-  final Function? customDeleteFunction;
+  final Function(Reference reference)? customDeleteFunction;
 
   /// The function which shall be called to upload the image, if you don't want to use the default one
-  final Function? customUploadFunction;
+  final Function(File image, int id)? customUploadFunction;
 
   /// The settings how the image shall be modified before upload
   final ImageManipulationSettings imageManipulationSettings;
@@ -575,11 +575,11 @@ class _SingleProfilePictureUploadWidgetState
       // in case of custom delete function, use it
       if (widget.pictureUploadWidget.settings.customDeleteFunction != null) {
         await widget.pictureUploadWidget.settings
-            .customDeleteFunction!(_uploadJob.storageReference);
+            .customDeleteFunction!(_uploadJob.storageReference!);
       } else {
         // else use default one
         await widget.pictureUploadController
-            .deleteProfilePicture(_uploadJob.storageReference);
+            .deleteProfilePicture(_uploadJob.storageReference!);
       }
     } on Exception catch (error, stackTrace) {
       setState(() {
