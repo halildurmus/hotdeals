@@ -2,7 +2,6 @@ import 'package:firebase_picture_uploader/firebase_picture_uploader.dart'
     show UploadAction, UploadJob;
 import 'package:get_it/get_it.dart';
 
-import '../models/deal.dart';
 import '../services/firebase_storage_service.dart';
 
 class DealUtil {
