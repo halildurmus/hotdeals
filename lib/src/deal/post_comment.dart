@@ -29,17 +29,20 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late MyUser? user;
   late TextEditingController commentController;
+  late FocusNode commentFocusNode;
 
   @override
   void initState() {
     user = context.read<UserController>().user;
     commentController = TextEditingController();
+    commentFocusNode = FocusNode()..requestFocus();
     super.initState();
   }
 
   @override
   void dispose() {
     commentController.dispose();
+    commentFocusNode.dispose();
     super.dispose();
   }
 
@@ -60,7 +63,6 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
         dealId: widget.deal.id!,
         message: commentController.text,
       );
-
       final postedComment =
           await GetIt.I.get<SpringService>().postComment(comment: comment);
 
@@ -139,6 +141,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
                       : Colors.grey),
               hintText: l(context).enterYourComment,
             ),
+            focusNode: commentFocusNode,
             minLines: 4,
             maxLines: 30,
             maxLength: 500,
