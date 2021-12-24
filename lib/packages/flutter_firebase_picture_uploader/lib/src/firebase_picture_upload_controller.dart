@@ -89,8 +89,8 @@ class FirebasePictureUploadController {
     return imgRef;
   }
 
-  Future<void> deleteProfilePicture(Reference? oldUpload) async {
+  Future<void> deleteProfilePicture(Reference oldUpload) async {
     // ask backend to transform images
-    await oldUpload!.delete();
+    await oldUpload.delete();
   }
 }
