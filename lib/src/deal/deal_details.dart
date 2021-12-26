@@ -28,11 +28,12 @@ import '../widgets/slider_indicator.dart';
 import '../widgets/user_profile_dialog.dart';
 import 'deal_comments.dart';
 import 'deal_score_box.dart';
+import 'deal_status.dart';
 import 'image_fullscreen.dart';
 import 'post_comment.dart';
 import 'report_deal_dialog.dart';
 
-enum _DealPopup { markAsExpired, reportDeal }
+enum _DealPopup { markAsActive, markAsExpired, reportDeal }
 
 class DealDetails extends StatefulWidget {
   const DealDetails({Key? key, required this.dealId}) : super(key: key);
@@ -124,10 +125,11 @@ class _DealDetailsState extends State<DealDetails> {
         .toList();
   }
 
-  Future<void> _markAsExpired() async {
+  Future<void> _updateDealStatus(DealStatus status) async {
     try {
-      final deal = await GetIt.I.get<SpringService>().markDealAsExpired(
+      final deal = await GetIt.I.get<SpringService>().updateDealStatus(
             dealId: _deal!.id!,
+            status: status,
           );
       setState(() => _deal = deal);
     } on Exception {
@@ -157,7 +159,12 @@ class _DealDetailsState extends State<DealDetails> {
         items = [];
       } else {
         items = <PopupMenuItem<_DealPopup>>[
-          if (!_deal!.isExpired && (_user!.id! == _deal!.postedBy!))
+          if (_deal!.isExpired && (_user!.id! == _deal!.postedBy!))
+            PopupMenuItem<_DealPopup>(
+              value: _DealPopup.markAsActive,
+              child: Text(l(context).markAsActive),
+            )
+          else if (!_deal!.isExpired && (_user!.id! == _deal!.postedBy!))
             PopupMenuItem<_DealPopup>(
               value: _DealPopup.markAsExpired,
               child: Text(l(context).markAsExpired),
@@ -179,8 +186,10 @@ class _DealDetailsState extends State<DealDetails> {
                 icon: const Icon(Icons.more_vert),
                 itemBuilder: (context) => items,
                 onSelected: (result) {
-                  if (result == _DealPopup.markAsExpired) {
-                    _markAsExpired();
+                  if (result == _DealPopup.markAsActive) {
+                    _updateDealStatus(DealStatus.active);
+                  } else if (result == _DealPopup.markAsExpired) {
+                    _updateDealStatus(DealStatus.expired);
                   } else if (result == _DealPopup.reportDeal) {
                     _onPressedReport();
                   }

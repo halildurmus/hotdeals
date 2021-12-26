@@ -7,6 +7,7 @@ import 'package:http/http.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../config/environment.dart';
+import '../deal/deal_status.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
@@ -422,10 +423,14 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<Deal> markDealAsExpired({required String dealId}) async {
+  Future<Deal> updateDealStatus({
+    required String dealId,
+    required DealStatus status,
+  }) async {
     final url = '$_baseUrl/deals/$dealId';
+    final value = status == DealStatus.expired;
     final data = <Json>[
-      <String, dynamic>{'op': 'replace', 'path': '/isExpired', 'value': true}
+      <String, dynamic>{'op': 'replace', 'path': '/isExpired', 'value': value}
     ];
     try {
       final response = await _httpService.patch(url, data);

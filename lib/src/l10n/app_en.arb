@@ -1184,6 +1184,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "markAsActive": "Mark as Active",
+  "@markAsActive": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "markAsExpired": "Mark as Expired",
   "@markAsExpired": {
     "description": "",

@@ -1184,6 +1184,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "markAsActive": "Aktif olarak işaretle",
+  "@markAsActive": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "markAsExpired": "Süresi doldu olarak işaretle",
   "@markAsExpired": {
     "description": "",
