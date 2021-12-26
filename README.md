@@ -39,15 +39,18 @@ The app's **Backend** can be found **[here](https://github.com/halildurmus/hotde
 
 ## Features
 
-- Social sign in with Facebook and Google (using Firebase Authentication)
-- State management using [Provider](https://github.com/rrousselGit/provider)
-- Service Locator using [get_it](https://github.com/fluttercommunity/get_it)
-- Infinite scrolling pagination using [infinite_scroll_pagination](https://github.com/EdsonBueno/infinite_scroll_pagination)
-- In-app messaging
-- Notifications (using Firebase Cloud Messaging)
-- Localization (l10n)
-- Light and Dark theme
-- Logging (using [loggy](https://github.com/infinum/floggy) and Firebase Crashlytics)
+- **CRUD** deals
+- **Vote** and **Comment** on deals
+- **Search as you type** & **Faceted search** (*using Elasticsearch*)
+- **In-app Chat** (*using Firebase Firestore*)
+- **Social Login** with *Facebook* and *Google* (*using Firebase Authentication*)
+- **Push notifications** (*using Firebase Cloud Messaging*)
+- **State management** with *[Provider](https://github.com/rrousselGit/provider)*
+- **Service Locator** Pattern (*using [get_it](https://github.com/fluttercommunity/get_it)*)
+- **Infinite Scrolling Pagination** (*using [infinite_scroll_pagination](https://github.com/EdsonBueno/infinite_scroll_pagination)*)
+- **Light** and **Dark** themes
+- **Localization**
+- **Logging** (*using [loggy](https://github.com/infinum/floggy) and Firebase Crashlytics*)
 
 ## Getting Started
 
