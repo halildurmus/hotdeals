@@ -49,6 +49,6 @@ class FirebaseStorageService {
 
   Future<void> deleteImagesFromUrl({required List<String> urls}) async {
     final refs = <Reference>[...urls.map(_storage.refFromURL)];
-    await Future.wait([...refs.map((e) => e.delete())]);
+    await deleteImagesFromRef(refs: refs);
   }
 }
