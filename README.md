@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/halildurmus/hotdeals-app/blob/master/LICENSE)
 ![Visits](https://badges.pufler.dev/visits/halildurmus/hotdeals-app?style=for-the-badge)
 
-> **hotdeals-app** is an **online marketplace** app developed with **[Flutter](https://github.com/flutter/flutter)**.  
+> **hotdeals-app** is an **online marketplace** app developed with **[Flutter](https://github.com/flutter/flutter)**.
 The app's **Backend** can be found **[here](https://github.com/halildurmus/hotdeals-backend)**.
 
 ## Table of Contents
@@ -28,6 +28,7 @@ The app's **Backend** can be found **[here](https://github.com/halildurmus/hotde
     <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/home-dark.png" width="270">
     <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/deal-details1-dark.png" width="270">
     <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/deal-details2-dark.png" width="270">
+    <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/search-dark.png" width="270">
     <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/chats-dark.png" width="270">
     <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/chat-dark.png" width="270">
     <img src="https://raw.githubusercontent.com/halildurmus/hotdeals-app/master/screenshots/profile-dark.png" width="270">
@@ -91,7 +92,7 @@ This project exists thanks to all the people who contribute.
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome.  
+Contributions, issues and feature requests are welcome.
 Feel free to check [issues page](https://github.com/halildurmus/hotdeals-app/issues) if you want to contribute.
 
 ## Author
@@ -106,5 +107,5 @@ This project is [MIT](https://github.com/halildurmus/hotdeals-app/blob/master/LI
 
 ## Acknowledgements
 * Country Icons made by [Freepik](https://www.freepik.com "Freepik") from [www.flaticon.com](https://www.flaticon.com "Flaticon")
-* [Img Shields](https://shields.io "Img Shields") 
+* [Img Shields](https://shields.io "Img Shields")
 * Preview mockups were created with [AppMockUp](https://app-mockup.com "AppMockUp")
