@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../deal/deal_status.dart';
+
 typedef Json = Map<String, dynamic>;
 
 List<Deal> userDealsFromJson(String str) =>
@@ -13,7 +15,7 @@ List<Deal> dealsFromJson(String str) =>
 class Deal {
   const Deal({
     this.id,
-    this.isExpired = false,
+    this.status = DealStatus.active,
     this.postedBy,
     required this.coverPhoto,
     required this.dealUrl,
@@ -35,7 +37,8 @@ class Deal {
 
   factory Deal.fromJson(Json json) => Deal(
         id: json['id'] as String,
-        isExpired: json['isExpired'] as bool,
+        status:
+            DealStatus.values.byName((json['status'] as String).toLowerCase()),
         postedBy: json['postedBy'] as String,
         coverPhoto: json['coverPhoto'] as String,
         dealUrl: json['dealUrl'] as String,
@@ -60,8 +63,9 @@ class Deal {
   factory Deal.fromJsonES(Json json) => Deal(
         dealUrl: '',
         id: json['id'] as String,
+        status:
+            DealStatus.values.byName((json['status'] as String).toLowerCase()),
         postedBy: json['postedBy'] as String,
-        isExpired: json['isExpired'] as bool,
         coverPhoto: json['coverPhoto'] as String,
         title: json['title'] as String,
         description: json['description'] as String,
@@ -81,7 +85,7 @@ class Deal {
       );
 
   final String? id;
-  final bool isExpired;
+  final DealStatus status;
   final String? postedBy;
   final String coverPhoto;
   final String dealUrl;
@@ -102,7 +106,7 @@ class Deal {
 
   Json toJson() => <String, dynamic>{
         if (postedBy != null) 'postedBy': postedBy,
-        'isExpired': isExpired,
+        'status': status.name.toUpperCase(),
         'coverPhoto': coverPhoto,
         'dealUrl': dealUrl,
         if (photos != null) 'photos': photos,
@@ -116,5 +120,5 @@ class Deal {
 
   @override
   String toString() =>
-      'Deal{id: $id, isExpired: $isExpired, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
+      'Deal{id: $id, status: $status, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
 }

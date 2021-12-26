@@ -159,12 +159,14 @@ class _DealDetailsState extends State<DealDetails> {
         items = [];
       } else {
         items = <PopupMenuItem<_DealPopup>>[
-          if (_deal!.isExpired && (_user!.id! == _deal!.postedBy!))
+          if (_deal!.status == DealStatus.expired &&
+              (_user!.id! == _deal!.postedBy!))
             PopupMenuItem<_DealPopup>(
               value: _DealPopup.markAsActive,
               child: Text(l(context).markAsActive),
             )
-          else if (!_deal!.isExpired && (_user!.id! == _deal!.postedBy!))
+          else if (_deal!.status == DealStatus.active &&
+              (_user!.id! == _deal!.postedBy!))
             PopupMenuItem<_DealPopup>(
               value: _DealPopup.markAsExpired,
               child: Text(l(context).markAsExpired),
@@ -746,7 +748,8 @@ class _DealDetailsState extends State<DealDetails> {
 
     Widget _buildBody() => Column(
           children: [
-            if (_deal!.isExpired) const _DealIsExpiredBanner(),
+            if (_deal!.status == DealStatus.expired)
+              const _DealIsExpiredBanner(),
             Expanded(
               child: Stack(
                 children: [

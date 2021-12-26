@@ -5,6 +5,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
 
 import '../deal/deal_details.dart';
+import '../deal/deal_status.dart';
 import '../models/categories.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
@@ -273,7 +274,9 @@ class _DealItemState extends State<DealItem> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
               child: Text(
-                deal.isExpired ? l(context).expired : l(context).newMark,
+                deal.status == DealStatus.expired
+                    ? l(context).expired
+                    : l(context).newMark,
                 style: textTheme.bodyText2!
                     .copyWith(color: Colors.white, fontSize: 11),
               ),
@@ -303,7 +306,8 @@ class _DealItemState extends State<DealItem> {
             buildDealContent(),
             if (widget.showControlButtons) buildControlButtons(),
             buildFavoriteButton(),
-            if (deal.isExpired || deal.isNew!) buildSpecialMark(),
+            if (deal.status == DealStatus.expired || deal.isNew!)
+              buildSpecialMark(),
           ],
         );
 
@@ -312,9 +316,9 @@ class _DealItemState extends State<DealItem> {
       child: SizedBox(
         height: 145,
         width: deviceWidth,
-        child: deal.isExpired
+        child: deal.status == DealStatus.expired
             ? Opacity(
-                opacity: deal.isExpired ? .7 : 1,
+                opacity: .7,
                 child: GrayscaleColorFiltered(
                   child: buildStack(),
                 ),

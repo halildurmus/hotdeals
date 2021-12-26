@@ -428,9 +428,12 @@ class SpringService with NetworkLoggy {
     required DealStatus status,
   }) async {
     final url = '$_baseUrl/deals/$dealId';
-    final value = status == DealStatus.expired;
     final data = <Json>[
-      <String, dynamic>{'op': 'replace', 'path': '/isExpired', 'value': value}
+      <String, dynamic>{
+        'op': 'replace',
+        'path': '/status',
+        'value': status.name.toUpperCase(),
+      }
     ];
     try {
       final response = await _httpService.patch(url, data);
@@ -438,10 +441,10 @@ class SpringService with NetworkLoggy {
         return Deal.fromJson(jsonDecode(response.body) as Json);
       }
 
-      throw Exception('Failed to mark the deal as expired!');
+      throw Exception('Failed to update the deal status!');
     } on Exception catch (e) {
       loggy.error(e, e);
-      throw Exception('Failed to mark the deal as expired!');
+      throw Exception('Failed to update the deal status!');
     }
   }
 
@@ -610,7 +613,7 @@ class SpringService with NetworkLoggy {
 
   Future<List<Deal>> getLatestDeals({int? page, int? size}) async {
     final url =
-        '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByCreatedAtDesc';
+        '$_baseUrl/deals/search/findAllByStatusEqualsOrderByCreatedAtDesc?status=ACTIVE';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
@@ -628,7 +631,7 @@ class SpringService with NetworkLoggy {
 
   Future<List<Deal>> getMostLikedDeals({int? page, int? size}) async {
     final url =
-        '$_baseUrl/deals/search/findAllByIsExpiredIsFalseOrderByDealScoreDesc';
+        '$_baseUrl/deals/search/findAllByStatusEqualsOrderByDealScoreDesc?status=ACTIVE';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
