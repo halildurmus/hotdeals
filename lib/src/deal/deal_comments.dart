@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
 
 import '../models/comment.dart';
+import '../models/comments.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
@@ -25,7 +26,7 @@ class DealComments extends StatefulWidget {
 }
 
 class _DealCommentsState extends State<DealComments> {
-  Future<List<Comment>?> _commentFuture(int page, int size) =>
+  Future<Comments?> _commentFuture(int page, int size) =>
       GetIt.I.get<SpringService>().getComments(
             dealId: widget.deal.id!,
             page: page,

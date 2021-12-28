@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../models/categories.dart';
 import '../models/comment.dart';
+import '../models/comments.dart';
 import '../models/deal.dart';
 import '../models/deal_vote_type.dart';
 import '../models/my_user.dart';
@@ -48,7 +49,7 @@ class _DealDetailsState extends State<DealDetails> {
   final _pagingController = PagingController<int, Comment>(firstPageKey: 0);
   Deal? _deal;
   late Future<Deal?> _dealFuture;
-  late Future<int?> _commentCountFuture;
+  late Future<Comments?> _commentCountFuture;
   List<String>? _images;
   int currentIndex = 0;
   late Categories _categories;
@@ -63,9 +64,8 @@ class _DealDetailsState extends State<DealDetails> {
   @override
   void initState() {
     _dealFuture = GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
-    _commentCountFuture = GetIt.I
-        .get<SpringService>()
-        .getNumberOfCommentsByDealId(dealId: widget.dealId);
+    _commentCountFuture =
+        GetIt.I.get<SpringService>().getComments(dealId: widget.dealId);
     _categories = GetIt.I.get<Categories>();
     _user = context.read<UserController>().user;
     _scrollController = ScrollController()
@@ -84,12 +84,12 @@ class _DealDetailsState extends State<DealDetails> {
   void _updateCommentsCount() {
     GetIt.I
         .get<SpringService>()
-        .getNumberOfCommentsByDealId(dealId: widget.dealId)
-        .then((commentCount) {
-      if (commentCount != null) {
+        .getComments(dealId: widget.dealId)
+        .then((comments) {
+      if (comments != null) {
         WidgetsBinding.instance!.addPostFrameCallback((_) {
           if (mounted) {
-            setState(() => _commentCount = commentCount);
+            setState(() => _commentCount = comments.count);
           }
         });
       }
@@ -771,7 +771,7 @@ class _DealDetailsState extends State<DealDetails> {
                   GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
               _commentCountFuture = GetIt.I
                   .get<SpringService>()
-                  .getNumberOfCommentsByDealId(dealId: widget.dealId);
+                  .getComments(dealId: widget.dealId);
               setState(() {});
             },
           ),
@@ -782,7 +782,7 @@ class _DealDetailsState extends State<DealDetails> {
       builder: (context, snapshot) {
         if (snapshot.data?[0] != null && snapshot.data?[1] != null) {
           _deal ??= snapshot.data[0]!;
-          _commentCount ??= snapshot.data[1]!;
+          _commentCount ??= (snapshot.data[1]! as Comments).count;
           // Prefetch and caches the images.
           if (_images == null) {
             _images = [_deal!.coverPhoto, ..._deal!.photos!];

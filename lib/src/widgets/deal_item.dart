@@ -7,6 +7,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
 import '../deal/deal_details.dart';
 import '../deal/deal_status.dart';
 import '../models/categories.dart';
+import '../models/comments.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
@@ -55,12 +56,10 @@ class _DealItemState extends State<DealItem> {
   void _fetchDealDetails() {
     Future.wait([
       GetIt.I.get<SpringService>().getDeal(dealId: widget.deal.id!),
-      GetIt.I
-          .get<SpringService>()
-          .getNumberOfCommentsByDealId(dealId: widget.deal.id!),
+      GetIt.I.get<SpringService>().getComments(dealId: widget.deal.id!),
     ]).then((values) {
       final deal = values[0] as Deal?;
-      final commentCount = values[1] as int?;
+      final commentCount = (values[1] as Comments?)?.count;
       if (commentCount != null && deal != null) {
         WidgetsBinding.instance!.addPostFrameCallback((_) {
           if (mounted) {

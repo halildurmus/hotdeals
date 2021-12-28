@@ -10,6 +10,7 @@ import '../config/environment.dart';
 import '../deal/deal_status.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
+import '../models/comments.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
 import '../models/deal_vote_type.dart';
@@ -193,19 +194,16 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<List<Comment>?> getComments({
+  Future<Comments?> getComments({
     required String dealId,
     int? page,
     int? size,
   }) async {
-    final url =
-        '$_baseUrl/comments/search/findByDealId?dealId=$dealId&page=$page&size=$size';
+    final url = '$_baseUrl/deals/$dealId/comments?page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final comments = commentFromJson(response.body);
-
-        return comments;
+        return Comments.fromJson(jsonDecode(response.body) as Json);
       }
 
       return null;
@@ -215,8 +213,11 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<Comment?> postComment({required Comment comment}) async {
-    final url = '$_baseUrl/comments';
+  Future<Comment?> postComment({
+    required String dealId,
+    required Comment comment,
+  }) async {
+    final url = '$_baseUrl/deals/$dealId/comments';
     try {
       final response = await _httpService.post(url, comment.toJson());
       if (response.statusCode == 201) {
@@ -551,7 +552,7 @@ class SpringService with NetworkLoggy {
     int? size,
   }) async {
     final url =
-        '$_baseUrl/deals/search/findAllByCategoryStartsWith?category=$category&page=$page&size=$size';
+        '$_baseUrl/deals/search/findAllByCategoryStartsWithOrderByCreatedAtDesc?category=$category&page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
@@ -595,7 +596,7 @@ class SpringService with NetworkLoggy {
     int? size,
   }) async {
     final url =
-        '$_baseUrl/deals/search/findAllByStore?storeId=$storeId&page=$page&size=$size';
+        '$_baseUrl/deals/search/findAllByStoreOrderByCreatedAtDesc?storeId=$storeId&page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
@@ -647,25 +648,8 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<int?> getNumberOfCommentsByDealId({required String dealId}) async {
-    final url =
-        '$_baseUrl/comments/search/countCommentsByDealId?dealId=$dealId';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return int.parse(response.body);
-      }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
-    }
-  }
-
   Future<int?> getNumberOfCommentsPostedByUser({required String userId}) async {
-    final url =
-        '$_baseUrl/comments/search/countCommentsByPostedBy?postedBy=$userId';
+    final url = '$_baseUrl/users/$userId/comments-count';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {

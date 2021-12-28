@@ -59,12 +59,10 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
 
       GetIt.I.get<LoadingDialog>().showLoadingDialog(context);
 
-      final comment = Comment(
-        dealId: widget.deal.id!,
-        message: commentController.text,
-      );
-      final postedComment =
-          await GetIt.I.get<SpringService>().postComment(comment: comment);
+      final comment = Comment(message: commentController.text);
+      final postedComment = await GetIt.I
+          .get<SpringService>()
+          .postComment(dealId: widget.deal.id!, comment: comment);
 
       // Send push notification to the poster if the commentator is not
       // the poster.

@@ -3,6 +3,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../models/comment.dart';
+import '../models/comments.dart';
 import '../utils/error_indicator_util.dart';
 import 'comment_item.dart';
 
@@ -15,7 +16,7 @@ class CommentPagedListView extends StatefulWidget {
     this.pagingController,
   }) : super(key: key);
 
-  final Future<List<Comment>?> Function(int page, int size) commentFuture;
+  final Future<Comments?> Function(int page, int size) commentFuture;
   final Widget noCommentsFound;
   final int pageSize;
   final PagingController<int, Comment>? pagingController;
@@ -46,7 +47,8 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems = await widget.commentFuture(pageKey, widget.pageSize);
+      final newItems =
+          (await widget.commentFuture(pageKey, widget.pageSize))?.comments;
       final isLastPage = newItems!.length < widget.pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);
