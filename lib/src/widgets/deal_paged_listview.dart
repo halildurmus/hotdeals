@@ -173,9 +173,9 @@ class _DealPagedListViewState extends State<DealPagedListView>
         ).show(context) ??
         false;
     if (didRequestRemove) {
-      GetIt.I.get<SpringService>().deleteDeal(dealId: deal.id!).then((result) {
+      GetIt.I.get<SpringService>().deleteDeal(dealId: deal.id!).then((result) async {
         // Deletes the deal images.
-        GetIt.I
+        await GetIt.I
             .get<FirebaseStorageService>()
             .deleteImagesFromUrl(urls: [deal.coverPhoto, ...deal.photos!]);
         if (result) {
