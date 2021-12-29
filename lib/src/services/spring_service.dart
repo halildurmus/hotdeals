@@ -250,40 +250,6 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<Category?> createCategory({required Category category}) async {
-    final url = '$_baseUrl/categories';
-    try {
-      final response = await _httpService.post(url, category.toJson());
-      if (response.statusCode == 201) {
-        final category = Category.fromJson(jsonDecode(response.body) as Json);
-
-        return category;
-      }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
-    }
-  }
-
-  Future<Store?> getStore({required String storeId}) async {
-    final url = '$_baseUrl/stores/$storeId';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        final store = Store.fromJson(jsonDecode(response.body) as Json);
-
-        return store;
-      }
-
-      return null;
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      return null;
-    }
-  }
-
   Future<List<Store>> getStores() async {
     final url = '$_baseUrl/stores';
     try {
