@@ -1226,7 +1226,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "resetFilters": "resetFilters",
+  "resetFilters": "Reset filters",
   "@resetFilters": {
     "description": "",
     "type": "text",
