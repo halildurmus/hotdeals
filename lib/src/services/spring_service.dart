@@ -214,7 +214,7 @@ class SpringService with NetworkLoggy {
   }
 
   Future<int?> getDealCommentCount({required String dealId}) async {
-    final url = '$_baseUrl/deals/$dealId/comments-count';
+    final url = '$_baseUrl/deals/$dealId/comment-count';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
