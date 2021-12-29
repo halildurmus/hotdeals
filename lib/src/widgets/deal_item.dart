@@ -56,7 +56,7 @@ class _DealItemState extends State<DealItem> {
   void _fetchDealDetails() {
     Future.wait([
       GetIt.I.get<SpringService>().getDeal(dealId: widget.deal.id!),
-      GetIt.I.get<SpringService>().getComments(dealId: widget.deal.id!),
+      GetIt.I.get<SpringService>().getDealComments(dealId: widget.deal.id!),
     ]).then((values) {
       final deal = values[0] as Deal?;
       final commentCount = (values[1] as Comments?)?.count;

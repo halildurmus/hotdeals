@@ -27,7 +27,7 @@ class DealComments extends StatefulWidget {
 
 class _DealCommentsState extends State<DealComments> {
   Future<Comments?> _commentFuture(int page, int size) =>
-      GetIt.I.get<SpringService>().getComments(
+      GetIt.I.get<SpringService>().getDealComments(
             dealId: widget.deal.id!,
             page: page,
             size: size,

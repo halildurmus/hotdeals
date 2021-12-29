@@ -10,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../models/categories.dart';
 import '../models/comment.dart';
-import '../models/comments.dart';
 import '../models/deal.dart';
 import '../models/deal_vote_type.dart';
 import '../models/my_user.dart';
@@ -49,7 +48,7 @@ class _DealDetailsState extends State<DealDetails> {
   final _pagingController = PagingController<int, Comment>(firstPageKey: 0);
   Deal? _deal;
   late Future<Deal?> _dealFuture;
-  late Future<Comments?> _commentCountFuture;
+  late Future<int?> _commentCountFuture;
   List<String>? _images;
   int currentIndex = 0;
   late Categories _categories;
@@ -65,7 +64,7 @@ class _DealDetailsState extends State<DealDetails> {
   void initState() {
     _dealFuture = GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
     _commentCountFuture =
-        GetIt.I.get<SpringService>().getComments(dealId: widget.dealId);
+        GetIt.I.get<SpringService>().getDealCommentCount(dealId: widget.dealId);
     _categories = GetIt.I.get<Categories>();
     _user = context.read<UserController>().user;
     _scrollController = ScrollController()
@@ -84,12 +83,12 @@ class _DealDetailsState extends State<DealDetails> {
   void _updateCommentsCount() {
     GetIt.I
         .get<SpringService>()
-        .getComments(dealId: widget.dealId)
-        .then((comments) {
-      if (comments != null) {
+        .getDealCommentCount(dealId: widget.dealId)
+        .then((commentCount) {
+      if (commentCount != null) {
         WidgetsBinding.instance!.addPostFrameCallback((_) {
           if (mounted) {
-            setState(() => _commentCount = comments.count);
+            setState(() => _commentCount = commentCount);
           }
         });
       }
@@ -770,7 +769,7 @@ class _DealDetailsState extends State<DealDetails> {
                   GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
               _commentCountFuture = GetIt.I
                   .get<SpringService>()
-                  .getComments(dealId: widget.dealId);
+                  .getDealCommentCount(dealId: widget.dealId);
               setState(() {});
             },
           ),
@@ -781,7 +780,7 @@ class _DealDetailsState extends State<DealDetails> {
       builder: (context, snapshot) {
         if (snapshot.data?[0] != null && snapshot.data?[1] != null) {
           _deal ??= snapshot.data[0]!;
-          _commentCount ??= (snapshot.data[1]! as Comments).count;
+          _commentCount ??= snapshot.data[1]!;
           // Prefetch and caches the images.
           if (_images == null) {
             _images = [_deal!.coverPhoto, ..._deal!.photos!];

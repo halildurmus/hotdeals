@@ -194,7 +194,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<Comments?> getComments({
+  Future<Comments?> getDealComments({
     required String dealId,
     int? page,
     int? size,
@@ -204,6 +204,21 @@ class SpringService with NetworkLoggy {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
         return Comments.fromJson(jsonDecode(response.body) as Json);
+      }
+
+      return null;
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      return null;
+    }
+  }
+
+  Future<int?> getDealCommentCount({required String dealId}) async {
+    final url = '$_baseUrl/deals/$dealId/comments-count';
+    try {
+      final response = await _httpService.get(url, auth: false);
+      if (response.statusCode == 200) {
+        return int.parse(response.body);
       }
 
       return null;
