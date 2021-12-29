@@ -63,22 +63,22 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "remove": "Sil",
-  "@remove": {
+  "delete": "Sil",
+  "@delete": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "removeConfirm": "Fırsatı silmek istediğinizden emin misiniz?",
-  "@removeConfirm": {
+  "deleteConfirm": "Fırsatı silmek istediğinizden emin misiniz?",
+  "@deleteConfirm": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "removeDealError": "Fırsat silinemedi.",
-  "@removeDealError": {
+  "deleteDealError": "Fırsat silinemedi.",
+  "@deleteDealError": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

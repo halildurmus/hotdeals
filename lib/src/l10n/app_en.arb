@@ -63,22 +63,22 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "remove": "Remove",
-  "@remove": {
+  "delete": "Delete",
+  "@delete": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "removeConfirm": "Are you sure you want to remove this deal?",
-  "@removeConfirm": {
+  "deleteConfirm": "Are you sure you want to delete this deal?",
+  "@deleteConfirm": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "removeDealError": "Could not remove the deal.",
-  "@removeDealError": {
+  "deleteDealError": "Could not delete the deal.",
+  "@deleteDealError": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

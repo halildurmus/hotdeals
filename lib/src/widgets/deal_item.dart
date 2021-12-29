@@ -22,7 +22,7 @@ class DealItem extends StatefulWidget {
     required this.isFavorited,
     required this.onEditButtonPressed,
     required this.onFavoriteButtonPressed,
-    required this.onRemoveButtonPressed,
+    required this.onDeleteButtonPressed,
     required this.pagingController,
     required this.showControlButtons,
   }) : super(key: key);
@@ -32,7 +32,7 @@ class DealItem extends StatefulWidget {
   final bool isFavorited;
   final VoidCallback onEditButtonPressed;
   final VoidCallback onFavoriteButtonPressed;
-  final VoidCallback onRemoveButtonPressed;
+  final VoidCallback onDeleteButtonPressed;
   final PagingController pagingController;
   final bool showControlButtons;
 
@@ -124,7 +124,7 @@ class _DealItemState extends State<DealItem> {
                 ),
               ),
               FloatingActionButton(
-                onPressed: widget.onRemoveButtonPressed,
+                onPressed: widget.onDeleteButtonPressed,
                 backgroundColor: theme.backgroundColor,
                 heroTag: null,
                 mini: true,

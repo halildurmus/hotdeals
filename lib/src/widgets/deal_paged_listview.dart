@@ -160,19 +160,19 @@ class _DealPagedListViewState extends State<DealPagedListView>
     }
   }
 
-  Future<void> onRemoveButtonPressed(MyUser? user, Deal deal) async {
+  Future<void> onDeleteButtonPressed(MyUser? user, Deal deal) async {
     if (user == null) {
       GetIt.I.get<SignInDialog>().showSignInDialog(context);
       return;
     }
 
-    final didRequestRemove = await CustomAlertDialog(
+    final didRequestDelete = await CustomAlertDialog(
           title: l(context).removeConfirm,
           cancelActionText: l(context).cancel,
           defaultActionText: l(context).remove,
         ).show(context) ??
         false;
-    if (didRequestRemove) {
+    if (didRequestDelete) {
       GetIt.I.get<SpringService>().deleteDeal(dealId: deal.id!).then((result) async {
         // Deletes the deal images.
         await GetIt.I
@@ -216,7 +216,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
                 onEditButtonPressed: () => onEditButtonPressed(deal),
                 onFavoriteButtonPressed: () =>
                     onFavoriteButtonPressed(user, deal.id!, isFavorited),
-                onRemoveButtonPressed: () => onRemoveButtonPressed(user, deal),
+                onDeleteButtonPressed: () => onDeleteButtonPressed(user, deal),
                 pagingController: _pagingController,
                 showControlButtons:
                     user != null && (deal.postedBy! == user.id!),
