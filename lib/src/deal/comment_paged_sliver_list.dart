@@ -47,8 +47,8 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newItems =
-          (await widget.commentFuture(pageKey, widget.pageSize))?.comments;
+      final comments = await widget.commentFuture(pageKey, widget.pageSize);
+      final newItems = comments?.comments;
       final isLastPage = newItems!.length < widget.pageSize;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems);

@@ -158,20 +158,19 @@ class _DealDetailsState extends State<DealDetails> {
       if (_user == null) {
         items = [];
       } else {
+        final userIsPoster = _user!.id! == _deal!.postedBy!;
         items = <PopupMenuItem<_DealPopup>>[
-          if (_deal!.status == DealStatus.expired &&
-              (_user!.id! == _deal!.postedBy!))
+          if (_deal!.status == DealStatus.expired && userIsPoster)
             PopupMenuItem<_DealPopup>(
               value: _DealPopup.markAsActive,
               child: Text(l(context).markAsActive),
             )
-          else if (_deal!.status == DealStatus.active &&
-              (_user!.id! == _deal!.postedBy!))
+          else if (_deal!.status == DealStatus.active && userIsPoster)
             PopupMenuItem<_DealPopup>(
               value: _DealPopup.markAsExpired,
               child: Text(l(context).markAsExpired),
             ),
-          if (_user!.id! != _deal!.postedBy!)
+          if (userIsPoster)
             PopupMenuItem<_DealPopup>(
               value: _DealPopup.reportDeal,
               child: Text(l(context).reportDeal),
