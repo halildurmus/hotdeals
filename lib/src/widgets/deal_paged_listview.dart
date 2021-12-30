@@ -103,12 +103,14 @@ class _DealPagedListViewState extends State<DealPagedListView>
             await widget.searchResultsFuture!(pageKey, widget.pageSize);
         newItems = _searchResponse!.hits.hits;
       }
-      final isLastPage = newItems.length < widget.pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(newItems, nextPageKey);
+      if (mounted) {
+        final isLastPage = newItems.length < widget.pageSize;
+        if (isLastPage) {
+          _pagingController.appendLastPage(newItems);
+        } else {
+          final nextPageKey = pageKey + 1;
+          _pagingController.appendPage(newItems, nextPageKey);
+        }
       }
     } on Exception catch (error) {
       loggy.error(error);
