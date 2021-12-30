@@ -169,7 +169,7 @@ class _DealDetailsState extends State<DealDetails> {
               value: _DealPopup.markAsExpired,
               child: Text(l(context).markAsExpired),
             ),
-          if (userIsPoster)
+          if (!userIsPoster)
             PopupMenuItem<_DealPopup>(
               value: _DealPopup.reportDeal,
               child: Text(l(context).reportDeal),
