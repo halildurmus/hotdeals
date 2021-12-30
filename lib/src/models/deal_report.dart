@@ -5,14 +5,12 @@ typedef Json = Map<String, dynamic>;
 class DealReport {
   const DealReport({
     this.id,
-    this.reportedBy,
     required this.reportedDeal,
     required this.reasons,
     this.message,
   });
 
   final String? id;
-  final String? reportedBy;
   final String reportedDeal;
   final List<DealReportReason> reasons;
   final String? message;
@@ -25,5 +23,5 @@ class DealReport {
 
   @override
   String toString() =>
-      'DealReport{id: $id, reportedBy: $reportedBy, reportedDeal: $reportedDeal, reasons: $reasons, message: $message}';
+      'DealReport{id: $id, reportedDeal: $reportedDeal, reasons: $reasons, message: $message}';
 }
