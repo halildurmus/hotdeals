@@ -117,8 +117,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
   }
 
   void onEditButtonPressed(Deal deal) =>
-    NavigationUtil.navigate(context, UpdateDeal(deal: deal));
-
+      NavigationUtil.navigate(context, UpdateDeal(deal: deal));
 
   void onFavoriteButtonPressed(MyUser? user, String dealId, bool isFavorited) {
     if (user == null) {
@@ -167,13 +166,16 @@ class _DealPagedListViewState extends State<DealPagedListView>
     }
 
     final didRequestDelete = await CustomAlertDialog(
-          title: l(context).removeConfirm,
+          title: l(context).deleteConfirm,
           cancelActionText: l(context).cancel,
-          defaultActionText: l(context).remove,
+          defaultActionText: l(context).delete,
         ).show(context) ??
         false;
     if (didRequestDelete) {
-      GetIt.I.get<SpringService>().deleteDeal(dealId: deal.id!).then((result) async {
+      GetIt.I
+          .get<SpringService>()
+          .deleteDeal(dealId: deal.id!)
+          .then((result) async {
         // Deletes the deal images.
         await GetIt.I
             .get<FirebaseStorageService>()
@@ -183,7 +185,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         } else {
           final snackBar = CustomSnackBar(
             icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
-            text: l(context).removeDealError,
+            text: l(context).deleteDealError,
           ).buildSnackBar(context);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
