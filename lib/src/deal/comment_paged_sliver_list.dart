@@ -12,7 +12,7 @@ class CommentPagedListView extends StatefulWidget {
     Key? key,
     required this.commentFuture,
     required this.noCommentsFound,
-    this.pageSize = 20,
+    this.pageSize = 8,
     this.pagingController,
   }) : super(key: key);
 
