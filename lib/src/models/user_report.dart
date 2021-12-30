@@ -9,30 +9,13 @@ class UserReport {
     required this.reportedUser,
     required this.reasons,
     this.message,
-    this.createdAt,
-    this.updatedAt,
   });
-
-  factory UserReport.fromJson(Json json) => UserReport(
-        id: json['id'] as String,
-        reportedBy: json['reportedBy'] as String,
-        reportedUser: json['reportedUser'] as String,
-        reasons: (json['reasons'] as List<dynamic>)
-            .map((e) =>
-                UserReportReason.values.byName((e as String).toLowerCase()))
-            .toList(),
-        message: json['message'] != null ? json['message'] as String : null,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
-      );
 
   final String? id;
   final String? reportedBy;
   final String reportedUser;
   final List<UserReportReason> reasons;
   final String? message;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
 
   Json toJson() => <String, dynamic>{
         'reportedUser': reportedUser,
@@ -42,5 +25,5 @@ class UserReport {
 
   @override
   String toString() =>
-      'UserReport{id: $id, reportedBy: $reportedBy, reportedUser: $reportedUser, reasons: $reasons, message: $message, createdAt: $createdAt, updatedAt: $updatedAt}';
+      'UserReport{id: $id, reportedBy: $reportedBy, reportedUser: $reportedUser, reasons: $reasons, message: $message}';
 }

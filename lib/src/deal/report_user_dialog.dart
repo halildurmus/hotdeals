@@ -63,10 +63,9 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
       final sentReport =
           await GetIt.I.get<SpringService>().sendUserReport(report: report);
       loggy.info(sentReport);
-
       // Pops the loading dialog.
       Navigator.of(ctx).pop();
-      if (sentReport != null) {
+      if (sentReport) {
         Navigator.of(ctx).pop();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),

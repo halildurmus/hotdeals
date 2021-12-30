@@ -158,39 +158,27 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<DealReport?> sendDealReport({required DealReport report}) async {
-    final url = '$_baseUrl/deal-reports';
+  Future<bool> sendDealReport({required DealReport report}) async {
+    final url = '$_baseUrl/deals/${report.reportedDeal}/reports';
     try {
       final response = await _httpService.post(url, report.toJson());
-      if (response.statusCode == 201) {
-        final dealReport =
-            DealReport.fromJson(jsonDecode(response.body) as Json);
 
-        return dealReport;
-      }
-
-      return null;
+      return response.statusCode == 201;
     } on Exception catch (e) {
       loggy.error(e, e);
-      return null;
+      return false;
     }
   }
 
-  Future<UserReport?> sendUserReport({required UserReport report}) async {
-    final url = '$_baseUrl/user-reports';
+  Future<bool> sendUserReport({required UserReport report}) async {
+    final url = '$_baseUrl/users/${report.reportedUser}/reports';
     try {
       final response = await _httpService.post(url, report.toJson());
-      if (response.statusCode == 201) {
-        final userReport =
-            UserReport.fromJson(jsonDecode(response.body) as Json);
 
-        return userReport;
-      }
-
-      return null;
+      return response.statusCode == 201;
     } on Exception catch (e) {
       loggy.error(e, e);
-      return null;
+      return false;
     }
   }
 
@@ -253,7 +241,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final categories = categoryFromJson(response.body);
+        final categories = categoriesFromJson(response.body);
 
         return categories;
       }
