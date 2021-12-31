@@ -61,7 +61,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
       );
 
       final sentReport =
-          await GetIt.I.get<SpringService>().sendUserReport(report: report);
+          await GetIt.I.get<SpringService>().reportUser(report: report);
       loggy.info(sentReport);
       // Pops the loading dialog.
       Navigator.of(ctx).pop();

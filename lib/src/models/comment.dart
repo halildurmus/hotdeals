@@ -6,25 +6,19 @@ class Comment {
   const Comment({
     this.id,
     this.postedBy,
-    this.poster,
     required this.message,
     this.createdAt,
   });
 
   factory Comment.fromJson(Json json) => Comment(
         id: json['id'] as String,
-        postedBy:
-            (json['postedBy'] is String) ? json['postedBy'] as String : null,
-        poster: (json['postedBy'] is Json)
-            ? MyUser.fromJsonDTO(json['postedBy'] as Json)
-            : null,
+        postedBy: MyUser.fromJsonBasicDTO(json['postedBy'] as Json),
         message: json['message'] as String,
         createdAt: DateTime.parse(json['createdAt'] as String),
       );
 
   final String? id;
-  final String? postedBy;
-  final MyUser? poster;
+  final MyUser? postedBy;
   final String message;
   final DateTime? createdAt;
 
@@ -32,5 +26,5 @@ class Comment {
 
   @override
   String toString() =>
-      'Comment{id: $id, postedBy: $postedBy, poster: $poster, message: $message, createdAt: $createdAt}';
+      'Comment{id: $id, postedBy: $postedBy, message: $message, createdAt: $createdAt}';
 }

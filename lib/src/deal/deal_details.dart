@@ -556,9 +556,10 @@ class _DealDetailsState extends State<DealDetails> {
               VoidCallback? onTap;
 
               if (snapshot.hasData) {
-                onTap = () => _onUserTap(snapshot.data!.id!);
-                avatar = snapshot.data!.avatar!;
-                nickname = snapshot.data!.nickname!;
+                final user = snapshot.data!;
+                onTap = () => _onUserTap(user.id!);
+                avatar = user.avatar!;
+                nickname = user.nickname!;
               } else if (snapshot.hasError) {
                 nickname = l(context).anErrorOccurred;
               }
@@ -726,8 +727,8 @@ class _DealDetailsState extends State<DealDetails> {
 
     Widget _buildSeeDealButton() {
       Future<void> launchURL() async {
-        await canLaunch(_deal!.dealUrl)
-            ? await launch(_deal!.dealUrl)
+        await canLaunch(_deal!.dealUrl!)
+            ? await launch(_deal!.dealUrl!)
             : throw Exception('Could not launch ${_deal!.dealUrl}');
       }
 

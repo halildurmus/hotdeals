@@ -63,7 +63,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
       );
 
       final sentReport =
-          await GetIt.I.get<SpringService>().sendDealReport(report: report);
+          await GetIt.I.get<SpringService>().reportDeal(report: report);
       loggy.info(sentReport);
       // Pops the loading dialog.
       Navigator.of(context).pop();

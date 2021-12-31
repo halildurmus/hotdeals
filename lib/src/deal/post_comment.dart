@@ -69,7 +69,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
       if (user!.id! != widget.deal.postedBy) {
         final poster = await GetIt.I
             .get<SpringService>()
-            .getUserById(id: widget.deal.postedBy!);
+            .getUserExtendedById(id: widget.deal.postedBy!);
 
         final notification = PushNotification(
           titleLocKey: 'comment_title',
@@ -79,7 +79,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
           verb: NotificationVerb.comment,
           object: widget.deal.id!,
           message: comment.message,
-          uid: poster.id!,
+          uid: poster.uid,
           avatar: user!.avatar!,
           tokens: poster.fcmTokens!.values.toList(),
         );

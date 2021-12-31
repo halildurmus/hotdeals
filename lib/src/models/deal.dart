@@ -4,12 +4,8 @@ import '../deal/deal_status.dart';
 
 typedef Json = Map<String, dynamic>;
 
-List<Deal> userDealsFromJson(String str) =>
-    List<Deal>.from((json.decode(str) as List<dynamic>)
-        .map<dynamic>((dynamic e) => Deal.fromJson(e as Json)));
-
 List<Deal> dealsFromJson(String str) =>
-    List<Deal>.from((json.decode(str)['_embedded']['deals'] as List<dynamic>)
+    List<Deal>.from((json.decode(str) as List<dynamic>)
         .map<dynamic>((dynamic e) => Deal.fromJson(e as Json)));
 
 class Deal {
@@ -18,7 +14,7 @@ class Deal {
     this.status = DealStatus.active,
     this.postedBy,
     required this.coverPhoto,
-    required this.dealUrl,
+    this.dealUrl,
     this.photos,
     this.upvoters,
     this.downvoters,
@@ -57,11 +53,9 @@ class Deal {
                 .difference(DateTime.parse(json['createdAt'] as String)) <=
             const Duration(days: 1),
         createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
   factory Deal.fromJsonES(Json json) => Deal(
-        dealUrl: '',
         id: json['id'] as String,
         status:
             DealStatus.values.byName((json['status'] as String).toLowerCase()),
@@ -88,7 +82,7 @@ class Deal {
   final DealStatus status;
   final String? postedBy;
   final String coverPhoto;
-  final String dealUrl;
+  final String? dealUrl;
   final List<String>? photos;
   final List<String>? upvoters;
   final List<String>? downvoters;
@@ -105,11 +99,9 @@ class Deal {
   final DateTime? updatedAt;
 
   Json toJson() => <String, dynamic>{
-        if (postedBy != null) 'postedBy': postedBy,
-        'status': status.name.toUpperCase(),
         'coverPhoto': coverPhoto,
         'dealUrl': dealUrl,
-        if (photos != null) 'photos': photos,
+        'photos': photos ?? const [],
         'title': title,
         'description': description,
         'category': category,

@@ -4,7 +4,7 @@ typedef Json = Map<String, dynamic>;
 
 List<MyUser> blockedUsersFromJson(String str) =>
     List<MyUser>.from((json.decode(str) as List<dynamic>)
-        .map<dynamic>((dynamic e) => MyUser.fromJson(e as Json)));
+        .map<dynamic>((dynamic e) => MyUser.fromJsonExtendedDTO(e as Json)));
 
 List<MyUser> userFromJson(String str) =>
     List<MyUser>.from((json.decode(str)['_embedded']['users'] as List<dynamic>)
@@ -21,14 +21,24 @@ class MyUser {
     this.fcmTokens,
     this.favorites,
     this.createdAt,
-    this.updatedAt,
   });
 
-  factory MyUser.fromJsonDTO(Json json) => MyUser(
+  factory MyUser.fromJsonBasicDTO(Json json) => MyUser(
         id: json['id'] as String,
         uid: json['uid'] as String,
         avatar: json['avatar'] as String,
         nickname: json['nickname'] as String,
+        createdAt: DateTime.parse(json['createdAt'] as String),
+      );
+
+  factory MyUser.fromJsonExtendedDTO(Json json) => MyUser(
+        id: json['id'] as String,
+        uid: json['uid'] as String,
+        avatar: json['avatar'] as String,
+        nickname: json['nickname'] as String,
+        blockedUsers: _blockedUsersFromJson(json['blockedUsers'] as Json),
+        fcmTokens: _fcmTokensFromJson(json['fcmTokens'] as Json),
+        createdAt: DateTime.parse(json['createdAt'] as String),
       );
 
   factory MyUser.fromJson(Json json) => MyUser(
@@ -41,7 +51,6 @@ class MyUser {
         fcmTokens: _fcmTokensFromJson(json['fcmTokens'] as Json),
         favorites: _favoritesFromJson(json['favorites'] as Json),
         createdAt: DateTime.parse(json['createdAt'] as String),
-        updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
 
   final String? id;
@@ -53,7 +62,6 @@ class MyUser {
   Map<String, String>? fcmTokens;
   Map<String, bool>? favorites;
   final DateTime? createdAt;
-  final DateTime? updatedAt;
 
   Json toJson() => <String, dynamic>{
         'id': id,
@@ -66,7 +74,7 @@ class MyUser {
   String toString() =>
       'MyUser{id: $id, uid: $uid, avatar: $avatar, email: $email, '
       'nickname: $nickname, blockedUsers: $blockedUsers, '
-      'fcmTokens: $fcmTokens, favorites: $favorites}';
+      'fcmTokens: $fcmTokens, favorites: $favorites, createdAt: $createdAt}';
 }
 
 Map<String, bool> _blockedUsersFromJson(Json json) {

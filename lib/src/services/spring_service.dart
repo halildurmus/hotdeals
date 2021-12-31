@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
@@ -100,9 +99,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.post(url, deal.toJson());
       if (response.statusCode == 201) {
-        final createdDeal = Deal.fromJson(jsonDecode(response.body) as Json);
-
-        return createdDeal;
+        return Deal.fromJson(jsonDecode(response.body) as Json);
       }
 
       return null;
@@ -117,9 +114,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.put(url, deal.toJson());
       if (response.statusCode == 200) {
-        final updatedDeal = Deal.fromJson(jsonDecode(response.body) as Json);
-
-        return updatedDeal;
+        return Deal.fromJson(jsonDecode(response.body) as Json);
       }
 
       return null;
@@ -158,7 +153,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<bool> sendDealReport({required DealReport report}) async {
+  Future<bool> reportDeal({required DealReport report}) async {
     final url = '$_baseUrl/deals/${report.reportedDeal}/reports';
     try {
       final response = await _httpService.post(url, report.toJson());
@@ -170,7 +165,7 @@ class SpringService with NetworkLoggy {
     }
   }
 
-  Future<bool> sendUserReport({required UserReport report}) async {
+  Future<bool> reportUser({required UserReport report}) async {
     final url = '$_baseUrl/users/${report.reportedUser}/reports';
     try {
       final response = await _httpService.post(url, report.toJson());
@@ -224,9 +219,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.post(url, comment.toJson());
       if (response.statusCode == 201) {
-        final comment = Comment.fromJson(jsonDecode(response.body) as Json);
-
-        return comment;
+        return Comment.fromJson(jsonDecode(response.body) as Json);
       }
 
       return null;
@@ -241,9 +234,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final categories = categoriesFromJson(response.body);
-
-        return categories;
+        return categoriesFromJson(response.body);
       }
 
       throw Exception('Failed to fetch categories!');
@@ -258,9 +249,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final stores = storeFromJson(response.body);
-
-        return stores;
+        return storesFromJson(response.body);
       }
 
       throw Exception('Failed to fetch stores!');
@@ -272,21 +261,18 @@ class SpringService with NetworkLoggy {
 
   Future<MyUser> createMongoUser(User user) async {
     final url = '$_baseUrl/users';
-    final fcmToken = await FirebaseMessaging.instance.getToken();
+    const defaultAvatar =
+        'https://ui-avatars.com/api/?length=1&background=008080&rounded=true&name=';
     final data = <String, dynamic>{
       'uid': user.uid,
       'email': user.email,
-      'avatar': user.photoURL ??
-          'https://ui-avatars.com/api/?length=1&background=008080&rounded=true&name=',
-      'fcmTokens': [fcmToken],
+      'avatar': user.photoURL ?? defaultAvatar,
     };
 
     try {
       final response = await _httpService.post(url, data, auth: false);
       if (response.statusCode == 201) {
-        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
-
-        return myUser;
+        return MyUser.fromJsonBasicDTO(jsonDecode(response.body) as Json);
       }
 
       throw Exception('Failed to create the user!');
@@ -301,9 +287,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
-
-        return myUser;
+        return MyUser.fromJson(jsonDecode(response.body) as Json);
       }
 
       return null;
@@ -318,9 +302,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final blockedUsers = blockedUsersFromJson(response.body);
-
-        return blockedUsers;
+        return blockedUsersFromJson(response.body);
       }
 
       return null;
@@ -330,14 +312,27 @@ class SpringService with NetworkLoggy {
     }
   }
 
+  Future<MyUser> getUserExtendedById({required String id}) async {
+    final url = '$_baseUrl/users/$id/extended';
+    try {
+      final response = await _httpService.get(url);
+      if (response.statusCode == 200) {
+        return MyUser.fromJsonExtendedDTO(jsonDecode(response.body) as Json);
+      }
+
+      throw Exception('User not found!');
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      throw Exception('User not found!');
+    }
+  }
+
   Future<MyUser> getUserById({required String id}) async {
     final url = '$_baseUrl/users/$id';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
-
-        return myUser;
+        return MyUser.fromJsonBasicDTO(jsonDecode(response.body) as Json);
       }
 
       throw Exception('User not found!');
@@ -352,9 +347,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
-
-        return myUser;
+        return MyUser.fromJsonExtendedDTO(jsonDecode(response.body) as Json);
       }
 
       throw Exception('User not found!');
@@ -429,9 +422,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
-
-        return myUser;
+        return MyUser.fromJsonExtendedDTO(jsonDecode(response.body) as Json);
       }
 
       throw Exception("Failed to update the user's avatar!");
@@ -452,9 +443,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        final myUser = MyUser.fromJson(jsonDecode(response.body) as Json);
-
-        return myUser;
+        return MyUser.fromJsonExtendedDTO(jsonDecode(response.body) as Json);
       } else if (response.body.contains('E11000')) {
         throw Exception('This nickname already being used by another user!');
       }
@@ -471,9 +460,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final deals = userDealsFromJson(response.body);
-
-        return deals;
+        return dealsFromJson(response.body);
       }
 
       throw Exception('Could not get the user favorites!');
@@ -503,9 +490,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        final deals = userDealsFromJson(response.body);
-
-        return deals;
+        return dealsFromJson(response.body);
       }
 
       throw Exception('Could not get the user deals!');
@@ -521,13 +506,11 @@ class SpringService with NetworkLoggy {
     int? size,
   }) async {
     final url =
-        '$_baseUrl/deals/search/findAllByCategoryStartsWithOrderByCreatedAtDesc?category=$category&page=$page&size=$size';
+        '$_baseUrl/deals/search/byCategory?category=$category&page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deals = dealsFromJson(response.body);
-
-        return deals;
+        return dealsFromJson(response.body);
       }
 
       throw Exception('Could not get deals by category!');
@@ -565,13 +548,11 @@ class SpringService with NetworkLoggy {
     int? size,
   }) async {
     final url =
-        '$_baseUrl/deals/search/findAllByStoreOrderByCreatedAtDesc?storeId=$storeId&page=$page&size=$size';
+        '$_baseUrl/deals/search/byStoreId?storeId=$storeId&page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deals = dealsFromJson(response.body);
-
-        return deals;
+        return dealsFromJson(response.body);
       }
 
       throw Exception('Could not get deals by store!');
@@ -583,13 +564,11 @@ class SpringService with NetworkLoggy {
 
   Future<List<Deal>> getLatestDeals({int? page, int? size}) async {
     final url =
-        '$_baseUrl/deals/search/findAllByStatusEqualsOrderByCreatedAtDesc?status=ACTIVE';
+        '$_baseUrl/deals/search/latestActiveDeals?page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deals = dealsFromJson(response.body);
-
-        return deals;
+        return dealsFromJson(response.body);
       }
 
       throw Exception('Could not get the latest deals!');
@@ -601,13 +580,11 @@ class SpringService with NetworkLoggy {
 
   Future<List<Deal>> getMostLikedDeals({int? page, int? size}) async {
     final url =
-        '$_baseUrl/deals/search/findAllByStatusEqualsOrderByDealScoreDesc?status=ACTIVE';
+        '$_baseUrl/deals/search/mostLikedActiveDeals?page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deals = dealsFromJson(response.body);
-
-        return deals;
+        return dealsFromJson(response.body);
       }
 
       throw Exception('Could not get the most liked deals!');
@@ -667,9 +644,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        final deal = Deal.fromJson(jsonDecode(response.body) as Json);
-
-        return deal;
+        return Deal.fromJson(jsonDecode(response.body) as Json);
       }
 
       return null;
@@ -693,9 +668,7 @@ class SpringService with NetworkLoggy {
         response = await _httpService.put(url, data);
       }
       if (response.statusCode == 200) {
-        final deal = Deal.fromJson(jsonDecode(response.body) as Json);
-
-        return deal;
+        return Deal.fromJson(jsonDecode(response.body) as Json);
       }
 
       return null;

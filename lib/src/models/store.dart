@@ -2,7 +2,7 @@ import 'dart:convert';
 
 typedef Json = Map<String, dynamic>;
 
-List<Store> storeFromJson(String str) =>
+List<Store> storesFromJson(String str) =>
     List<Store>.from((json.decode(str) as List<dynamic>)
         .map<dynamic>((dynamic e) => Store.fromJson(e as Json)));
 

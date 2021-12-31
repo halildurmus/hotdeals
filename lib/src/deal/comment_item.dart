@@ -24,7 +24,7 @@ class CommentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final poster = comment.poster!;
+    final poster = comment.postedBy!;
     final user = context.read<UserController>().user;
 
     Widget buildUserDetails() => GestureDetector(
