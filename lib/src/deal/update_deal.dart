@@ -363,16 +363,22 @@ class _UpdateDealState extends State<UpdateDeal> {
               const SizedBox(height: 10),
               buildDescriptionFormField(),
               const SizedBox(height: 10),
-              buildUpdateDealButton(),
             ],
           ),
         );
 
-    Widget buildBody() => SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: buildForm(),
-          ),
+    Widget buildBody() => Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: buildForm(),
+                ),
+              ),
+            ),
+            buildUpdateDealButton(),
+          ],
         );
 
     return Scaffold(
