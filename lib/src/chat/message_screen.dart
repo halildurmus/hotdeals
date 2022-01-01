@@ -185,11 +185,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
       await GetIt.I.get<FirestoreService>().sendMessage(
           docID: widget.docId,
           message: ChatUtil.messageToJson(message: message));
-
-      setState(() {
-        _isAttachmentUploading = false;
-      });
-
+      setState(() => _isAttachmentUploading = false);
       _sendPushNotification(_user, message);
     }
 
@@ -201,16 +197,12 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         author: types.User(id: _user.uid, imageUrl: _user.avatar),
         text: message.text,
       );
-
       _sendMessage(textMessage);
     }
 
     Future<void> _handleFileSelection() async {
       final result = await FilePicker.platform.pickFiles();
-      setState(() {
-        _isAttachmentUploading = true;
-      });
-
+      setState(() => _isAttachmentUploading = true);
       if (result != null) {
         final pickedFile = result.files.single;
         final mimeType = lookupMimeType(pickedFile.name) ?? '';
@@ -219,7 +211,6 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
               fileName: pickedFile.name,
               mimeType: mimeType,
             );
-
         final fileMessage = types.FileMessage(
           id: uuid.v4(),
           createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -230,12 +221,9 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
           size: pickedFile.size,
           uri: url,
         );
-
         _sendMessage(fileMessage);
       } else {
-        setState(() {
-          _isAttachmentUploading = false;
-        });
+        setState(() => _isAttachmentUploading = false);
       }
     }
 
@@ -245,11 +233,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
             maxWidth: 1440,
             source: ImageSource.camera,
           );
-
-      setState(() {
-        _isAttachmentUploading = true;
-      });
-
+      setState(() => _isAttachmentUploading = true);
       if (pickedFile != null) {
         final bytes = await pickedFile.readAsBytes();
         final image = await decodeImageFromList(bytes);
@@ -259,7 +243,6 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
               fileName: pickedFile.name,
               mimeType: mimeType,
             );
-
         final imageMessage = types.ImageMessage(
           id: uuid.v4(),
           createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -271,12 +254,9 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
           uri: url,
           width: image.width.toDouble(),
         );
-
         _sendMessage(imageMessage);
       } else {
-        setState(() {
-          _isAttachmentUploading = false;
-        });
+        setState(() => _isAttachmentUploading = false);
       }
     }
 

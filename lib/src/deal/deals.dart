@@ -12,8 +12,8 @@ import '../search/search_bar.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
-import 'deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
+import 'deal_paged_listview.dart';
 import 'post_deal.dart';
 
 class Deals extends StatefulWidget {

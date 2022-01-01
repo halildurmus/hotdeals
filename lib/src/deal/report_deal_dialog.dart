@@ -102,38 +102,26 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
               CheckboxListTile(
                 title: Text(l(context).expired),
                 value: expiredCheckbox,
-                onChanged: (newValue) {
-                  setState(() {
-                    expiredCheckbox = newValue!;
-                  });
-                },
+                onChanged: (newValue) =>
+                    setState(() => expiredCheckbox = newValue!),
               ),
               CheckboxListTile(
                 title: Text(l(context).repost),
                 value: repostCheckbox,
-                onChanged: (newValue) {
-                  setState(() {
-                    repostCheckbox = newValue!;
-                  });
-                },
+                onChanged: (newValue) =>
+                    setState(() => repostCheckbox = newValue!),
               ),
               CheckboxListTile(
                 title: Text(l(context).spam),
                 value: spamCheckbox,
-                onChanged: (newValue) {
-                  setState(() {
-                    spamCheckbox = newValue!;
-                  });
-                },
+                onChanged: (newValue) =>
+                    setState(() => spamCheckbox = newValue!),
               ),
               CheckboxListTile(
                 title: Text(l(context).other),
                 value: otherCheckbox,
-                onChanged: (newValue) {
-                  setState(() {
-                    otherCheckbox = newValue!;
-                  });
-                },
+                onChanged: (newValue) =>
+                    setState(() => otherCheckbox = newValue!),
               ),
               const SizedBox(height: 10),
               TextField(

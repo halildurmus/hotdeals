@@ -94,9 +94,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
           text: l(context).successfullyUnblocked,
         ).buildSnackBar(context);
-        setState(() {
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        });
+        setState(() => ScaffoldMessenger.of(context).showSnackBar(snackBar));
       } else {
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),

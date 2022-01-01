@@ -86,11 +86,9 @@ class _DealDetailsState extends State<DealDetails> {
         .getDealCommentCount(dealId: widget.dealId)
         .then((commentCount) {
       if (commentCount != null) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
-          if (mounted) {
-            setState(() => _commentCount = commentCount);
-          }
-        });
+        if (mounted) {
+          setState(() => _commentCount = commentCount);
+        }
       }
     });
   }

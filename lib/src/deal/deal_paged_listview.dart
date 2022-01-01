@@ -148,7 +148,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         if (result) {
           Provider.of<UserController>(context, listen: false).getUser();
           if (widget.removeDealWhenUnfavorited) {
-            _pagingController.itemList!.removeWhere((e) => e.id == dealId);
+            _pagingController.itemList?.removeWhere((e) => e.id == dealId);
           }
         } else {
           final snackBar = CustomSnackBar(

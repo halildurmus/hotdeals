@@ -70,9 +70,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
   void _onSelectAll(bool shouldSelectAll) {
     // If shouldSelectAll is true, it will select all items. Otherwise it will
     // de-select them.
-    setState(() {
-      _items.updateAll((key, value) => shouldSelectAll);
-    });
+    setState(() => _items.updateAll((key, value) => shouldSelectAll));
   }
 
   Future<void> _fetchPage(int pageKey) async {
@@ -153,13 +151,9 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
 
   Future<void> _onTap(bool isSelected, PushNotification notification) async {
     if (_isSelectionMode) {
-      setState(() {
-        _items[notification.id!] = !isSelected;
-      });
+      setState(() => _items[notification.id!] = !isSelected);
     } else if (!_isSelectionMode && !notification.isRead) {
-      setState(() {
-        notification.isRead = true;
-      });
+      setState(() => notification.isRead = true);
       await GetIt.I
           .get<PushNotificationService>()
           .markAsRead([notification.id!]);

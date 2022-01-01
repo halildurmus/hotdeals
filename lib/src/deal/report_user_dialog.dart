@@ -100,29 +100,20 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
               CheckboxListTile(
                 title: Text(l(context).harassing),
                 value: harassingCheckbox,
-                onChanged: (newValue) {
-                  setState(() {
-                    harassingCheckbox = newValue!;
-                  });
-                },
+                onChanged: (newValue) =>
+                    setState(() => harassingCheckbox = newValue!),
               ),
               CheckboxListTile(
                 title: Text(l(context).spam),
                 value: spamCheckbox,
-                onChanged: (newValue) {
-                  setState(() {
-                    spamCheckbox = newValue!;
-                  });
-                },
+                onChanged: (newValue) =>
+                    setState(() => spamCheckbox = newValue!),
               ),
               CheckboxListTile(
                 title: Text(l(context).other),
                 value: otherCheckbox,
-                onChanged: (newValue) {
-                  setState(() {
-                    otherCheckbox = newValue!;
-                  });
-                },
+                onChanged: (newValue) =>
+                    setState(() => otherCheckbox = newValue!),
               ),
               const SizedBox(height: 10),
               TextField(
