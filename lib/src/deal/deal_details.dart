@@ -128,7 +128,16 @@ class _DealDetailsState extends State<DealDetails> {
             dealId: _deal!.id!,
             status: status,
           );
-      setState(() => _deal = deal);
+      if (mounted) {
+        setState(() => _deal = deal);
+      }
+      final snackBar = CustomSnackBar(
+        icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+        text: status == DealStatus.active
+            ? l(context).markAsActiveSuccess
+            : l(context).markAsExpiredSuccess,
+      ).buildSnackBar(context);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } on Exception {
       final snackBar = CustomSnackBar(
         icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),

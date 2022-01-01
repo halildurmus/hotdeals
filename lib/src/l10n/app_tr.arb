@@ -1191,8 +1191,22 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "markAsActiveSuccess": "Fırsatın durumu 'aktif' olarak güncellendi!",
+  "@markAsActiveSuccess": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "markAsExpired": "Süresi doldu olarak işaretle",
   "@markAsExpired": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "markAsExpiredSuccess": "Fırsatın durumu 'süresi doldu' olarak güncellendi!",
+  "@markAsExpiredSuccess": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

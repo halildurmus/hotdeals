@@ -1191,8 +1191,22 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "markAsActiveSuccess": "Marked the status of this deal as 'active'.",
+  "@markAsActiveSuccess": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "markAsExpired": "Mark as Expired",
   "@markAsExpired": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "markAsExpiredSuccess": "Marked the status of this deal as 'expired'.",
+  "@markAsExpiredSuccess": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
