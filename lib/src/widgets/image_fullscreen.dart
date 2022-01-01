@@ -2,22 +2,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
-class AvatarFullScreen extends StatelessWidget {
-  const AvatarFullScreen({
+class ImageFullScreen extends StatelessWidget {
+  const ImageFullScreen({
     Key? key,
-    required this.avatarURL,
-    required this.heroTag,
+    this.heroTag,
+    required this.imageUrl,
   }) : super(key: key);
 
-  final String avatarURL;
-  final String heroTag;
+  final String? heroTag;
+  final String imageUrl;
 
   Widget _buildImage(BuildContext ctx, ImageProvider<Object> imageProvider) =>
       PhotoView(
-        backgroundDecoration:
-            BoxDecoration(color: Theme.of(ctx).backgroundColor),
+        backgroundDecoration: BoxDecoration(
+          color: Theme.of(ctx).backgroundColor,
+        ),
         filterQuality: FilterQuality.low,
-        heroAttributes: PhotoViewHeroAttributes(tag: heroTag),
+        heroAttributes:
+            heroTag != null ? PhotoViewHeroAttributes(tag: heroTag!) : null,
         imageProvider: imageProvider,
       );
 
@@ -25,7 +27,7 @@ class AvatarFullScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(),
         body: CachedNetworkImage(
-          imageUrl: avatarURL,
+          imageUrl: imageUrl,
           imageBuilder: _buildImage,
           placeholder: (context, url) =>
               const Center(child: CircularProgressIndicator()),

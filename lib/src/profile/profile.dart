@@ -6,7 +6,7 @@ import '../settings/settings.view.dart';
 import '../sign_in/sign_in_page.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
-import 'avatar_fullscreen.dart';
+import '../widgets/image_fullscreen.dart';
 import 'my_deals.dart';
 import 'my_favorites.dart';
 import 'update_profile.dart';
@@ -30,7 +30,7 @@ class _ProfileState extends State<Profile> {
     Widget buildAvatar() => GestureDetector(
           onTap: () => NavigationUtil.navigate(
             context,
-            AvatarFullScreen(avatarURL: user!.avatar!, heroTag: user.id!),
+            ImageFullScreen(imageUrl: user!.avatar!, heroTag: user.id!),
           ),
           child: Hero(
             tag: user!.id!,
