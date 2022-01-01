@@ -82,7 +82,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final _user = Provider.of<UserController>(context).user!;
-    final _isUserBlocked = _user.blockedUsers!.containsKey(widget.user2.id!);
+    final _isUserBlocked = _user.blockedUsers!.contains(widget.user2.id!);
 
     Future<void> _onPressedReport() async => showDialog<void>(
           context: context,

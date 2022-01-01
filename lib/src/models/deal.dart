@@ -39,8 +39,8 @@ class Deal {
         coverPhoto: json['coverPhoto'] as String,
         dealUrl: json['dealUrl'] as String,
         photos: List<String>.from(json['photos'] as List<dynamic>),
-        upvoters: List<String>.from(json['upvoters'] as List<dynamic>),
-        downvoters: List<String>.from(json['downvoters'] as List<dynamic>),
+        upvoters: Set<String>.from(json['upvoters'] as List<dynamic>),
+        downvoters: Set<String>.from(json['downvoters'] as List<dynamic>),
         title: json['title'] as String,
         description: json['description'] as String,
         category: json['category'] as String,
@@ -84,8 +84,8 @@ class Deal {
   final String coverPhoto;
   final String? dealUrl;
   final List<String>? photos;
-  final List<String>? upvoters;
-  final List<String>? downvoters;
+  final Set<String>? upvoters;
+  final Set<String>? downvoters;
   final String title;
   final String description;
   final int? dealScore;

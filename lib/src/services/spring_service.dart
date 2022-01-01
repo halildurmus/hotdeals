@@ -301,7 +301,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        return blockedUsersFromJson(response.body);
+        return usersFromJson(response.body);
       }
 
       return null;

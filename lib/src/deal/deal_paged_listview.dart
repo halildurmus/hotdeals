@@ -211,7 +211,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
           builderDelegate: PagedChildBuilderDelegate<Deal>(
             animateTransitions: true,
             itemBuilder: (context, deal, index) {
-              final isFavorited = user?.favorites![deal.id!] ?? false;
+              final isFavorited = user?.favorites!.contains(deal.id!) ?? false;
 
               return DealItem(
                 deal: deal,

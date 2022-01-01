@@ -2,13 +2,9 @@ import 'dart:convert';
 
 typedef Json = Map<String, dynamic>;
 
-List<MyUser> blockedUsersFromJson(String str) =>
+List<MyUser> usersFromJson(String str) =>
     List<MyUser>.from((json.decode(str) as List<dynamic>)
         .map<dynamic>((dynamic e) => MyUser.fromJsonExtendedDTO(e as Json)));
-
-List<MyUser> userFromJson(String str) =>
-    List<MyUser>.from((json.decode(str)['_embedded']['users'] as List<dynamic>)
-        .map<dynamic>((dynamic e) => MyUser.fromJson(e as Json)));
 
 class MyUser {
   MyUser({
@@ -36,7 +32,7 @@ class MyUser {
         uid: json['uid'] as String,
         avatar: json['avatar'] as String,
         nickname: json['nickname'] as String,
-        blockedUsers: _blockedUsersFromJson(json['blockedUsers'] as Json),
+        blockedUsers: _setFromJson(json['blockedUsers'] as List<dynamic>),
         fcmTokens: _fcmTokensFromJson(json['fcmTokens'] as Json),
         createdAt: DateTime.parse(json['createdAt'] as String),
       );
@@ -47,9 +43,9 @@ class MyUser {
         avatar: json['avatar'] as String,
         email: json['email'] as String,
         nickname: json['nickname'] as String,
-        blockedUsers: _blockedUsersFromJson(json['blockedUsers'] as Json),
+        blockedUsers: _setFromJson(json['blockedUsers'] as List<dynamic>),
         fcmTokens: _fcmTokensFromJson(json['fcmTokens'] as Json),
-        favorites: _favoritesFromJson(json['favorites'] as Json),
+        favorites: _setFromJson(json['favorites'] as List<dynamic>),
         createdAt: DateTime.parse(json['createdAt'] as String),
       );
 
@@ -58,9 +54,9 @@ class MyUser {
   String? avatar;
   String? email;
   String? nickname;
-  Map<String, bool>? blockedUsers;
+  Set<String>? blockedUsers;
   Map<String, String>? fcmTokens;
-  Map<String, bool>? favorites;
+  Set<String>? favorites;
   final DateTime? createdAt;
 
   Json toJson() => <String, dynamic>{
@@ -77,23 +73,8 @@ class MyUser {
       'fcmTokens: $fcmTokens, favorites: $favorites, createdAt: $createdAt}';
 }
 
-Map<String, bool> _blockedUsersFromJson(Json json) {
-  final blockedUsers = <String, bool>{};
-  json.forEach((k, dynamic v) {
-    blockedUsers.putIfAbsent(k, () => v as bool);
-  });
-
-  return blockedUsers;
-}
-
-Map<String, bool> _favoritesFromJson(Json json) {
-  final favorites = <String, bool>{};
-  json.forEach((k, dynamic v) {
-    favorites.putIfAbsent(k, () => v as bool);
-  });
-
-  return favorites;
-}
+Set<String> _setFromJson(List<dynamic> list) =>
+    <String>{}..addAll(List.from(list));
 
 Map<String, String> _fcmTokensFromJson(Json json) {
   final fcmTokens = <String, String>{};

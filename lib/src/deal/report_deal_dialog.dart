@@ -52,12 +52,12 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
 
       final report = DealReport(
         reportedDeal: widget.reportedDealId,
-        reasons: [
+        reasons: {
           if (expiredCheckbox) DealReportReason.expired,
           if (repostCheckbox) DealReportReason.repost,
           if (spamCheckbox) DealReportReason.spam,
           if (otherCheckbox) DealReportReason.other,
-        ],
+        },
         message:
             messageController.text.isNotEmpty ? messageController.text : null,
       );

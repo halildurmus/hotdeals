@@ -10,7 +10,7 @@ class DealReport {
   });
 
   final String reportedDeal;
-  final List<DealReportReason> reasons;
+  final Set<DealReportReason> reasons;
   final String? message;
 
   Json toJson() => <String, dynamic>{

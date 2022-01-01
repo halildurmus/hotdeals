@@ -267,7 +267,7 @@ class _DealDetailsState extends State<DealDetails> {
     Widget buildFavoriteButton() => Consumer<UserController>(
           builder: (context, mongoUser, child) {
             final user = mongoUser.user;
-            final isFavorited = user?.favorites![_deal!.id!] ?? false;
+            final isFavorited = user?.favorites!.contains(_deal!.id!) ?? false;
 
             return FloatingActionButton(
               onPressed: () {

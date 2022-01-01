@@ -51,11 +51,11 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
 
       final report = UserReport(
         reportedUser: widget.reportedUserId,
-        reasons: [
+        reasons: {
           if (harassingCheckbox) UserReportReason.harassing,
           if (spamCheckbox) UserReportReason.spam,
           if (otherCheckbox) UserReportReason.other,
-        ],
+        },
         message:
             messageController.text.isNotEmpty ? messageController.text : null,
       );

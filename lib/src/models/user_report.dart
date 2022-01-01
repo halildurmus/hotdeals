@@ -10,7 +10,7 @@ class UserReport {
   });
 
   final String reportedUser;
-  final List<UserReportReason> reasons;
+  final Set<UserReportReason> reasons;
   final String? message;
 
   Json toJson() => <String, dynamic>{
