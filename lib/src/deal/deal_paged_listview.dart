@@ -5,7 +5,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:provider/provider.dart';
 
-import 'update_deal.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
@@ -16,12 +15,13 @@ import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
-import 'deal_item.dart';
-import '../widgets/sign_in_dialog.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/error_indicator.dart';
 import '../widgets/filter_bar.dart';
+import '../widgets/sign_in_dialog.dart';
+import 'deal_item.dart';
+import 'update_deal.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({

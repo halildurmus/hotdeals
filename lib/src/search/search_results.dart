@@ -5,11 +5,11 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
 import 'package:material_floating_search_bar/material_floating_search_bar.dart'
     show FloatingSearchBar;
 
+import '../deal/deal_paged_listview.dart';
 import '../models/deal.dart';
 import '../search/search_response.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
-import '../deal/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 import 'search_params.dart';
 

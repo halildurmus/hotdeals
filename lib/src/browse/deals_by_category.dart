@@ -3,11 +3,11 @@ import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
 
+import '../deal/deal_paged_listview.dart';
 import '../models/category.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
-import '../deal/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 import 'filter_chips.dart';
 
