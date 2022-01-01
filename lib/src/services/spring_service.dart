@@ -268,7 +268,6 @@ class SpringService with NetworkLoggy {
       'email': user.email,
       'avatar': user.photoURL ?? defaultAvatar,
     };
-
     try {
       final response = await _httpService.post(url, data, auth: false);
       if (response.statusCode == 201) {

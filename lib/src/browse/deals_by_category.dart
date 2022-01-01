@@ -7,7 +7,7 @@ import '../models/category.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
-import '../widgets/deal_paged_listview.dart';
+import '../deal/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 import 'filter_chips.dart';
 

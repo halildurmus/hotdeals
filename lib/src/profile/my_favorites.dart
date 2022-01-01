@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
-import '../widgets/deal_paged_listview.dart';
+import '../deal/deal_paged_listview.dart';
 import '../widgets/error_indicator.dart';
 
 class MyFavorites extends StatelessWidget {

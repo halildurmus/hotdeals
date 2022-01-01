@@ -4,15 +4,15 @@ import 'package:get_it/get_it.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
 
-import '../deal/deal_details.dart';
-import '../deal/deal_status.dart';
 import '../models/categories.dart';
 import '../models/comments.dart';
 import '../models/deal.dart';
 import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
-import 'grayscale_filtered.dart';
+import '../widgets/grayscale_filtered.dart';
+import 'deal_details.dart';
+import 'deal_status.dart';
 
 class DealItem extends StatefulWidget {
   const DealItem({
