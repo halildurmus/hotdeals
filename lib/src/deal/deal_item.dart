@@ -49,8 +49,8 @@ class _DealItemState extends State<DealItem> {
   @override
   void initState() {
     _categories = GetIt.I.get<Categories>();
-    _fetchDealDetails();
     super.initState();
+    _fetchDealDetails();
   }
 
   void _fetchDealDetails() {
@@ -61,15 +61,13 @@ class _DealItemState extends State<DealItem> {
       final deal = values[0] as Deal?;
       final commentCount = (values[1] as Comments?)?.count;
       if (commentCount != null && deal != null) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
-          if (mounted) {
-            setState(() {
-              _dealScore = deal.dealScore!;
-              _commentsCount = commentCount;
-              _viewsCount = deal.views!;
-            });
-          }
-        });
+        if (mounted) {
+          setState(() {
+            _dealScore = deal.dealScore!;
+            _commentsCount = commentCount;
+            _viewsCount = deal.views!;
+          });
+        }
       }
     });
   }
