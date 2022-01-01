@@ -303,8 +303,6 @@ class _DealItemState extends State<DealItem> {
           clipBehavior: Clip.none,
           children: [
             buildDealContent(),
-            if (widget.showControlButtons) buildControlButtons(),
-            buildFavoriteButton(),
             if (deal.status == DealStatus.expired || deal.isNew!)
               buildSpecialMark(),
           ],
@@ -315,14 +313,21 @@ class _DealItemState extends State<DealItem> {
       child: SizedBox(
         height: 145,
         width: deviceWidth,
-        child: deal.status == DealStatus.expired
-            ? Opacity(
-                opacity: .7,
+        child: Stack(
+          children: [
+            if (deal.status == DealStatus.expired)
+              Opacity(
+                opacity: .75,
                 child: GrayscaleColorFiltered(
                   child: buildStack(),
                 ),
               )
-            : buildStack(),
+            else
+              buildStack(),
+            if (widget.showControlButtons) buildControlButtons(),
+            buildFavoriteButton(),
+          ],
+        ),
       ),
     );
   }
