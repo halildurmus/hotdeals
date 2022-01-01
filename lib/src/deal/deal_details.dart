@@ -23,6 +23,7 @@ import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/expandable_text.dart';
+import '../widgets/image_fullscreen.dart';
 import '../widgets/sign_in_dialog.dart';
 import '../widgets/slider_indicator.dart';
 import '../widgets/user_profile_dialog.dart';
@@ -232,24 +233,34 @@ class _DealDetailsState extends State<DealDetails> {
           child: ExpandableText(text: _deal!.description),
         );
 
-    Widget buildStoreImage() => Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            color: theme.brightness == Brightness.dark ? Colors.white : null,
+    Widget buildStoreImage() => GestureDetector(
+          onTap: () => NavigationUtil.navigate(
+            context,
+            ImageFullScreen(imageUrl: _store!.logo, heroTag: _store!.id!),
           ),
-          padding: theme.brightness == Brightness.dark
-              ? const EdgeInsets.all(3)
-              : null,
-          height: 45,
-          width: 45,
-          child: CachedNetworkImage(
-            imageUrl: _store!.logo,
-            imageBuilder: (ctx, imageProvider) => DecoratedBox(
-              decoration: BoxDecoration(
-                image: DecorationImage(image: imageProvider),
-              ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
+              color: theme.brightness == Brightness.dark ? Colors.white : null,
             ),
-            placeholder: (context, url) => const SizedBox.square(dimension: 40),
+            padding: theme.brightness == Brightness.dark
+                ? const EdgeInsets.all(3)
+                : null,
+            height: 45,
+            width: 45,
+            child: CachedNetworkImage(
+              imageUrl: _store!.logo,
+              imageBuilder: (ctx, imageProvider) => Hero(
+                tag: _store!.id!,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: imageProvider),
+                  ),
+                ),
+              ),
+              placeholder: (context, url) =>
+                  const SizedBox.square(dimension: 40),
+            ),
           ),
         );
 
