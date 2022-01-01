@@ -362,16 +362,22 @@ class _PostDealState extends State<PostDeal> {
               const SizedBox(height: 10),
               buildDescriptionFormField(),
               const SizedBox(height: 10),
-              buildPostDealButton(),
             ],
           ),
         );
 
-    Widget buildBody() => SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: buildForm(),
-          ),
+    Widget buildBody() => Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: buildForm(),
+                ),
+              ),
+            ),
+            buildPostDealButton(),
+          ],
         );
 
     return Scaffold(
