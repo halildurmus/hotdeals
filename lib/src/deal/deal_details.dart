@@ -473,23 +473,25 @@ class _DealDetailsState extends State<DealDetails> {
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
-        setState(() {
-          _deal = deal;
-          switch (voteType) {
-            case DealVoteType.up:
-              isUpvoted = true;
-              isDownvoted = false;
-              break;
-            case DealVoteType.down:
-              isUpvoted = false;
-              isDownvoted = true;
-              break;
-            case DealVoteType.unvote:
-              isUpvoted = false;
-              isDownvoted = false;
-              break;
-          }
-        });
+        if (mounted) {
+          setState(() {
+            _deal = deal;
+            switch (voteType) {
+              case DealVoteType.up:
+                isUpvoted = true;
+                isDownvoted = false;
+                break;
+              case DealVoteType.down:
+                isUpvoted = false;
+                isDownvoted = true;
+                break;
+              case DealVoteType.unvote:
+                isUpvoted = false;
+                isDownvoted = false;
+                break;
+            }
+          });
+        }
       }
     }
 
