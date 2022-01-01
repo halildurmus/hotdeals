@@ -1,4 +1,5 @@
-import 'dart:ui' show Locale;
+import 'package:flex_color_scheme/flex_color_scheme.dart' show FlexScheme;
+import 'package:flutter/material.dart';
 
 const appTitle = 'hotdeals';
 
@@ -14,3 +15,15 @@ final localeAssets = <Locale, String>{
   localeEnglish: assetEnglish,
   localeTurkish: assetTurkish,
 };
+
+// The FlexScheme used throughout the app.
+const usedFlexScheme = FlexScheme.deepBlue;
+
+// ZoomPageTransitionsBuilder will make animations on Android devices
+// match the default animations seen on Android 10 and above.
+const pageTransitionsTheme = PageTransitionsTheme(
+  builders: {
+    TargetPlatform.android: ZoomPageTransitionsBuilder(),
+    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+  },
+);

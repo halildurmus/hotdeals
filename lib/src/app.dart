@@ -28,8 +28,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with NetworkLoggy {
-  final usedFlexScheme = FlexScheme.deepBlue;
-  late SettingsController settingsController;
+  late final SettingsController settingsController;
   _FutureState _futureState = _FutureState.loading;
 
   @override
@@ -79,11 +78,11 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
         theme: FlexColorScheme.light(
           scheme: usedFlexScheme,
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        ).toTheme,
+        ).toTheme.copyWith(pageTransitionsTheme: pageTransitionsTheme),
         darkTheme: FlexColorScheme.dark(
           scheme: usedFlexScheme,
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        ).toTheme,
+        ).toTheme.copyWith(pageTransitionsTheme: pageTransitionsTheme),
         themeMode: settingsController.themeMode,
         onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         home: home ?? AuthWidget(userSnapshot: userSnapshot!),
