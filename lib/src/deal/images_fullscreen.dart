@@ -5,8 +5,8 @@ import 'package:photo_view/photo_view.dart';
 
 import '../widgets/slider_indicator.dart';
 
-class ImageFullScreen extends StatefulWidget {
-  const ImageFullScreen({
+class ImagesFullScreen extends StatefulWidget {
+  const ImagesFullScreen({
     Key? key,
     required this.images,
     required this.currentIndex,
@@ -19,7 +19,7 @@ class ImageFullScreen extends StatefulWidget {
   _MyImageScreen createState() => _MyImageScreen();
 }
 
-class _MyImageScreen extends State<ImageFullScreen> {
+class _MyImageScreen extends State<ImagesFullScreen> {
   late int currentIndex;
   late List<String> images;
 

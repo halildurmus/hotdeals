@@ -29,7 +29,7 @@ import '../widgets/user_profile_dialog.dart';
 import 'deal_comments.dart';
 import 'deal_score_box.dart';
 import 'deal_status.dart';
-import 'image_fullscreen.dart';
+import 'images_fullscreen.dart';
 import 'post_comment.dart';
 import 'report_deal_dialog.dart';
 
@@ -108,7 +108,7 @@ class _DealDetailsState extends State<DealDetails> {
         .map((item) => GestureDetector(
               onTap: () => NavigationUtil.navigate(
                 context,
-                ImageFullScreen(images: _images!, currentIndex: currentIndex),
+                ImagesFullScreen(images: _images!, currentIndex: currentIndex),
               ),
               child: Container(
                 decoration: BoxDecoration(
