@@ -25,19 +25,14 @@ class ConnectionService {
 
   // A clean up method to close our StreamController. Because this is meant to
   // exist through the entire application life cycle this isn't really an issue.
-  void dispose() {
-    connectionChangeController.close();
-  }
+  void dispose() => connectionChangeController.close();
 
   // flutter_connectivity's listener.
-  void _connectionChange(ConnectivityResult result) {
-    checkConnection();
-  }
+  void _connectionChange(ConnectivityResult result) => checkConnection();
 
   // Checks if there is a connection.
   Future<bool> checkConnection() async {
     final previousConnection = hasConnection;
-
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
