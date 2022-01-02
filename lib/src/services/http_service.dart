@@ -1,54 +1,44 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show SocketException;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
 
 typedef Json = Map<String, dynamic>;
 
-const Duration _timeoutDuration = Duration(seconds: 5);
-final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+final _firebaseAuth = FirebaseAuth.instance;
+const _headers = <String, String>{
+  'Accept': 'application/json; charset=utf-8',
+  'Content-Type': 'application/json; charset=utf-8',
+};
+const _timeoutDuration = Duration(seconds: 5);
 
+/// A class that exposes `HTTP` methods to interact with the Backend.
 class HttpService {
-  /// Creates an instance of [HttpService] with given HTTP [client].
-  /// If no [client] is given, automatically initializes a new HTTP [client].
-  factory HttpService({Client? client}) {
-    if (client == null) {
-      return HttpService._privateConstructor(Client());
-    }
-
-    return HttpService._privateConstructor(client);
-  }
+  /// Creates an instance of [HttpService] with given `HTTP` [client].
+  /// If no [client] is given, creates a default one.
+  factory HttpService({Client? client}) =>
+      HttpService._privateConstructor(client ?? Client());
 
   HttpService._privateConstructor(Client client) {
     _client = client;
   }
 
-  late Client _client;
+  late final Client _client;
 
-  Future<Response> delete(String url, [Json? data]) async {
-    final idToken = await _firebaseAuth.currentUser!.getIdToken();
-
-    Response response;
+  // Wrapper function for HTTP requests to reduce boilerplate.
+  Future<Response> _request(Future<Response> Function() fn) async {
     try {
-      response = await _client
-          .delete(
-            Uri.parse(url),
-            headers: <String, String>{
-              'Accept': 'application/json; charset=utf-8',
-              'Authorization': 'Bearer $idToken',
-              'Content-Type': 'application/json; charset=utf-8',
-            },
-            body: data != null ? jsonEncode(data) : null,
-          )
-          .timeout(
-            _timeoutDuration,
-            onTimeout: () => throw Exception('Server timeout'),
-          );
-    } on Exception catch (e) {
-      throw Exception(e);
+      return fn().timeout(
+        _timeoutDuration,
+        onTimeout: () => throw TimeoutException(null, _timeoutDuration),
+      );
+    } on SocketException catch (e) {
+      throw SocketException(e.toString());
+    } on Exception {
+      rethrow;
     }
-
-    return response;
   }
 
   Future<Response> get(String url, {bool auth = true}) async {
@@ -57,50 +47,27 @@ class HttpService {
       idToken = await _firebaseAuth.currentUser!.getIdToken();
     }
 
-    Response response;
-    try {
-      response = await _client.get(
-        Uri.parse(url),
-        headers: <String, String>{
-          'Accept': 'application/json; charset=utf-8',
-          if (auth) 'Authorization': 'Bearer $idToken',
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-      ).timeout(
-        _timeoutDuration,
-        onTimeout: () => throw Exception('Server timeout'),
-      );
-    } on Exception catch (e) {
-      throw Exception(e);
-    }
-
-    return response;
+    return _request(() => _client.get(
+          Uri.parse(url),
+          headers: <String, String>{
+            if (auth) 'Authorization': 'Bearer $idToken',
+            ..._headers,
+          },
+        ));
   }
 
   Future<Response> patch(String url, List<Json> data) async {
     final idToken = await _firebaseAuth.currentUser!.getIdToken();
 
-    Response response;
-    try {
-      response = await _client
-          .patch(
-            Uri.parse(url),
-            headers: <String, String>{
-              'Accept': 'application/json; charset=utf-8',
-              'Authorization': 'Bearer $idToken',
-              'Content-Type': 'application/json-patch+json',
-            },
-            body: jsonEncode(data),
-          )
-          .timeout(
-            _timeoutDuration,
-            onTimeout: () => throw Exception('Server timeout'),
-          );
-    } on Exception catch (e) {
-      throw Exception(e);
-    }
-
-    return response;
+    return _request(() => _client.patch(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Authorization': 'Bearer $idToken',
+            _headers.keys.first: _headers.values.first,
+            'Content-Type': 'application/json-patch+json',
+          },
+          body: jsonEncode(data),
+        ));
   }
 
   Future<Response> post(String url, Json? data, {bool auth = true}) async {
@@ -109,53 +76,40 @@ class HttpService {
       idToken = await _firebaseAuth.currentUser!.getIdToken();
     }
 
-    Response response;
-    try {
-      response = await _client
-          .post(
-            Uri.parse(url),
-            headers: <String, String>{
-              'Accept': 'application/json; charset=utf-8',
-              if (auth) 'Authorization': 'Bearer $idToken',
-              'Content-Type': 'application/json; charset=utf-8',
-            },
-            body: data != null ? jsonEncode(data) : null,
-          )
-          .timeout(
-            _timeoutDuration,
-            onTimeout: () => throw Exception('Server timeout'),
-          );
-    } on Exception catch (e) {
-      throw Exception(e);
-    }
-
-    return response;
+    return _request(() => _client.post(
+          Uri.parse(url),
+          headers: <String, String>{
+            if (auth) 'Authorization': 'Bearer $idToken',
+            ..._headers,
+          },
+          body: data != null ? jsonEncode(data) : null,
+        ));
   }
 
   Future<Response> put(String url, [Json? data]) async {
     final idToken = await _firebaseAuth.currentUser!.getIdToken();
     data ??= <String, dynamic>{};
 
-    Response response;
-    try {
-      response = await _client
-          .put(
-            Uri.parse(url),
-            headers: <String, String>{
-              'Accept': 'application/json; charset=utf-8',
-              'Authorization': 'Bearer $idToken',
-              'Content-Type': 'application/json; charset=utf-8',
-            },
-            body: jsonEncode(data),
-          )
-          .timeout(
-            _timeoutDuration,
-            onTimeout: () => throw Exception('Server timeout'),
-          );
-    } on Exception catch (e) {
-      throw Exception(e);
-    }
+    return _request(() => _client.put(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Authorization': 'Bearer $idToken',
+            ..._headers,
+          },
+          body: jsonEncode(data),
+        ));
+  }
 
-    return response;
+  Future<Response> delete(String url, [Json? data]) async {
+    final idToken = await _firebaseAuth.currentUser!.getIdToken();
+
+    return _request(() => _client.delete(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Authorization': 'Bearer $idToken',
+            ..._headers,
+          },
+          body: data != null ? jsonEncode(data) : null,
+        ));
   }
 }
