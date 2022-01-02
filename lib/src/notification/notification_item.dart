@@ -6,7 +6,7 @@ import 'package:loggy/loggy.dart' show NetworkLoggy;
 import '../models/my_user.dart';
 import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/date_time_util.dart';
 import '../utils/localization_util.dart';
 
@@ -36,7 +36,7 @@ class _NotificationItemState extends State<NotificationItem> with NetworkLoggy {
   @override
   void initState() {
     _userFuture =
-        GetIt.I.get<SpringService>().getUserById(id: widget.notification.actor);
+        GetIt.I.get<APIRepository>().getUserById(id: widget.notification.actor);
     super.initState();
   }
 

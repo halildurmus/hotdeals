@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 typedef Json = Map<String, dynamic>;
 
-List<Store> storesFromJson(String str) =>
-    List<Store>.from((json.decode(str) as List<dynamic>)
-        .map<dynamic>((dynamic e) => Store.fromJson(e as Json)));
+List<Store> storesFromJson(List<dynamic> jsonArray) => List<Store>.from(
+    jsonArray.map<dynamic>((dynamic e) => Store.fromJson(e as Json)));
 
 class Store {
   const Store({this.id, required this.name, required this.logo});

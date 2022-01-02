@@ -8,8 +8,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../models/my_user.dart';
+import 'api_repository.dart';
 import 'auth_service.dart';
-import 'spring_service.dart';
 
 class FirebaseAuthService with NetworkLoggy implements AuthService {
   FirebaseAuthService() {
@@ -17,7 +17,7 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   }
 
   final _firebaseAuth = FirebaseAuth.instance;
-  final _springService = GetIt.I.get<SpringService>();
+  final _apiRepository = GetIt.I.get<APIRepository>();
   final _authStateController = StreamController<User?>();
 
   MyUser? _userFromFirebase(User? user) =>
@@ -40,7 +40,7 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
       if (userCredential.additionalUserInfo!.isNewUser) {
         try {
           final user =
-              await _springService.createMongoUser(userCredential.user!);
+              await _apiRepository.createMongoUser(userCredential.user!);
           loggy.info('User created on mongodb\n$user');
         } on Exception {
           await _firebaseAuth.currentUser!.delete();
@@ -91,7 +91,7 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
         if (userCredential.additionalUserInfo!.isNewUser) {
           try {
             final user =
-                await _springService.createMongoUser(userCredential.user!);
+                await _apiRepository.createMongoUser(userCredential.user!);
             loggy.info('User created on mongodb\n$user');
           } on Exception {
             await _firebaseAuth.currentUser!.delete();

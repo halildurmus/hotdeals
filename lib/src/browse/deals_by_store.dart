@@ -5,7 +5,7 @@ import 'package:get_it/get_it.dart';
 import '../deal/deal_paged_listview.dart';
 import '../models/deal.dart';
 import '../models/store.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/error_indicator.dart';
 
@@ -46,7 +46,7 @@ class DealsByStore extends StatelessWidget {
   }
 
   Future<List<Deal>> _dealFuture(int page, int size) =>
-      GetIt.I.get<SpringService>().getDealsByStore(
+      GetIt.I.get<APIRepository>().getDealsByStore(
             storeId: store.id!,
             page: page,
             size: size,

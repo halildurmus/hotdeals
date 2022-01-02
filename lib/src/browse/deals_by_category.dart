@@ -6,7 +6,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
 import '../deal/deal_paged_listview.dart';
 import '../models/category.dart';
 import '../models/deal.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/error_indicator.dart';
 import 'filter_chips.dart';
@@ -46,7 +46,7 @@ class _DealsByCategoryState extends State<DealsByCategory> {
       );
 
   Future<List<Deal>> _dealFuture(int page, int size) =>
-      GetIt.I.get<SpringService>().getDealsByCategory(
+      GetIt.I.get<APIRepository>().getDealsByCategory(
             category: category.category,
             page: page,
             size: size,

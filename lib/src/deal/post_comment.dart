@@ -11,7 +11,7 @@ import '../models/my_user.dart';
 import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
@@ -61,14 +61,14 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
 
       final comment = Comment(message: commentController.text);
       final postedComment = await GetIt.I
-          .get<SpringService>()
+          .get<APIRepository>()
           .postComment(dealId: widget.deal.id!, comment: comment);
 
       // Send push notification to the poster if the commentator is not
       // the poster.
       if (user!.id! != widget.deal.postedBy) {
         final poster = await GetIt.I
-            .get<SpringService>()
+            .get<APIRepository>()
             .getUserExtendedById(id: widget.deal.postedBy!);
 
         final notification = PushNotification(
@@ -85,7 +85,7 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
         );
 
         final result = await GetIt.I
-            .get<SpringService>()
+            .get<APIRepository>()
             .sendPushNotification(notification: notification);
         if (result) {
           loggy.debug('Push notification sent to: ${poster.nickname}');

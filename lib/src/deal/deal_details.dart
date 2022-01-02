@@ -16,7 +16,7 @@ import '../models/my_user.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
 import '../models/user_controller.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/date_time_util.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
@@ -63,9 +63,9 @@ class _DealDetailsState extends State<DealDetails> {
 
   @override
   void initState() {
-    _dealFuture = GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
+    _dealFuture = GetIt.I.get<APIRepository>().getDeal(dealId: widget.dealId);
     _commentCountFuture =
-        GetIt.I.get<SpringService>().getDealCommentCount(dealId: widget.dealId);
+        GetIt.I.get<APIRepository>().getDealCommentCount(dealId: widget.dealId);
     _categories = GetIt.I.get<Categories>();
     _user = context.read<UserController>().user;
     _scrollController = ScrollController()
@@ -83,7 +83,7 @@ class _DealDetailsState extends State<DealDetails> {
 
   void _updateCommentsCount() {
     GetIt.I
-        .get<SpringService>()
+        .get<APIRepository>()
         .getDealCommentCount(dealId: widget.dealId)
         .then((commentCount) {
       if (commentCount != null) {
@@ -109,7 +109,7 @@ class _DealDetailsState extends State<DealDetails> {
         .map((item) => GestureDetector(
               onTap: () => NavigationUtil.navigate(
                 context,
-                ImagesFullScreen(images: _images!, currentIndex: currentIndex),
+                DealImagesFullScreen(images: _images!, currentIndex: currentIndex),
               ),
               child: Container(
                 decoration: BoxDecoration(
@@ -125,7 +125,7 @@ class _DealDetailsState extends State<DealDetails> {
 
   Future<void> _updateDealStatus(DealStatus status) async {
     try {
-      final deal = await GetIt.I.get<SpringService>().updateDealStatus(
+      final deal = await GetIt.I.get<APIRepository>().updateDealStatus(
             dealId: _deal!.id!,
             status: status,
           );
@@ -278,7 +278,7 @@ class _DealDetailsState extends State<DealDetails> {
                 }
                 if (!isFavorited) {
                   GetIt.I
-                      .get<SpringService>()
+                      .get<APIRepository>()
                       .favoriteDeal(dealId: _deal!.id!)
                       .then((result) {
                     if (result) {
@@ -288,7 +288,7 @@ class _DealDetailsState extends State<DealDetails> {
                   });
                 } else {
                   GetIt.I
-                      .get<SpringService>()
+                      .get<APIRepository>()
                       .unfavoriteDeal(dealId: _deal!.id!)
                       .then((result) {
                     if (result) {
@@ -461,7 +461,7 @@ class _DealDetailsState extends State<DealDetails> {
 
         return;
       }
-      final deal = await GetIt.I.get<SpringService>().voteDeal(
+      final deal = await GetIt.I.get<APIRepository>().voteDeal(
             dealId: _deal!.id!,
             voteType: voteType,
           );
@@ -569,7 +569,7 @@ class _DealDetailsState extends State<DealDetails> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: FutureBuilder<MyUser>(
             future:
-                GetIt.I.get<SpringService>().getUserById(id: _deal!.postedBy!),
+                GetIt.I.get<APIRepository>().getUserById(id: _deal!.postedBy!),
             builder: (context, snapshot) {
               var avatar = 'http://www.gravatar.com/avatar';
               var nickname = '...';
@@ -787,9 +787,9 @@ class _DealDetailsState extends State<DealDetails> {
             context,
             onTryAgain: () async {
               _dealFuture =
-                  GetIt.I.get<SpringService>().getDeal(dealId: widget.dealId);
+                  GetIt.I.get<APIRepository>().getDeal(dealId: widget.dealId);
               _commentCountFuture = GetIt.I
-                  .get<SpringService>()
+                  .get<APIRepository>()
                   .getDealCommentCount(dealId: widget.dealId);
               setState(() {});
             },

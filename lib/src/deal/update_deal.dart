@@ -10,7 +10,7 @@ import '../models/category.dart';
 import '../models/deal.dart';
 import '../models/store.dart';
 import '../models/stores.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
@@ -112,7 +112,7 @@ class _UpdateDealState extends State<UpdateDeal> {
         price: double.parse(priceController.text),
       );
       final updatedDeal =
-          await GetIt.I.get<SpringService>().updateDeal(deal: deal);
+          await GetIt.I.get<APIRepository>().updateDeal(deal: deal);
 
       // Pops the loading dialog.
       Navigator.of(context).pop();

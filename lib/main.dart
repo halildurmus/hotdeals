@@ -20,12 +20,12 @@ import 'src/models/categories.dart';
 import 'src/models/current_route.dart';
 import 'src/models/stores.dart';
 import 'src/search/search_service.dart';
+import 'src/services/api_repository.dart';
 import 'src/services/connection_service.dart';
 import 'src/services/firebase_storage_service.dart';
 import 'src/services/firestore_service.dart';
 import 'src/services/image_picker_service.dart';
 import 'src/services/push_notification_service.dart';
-import 'src/services/spring_service.dart';
 import 'src/settings/settings.controller.dart';
 import 'src/settings/settings.service.dart';
 import 'src/utils/crashlytics_printer.dart';
@@ -124,7 +124,7 @@ void _registerSingletonClasses() {
     ..registerSingleton<FirebaseStorageService>(FirebaseStorageService())
     ..registerSingleton<FirestoreService>(FirestoreService())
     ..registerSingleton<ImagePickerService>(ImagePickerService())
-    ..registerSingleton<SpringService>(SpringService())
+    ..registerSingleton<APIRepository>(APIRepository())
     ..registerSingleton<Categories>(Categories())
     ..registerSingleton<Stores>(Stores())
     ..registerSingleton<LoadingDialog>(const LoadingDialog())

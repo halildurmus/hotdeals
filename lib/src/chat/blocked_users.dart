@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_alert_dialog.dart';
@@ -87,7 +87,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
         false;
     if (didRequestUnblockUser == true) {
       final result =
-          await GetIt.I.get<SpringService>().unblockUser(userId: userId);
+          await GetIt.I.get<APIRepository>().unblockUser(userId: userId);
       if (result) {
         await Provider.of<UserController>(context, listen: false).getUser();
         final snackBar = CustomSnackBar(
@@ -106,7 +106,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
   }
 
   Widget buildBlockedUsers(MyUser user) => FutureBuilder<List<MyUser>?>(
-        future: GetIt.I.get<SpringService>().getBlockedUsers(),
+        future: GetIt.I.get<APIRepository>().getBlockedUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final users = snapshot.data!;

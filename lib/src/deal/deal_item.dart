@@ -7,7 +7,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
 import '../models/categories.dart';
 import '../models/comments.dart';
 import '../models/deal.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/grayscale_filtered.dart';
@@ -55,8 +55,8 @@ class _DealItemState extends State<DealItem> {
 
   void _fetchDealDetails() {
     Future.wait([
-      GetIt.I.get<SpringService>().getDeal(dealId: widget.deal.id!),
-      GetIt.I.get<SpringService>().getDealComments(dealId: widget.deal.id!),
+      GetIt.I.get<APIRepository>().getDeal(dealId: widget.deal.id!),
+      GetIt.I.get<APIRepository>().getDealComments(dealId: widget.deal.id!),
     ]).then((values) {
       final deal = values[0] as Deal?;
       final commentCount = (values[1] as Comments?)?.count;

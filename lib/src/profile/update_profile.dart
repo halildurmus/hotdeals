@@ -11,10 +11,10 @@ import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
+import '../services/api_repository.dart';
 import '../services/auth_service.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/image_picker_service.dart';
-import '../services/spring_service.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_snackbar.dart';
@@ -39,7 +39,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   Future<void> updateAvatar(String userID, String avatarURL) async {
     try {
       await GetIt.I
-          .get<SpringService>()
+          .get<APIRepository>()
           .updateUserAvatar(userId: userID, avatarUrl: avatarURL);
       Provider.of<UserController>(context, listen: false).getUser();
       // Pops the LoadingDialog.
@@ -60,7 +60,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
     showLoadingDialog();
     try {
       await GetIt.I
-          .get<SpringService>()
+          .get<APIRepository>()
           .updateUserNickname(userId: userId, nickname: nickname);
       // Pops the LoadingDialog.
       Navigator.of(context).pop();
@@ -258,7 +258,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
 
     if (_didRequestSignOut) {
       final fcmToken = await FirebaseMessaging.instance.getToken();
-      await GetIt.I.get<SpringService>().deleteFCMToken(token: fcmToken!);
+      await GetIt.I.get<APIRepository>().deleteFCMToken(token: fcmToken!);
       await _signOut(context);
       Provider.of<UserController>(context, listen: false).logout();
       Navigator.of(context).pushReplacementNamed('/');

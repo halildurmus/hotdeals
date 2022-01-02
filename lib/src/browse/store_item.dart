@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../models/store.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 
 class StoreItem extends StatefulWidget {
@@ -26,7 +26,7 @@ class _StoreItemState extends State<StoreItem> {
   @override
   void initState() {
     numberOfDealsFuture = GetIt.I
-        .get<SpringService>()
+        .get<APIRepository>()
         .getNumberOfDealsByStore(storeId: widget.store.id!);
     super.initState();
   }

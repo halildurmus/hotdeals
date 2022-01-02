@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import '../models/deal.dart';
 import '../models/user_controller.dart';
 import '../search/search_bar.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/error_indicator.dart';
@@ -48,10 +48,10 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
   }
 
   Future<List<Deal>> _latestDealsFuture(int page, int size) =>
-      GetIt.I.get<SpringService>().getLatestDeals(page: page, size: size);
+      GetIt.I.get<APIRepository>().getLatestDeals(page: page, size: size);
 
   Future<List<Deal>> _mostLikedDealsFuture(int page, int size) =>
-      GetIt.I.get<SpringService>().getMostLikedDeals(page: page, size: size);
+      GetIt.I.get<APIRepository>().getMostLikedDeals(page: page, size: size);
 
   Widget buildNoDealsFound(BuildContext context) => ErrorIndicator(
         icon: Icons.local_offer,

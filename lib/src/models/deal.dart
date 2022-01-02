@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import '../deal/deal_status.dart';
 
 typedef Json = Map<String, dynamic>;
 
-List<Deal> dealsFromJson(String str) =>
-    List<Deal>.from((json.decode(str) as List<dynamic>)
-        .map<dynamic>((dynamic e) => Deal.fromJson(e as Json)));
+List<Deal> dealsFromJson(List<dynamic> jsonArray) => List<Deal>.from(
+    jsonArray.map<dynamic>((dynamic e) => Deal.fromJson(e as Json)));
 
 class Deal {
   const Deal({

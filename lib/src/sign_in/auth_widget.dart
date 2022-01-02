@@ -9,7 +9,7 @@ import '../firebase_messaging_listener.dart';
 import '../home/home.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
 
@@ -32,7 +32,7 @@ class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
     final androidDeviceInfo = GetIt.I.get<AndroidDeviceInfo>();
     final deviceId = androidDeviceInfo.androidId!;
     await GetIt.I
-        .get<SpringService>()
+        .get<APIRepository>()
         .addFCMToken(deviceId: deviceId, token: token);
     await context.read<UserController>().getUser();
   }

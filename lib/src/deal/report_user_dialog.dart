@@ -5,7 +5,7 @@ import 'package:loggy/loggy.dart';
 
 import '../models/user_report.dart';
 import '../models/user_report_reason.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
@@ -21,7 +21,7 @@ class ReportUserDialog extends StatefulWidget {
 }
 
 class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
-  late final SpringService springService;
+  late final APIRepository apiRepository;
   late final TextEditingController messageController;
   bool harassingCheckbox = false;
   bool spamCheckbox = false;
@@ -29,7 +29,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
 
   @override
   void initState() {
-    springService = GetIt.I.get<SpringService>();
+    apiRepository = GetIt.I.get<APIRepository>();
     messageController = TextEditingController();
     super.initState();
   }
@@ -61,7 +61,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
       );
 
       final sentReport =
-          await GetIt.I.get<SpringService>().reportUser(report: report);
+          await GetIt.I.get<APIRepository>().reportUser(report: report);
       loggy.info(sentReport);
       // Pops the loading dialog.
       Navigator.of(ctx).pop();

@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
+import '../services/api_repository.dart';
 import '../services/firestore_service.dart';
-import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
@@ -91,7 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
           }
 
           return FutureBuilder<MyUser>(
-            future: GetIt.I.get<SpringService>().getUserByUid(uid: user2Uid),
+            future: GetIt.I.get<APIRepository>().getUserByUid(uid: user2Uid),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final user2 = snapshot.data!;

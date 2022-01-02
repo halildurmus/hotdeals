@@ -5,23 +5,23 @@ import 'package:photo_view/photo_view.dart';
 
 import '../widgets/slider_indicator.dart';
 
-class ImagesFullScreen extends StatefulWidget {
-  const ImagesFullScreen({
+class DealImagesFullScreen extends StatefulWidget {
+  const DealImagesFullScreen({
     Key? key,
-    required this.images,
     required this.currentIndex,
+    required this.images,
   }) : super(key: key);
 
-  final List<String> images;
   final int currentIndex;
+  final List<String> images;
 
   @override
-  _MyImageScreen createState() => _MyImageScreen();
+  _DealImagesFullScreen createState() => _DealImagesFullScreen();
 }
 
-class _MyImageScreen extends State<ImagesFullScreen> {
-  late int currentIndex;
-  late List<String> images;
+class _DealImagesFullScreen extends State<DealImagesFullScreen> {
+  late final int currentIndex;
+  late final List<String> images;
 
   @override
   void initState() {

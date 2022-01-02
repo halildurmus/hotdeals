@@ -8,7 +8,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart'
 import '../deal/deal_paged_listview.dart';
 import '../models/deal.dart';
 import '../search/search_response.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/error_indicator.dart';
 import 'search_params.dart';
@@ -46,7 +46,7 @@ class _SearchResultsState extends State<SearchResults> {
   }
 
   Future<SearchResponse> _searchResultsFuture(int page, int size) => GetIt.I
-      .get<SpringService>()
+      .get<APIRepository>()
       .searchDeals(searchParams: widget.searchParams);
 
   Widget buildNoDealsFound(BuildContext context) => ErrorIndicator(

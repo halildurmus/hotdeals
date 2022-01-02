@@ -24,27 +24,43 @@ import 'http_service.dart';
 
 typedef Json = Map<String, dynamic>;
 
-// Retrieves the base URL from environment config.
+/// Thrown when an error occurs while decoding the response body.
+class JsonDecodeException implements Exception {}
+
+/// Thrown when an error occurs while deserializing the response body.
+class JsonDeserializationException implements Exception {}
+
+// The API base URL read from environment config.
 final String _baseUrl = GetIt.I.get<Environment>().config.apiBaseUrl;
 
-/// An implementation of the [SpringService] that used for communicating with
-/// the backend.
-class SpringService with NetworkLoggy {
-  /// Creates an instance of [SpringService] with given [httpService].
-  /// If no [httpService] is given, automatically creates a new [httpService].
-  factory SpringService({HttpService? httpService}) {
-    if (httpService == null) {
-      return SpringService._privateConstructor(HttpService());
-    }
+/// A class used for communicating with the Backend.
+class APIRepository with NetworkLoggy {
+  /// Creates an instance of [APIRepository] with given [httpService].
+  /// If no [httpService] is given, creates a default one.
+  factory APIRepository({HttpService? httpService}) =>
+      APIRepository._privateConstructor(httpService ?? HttpService());
 
-    return SpringService._privateConstructor(httpService);
-  }
-
-  SpringService._privateConstructor(HttpService httpService) {
+  APIRepository._privateConstructor(HttpService httpService) {
     _httpService = httpService;
   }
 
-  late HttpService _httpService;
+  late final HttpService _httpService;
+
+  Json _parseJsonObject(String response) {
+    try {
+      return jsonDecode(response) as Json;
+    } on Exception {
+      throw JsonDecodeException();
+    }
+  }
+
+  List<dynamic> _parseJsonArray(String response) {
+    try {
+      return jsonDecode(response) as List<dynamic>;
+    } on Exception {
+      throw JsonDecodeException();
+    }
+  }
 
   Future<bool> blockUser({required String userId}) async {
     final url = '$_baseUrl/users/me/blocks/$userId';
@@ -99,7 +115,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.post(url, deal.toJson());
       if (response.statusCode == 201) {
-        return Deal.fromJson(jsonDecode(response.body) as Json);
+        return Deal.fromJson(_parseJsonObject(response.body));
       }
 
       return null;
@@ -114,7 +130,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.put(url, deal.toJson());
       if (response.statusCode == 200) {
-        return Deal.fromJson(jsonDecode(response.body) as Json);
+        return Deal.fromJson(_parseJsonObject(response.body));
       }
 
       return null;
@@ -169,7 +185,7 @@ class SpringService with NetworkLoggy {
     final url = '$_baseUrl/users/${report.reportedUser}/reports';
     try {
       final response = await _httpService.post(url, report.toJson());
-
+      loggy.debug(response.body);
       return response.statusCode == 201;
     } on Exception catch (e) {
       loggy.error(e, e);
@@ -186,7 +202,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return Comments.fromJson(jsonDecode(response.body) as Json);
+        return Comments.fromJson(_parseJsonObject(response.body));
       }
 
       return null;
@@ -201,7 +217,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return int.parse(response.body);
+        return int.tryParse(response.body) ?? 0;
       }
 
       return null;
@@ -219,7 +235,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.post(url, comment.toJson());
       if (response.statusCode == 201) {
-        return Comment.fromJson(jsonDecode(response.body) as Json);
+        return Comment.fromJson(_parseJsonObject(response.body));
       }
 
       return null;
@@ -234,7 +250,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return categoriesFromJson(response.body);
+        return categoriesFromJson(_parseJsonArray(response.body));
       }
 
       throw Exception('Failed to fetch categories!');
@@ -249,7 +265,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return storesFromJson(response.body);
+        return storesFromJson(_parseJsonArray(response.body));
       }
 
       throw Exception('Failed to fetch stores!');
@@ -271,7 +287,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.post(url, data, auth: false);
       if (response.statusCode == 201) {
-        return MyUser.fromJsonBasicDTO(jsonDecode(response.body) as Json);
+        return MyUser.fromJsonBasicDTO(_parseJsonObject(response.body));
       }
 
       throw Exception('Failed to create the user!');
@@ -286,7 +302,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        return MyUser.fromJson(jsonDecode(response.body) as Json);
+        return MyUser.fromJson(_parseJsonObject(response.body));
       }
 
       return null;
@@ -301,7 +317,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        return usersFromJson(response.body);
+        return usersFromJson(_parseJsonArray(response.body));
       }
 
       return null;
@@ -316,7 +332,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        return MyUser.fromJsonExtendedDTO(jsonDecode(response.body) as Json);
+        return MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body));
       }
 
       throw Exception('User not found!');
@@ -331,7 +347,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return MyUser.fromJsonBasicDTO(jsonDecode(response.body) as Json);
+        return MyUser.fromJsonBasicDTO(_parseJsonObject(response.body));
       }
 
       throw Exception('User not found!');
@@ -346,7 +362,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        return MyUser.fromJsonExtendedDTO(jsonDecode(response.body) as Json);
+        return MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body));
       }
 
       throw Exception('User not found!');
@@ -400,7 +416,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        return Deal.fromJson(jsonDecode(response.body) as Json);
+        return Deal.fromJson(_parseJsonObject(response.body));
       }
 
       throw Exception('Failed to update the deal status!');
@@ -421,7 +437,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        return MyUser.fromJsonExtendedDTO(jsonDecode(response.body) as Json);
+        return MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body));
       }
 
       throw Exception("Failed to update the user's avatar!");
@@ -442,7 +458,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.patch(url, data);
       if (response.statusCode == 200) {
-        return MyUser.fromJsonExtendedDTO(jsonDecode(response.body) as Json);
+        return MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body));
       } else if (response.body.contains('E11000')) {
         throw Exception('This nickname already being used by another user!');
       }
@@ -459,7 +475,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        return dealsFromJson(response.body);
+        return dealsFromJson(_parseJsonArray(response.body));
       }
 
       throw Exception('Could not get the user favorites!');
@@ -489,7 +505,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url);
       if (response.statusCode == 200) {
-        return dealsFromJson(response.body);
+        return dealsFromJson(_parseJsonArray(response.body));
       }
 
       throw Exception('Could not get the user deals!');
@@ -509,7 +525,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return dealsFromJson(response.body);
+        return dealsFromJson(_parseJsonArray(response.body));
       }
 
       throw Exception('Could not get deals by category!');
@@ -551,7 +567,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return dealsFromJson(response.body);
+        return dealsFromJson(_parseJsonArray(response.body));
       }
 
       throw Exception('Could not get deals by store!');
@@ -567,7 +583,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return dealsFromJson(response.body);
+        return dealsFromJson(_parseJsonArray(response.body));
       }
 
       throw Exception('Could not get the latest deals!');
@@ -583,7 +599,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return dealsFromJson(response.body);
+        return dealsFromJson(_parseJsonArray(response.body));
       }
 
       throw Exception('Could not get the most liked deals!');
@@ -643,7 +659,7 @@ class SpringService with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        return Deal.fromJson(jsonDecode(response.body) as Json);
+        return Deal.fromJson(_parseJsonObject(response.body));
       }
 
       return null;
@@ -667,7 +683,7 @@ class SpringService with NetworkLoggy {
         response = await _httpService.put(url, data);
       }
       if (response.statusCode == 200) {
-        return Deal.fromJson(jsonDecode(response.body) as Json);
+        return Deal.fromJson(_parseJsonObject(response.body));
       }
 
       return null;

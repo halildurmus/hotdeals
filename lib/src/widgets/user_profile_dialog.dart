@@ -10,8 +10,8 @@ import '../chat/message_screen.dart';
 import '../deal/report_user_dialog.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
+import '../services/api_repository.dart';
 import '../services/firestore_service.dart';
-import '../services/spring_service.dart';
 import '../utils/chat_util.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
@@ -35,7 +35,7 @@ class UserProfileDialog extends StatefulWidget {
 class _UserProfileDialogState extends State<UserProfileDialog> {
   MyUser? loggedInUser;
   late final FirestoreService firestoreService;
-  late final SpringService springService;
+  late final APIRepository apiRepository;
   late final Future<MyUser> userFuture;
   late final Future<int?> postedCommentsFuture;
   late final Future<int?> postedDealsFuture;
@@ -48,12 +48,12 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
   void initState() {
     loggedInUser = context.read<UserController>().user;
     firestoreService = GetIt.I.get<FirestoreService>();
-    springService = GetIt.I.get<SpringService>();
-    userFuture = springService.getUserById(id: widget.userId);
+    apiRepository = GetIt.I.get<APIRepository>();
+    userFuture = apiRepository.getUserById(id: widget.userId);
     postedCommentsFuture =
-        springService.getNumberOfCommentsPostedByUser(userId: widget.userId);
+        apiRepository.getNumberOfCommentsPostedByUser(userId: widget.userId);
     postedDealsFuture =
-        springService.getNumberOfDealsPostedByUser(userId: widget.userId);
+        apiRepository.getNumberOfDealsPostedByUser(userId: widget.userId);
     future = Future.wait([userFuture, postedCommentsFuture, postedDealsFuture]);
     super.initState();
   }

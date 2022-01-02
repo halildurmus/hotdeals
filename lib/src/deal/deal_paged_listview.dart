@@ -10,8 +10,8 @@ import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../search/search_params.dart';
 import '../search/search_response.dart';
+import '../services/api_repository.dart';
 import '../services/firebase_storage_service.dart';
-import '../services/spring_service.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
@@ -129,7 +129,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
     }
 
     if (!isFavorited) {
-      GetIt.I.get<SpringService>().favoriteDeal(dealId: dealId).then((result) {
+      GetIt.I.get<APIRepository>().favoriteDeal(dealId: dealId).then((result) {
         if (result) {
           Provider.of<UserController>(context, listen: false).getUser();
         } else {
@@ -142,7 +142,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
       });
     } else {
       GetIt.I
-          .get<SpringService>()
+          .get<APIRepository>()
           .unfavoriteDeal(dealId: dealId)
           .then((result) {
         if (result) {
@@ -175,7 +175,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
         false;
     if (didRequestDelete) {
       GetIt.I
-          .get<SpringService>()
+          .get<APIRepository>()
           .deleteDeal(dealId: deal.id!)
           .then((result) async {
         // Deletes the deal images.

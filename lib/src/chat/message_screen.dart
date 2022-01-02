@@ -21,10 +21,10 @@ import '../models/my_user.dart';
 import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller.dart';
+import '../services/api_repository.dart';
 import '../services/firebase_storage_service.dart';
 import '../services/firestore_service.dart';
 import '../services/image_picker_service.dart';
-import '../services/spring_service.dart';
 import '../settings/settings.controller.dart';
 import '../utils/chat_util.dart';
 import '../utils/localization_util.dart';
@@ -111,7 +111,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     );
 
     final result = await GetIt.I
-        .get<SpringService>()
+        .get<APIRepository>()
         .sendPushNotification(notification: notification);
     if (result) {
       loggy.debug('Push notification sent to: ${widget.user2.nickname}');

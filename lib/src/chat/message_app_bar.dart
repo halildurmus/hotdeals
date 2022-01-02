@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../deal/report_user_dialog.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_snackbar.dart';
@@ -34,7 +34,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
         false;
     if (_didRequestBlockUser == true) {
       final _result = await GetIt.I
-          .get<SpringService>()
+          .get<APIRepository>()
           .blockUser(userId: widget.user2.id!);
       if (_result) {
         await Provider.of<UserController>(context, listen: false).getUser();
@@ -63,7 +63,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
         false;
     if (_didRequestUnblockUser == true) {
       final _result = await GetIt.I
-          .get<SpringService>()
+          .get<APIRepository>()
           .unblockUser(userId: widget.user2.id!);
       if (_result) {
         await Provider.of<UserController>(context, listen: false).getUser();

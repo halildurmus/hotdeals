@@ -2,7 +2,7 @@ import 'dart:ui' show Locale;
 
 import 'package:get_it/get_it.dart';
 
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import 'category.dart';
 
 class Categories {
@@ -17,7 +17,7 @@ class Categories {
       _categories!.where((e) => e.parent == category.category).toList();
 
   Future<List<Category>> getCategories() async {
-    _categories = await GetIt.I.get<SpringService>().getCategories();
+    _categories = await GetIt.I.get<APIRepository>().getCategories();
     // Sort categories alphabetically by name.
     _categories!.sort((a, b) => a.names['en'].compareTo(b.names['en']));
 

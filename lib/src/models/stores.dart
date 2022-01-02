@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
 
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import 'store.dart';
 
 class Stores {
@@ -8,7 +8,7 @@ class Stores {
   List<Store>? get stores => _stores;
 
   Future<List<Store>> getStores() async {
-    _stores = await GetIt.I.get<SpringService>().getStores();
+    _stores = await GetIt.I.get<APIRepository>().getStores();
 
     return _stores!;
   }

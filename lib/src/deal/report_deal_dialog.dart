@@ -5,7 +5,7 @@ import 'package:loggy/loggy.dart';
 
 import '../models/deal_report.dart';
 import '../models/deal_report_reason.dart';
-import '../services/spring_service.dart';
+import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
@@ -21,7 +21,7 @@ class ReportDealDialog extends StatefulWidget {
 }
 
 class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
-  late final SpringService springService;
+  late final APIRepository apiRepository;
   late final TextEditingController messageController;
   bool expiredCheckbox = false;
   bool repostCheckbox = false;
@@ -30,7 +30,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
 
   @override
   void initState() {
-    springService = GetIt.I.get<SpringService>();
+    apiRepository = GetIt.I.get<APIRepository>();
     messageController = TextEditingController();
     super.initState();
   }
@@ -63,7 +63,7 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
       );
 
       final sentReport =
-          await GetIt.I.get<SpringService>().reportDeal(report: report);
+          await GetIt.I.get<APIRepository>().reportDeal(report: report);
       loggy.info(sentReport);
       // Pops the loading dialog.
       Navigator.of(context).pop();

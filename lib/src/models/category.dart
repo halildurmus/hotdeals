@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'dart:ui' show Locale;
 
 typedef Json = Map<String, dynamic>;
 
-List<Category> categoriesFromJson(String str) =>
-    List<Category>.from((json.decode(str) as List<dynamic>)
-        .map<dynamic>((dynamic e) => Category.fromJson(e as Json)));
+List<Category> categoriesFromJson(List<dynamic> jsonArray) =>
+    List<Category>.from(
+        jsonArray.map<dynamic>((dynamic e) => Category.fromJson(e as Json)));
 
 class Category {
   Category({
