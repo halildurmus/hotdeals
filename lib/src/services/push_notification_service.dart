@@ -9,8 +9,8 @@ import '../models/push_notification.dart';
 
 typedef Json = Map<String, dynamic>;
 
-/// An implementation of the [PushNotificationService] that many Widgets
-/// can interact with to create, read and update notifications.
+/// A class that many Widgets can interact with to create, read and update
+/// notifications.
 class PushNotificationService extends ChangeNotifier {
   late final _notificationController =
       StreamController<PushNotification>.broadcast();
