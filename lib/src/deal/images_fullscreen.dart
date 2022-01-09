@@ -20,8 +20,8 @@ class DealImagesFullScreen extends StatefulWidget {
 }
 
 class _DealImagesFullScreen extends State<DealImagesFullScreen> {
-  late final int currentIndex;
-  late final List<String> images;
+  late int currentIndex;
+  late List<String> images;
 
   @override
   void initState() {
