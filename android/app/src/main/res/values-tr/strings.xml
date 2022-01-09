@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">hotdeals</string>
-<!-- Replace "000000000000" with your Facebook App ID here. -->
-    <string name="facebook_app_id">000000000000</string>
-<!--
-  Replace "fb000000000000" with your Facebook App ID here.
-  **NOTE**: The scheme needs to start with `fb` and then your ID.
--->
-    <string name="fb_login_protocol_scheme">fb000000000000</string>
     <!-- Firebase Cloud Messaging translations -->
     <string name="comment_title">%1$s gönderine yorum yaptı</string>
     <string name="file_message_title">%1$s sana bir dosya gönderdi</string>

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">hotdeals</string>
+    <string name="app_name" translatable="false">hotdeals</string>
 <!-- Replace "000000000000" with your Facebook App ID here. -->
-    <string name="facebook_app_id">000000000000</string>
+    <string name="facebook_app_id" translatable="false">000000000000</string>
 <!--
   Replace "fb000000000000" with your Facebook App ID here.
   **NOTE**: The scheme needs to start with `fb` and then your ID.
 -->
-    <string name="fb_login_protocol_scheme">fb000000000000</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb000000000000</string>
+    <string name="facebook_client_token" translatable="false">YOUR_CLIENT_TOKEN</string>
     <!-- Firebase Cloud Messaging translations -->
     <string name="comment_title">%1$s commented on your post</string>
     <string name="file_message_title">%1$s sent you a file</string>
