@@ -23,11 +23,11 @@ dependencies:
   firebase_picture_uploader:
     path: lib/packages/flutter_firebase_picture_uploader
   firebase_storage: ^10.0.3
-  flex_color_scheme: ^3.0.1
+  flex_color_scheme: ^4.1.1
   flutter:
     sdk: flutter
   flutter_chat_ui: ^1.5.0
-  flutter_facebook_auth: ^3.5.2
+  flutter_facebook_auth: ^4.0.0
   flutter_local_notifications: ^9.1.5
   flutter_localizations:
     sdk: flutter
