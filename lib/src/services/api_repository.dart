@@ -578,8 +578,7 @@ class APIRepository with NetworkLoggy {
   }
 
   Future<List<Deal>> getLatestDeals({int? page, int? size}) async {
-    final url =
-        '$_baseUrl/deals/search/latestActiveDeals?page=$page&size=$size';
+    final url = '$_baseUrl/deals/search/latestActive?page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
@@ -594,8 +593,7 @@ class APIRepository with NetworkLoggy {
   }
 
   Future<List<Deal>> getMostLikedDeals({int? page, int? size}) async {
-    final url =
-        '$_baseUrl/deals/search/mostLikedActiveDeals?page=$page&size=$size';
+    final url = '$_baseUrl/deals/search/mostLikedActive?page=$page&size=$size';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
@@ -610,10 +608,11 @@ class APIRepository with NetworkLoggy {
   }
 
   Future<int?> getNumberOfCommentsPostedByUser({required String userId}) async {
-    final url = '$_baseUrl/users/$userId/comments-count';
+    final url = '$_baseUrl/users/$userId/comment-count';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
+        loggy.debug(response.body);
         return int.parse(response.body);
       }
 
@@ -625,7 +624,7 @@ class APIRepository with NetworkLoggy {
   }
 
   Future<int?> getNumberOfDealsByStore({required String storeId}) async {
-    final url = '$_baseUrl/deals/search/countDealsByStore?storeId=$storeId';
+    final url = '$_baseUrl/deals/count/byStore?storeId=$storeId';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
@@ -640,10 +639,11 @@ class APIRepository with NetworkLoggy {
   }
 
   Future<int?> getNumberOfDealsPostedByUser({required String userId}) async {
-    final url = '$_baseUrl/deals/search/countDealsByPostedBy?postedBy=$userId';
+    final url = '$_baseUrl/deals/count/byPostedBy?postedBy=$userId';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
+        loggy.debug(response.body);
         return int.parse(response.body);
       }
 
