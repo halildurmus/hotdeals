@@ -12,7 +12,7 @@ const _headers = <String, String>{
   'Accept': 'application/json; charset=utf-8',
   'Content-Type': 'application/json; charset=utf-8',
 };
-const _timeoutDuration = Duration(seconds: 5);
+const _timeoutDuration = Duration(seconds: 10);
 
 /// A class that exposes `HTTP` methods to interact with the Backend.
 class HttpService {
