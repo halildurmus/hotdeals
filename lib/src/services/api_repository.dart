@@ -185,7 +185,6 @@ class APIRepository with NetworkLoggy {
     final url = '$_baseUrl/users/${report.reportedUser}/reports';
     try {
       final response = await _httpService.post(url, report.toJson());
-      loggy.debug(response.body);
       return response.statusCode == 201;
     } on Exception catch (e) {
       loggy.error(e, e);
@@ -612,7 +611,6 @@ class APIRepository with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        loggy.debug(response.body);
         return int.parse(response.body);
       }
 
@@ -643,7 +641,6 @@ class APIRepository with NetworkLoggy {
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {
-        loggy.debug(response.body);
         return int.parse(response.body);
       }
 
