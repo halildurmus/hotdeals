@@ -51,6 +51,10 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 flutter {
