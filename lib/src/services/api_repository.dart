@@ -62,6 +62,20 @@ class APIRepository with NetworkLoggy {
     }
   }
 
+  T _deserialize<T>(T fn) {
+    try {
+      return fn;
+    } on Exception catch (e) {
+      loggy.error(e);
+      throw JsonDeserializationException();
+    }
+  }
+
+  void _throwException(String errorMessage) {
+    loggy.error(errorMessage);
+    throw Exception(errorMessage);
+  }
+
   Future<bool> blockUser({required String userId}) async {
     final url = '$_baseUrl/users/me/blocks/$userId';
     try {
@@ -246,32 +260,24 @@ class APIRepository with NetworkLoggy {
 
   Future<List<Category>> getCategories() async {
     final url = '$_baseUrl/categories';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return categoriesFromJson(_parseJsonArray(response.body));
-      }
-
-      throw Exception('Failed to fetch categories!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Failed to fetch categories!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('Failed to fetch categories!');
     }
+
+    return _deserialize<List<Category>>(
+        categoriesFromJson(_parseJsonArray(response.body)));
   }
 
   Future<List<Store>> getStores() async {
     final url = '$_baseUrl/stores';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return storesFromJson(_parseJsonArray(response.body));
-      }
-
-      throw Exception('Failed to fetch stores!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Failed to fetch stores!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('Failed to fetch stores!');
     }
+
+    return _deserialize<List<Store>>(
+        storesFromJson(_parseJsonArray(response.body)));
   }
 
   Future<MyUser> createMongoUser(User user) async {
@@ -283,17 +289,13 @@ class APIRepository with NetworkLoggy {
       'email': user.email,
       'avatar': user.photoURL ?? defaultAvatar,
     };
-    try {
-      final response = await _httpService.post(url, data, auth: false);
-      if (response.statusCode == 201) {
-        return MyUser.fromJsonBasicDTO(_parseJsonObject(response.body));
-      }
-
-      throw Exception('Failed to create the user!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Failed to create the user!');
+    final response = await _httpService.post(url, data, auth: false);
+    if (response.statusCode != 201) {
+      _throwException('Failed to create the user!');
     }
+
+    return _deserialize<MyUser>(
+        MyUser.fromJsonBasicDTO(_parseJsonObject(response.body)));
   }
 
   Future<MyUser?> getMongoUser() async {
@@ -328,47 +330,35 @@ class APIRepository with NetworkLoggy {
 
   Future<MyUser> getUserExtendedById({required String id}) async {
     final url = '$_baseUrl/users/$id/extended';
-    try {
-      final response = await _httpService.get(url);
-      if (response.statusCode == 200) {
-        return MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body));
-      }
-
-      throw Exception('User not found!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('User not found!');
+    final response = await _httpService.get(url);
+    if (response.statusCode != 200) {
+      _throwException('User not found!');
     }
+
+    return _deserialize<MyUser>(
+        MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
   }
 
   Future<MyUser> getUserById({required String id}) async {
     final url = '$_baseUrl/users/$id';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return MyUser.fromJsonBasicDTO(_parseJsonObject(response.body));
-      }
-
-      throw Exception('User not found!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('User not found!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('User not found!');
     }
+
+    return _deserialize<MyUser>(
+        MyUser.fromJsonBasicDTO(_parseJsonObject(response.body)));
   }
 
   Future<MyUser> getUserByUid({required String uid}) async {
     final url = '$_baseUrl/users/search/findByUid?uid=$uid';
-    try {
-      final response = await _httpService.get(url);
-      if (response.statusCode == 200) {
-        return MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body));
-      }
-
-      throw Exception('User not found!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('User not found!');
+    final response = await _httpService.get(url);
+    if (response.statusCode != 200) {
+      _throwException('User not found!');
     }
+
+    return _deserialize<MyUser>(
+        MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
   }
 
   Future<bool> addFCMToken({
@@ -412,17 +402,12 @@ class APIRepository with NetworkLoggy {
         'value': status.name.toUpperCase(),
       }
     ];
-    try {
-      final response = await _httpService.patch(url, data);
-      if (response.statusCode == 200) {
-        return Deal.fromJson(_parseJsonObject(response.body));
-      }
-
-      throw Exception('Failed to update the deal status!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Failed to update the deal status!');
+    final response = await _httpService.patch(url, data);
+    if (response.statusCode != 200) {
+      _throwException('Failed to update the deal status!');
     }
+
+    return _deserialize<Deal>(Deal.fromJson(_parseJsonObject(response.body)));
   }
 
   Future<MyUser> updateUserAvatar({
@@ -433,17 +418,13 @@ class APIRepository with NetworkLoggy {
     final data = <Json>[
       <String, dynamic>{'op': 'replace', 'path': '/avatar', 'value': avatarUrl}
     ];
-    try {
-      final response = await _httpService.patch(url, data);
-      if (response.statusCode == 200) {
-        return MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body));
-      }
-
-      throw Exception("Failed to update the user's avatar!");
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception("Failed to update the user's avatar!");
+    final response = await _httpService.patch(url, data);
+    if (response.statusCode != 200) {
+      _throwException("Failed to update the user's avatar!");
     }
+
+    return _deserialize<MyUser>(
+        MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
   }
 
   Future<MyUser> updateUserNickname({
@@ -454,64 +435,48 @@ class APIRepository with NetworkLoggy {
     final data = <Json>[
       <String, dynamic>{'op': 'replace', 'path': '/nickname', 'value': nickname}
     ];
-    try {
-      final response = await _httpService.patch(url, data);
-      if (response.statusCode == 200) {
-        return MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body));
-      } else if (response.body.contains('E11000')) {
-        throw Exception('This nickname already being used by another user!');
-      }
-
-      throw Exception("Failed to update the user's nickname!");
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception("Failed to update the user's nickname!");
+    final response = await _httpService.patch(url, data);
+    if (response.statusCode != 200) {
+      _throwException("Failed to update the user's nickname!");
+    } else if (response.body.contains('E11000')) {
+      _throwException('This nickname already being used by another user!');
     }
+
+    return _deserialize<MyUser>(
+        MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
   }
 
   Future<List<Deal>> getUserFavorites({int? page, int? size}) async {
     final url = '$_baseUrl/users/me/favorites?page=$page&size=$size';
-    try {
-      final response = await _httpService.get(url);
-      if (response.statusCode == 200) {
-        return dealsFromJson(_parseJsonArray(response.body));
-      }
-
-      throw Exception('Could not get the user favorites!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Could not get the user favorites!');
+    final response = await _httpService.get(url);
+    if (response.statusCode != 200) {
+      _throwException('Could not get the user favorites!');
     }
+
+    return _deserialize<List<Deal>>(
+        dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<SuggestionResponse> getDealSuggestions({required String query}) async {
     final url = '$_baseUrl/deals/suggestions?query=$query';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return SuggestionResponse.fromJson(jsonDecode(response.body));
-      }
-
-      throw Exception('An error occurred while searching deals!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('An error occurred while searching deals!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('An error occurred while searching deals!');
     }
+
+    return _deserialize<SuggestionResponse>(
+        SuggestionResponse.fromJson(jsonDecode(response.body)));
   }
 
   Future<List<Deal>> getUserDeals({int? page, int? size}) async {
     final url = '$_baseUrl/users/me/deals?page=$page&size=$size';
-    try {
-      final response = await _httpService.get(url);
-      if (response.statusCode == 200) {
-        return dealsFromJson(_parseJsonArray(response.body));
-      }
-
-      throw Exception('Could not get the user deals!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Could not get the user deals!');
+    final response = await _httpService.get(url);
+    if (response.statusCode != 200) {
+      _throwException('Could not get the user deals!');
     }
+
+    return _deserialize<List<Deal>>(
+        dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<List<Deal>> getDealsByCategory({
@@ -521,17 +486,13 @@ class APIRepository with NetworkLoggy {
   }) async {
     final url =
         '$_baseUrl/deals/search/byCategory?category=$category&page=$page&size=$size';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return dealsFromJson(_parseJsonArray(response.body));
-      }
-
-      throw Exception('Could not get deals by category!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Could not get deals by category!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('Could not get deals by category!');
     }
+
+    return _deserialize<List<Deal>>(
+        dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<SearchResponse> searchDeals({
@@ -543,17 +504,13 @@ class APIRepository with NetworkLoggy {
       '/deals/searches',
       searchParams.queryParameters,
     ).toString();
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return SearchResponse.fromJson(jsonDecode(response.body));
-      }
-
-      throw Exception('Could not get the search results!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Could not get the search results!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('Could not get the search results!');
     }
+
+    return _deserialize<SearchResponse>(
+        SearchResponse.fromJson(jsonDecode(response.body)));
   }
 
   Future<List<Deal>> getDealsByStore({
@@ -563,47 +520,35 @@ class APIRepository with NetworkLoggy {
   }) async {
     final url =
         '$_baseUrl/deals/search/byStoreId?storeId=$storeId&page=$page&size=$size';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return dealsFromJson(_parseJsonArray(response.body));
-      }
-
-      throw Exception('Could not get deals by store!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Could not get deals by store!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('Could not get deals by store!');
     }
+
+    return _deserialize<List<Deal>>(
+        dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<List<Deal>> getLatestDeals({int? page, int? size}) async {
     final url = '$_baseUrl/deals/search/latestActive?page=$page&size=$size';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return dealsFromJson(_parseJsonArray(response.body));
-      }
-
-      throw Exception('Could not get the latest deals!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Could not get the latest deals!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('Could not get the latest deals!');
     }
+
+    return _deserialize<List<Deal>>(
+        dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<List<Deal>> getMostLikedDeals({int? page, int? size}) async {
     final url = '$_baseUrl/deals/search/mostLikedActive?page=$page&size=$size';
-    try {
-      final response = await _httpService.get(url, auth: false);
-      if (response.statusCode == 200) {
-        return dealsFromJson(_parseJsonArray(response.body));
-      }
-
-      throw Exception('Could not get the most liked deals!');
-    } on Exception catch (e) {
-      loggy.error(e, e);
-      throw Exception('Could not get the most liked deals!');
+    final response = await _httpService.get(url, auth: false);
+    if (response.statusCode != 200) {
+      _throwException('Could not get the most liked deals!');
     }
+
+    return _deserialize<List<Deal>>(
+        dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<int?> getNumberOfCommentsPostedByUser({required String userId}) async {
