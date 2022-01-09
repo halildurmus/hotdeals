@@ -62,7 +62,7 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
 
       final sentReport =
           await GetIt.I.get<APIRepository>().reportUser(report: report);
-      loggy.info(sentReport);
+      loggy.debug(sentReport);
       // Pops the loading dialog.
       Navigator.of(ctx).pop();
       if (sentReport) {
