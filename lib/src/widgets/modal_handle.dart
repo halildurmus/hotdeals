@@ -12,8 +12,8 @@ class ModalHandle extends StatelessWidget {
             height: 5,
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: Theme.of(context).dividerColor,
                 borderRadius: const BorderRadius.all(Radius.circular(2.5)),
+                color: Theme.of(context).dividerColor,
               ),
             ),
           ),

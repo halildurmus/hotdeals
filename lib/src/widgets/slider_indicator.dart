@@ -17,10 +17,10 @@ class SliderIndicator extends StatelessWidget {
 
           return Container(
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
               color: currentIndex == index
                   ? Colors.white
                   : const Color.fromRGBO(180, 160, 140, .5),
+              shape: BoxShape.circle,
             ),
             height: 8,
             width: 8,

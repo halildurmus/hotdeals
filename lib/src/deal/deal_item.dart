@@ -88,8 +88,8 @@ class _DealItemState extends State<DealItem> {
               : null,
           margin: const EdgeInsets.only(left: 12, right: 4),
           decoration: BoxDecoration(
-            color: theme.brightness == Brightness.dark ? Colors.white : null,
             borderRadius: const BorderRadius.all(Radius.circular(4)),
+            color: theme.brightness == Brightness.dark ? Colors.white : null,
           ),
           child: Image.network(deal.coverPhoto, fit: BoxFit.cover),
         );
