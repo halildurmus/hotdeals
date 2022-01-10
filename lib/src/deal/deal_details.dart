@@ -851,12 +851,10 @@ class _DealIsExpiredBannerState extends State<_DealIsExpiredBanner> {
 
     return SizedBox(
       height: 30,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: isDarkMode
-              ? theme.primaryColorDark
-              : theme.colorScheme.secondaryVariant,
-        ),
+      child: ColoredBox(
+        color: isDarkMode
+            ? theme.primaryColorDark
+            : theme.colorScheme.secondaryVariant,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
