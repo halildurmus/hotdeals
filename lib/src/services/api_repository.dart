@@ -71,6 +71,7 @@ class APIRepository with NetworkLoggy {
     }
   }
 
+  // Logs and then throws an `Exception` with given `errorMessage`.
   void _throwException(String errorMessage) {
     loggy.error(errorMessage);
     throw Exception(errorMessage);
