@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show SocketException;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
+import 'package:loggy/loggy.dart' show logError;
 
 typedef Json = Map<String, dynamic>;
 
@@ -27,17 +27,16 @@ class HttpService {
 
   late final Client _client;
 
-  FutureOr<Response> _onTimeout() {
-    throw TimeoutException(null, _timeoutDuration);
-  }
+  FutureOr<Response> _onTimeout() =>
+      throw TimeoutException(null, _timeoutDuration);
 
-  // Wrapper function for HTTP requests to reduce boilerplate.
-  Future<Response> _request(Future<Response> fn) async {
+  // Wrapper function for HTTP requests that uses try-catch block
+  // to reduce boilerplate.
+  Future<Response> _request(Future<Response> Function() fn) async {
     try {
-      return fn.timeout(_timeoutDuration, onTimeout: _onTimeout);
-    } on SocketException catch (e) {
-      throw SocketException(e.toString());
-    } on Exception {
+      return fn().timeout(_timeoutDuration, onTimeout: _onTimeout);
+    } on Exception catch (e) {
+      logError(e.toString());
       rethrow;
     }
   }
@@ -49,7 +48,7 @@ class HttpService {
     }
 
     return _request(
-      _client.get(
+      () => _client.get(
         Uri.parse(url),
         headers: <String, String>{
           if (auth) 'Authorization': 'Bearer $idToken',
@@ -63,7 +62,7 @@ class HttpService {
     final idToken = await _firebaseAuth.currentUser!.getIdToken();
 
     return _request(
-      _client.patch(
+      () => _client.patch(
         Uri.parse(url),
         headers: <String, String>{
           'Authorization': 'Bearer $idToken',
@@ -82,7 +81,7 @@ class HttpService {
     }
 
     return _request(
-      _client.post(
+      () => _client.post(
         Uri.parse(url),
         headers: <String, String>{
           if (auth) 'Authorization': 'Bearer $idToken',
@@ -98,7 +97,7 @@ class HttpService {
     data ??= <String, dynamic>{};
 
     return _request(
-      _client.put(
+      () => _client.put(
         Uri.parse(url),
         headers: <String, String>{
           'Authorization': 'Bearer $idToken',
@@ -113,7 +112,7 @@ class HttpService {
     final idToken = await _firebaseAuth.currentUser!.getIdToken();
 
     return _request(
-      _client.delete(
+      () => _client.delete(
         Uri.parse(url),
         headers: <String, String>{
           'Authorization': 'Bearer $idToken',
