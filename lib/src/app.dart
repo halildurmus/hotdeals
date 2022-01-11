@@ -50,7 +50,8 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
         }
         setState(() => _futureState = _FutureState.success);
       });
-    }).catchError((_) {
+    }).catchError((e) {
+      loggy.error(e);
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         // If ctx is provided, pops the LoadingDialog in the ErrorScreen.
         if (ctx != null) {
