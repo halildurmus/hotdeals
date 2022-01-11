@@ -112,9 +112,9 @@ class _DealPagedListViewState extends State<DealPagedListView>
           _pagingController.appendPage(newItems, nextPageKey);
         }
       }
-    } on Exception catch (error) {
-      loggy.error(error);
-      _pagingController.error = error;
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      _pagingController.error = e;
     }
   }
 
