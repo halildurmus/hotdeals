@@ -30,8 +30,7 @@ class Deal {
 
   factory Deal.fromJson(Json json) => Deal(
         id: json['id'] as String,
-        status:
-            DealStatus.values.byName((json['status'] as String).toLowerCase()),
+        status: _getStatus(json['status'] as String),
         postedBy: json['postedBy'] as String,
         coverPhoto: json['coverPhoto'] as String,
         dealUrl: json['dealUrl'] as String,
@@ -46,16 +45,13 @@ class Deal {
         price: json['price'] as double,
         dealScore: json['dealScore'] as int,
         views: json['views'] as int,
-        isNew: DateTime.now()
-                .difference(DateTime.parse(json['createdAt'] as String)) <=
-            const Duration(days: 1),
+        isNew: _calculateIsNew(DateTime.parse(json['createdAt'] as String)),
         createdAt: DateTime.parse(json['createdAt'] as String),
       );
 
   factory Deal.fromJsonES(Json json) => Deal(
         id: json['id'] as String,
-        status:
-            DealStatus.values.byName((json['status'] as String).toLowerCase()),
+        status: _getStatus(json['status'] as String),
         postedBy: json['postedBy'] as String,
         coverPhoto: json['coverPhoto'] as String,
         title: json['title'] as String,
@@ -70,9 +66,7 @@ class Deal {
         price: (json['numberFacets'] as List<dynamic>).singleWhere(
                 (e) => (e['facetName'] as String) == 'price')['facetValue']
             as double,
-        isNew: DateTime.now()
-                .difference(DateTime.parse(json['createdAt'] as String)) <=
-            const Duration(days: 1),
+        isNew: _calculateIsNew(DateTime.parse(json['createdAt'] as String)),
       );
 
   final String? id;
@@ -111,3 +105,9 @@ class Deal {
   String toString() =>
       'Deal{id: $id, status: $status, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
 }
+
+DealStatus _getStatus(String status) =>
+    DealStatus.values.byName(status.toLowerCase());
+
+bool _calculateIsNew(DateTime createdAt) =>
+    DateTime.now().difference(createdAt) <= const Duration(days: 1);
