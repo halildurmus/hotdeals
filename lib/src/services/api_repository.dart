@@ -25,10 +25,34 @@ import 'http_service.dart';
 typedef Json = Map<String, dynamic>;
 
 /// Thrown when an error occurs while decoding the response body.
-class JsonDecodeException implements Exception {}
+class JsonDecodeException implements Exception {
+  JsonDecodeException([this.message]);
+
+  final dynamic message;
+
+  @override
+  String toString() {
+    final Object? message = this.message;
+    if (message == null) return 'JsonDecodeException';
+
+    return 'JsonDecodeException: $message';
+  }
+}
 
 /// Thrown when an error occurs while deserializing the response body.
-class JsonDeserializationException implements Exception {}
+class JsonDeserializationException implements Exception {
+  JsonDeserializationException([this.message]);
+
+  final dynamic message;
+
+  @override
+  String toString() {
+    final Object? message = this.message;
+    if (message == null) return 'JsonDeserializationException';
+
+    return 'JsonDeserializationException: $message';
+  }
+}
 
 // The API base URL read from environment config.
 final String _baseUrl = GetIt.I.get<Environment>().config.apiBaseUrl;
