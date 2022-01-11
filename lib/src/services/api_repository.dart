@@ -73,25 +73,29 @@ class APIRepository with NetworkLoggy {
   Json _parseJsonObject(String response) {
     try {
       return jsonDecode(response) as Json;
-    } on Exception {
-      throw JsonDecodeException();
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      throw JsonDecodeException(e);
     }
   }
 
   List<dynamic> _parseJsonArray(String response) {
     try {
       return jsonDecode(response) as List<dynamic>;
-    } on Exception {
-      throw JsonDecodeException();
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      throw JsonDecodeException(e);
     }
   }
 
-  T _deserialize<T>(T fn) {
+  // Wrapper function for deserializing that uses try-catch block
+  // to reduce boilerplate.
+  T _deserialize<T>(T Function() fn) {
     try {
-      return fn;
-    } on Exception catch (e) {
-      loggy.error(e);
-      throw JsonDeserializationException();
+      return fn();
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      throw JsonDeserializationException(e);
     }
   }
 
@@ -291,7 +295,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<List<Category>>(
-        categoriesFromJson(_parseJsonArray(response.body)));
+        () => categoriesFromJson(_parseJsonArray(response.body)));
   }
 
   Future<List<Store>> getStores() async {
@@ -302,7 +306,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<List<Store>>(
-        storesFromJson(_parseJsonArray(response.body)));
+        () => storesFromJson(_parseJsonArray(response.body)));
   }
 
   Future<MyUser> createMongoUser(User user) async {
@@ -320,7 +324,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<MyUser>(
-        MyUser.fromJsonBasicDTO(_parseJsonObject(response.body)));
+        () => MyUser.fromJsonBasicDTO(_parseJsonObject(response.body)));
   }
 
   Future<MyUser?> getMongoUser() async {
@@ -361,7 +365,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<MyUser>(
-        MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
+        () => MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
   }
 
   Future<MyUser> getUserById({required String id}) async {
@@ -372,7 +376,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<MyUser>(
-        MyUser.fromJsonBasicDTO(_parseJsonObject(response.body)));
+        () => MyUser.fromJsonBasicDTO(_parseJsonObject(response.body)));
   }
 
   Future<MyUser> getUserByUid({required String uid}) async {
@@ -383,7 +387,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<MyUser>(
-        MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
+        () => MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
   }
 
   Future<bool> addFCMToken({
@@ -432,7 +436,8 @@ class APIRepository with NetworkLoggy {
       _throwException('Failed to update the deal status!');
     }
 
-    return _deserialize<Deal>(Deal.fromJson(_parseJsonObject(response.body)));
+    return _deserialize<Deal>(
+        () => Deal.fromJson(_parseJsonObject(response.body)));
   }
 
   Future<MyUser> updateUserAvatar({
@@ -449,7 +454,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<MyUser>(
-        MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
+        () => MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
   }
 
   Future<MyUser> updateUserNickname({
@@ -468,7 +473,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<MyUser>(
-        MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
+        () => MyUser.fromJsonExtendedDTO(_parseJsonObject(response.body)));
   }
 
   Future<List<Deal>> getUserFavorites({int? page, int? size}) async {
@@ -479,7 +484,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<List<Deal>>(
-        dealsFromJson(_parseJsonArray(response.body)));
+        () => dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<SuggestionResponse> getDealSuggestions({required String query}) async {
@@ -490,7 +495,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<SuggestionResponse>(
-        SuggestionResponse.fromJson(jsonDecode(response.body)));
+        () => SuggestionResponse.fromJson(jsonDecode(response.body)));
   }
 
   Future<List<Deal>> getUserDeals({int? page, int? size}) async {
@@ -501,7 +506,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<List<Deal>>(
-        dealsFromJson(_parseJsonArray(response.body)));
+        () => dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<List<Deal>> getDealsByCategory({
@@ -517,7 +522,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<List<Deal>>(
-        dealsFromJson(_parseJsonArray(response.body)));
+        () => dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<SearchResponse> searchDeals({
@@ -535,7 +540,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<SearchResponse>(
-        SearchResponse.fromJson(jsonDecode(response.body)));
+        () => SearchResponse.fromJson(jsonDecode(response.body)));
   }
 
   Future<List<Deal>> getDealsByStore({
@@ -551,7 +556,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<List<Deal>>(
-        dealsFromJson(_parseJsonArray(response.body)));
+        () => dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<List<Deal>> getLatestDeals({int? page, int? size}) async {
@@ -562,7 +567,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<List<Deal>>(
-        dealsFromJson(_parseJsonArray(response.body)));
+        () => dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<List<Deal>> getMostLikedDeals({int? page, int? size}) async {
@@ -573,7 +578,7 @@ class APIRepository with NetworkLoggy {
     }
 
     return _deserialize<List<Deal>>(
-        dealsFromJson(_parseJsonArray(response.body)));
+        () => dealsFromJson(_parseJsonArray(response.body)));
   }
 
   Future<int?> getNumberOfCommentsPostedByUser({required String userId}) async {
