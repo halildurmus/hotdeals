@@ -109,7 +109,10 @@ class _DealDetailsState extends State<DealDetails> {
         .map((item) => GestureDetector(
               onTap: () => NavigationUtil.navigate(
                 context,
-                DealImagesFullScreen(images: _images!, currentIndex: currentIndex),
+                DealImagesFullScreen(
+                  images: _images!,
+                  currentIndex: currentIndex,
+                ),
               ),
               child: Container(
                 decoration: BoxDecoration(
