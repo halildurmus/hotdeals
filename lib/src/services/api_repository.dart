@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../config/environment.dart';
@@ -648,12 +647,9 @@ class APIRepository with NetworkLoggy {
     final url = '$_baseUrl/deals/$dealId/votes';
     final data = {'voteType': voteType.name.toUpperCase()};
     try {
-      late final Response response;
-      if (voteType == DealVoteType.unvote) {
-        response = await _httpService.delete(url);
-      } else {
-        response = await _httpService.put(url, data);
-      }
+      final response = voteType == DealVoteType.unvote
+          ? await _httpService.delete(url)
+          : await _httpService.put(url, data);
       if (response.statusCode == 200) {
         return Deal.fromJson(_parseJsonObject(response.body));
       }
