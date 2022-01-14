@@ -169,12 +169,14 @@ class _UserProfileDialogState extends State<UserProfileDialog> {
 
                     final conversationId = ChatUtil.getConversationID(
                         user1Uid: loggedInUser!.uid, user2Uid: user.uid);
+                    final user2 =
+                        await apiRepository.getUserByUid(uid: user.uid);
 
                     Navigator.of(context).pushNamed(
                       MessageScreen.routeName,
                       arguments: MessageArguments(
                         docId: conversationId,
-                        user2: user,
+                        user2: user2,
                       ),
                     );
                   };
