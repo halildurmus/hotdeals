@@ -12,7 +12,7 @@ import '../widgets/error_indicator.dart';
 import 'filter_chips.dart';
 
 class DealsByCategory extends StatefulWidget {
-  const DealsByCategory({Key? key, required this.category}) : super(key: key);
+  const DealsByCategory({required this.category, Key? key}) : super(key: key);
 
   final Category category;
 

@@ -8,9 +8,9 @@ import '../utils/localization_util.dart';
 
 class StoreItem extends StatefulWidget {
   const StoreItem({
-    Key? key,
     required this.onTap,
     required this.store,
+    Key? key,
   }) : super(key: key);
 
   final VoidCallback onTap;

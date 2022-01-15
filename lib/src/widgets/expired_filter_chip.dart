@@ -4,10 +4,10 @@ import '../utils/localization_util.dart';
 
 class ExpiredFilterChip extends StatelessWidget {
   const ExpiredFilterChip({
-    Key? key,
     required this.hideExpired,
     required this.label,
     required this.onSelected,
+    Key? key,
   }) : super(key: key);
 
   final bool hideExpired;

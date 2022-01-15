@@ -6,11 +6,11 @@ import '../utils/localization_util.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   const CustomAlertDialog({
+    required this.title,
     Key? key,
     this.cancelActionText,
     this.content,
     this.defaultActionText,
-    required this.title,
   }) : super(key: key);
 
   final String? cancelActionText;

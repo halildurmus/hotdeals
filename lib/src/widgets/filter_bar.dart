@@ -15,10 +15,10 @@ import 'sort_modal_bottom_sheet.dart';
 
 class FilterBar extends StatefulWidget {
   const FilterBar({
-    Key? key,
     required this.pagingController,
     required this.searchParams,
     required this.searchResponse,
+    Key? key,
   }) : super(key: key);
 
   final PagingController pagingController;
@@ -109,9 +109,11 @@ class _FilterBarState extends State<FilterBar> {
 }
 
 class _ResetFiltersChip extends StatelessWidget {
-  const _ResetFiltersChip(
-      {Key? key, required this.filterCount, required this.onPressed})
-      : super(key: key);
+  const _ResetFiltersChip({
+    required this.filterCount,
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
 
   final int filterCount;
   final VoidCallback onPressed;
@@ -161,10 +163,10 @@ class _ResetFiltersChip extends StatelessWidget {
 
 class _CategoryFilterChip extends StatelessWidget {
   const _CategoryFilterChip({
-    Key? key,
     required this.buckets,
     required this.onListTileTap,
     required this.searchParams,
+    Key? key,
   }) : super(key: key);
 
   final List<Bucket> buckets;
@@ -199,10 +201,10 @@ class _CategoryFilterChip extends StatelessWidget {
 
 class _PriceFilterChip extends StatelessWidget {
   const _PriceFilterChip({
-    Key? key,
     required this.buckets,
     required this.onListTileTap,
     required this.searchParams,
+    Key? key,
   }) : super(key: key);
 
   final List<Bucket> buckets;
@@ -237,10 +239,10 @@ class _PriceFilterChip extends StatelessWidget {
 
 class _StoreFilterChip extends StatelessWidget {
   const _StoreFilterChip({
-    Key? key,
     required this.buckets,
     required this.onListTileTap,
     required this.searchParams,
+    Key? key,
   }) : super(key: key);
 
   final List<Bucket> buckets;
@@ -275,9 +277,9 @@ class _StoreFilterChip extends StatelessWidget {
 
 class _ExpiredFilterChip extends StatelessWidget {
   const _ExpiredFilterChip({
-    Key? key,
     required this.onListTileTap,
     required this.searchParams,
+    Key? key,
   }) : super(key: key);
 
   final VoidCallback onListTileTap;
@@ -306,9 +308,9 @@ class _ExpiredFilterChip extends StatelessWidget {
 
 class _SortFilterChip extends StatelessWidget {
   const _SortFilterChip({
-    Key? key,
     required this.onListTileTap,
     required this.searchParams,
+    Key? key,
   }) : super(key: key);
 
   final VoidCallback onListTileTap;

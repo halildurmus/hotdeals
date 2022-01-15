@@ -16,7 +16,6 @@ import 'deal_status.dart';
 
 class DealItem extends StatefulWidget {
   const DealItem({
-    Key? key,
     required this.deal,
     required this.index,
     required this.isFavorited,
@@ -25,6 +24,7 @@ class DealItem extends StatefulWidget {
     required this.onDeleteButtonPressed,
     required this.pagingController,
     required this.showControlButtons,
+    Key? key,
   }) : super(key: key);
 
   final Deal deal;

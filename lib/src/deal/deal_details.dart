@@ -37,7 +37,7 @@ import 'report_deal_dialog.dart';
 enum _DealPopup { markAsActive, markAsExpired, reportDeal }
 
 class DealDetails extends StatefulWidget {
-  const DealDetails({Key? key, required this.dealId}) : super(key: key);
+  const DealDetails({required this.dealId, Key? key}) : super(key: key);
 
   final String dealId;
 

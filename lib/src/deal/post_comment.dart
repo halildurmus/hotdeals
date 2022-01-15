@@ -17,7 +17,7 @@ import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
 class PostComment extends StatefulWidget {
-  const PostComment({Key? key, required this.deal}) : super(key: key);
+  const PostComment({required this.deal, Key? key}) : super(key: key);
 
   final Deal deal;
 

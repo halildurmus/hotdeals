@@ -6,9 +6,9 @@ import 'modal_handle.dart';
 
 class SortModalBottomSheet extends StatelessWidget {
   const SortModalBottomSheet({
-    Key? key,
     required this.onListTileTap,
     required this.searchParams,
+    Key? key,
   }) : super(key: key);
 
   final VoidCallback onListTileTap;

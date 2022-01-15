@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class GrayscaleColorFiltered extends StatelessWidget {
-  const GrayscaleColorFiltered({Key? key, required this.child})
+  const GrayscaleColorFiltered({required this.child, Key? key})
       : super(key: key);
 
   final Widget child;

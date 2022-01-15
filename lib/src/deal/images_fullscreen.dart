@@ -7,9 +7,9 @@ import '../widgets/slider_indicator.dart';
 
 class DealImagesFullScreen extends StatefulWidget {
   const DealImagesFullScreen({
-    Key? key,
     required this.currentIndex,
     required this.images,
+    Key? key,
   }) : super(key: key);
 
   final int currentIndex;

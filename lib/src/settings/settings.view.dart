@@ -11,7 +11,7 @@ import 'settings.controller.dart';
 import 'settings_dialog.dart';
 
 class SettingsView extends StatefulWidget {
-  const SettingsView({Key? key, required this.controller}) : super(key: key);
+  const SettingsView({required this.controller, Key? key}) : super(key: key);
 
   static const String routeName = '/settings';
 

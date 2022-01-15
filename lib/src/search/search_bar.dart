@@ -9,9 +9,9 @@ import 'search_service.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({
-    Key? key,
     required this.controller,
     required this.onSearchModeChanged,
+    Key? key,
   }) : super(key: key);
 
   final FloatingSearchBarController controller;

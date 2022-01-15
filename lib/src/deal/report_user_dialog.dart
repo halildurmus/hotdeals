@@ -11,7 +11,7 @@ import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
 class ReportUserDialog extends StatefulWidget {
-  const ReportUserDialog({Key? key, required this.reportedUserId})
+  const ReportUserDialog({required this.reportedUserId, Key? key})
       : super(key: key);
 
   final String reportedUserId;

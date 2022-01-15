@@ -4,9 +4,9 @@ import 'settings_list_item.dart';
 
 class SettingsSection extends StatelessWidget {
   const SettingsSection({
-    Key? key,
     required this.children,
     required this.title,
+    Key? key,
   }) : super(key: key);
 
   final List<SettingsListItem> children;

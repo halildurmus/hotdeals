@@ -8,7 +8,7 @@ import '../utils/localization_util.dart';
 import 'chat.dart';
 
 class ChatItem extends StatelessWidget {
-  const ChatItem({Key? key, required this.chat, required this.onTap})
+  const ChatItem({required this.chat, required this.onTap, Key? key})
       : super(key: key);
 
   final Chat chat;

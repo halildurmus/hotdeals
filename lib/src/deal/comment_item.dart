@@ -10,7 +10,7 @@ import '../widgets/sign_in_dialog.dart';
 import '../widgets/user_profile_dialog.dart';
 
 class CommentItem extends StatelessWidget {
-  const CommentItem({Key? key, required this.comment}) : super(key: key);
+  const CommentItem({required this.comment, Key? key}) : super(key: key);
 
   final Comment comment;
 

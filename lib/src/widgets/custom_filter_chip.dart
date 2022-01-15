@@ -8,34 +8,34 @@ import '../search/search_params.dart';
 
 class CustomFilterChip extends StatelessWidget {
   CustomFilterChip.category({
-    Key? key,
     required this.filters,
     required this.icon,
     required this.label,
     required this.labelPlural,
     required this.onSelected,
+    Key? key,
   }) : super(key: key) {
     _filterType = FilterType.category;
   }
 
   CustomFilterChip.price({
-    Key? key,
     required this.filters,
     required this.icon,
     required this.label,
     required this.labelPlural,
     required this.onSelected,
+    Key? key,
   }) : super(key: key) {
     _filterType = FilterType.price;
   }
 
   CustomFilterChip.store({
-    Key? key,
     required this.filters,
     required this.icon,
     required this.label,
     required this.labelPlural,
     required this.onSelected,
+    Key? key,
   }) : super(key: key) {
     _filterType = FilterType.store;
   }

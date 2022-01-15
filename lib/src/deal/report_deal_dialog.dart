@@ -11,7 +11,7 @@ import '../widgets/custom_snackbar.dart';
 import '../widgets/loading_dialog.dart';
 
 class ReportDealDialog extends StatefulWidget {
-  const ReportDealDialog({Key? key, required this.reportedDealId})
+  const ReportDealDialog({required this.reportedDealId, Key? key})
       : super(key: key);
 
   final String reportedDealId;

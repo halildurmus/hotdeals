@@ -12,12 +12,12 @@ import '../utils/localization_util.dart';
 
 class NotificationItem extends StatefulWidget {
   const NotificationItem({
-    Key? key,
     required this.isSelectionMode,
     required this.isSelected,
     required this.notification,
     required this.onLongPress,
     required this.onTap,
+    Key? key,
   }) : super(key: key);
 
   final bool isSelectionMode;

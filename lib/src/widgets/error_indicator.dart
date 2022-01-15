@@ -4,13 +4,13 @@ import '../utils/localization_util.dart';
 
 class ErrorIndicator extends StatelessWidget {
   const ErrorIndicator({
+    required this.title,
     this.icon,
     this.iconColor,
     this.iconSize = 120,
     this.message,
     this.onTryAgain,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    required this.title,
     this.tryAgainIcon = Icons.refresh,
     this.tryAgainText,
     Key? key,

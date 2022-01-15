@@ -6,8 +6,8 @@ List<MyUser> usersFromJson(List<dynamic> jsonArray) =>
 
 class MyUser {
   MyUser({
-    this.id,
     required this.uid,
+    this.id,
     this.avatar,
     this.email,
     this.nickname,

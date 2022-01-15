@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class SliderIndicator extends StatelessWidget {
   const SliderIndicator({
-    Key? key,
-    required this.images,
     required this.currentIndex,
+    required this.images,
+    Key? key,
   }) : super(key: key);
 
-  final List<String> images;
   final int currentIndex;
+  final List<String> images;
 
   Widget buildDots() => Row(
         mainAxisAlignment: MainAxisAlignment.center,

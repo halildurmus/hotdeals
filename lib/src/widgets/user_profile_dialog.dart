@@ -20,8 +20,8 @@ typedef Json = Map<String, dynamic>;
 
 class UserProfileDialog extends StatefulWidget {
   const UserProfileDialog({
-    Key? key,
     required this.userId,
+    Key? key,
     this.hideButtons = false,
   }) : super(key: key);
 

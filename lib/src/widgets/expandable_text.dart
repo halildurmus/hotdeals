@@ -5,10 +5,10 @@ import '../utils/localization_util.dart';
 
 class ExpandableText extends StatefulWidget {
   const ExpandableText({
+    required this.text,
     Key? key,
     this.maxLines = 4,
     this.padding = const EdgeInsets.all(16),
-    required this.text,
   }) : super(key: key);
 
   final int maxLines;

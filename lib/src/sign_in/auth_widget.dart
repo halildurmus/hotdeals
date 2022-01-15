@@ -17,7 +17,7 @@ import '../utils/localization_util.dart';
 /// This widget should be below the [MaterialApp].
 /// An [AuthWidgetBuilder] ancestor is required for this widget to work.
 class AuthWidget extends StatefulWidget {
-  const AuthWidget({Key? key, required this.userSnapshot}) : super(key: key);
+  const AuthWidget({required this.userSnapshot, Key? key}) : super(key: key);
 
   final AsyncSnapshot<MyUser?> userSnapshot;
 

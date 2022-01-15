@@ -35,8 +35,11 @@ class SignInPageBuilder extends StatelessWidget {
 }
 
 class SignInPage extends StatelessWidget {
-  const SignInPage._({Key? key, required this.isLoading, required this.manager})
-      : super(key: key);
+  const SignInPage._({
+    required this.isLoading,
+    required this.manager,
+    Key? key,
+  }) : super(key: key);
 
   final SignInManager manager;
   final bool isLoading;

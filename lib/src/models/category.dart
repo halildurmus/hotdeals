@@ -8,12 +8,12 @@ List<Category> categoriesFromJson(List<dynamic> jsonArray) =>
 
 class Category {
   Category({
-    this.id,
     required this.names,
     required this.parent,
     required this.category,
     required this.iconLigature,
     required this.iconFontFamily,
+    this.id,
   });
 
   factory Category.fromJson(Json json) => Category(

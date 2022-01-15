@@ -4,9 +4,9 @@ import '../models/category.dart';
 
 class CategoryItem extends StatelessWidget {
   const CategoryItem({
-    Key? key,
     required this.category,
     required this.onTap,
+    Key? key,
   }) : super(key: key);
 
   final Category category;

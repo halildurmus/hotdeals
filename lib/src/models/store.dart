@@ -4,7 +4,7 @@ List<Store> storesFromJson(List<dynamic> jsonArray) => List<Store>.from(
     jsonArray.map<dynamic>((dynamic e) => Store.fromJson(e as Json)));
 
 class Store {
-  const Store({this.id, required this.name, required this.logo});
+  const Store({required this.name, required this.logo, this.id});
 
   factory Store.fromJson(Json json) => Store(
         id: json['id'] as String,

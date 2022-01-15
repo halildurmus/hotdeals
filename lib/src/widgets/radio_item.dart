@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class RadioItem<V> extends StatelessWidget {
   const RadioItem({
-    Key? key,
     required this.leading,
     required this.onChanged,
     required this.onTap,
     required this.providerValue,
     required this.radioValue,
     required this.text,
+    Key? key,
   }) : super(key: key);
 
   final Widget leading;

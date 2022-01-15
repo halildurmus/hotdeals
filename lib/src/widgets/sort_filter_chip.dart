@@ -5,11 +5,11 @@ import '../utils/localization_util.dart';
 
 class SortFilterChip extends StatelessWidget {
   const SortFilterChip({
-    Key? key,
     required this.label,
     required this.onSelected,
     required this.order,
     required this.sortBy,
+    Key? key,
   }) : super(key: key);
 
   final String label;

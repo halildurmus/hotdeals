@@ -6,9 +6,9 @@ import '../models/category.dart';
 
 class FilterChips extends StatefulWidget {
   const FilterChips({
-    Key? key,
     required this.category,
     required this.onFilterChange,
+    Key? key,
   }) : super(key: key);
 
   final Category category;

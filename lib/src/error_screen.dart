@@ -6,7 +6,7 @@ import 'utils/localization_util.dart';
 import 'widgets/loading_dialog.dart';
 
 class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({Key? key, required this.onTap}) : super(key: key);
+  const ErrorScreen({required this.onTap, Key? key}) : super(key: key);
 
   final Function(BuildContext ctx) onTap;
 

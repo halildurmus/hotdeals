@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SettingsDialog extends StatelessWidget {
-  const SettingsDialog({Key? key, required this.child}) : super(key: key);
+  const SettingsDialog({required this.child, Key? key}) : super(key: key);
 
   final Widget child;
 

@@ -25,9 +25,9 @@ import 'update_deal.dart';
 
 class DealPagedListView extends StatefulWidget {
   const DealPagedListView({
+    required this.noDealsFound,
     Key? key,
     this.dealsFuture,
-    required this.noDealsFound,
     this.pageSize = 20,
     this.pagingController,
     this.removeDealWhenUnfavorited = false,
@@ -38,14 +38,14 @@ class DealPagedListView extends StatefulWidget {
   }) : super(key: key);
 
   const DealPagedListView.withFilterBar({
+    required this.noDealsFound,
+    required this.searchParams,
+    required this.searchResultsFuture,
     Key? key,
     this.dealsFuture,
-    required this.noDealsFound,
     this.pageSize = 20,
     this.pagingController,
     this.removeDealWhenUnfavorited = false,
-    required this.searchParams,
-    required this.searchResultsFuture,
     this.showFilterBar = true,
     this.useRefreshIndicator = false,
   }) : super(key: key);

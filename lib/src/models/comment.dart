@@ -4,9 +4,9 @@ typedef Json = Map<String, dynamic>;
 
 class Comment {
   const Comment({
+    required this.message,
     this.id,
     this.postedBy,
-    required this.message,
     this.createdAt,
   });
 

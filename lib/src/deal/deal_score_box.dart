@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DealScoreBox extends StatelessWidget {
-  const DealScoreBox({Key? key, required this.score}) : super(key: key);
+  const DealScoreBox({required this.score, Key? key}) : super(key: key);
 
   final int score;
 

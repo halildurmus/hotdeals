@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class CustomSnackBar extends StatelessWidget {
   const CustomSnackBar({
+    required this.text,
     Key? key,
     this.action,
     this.content,
     this.icon,
-    required this.text,
   }) : super(key: key);
 
   final SnackBarAction? action;

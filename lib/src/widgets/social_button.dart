@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class SocialButton extends StatelessWidget {
   const SocialButton({
-    Key? key,
-    this.backgroundColor,
     required this.onPressed,
     required this.text,
+    Key? key,
+    this.backgroundColor,
     this.icon,
     this.iconSize = 20,
     this.image,
@@ -27,11 +27,11 @@ class SocialButton extends StatelessWidget {
         super(key: key);
 
   const SocialButton.mini({
+    required this.onPressed,
+    required this.icon,
     Key? key,
     this.backgroundColor,
-    required this.onPressed,
     this.text,
-    required this.icon,
     this.iconSize = 25,
     this.image,
     this.fontSize,

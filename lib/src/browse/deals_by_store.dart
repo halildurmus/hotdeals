@@ -10,7 +10,7 @@ import '../utils/localization_util.dart';
 import '../widgets/error_indicator.dart';
 
 class DealsByStore extends StatelessWidget {
-  const DealsByStore({Key? key, required this.store}) : super(key: key);
+  const DealsByStore({required this.store, Key? key}) : super(key: key);
 
   final Store store;
 

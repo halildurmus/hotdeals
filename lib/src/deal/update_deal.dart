@@ -18,7 +18,7 @@ import 'deal_details.dart';
 import 'deal_util.dart';
 
 class UpdateDeal extends StatefulWidget {
-  const UpdateDeal({Key? key, required this.deal}) : super(key: key);
+  const UpdateDeal({required this.deal, Key? key}) : super(key: key);
 
   final Deal deal;
 

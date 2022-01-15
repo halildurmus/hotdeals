@@ -4,6 +4,12 @@ typedef Json = Map<String, dynamic>;
 
 class PushNotification {
   PushNotification({
+    required this.actor,
+    required this.verb,
+    required this.object,
+    required this.avatar,
+    required this.message,
+    required this.uid,
     this.id,
     this.title,
     this.titleLocKey,
@@ -11,14 +17,8 @@ class PushNotification {
     this.body,
     this.bodyLocKey,
     this.bodyLocArgs,
-    required this.actor,
-    required this.verb,
-    required this.object,
     this.tokens = const [],
-    required this.avatar,
-    required this.message,
     this.image,
-    required this.uid,
     this.isRead = false,
     this.createdAt,
   })  : assert(title != null || titleLocKey != null,

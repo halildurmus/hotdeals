@@ -6,9 +6,9 @@ import 'modal_handle.dart';
 
 class ExpiredModalBottomSheet extends StatelessWidget {
   const ExpiredModalBottomSheet({
-    Key? key,
     required this.onListTileTap,
     required this.searchParams,
+    Key? key,
   }) : super(key: key);
 
   final VoidCallback onListTileTap;

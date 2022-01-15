@@ -10,34 +10,34 @@ import 'modal_handle.dart';
 
 class FilterModalBottomSheet extends StatefulWidget {
   FilterModalBottomSheet.category({
-    Key? key,
     required this.buckets,
     required this.filters,
     required this.hintText,
     required this.onListTileTap,
     required this.title,
+    Key? key,
   }) : super(key: key) {
     _filterType = FilterType.category;
   }
 
   FilterModalBottomSheet.price({
-    Key? key,
     required this.buckets,
     required this.filters,
     required this.hintText,
     required this.onListTileTap,
     required this.title,
+    Key? key,
   }) : super(key: key) {
     _filterType = FilterType.price;
   }
 
   FilterModalBottomSheet.store({
-    Key? key,
     required this.buckets,
     required this.filters,
     required this.hintText,
     required this.onListTileTap,
     required this.title,
+    Key? key,
   }) : super(key: key) {
     _filterType = FilterType.store;
   }
@@ -130,7 +130,6 @@ class _FilterModalBottomSheetState extends State<FilterModalBottomSheet> {
 
 class _ModalHeader extends StatefulWidget {
   const _ModalHeader({
-    Key? key,
     required this.filterType,
     required this.hintText,
     required this.onClearButtonPressed,
@@ -140,6 +139,7 @@ class _ModalHeader extends StatefulWidget {
     required this.searchFocusNode,
     required this.searchTextController,
     required this.title,
+    Key? key,
   }) : super(key: key);
 
   final FilterType filterType;
@@ -229,13 +229,13 @@ class _ModalHeaderState extends State<_ModalHeader> {
 
 class _ModalBody extends StatelessWidget {
   const _ModalBody({
-    Key? key,
     required this.buckets,
     required this.filterType,
     required this.filters,
     required this.onTap,
     required this.searchMode,
     required this.searchTextController,
+    Key? key,
   }) : super(key: key);
 
   final List<Bucket> buckets;

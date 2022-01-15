@@ -9,9 +9,9 @@ import 'comment_item.dart';
 
 class CommentPagedListView extends StatefulWidget {
   const CommentPagedListView({
-    Key? key,
     required this.commentFuture,
     required this.noCommentsFound,
+    Key? key,
     this.pageSize = 8,
     this.pagingController,
   }) : super(key: key);

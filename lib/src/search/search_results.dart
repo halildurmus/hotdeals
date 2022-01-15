@@ -14,7 +14,7 @@ import '../widgets/error_indicator.dart';
 import 'search_params.dart';
 
 class SearchResults extends StatefulWidget {
-  const SearchResults({Key? key, required this.searchParams}) : super(key: key);
+  const SearchResults({required this.searchParams, Key? key}) : super(key: key);
 
   final SearchParams searchParams;
 

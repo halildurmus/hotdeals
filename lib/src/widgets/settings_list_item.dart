@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class SettingsListItem extends StatelessWidget {
   const SettingsListItem({
-    Key? key,
-    this.hasNavigation = true,
     required this.leading,
     required this.onTap,
-    this.subtitle,
     required this.title,
+    Key? key,
+    this.hasNavigation = true,
+    this.subtitle,
   }) : super(key: key);
 
   final bool hasNavigation;

@@ -12,7 +12,7 @@ import '../services/auth_service.dart';
 /// See [AuthWidget], a descendant widget that consumes the snapshot generated
 /// by this builder.
 class AuthWidgetBuilder extends StatelessWidget with UiLoggy {
-  const AuthWidgetBuilder({Key? key, required this.builder}) : super(key: key);
+  const AuthWidgetBuilder({required this.builder, Key? key}) : super(key: key);
 
   final Widget Function(BuildContext, AsyncSnapshot<MyUser?>) builder;
 

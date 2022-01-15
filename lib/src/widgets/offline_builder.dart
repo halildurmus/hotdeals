@@ -14,9 +14,9 @@ typedef ValueWidgetBuilder<T> = Widget Function(
 
 class OfflineBuilder extends StatefulWidget {
   const OfflineBuilder({
-    Key? key,
     required this.connectivityBuilder,
     required this.connectionService,
+    Key? key,
     this.debounceDuration = kOfflineDebounceDuration,
     this.builder,
     this.child,

@@ -13,9 +13,9 @@ import 'comment_paged_sliver_list.dart';
 
 class DealComments extends StatefulWidget {
   const DealComments({
-    Key? key,
     required this.deal,
     required this.pagingController,
+    Key? key,
   }) : super(key: key);
 
   final Deal deal;

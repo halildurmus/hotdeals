@@ -5,9 +5,9 @@ import 'custom_alert_dialog.dart';
 
 class ExceptionAlertDialog extends CustomAlertDialog {
   ExceptionAlertDialog({
-    Key? key,
     required PlatformException exception,
     required String title,
+    Key? key,
   }) : super(
           key: key,
           content: message(exception) ?? '',
