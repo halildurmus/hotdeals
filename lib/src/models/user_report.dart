@@ -1,4 +1,5 @@
 import '../models/user_report_reason.dart';
+import '../utils/enum_util.dart';
 
 typedef Json = Map<String, dynamic>;
 
@@ -14,7 +15,7 @@ class UserReport {
   final String? message;
 
   Json toJson() => <String, dynamic>{
-        'reasons': reasons.map((e) => e.name.toUpperCase()).toList(),
+        'reasons': reasons.map((e) => e.javaName).toList(),
         if (message != null) 'message': message,
       };
 

@@ -19,6 +19,7 @@ import '../models/user_report.dart';
 import '../search/search_params.dart';
 import '../search/search_response.dart';
 import '../search/suggestion_response.dart';
+import '../utils/enum_util.dart';
 import 'http_service.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -427,7 +428,7 @@ class APIRepository with NetworkLoggy {
       <String, dynamic>{
         'op': 'replace',
         'path': '/status',
-        'value': status.name.toUpperCase(),
+        'value': status.javaName,
       }
     ];
     final response = await _httpService.patch(url, data);
@@ -645,7 +646,7 @@ class APIRepository with NetworkLoggy {
     required DealVoteType voteType,
   }) async {
     final url = '$_baseUrl/deals/$dealId/votes';
-    final data = {'voteType': voteType.name.toUpperCase()};
+    final data = {'voteType': voteType.javaName};
     try {
       final response = voteType == DealVoteType.unvote
           ? await _httpService.delete(url)
