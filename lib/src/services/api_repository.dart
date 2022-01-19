@@ -18,7 +18,7 @@ import '../models/store.dart';
 import '../models/user_report.dart';
 import '../search/search_params.dart';
 import '../search/search_response.dart';
-import '../search/suggestion_response.dart';
+import '../search/search_suggestion.dart';
 import '../utils/enum_util.dart';
 import 'http_service.dart';
 
@@ -487,15 +487,15 @@ class APIRepository with NetworkLoggy {
         () => dealsFromJson(_parseJsonArray(response.body)));
   }
 
-  Future<SuggestionResponse> getDealSuggestions({required String query}) async {
+  Future<SearchSuggestion> getDealSuggestions({required String query}) async {
     final url = '$_baseUrl/deals/suggestions?query=$query';
     final response = await _httpService.get(url, auth: false);
     if (response.statusCode != 200) {
       _throwException('An error occurred while searching deals!');
     }
 
-    return _deserialize<SuggestionResponse>(
-        () => SuggestionResponse.fromJson(jsonDecode(response.body)));
+    return _deserialize<SearchSuggestion>(
+        () => SearchSuggestion.fromJson(jsonDecode(response.body)));
   }
 
   Future<List<Deal>> getUserDeals({int? page, int? size}) async {
@@ -543,7 +543,7 @@ class APIRepository with NetworkLoggy {
         () => SearchResponse.fromJson(jsonDecode(response.body)));
   }
 
-  Future<List<Deal>> getDealsByStore({
+  Future<List<Deal>> getDealsByStoreId({
     required String storeId,
     int? page,
     int? size,
@@ -596,8 +596,8 @@ class APIRepository with NetworkLoggy {
     }
   }
 
-  Future<int?> getNumberOfDealsByStore({required String storeId}) async {
-    final url = '$_baseUrl/deals/count/byStore?storeId=$storeId';
+  Future<int?> getNumberOfDealsByStoreId({required String storeId}) async {
+    final url = '$_baseUrl/deals/count/byStoreId?storeId=$storeId';
     try {
       final response = await _httpService.get(url, auth: false);
       if (response.statusCode == 200) {

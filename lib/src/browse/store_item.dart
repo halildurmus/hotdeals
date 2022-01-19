@@ -27,7 +27,7 @@ class _StoreItemState extends State<StoreItem> {
   void initState() {
     numberOfDealsFuture = GetIt.I
         .get<APIRepository>()
-        .getNumberOfDealsByStore(storeId: widget.store.id!);
+        .getNumberOfDealsByStoreId(storeId: widget.store.id!);
     super.initState();
   }
 

@@ -46,7 +46,7 @@ class DealsByStore extends StatelessWidget {
   }
 
   Future<List<Deal>> _dealFuture(int page, int size) =>
-      GetIt.I.get<APIRepository>().getDealsByStore(
+      GetIt.I.get<APIRepository>().getDealsByStoreId(
             storeId: store.id!,
             page: page,
             size: size,
