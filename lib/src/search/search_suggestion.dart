@@ -6,7 +6,6 @@ class SearchSuggestion {
   factory SearchSuggestion.fromJson(dynamic json) {
     final list = List.from(json);
     final suggestions = list.map((e) => e['title'] as String).toList();
-    print(suggestions.length);
 
     return SearchSuggestion(suggestions: suggestions);
   }
