@@ -31,7 +31,7 @@ class ErrorIndicator extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final isLightMode = theme.brightness == Brightness.light;
-    final _iconColor = iconColor ?? (isLightMode ? theme.primaryColor : null);
+    final color = iconColor ?? (isLightMode ? theme.primaryColor : null);
 
     return Center(
       child: Padding(
@@ -39,7 +39,7 @@ class ErrorIndicator extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (icon != null) Icon(icon!, color: _iconColor, size: iconSize),
+            if (icon != null) Icon(icon!, color: color, size: iconSize),
             if (icon != null) const SizedBox(height: 16),
             Text(
               title,

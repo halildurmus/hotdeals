@@ -18,28 +18,30 @@ class SearchService {
       GetIt.I.get<APIRepository>().getDealSuggestions(query: query);
 
   /// Loads the user's search history from [SharedPreferences].
-  List<String> recentSearches() =>
+  List<String> getRecentSearches() =>
       _prefs.getStringList(_recentSearchesKey) ?? [];
 
   /// Persists the query to local storage.
   void saveQuery(String query) {
-    final _recentSearches = recentSearches();
-    if (!_recentSearches.contains(query)) {
-      _recentSearches.insert(0, query);
+    final recentSearches = getRecentSearches();
+    if (!recentSearches.contains(query)) {
+      recentSearches.insert(0, query);
     }
-    if (_recentSearches.length > 5) {
-      _recentSearches.removeLast();
+    // We only show the user last 5 recent searches, so if it is greater than 5,
+    // remove the last search
+    if (recentSearches.length > 5) {
+      recentSearches.removeLast();
     }
 
-    _prefs.setStringList(_recentSearchesKey, _recentSearches);
+    _prefs.setStringList(_recentSearchesKey, recentSearches);
   }
 
   /// Deletes the query from local storage.
   void deleteQuery(String query) {
-    final _recentSearches = recentSearches();
-    if (_recentSearches.contains(query)) {
-      _recentSearches.remove(query);
-      _prefs.setStringList(_recentSearchesKey, _recentSearches);
+    final recentSearches = getRecentSearches();
+    if (recentSearches.contains(query)) {
+      recentSearches.remove(query);
+      _prefs.setStringList(_recentSearchesKey, recentSearches);
     }
   }
 }

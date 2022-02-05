@@ -46,12 +46,11 @@ class FirestoreService with NetworkLoggy {
       },
     );
 
-    final _latestMessage = _firestore.collection('messages').doc(docID);
-
+    final latestMessage = _firestore.collection('messages').doc(docID);
     await _firestore.runTransaction(
       (transaction) async {
         transaction.set(
-          _latestMessage,
+          latestMessage,
           <String, dynamic>{'latestMessage': message},
           SetOptions(merge: true),
         );
@@ -73,7 +72,6 @@ class FirestoreService with NetworkLoggy {
 
     final latestMessageAuthorId =
         latestMessage.get('latestMessage')['author']['id'] as String;
-
     if (latestMessageAuthorId == user2Uid) {
       _firestore
           .collection('messages')
@@ -140,15 +138,15 @@ class FirestoreService with NetworkLoggy {
     required String messageID,
     required Json previewData,
   }) async {
-    final _doc = await FirebaseFirestore.instance
+    final doc = await FirebaseFirestore.instance
         .collection('messages')
         .doc(docID)
         .collection(docID)
         .where('id', isEqualTo: messageID)
         .get();
 
-    if (_doc.docs.isNotEmpty) {
-      _doc.docs.first.reference.update(<String, dynamic>{
+    if (doc.docs.isNotEmpty) {
+      doc.docs.first.reference.update(<String, dynamic>{
         'previewData': previewData,
       });
     }

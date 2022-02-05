@@ -25,18 +25,18 @@ class MessageAppBar extends StatefulWidget {
 
 class _MessageAppBarState extends State<MessageAppBar> {
   Future<void> _confirmBlockUser(BuildContext context) async {
-    final _didRequestBlockUser = await CustomAlertDialog(
+    final didRequestBlockUser = await CustomAlertDialog(
           title: l(context).blockUser,
           content: l(context).blockConfirm,
           cancelActionText: l(context).cancel,
           defaultActionText: l(context).ok,
         ).show(context) ??
         false;
-    if (_didRequestBlockUser == true) {
-      final _result = await GetIt.I
+    if (didRequestBlockUser == true) {
+      final result = await GetIt.I
           .get<APIRepository>()
           .blockUser(userId: widget.user2.id!);
-      if (_result) {
+      if (result) {
         await Provider.of<UserController>(context, listen: false).getUser();
         final snackBar = CustomSnackBar(
           icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
@@ -54,18 +54,18 @@ class _MessageAppBarState extends State<MessageAppBar> {
   }
 
   Future<void> _confirmUnblockUser(BuildContext context) async {
-    final _didRequestUnblockUser = await CustomAlertDialog(
+    final didRequestUnblockUser = await CustomAlertDialog(
           title: l(context).unblockUser,
           content: l(context).unblockConfirm,
           cancelActionText: l(context).cancel,
           defaultActionText: l(context).ok,
         ).show(context) ??
         false;
-    if (_didRequestUnblockUser == true) {
-      final _result = await GetIt.I
+    if (didRequestUnblockUser == true) {
+      final result = await GetIt.I
           .get<APIRepository>()
           .unblockUser(userId: widget.user2.id!);
-      if (_result) {
+      if (result) {
         await Provider.of<UserController>(context, listen: false).getUser();
       } else {
         final snackBar = CustomSnackBar(
@@ -81,8 +81,8 @@ class _MessageAppBarState extends State<MessageAppBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final _user = Provider.of<UserController>(context).user!;
-    final _isUserBlocked = _user.blockedUsers!.contains(widget.user2.id!);
+    final user = Provider.of<UserController>(context).user!;
+    final isUserBlocked = user.blockedUsers!.contains(widget.user2.id!);
 
     Future<void> _onPressedReport() async => showDialog<void>(
           context: context,
@@ -133,10 +133,10 @@ class _MessageAppBarState extends State<MessageAppBar> {
           },
           itemBuilder: (context) => [
             PopupMenuItem<_MessagePopup>(
-              value: _isUserBlocked
+              value: isUserBlocked
                   ? _MessagePopup.unblockUser
                   : _MessagePopup.blockUser,
-              child: _isUserBlocked
+              child: isUserBlocked
                   ? Text(l(context).unblockUser)
                   : Text(l(context).blockUser),
             ),

@@ -249,14 +249,13 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
   }
 
   Future<void> _confirmSignOut(BuildContext context) async {
-    final _didRequestSignOut = await CustomAlertDialog(
+    final didRequestSignOut = await CustomAlertDialog(
           title: l(context).logoutConfirm,
           cancelActionText: l(context).cancel,
           defaultActionText: l(context).logout,
         ).show(context) ??
         false;
-
-    if (_didRequestSignOut) {
+    if (didRequestSignOut) {
       final fcmToken = await FirebaseMessaging.instance.getToken();
       await GetIt.I.get<APIRepository>().deleteFCMToken(token: fcmToken!);
       await _signOut(context);

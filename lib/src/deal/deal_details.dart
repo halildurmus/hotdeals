@@ -857,6 +857,7 @@ class _DealIsExpiredBannerState extends State<_DealIsExpiredBanner> {
       child: ColoredBox(
         color: isDarkMode
             ? theme.primaryColorDark
+            // ignore: deprecated_member_use
             : theme.colorScheme.secondaryVariant,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

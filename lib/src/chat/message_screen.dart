@@ -157,9 +157,9 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final _user = Provider.of<UserController>(context).user!;
-    final _isUserBlocked = widget.user2.blockedUsers!.contains(_user.id!);
-    final _isUser2Blocked = _user.blockedUsers!.contains(widget.user2.id!);
+    final user = Provider.of<UserController>(context).user!;
+    final isUserBlocked = widget.user2.blockedUsers!.contains(user.id!);
+    final isUser2Blocked = user.blockedUsers!.contains(widget.user2.id!);
 
     Widget _buildBlockedText() => Container(
           margin: const EdgeInsets.all(10),
@@ -170,7 +170,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                 : theme.colorScheme.secondary.withOpacity(.9),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: _isUser2Blocked
+          child: isUser2Blocked
               ? Text(
                   l(context).youHaveBlockedThisUser,
                   style: const TextStyle(color: Colors.white),
@@ -186,7 +186,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
           docID: widget.docId,
           message: ChatUtil.messageToJson(message: message));
       setState(() => _isAttachmentUploading = false);
-      _sendPushNotification(_user, message);
+      _sendPushNotification(user, message);
     }
 
     void _handleSendPressed(types.PartialText message) {
@@ -194,7 +194,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
         id: uuid.v4(),
         createdAt: DateTime.now().millisecondsSinceEpoch,
         status: types.Status.sent,
-        author: types.User(id: _user.uid, imageUrl: _user.avatar),
+        author: types.User(id: user.uid, imageUrl: user.avatar),
         text: message.text,
       );
       _sendMessage(textMessage);
@@ -215,7 +215,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
           id: uuid.v4(),
           createdAt: DateTime.now().millisecondsSinceEpoch,
           status: types.Status.sent,
-          author: types.User(id: _user.uid, imageUrl: _user.avatar),
+          author: types.User(id: user.uid, imageUrl: user.avatar),
           mimeType: mimeType,
           name: pickedFile.name,
           size: pickedFile.size,
@@ -247,7 +247,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
           id: uuid.v4(),
           createdAt: DateTime.now().millisecondsSinceEpoch,
           status: types.Status.sent,
-          author: types.User(id: _user.uid, imageUrl: _user.avatar),
+          author: types.User(id: user.uid, imageUrl: user.avatar),
           height: image.height.toDouble(),
           name: pickedFile.path.split('/').last,
           size: bytes.length,
@@ -403,8 +403,8 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                           types.Status.sent;
                   final author = types.User(
                     id: messageData['author']['id'] as String,
-                    imageUrl: messageData['author']['id'] as String == _user.uid
-                        ? _user.avatar!
+                    imageUrl: messageData['author']['id'] as String == user.uid
+                        ? user.avatar!
                         : widget.user2.avatar!,
                   );
                   final type = messageData['type'] as String;
@@ -454,7 +454,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
             return SafeArea(
               bottom: false,
               child: Chat(
-                customBottomWidget: _isUser2Blocked || _isUserBlocked
+                customBottomWidget: isUser2Blocked || isUserBlocked
                     ? _buildBlockedText()
                     : null,
                 isAttachmentUploading: _isAttachmentUploading,
@@ -469,7 +469,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                 onPreviewDataFetched: _handlePreviewDataFetched,
                 onTextFieldTap: _markAsSeen,
                 onSendPressed: _handleSendPressed,
-                user: types.User(id: _user.uid, imageUrl: _user.avatar),
+                user: types.User(id: user.uid, imageUrl: user.avatar),
               ),
             );
           }

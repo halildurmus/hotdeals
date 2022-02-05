@@ -55,7 +55,7 @@ class _SearchBarState extends State<SearchBar> {
     void onIconButtonPressed(String query) =>
         setState(() => searchService.deleteQuery(query));
 
-    final recentSearches = searchService.recentSearches();
+    final recentSearches = searchService.getRecentSearches();
     if (recentSearches.isEmpty) return const SizedBox();
 
     return Column(
