@@ -146,7 +146,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     );
   }
 
-  Future<void> _handleMessageTap(types.Message message) async {
+  Future<void> _handleMessageTap(BuildContext context, types.Message message) async {
     if (message is types.FileMessage) {
       _onFileTap(message);
     } else if (message is types.ImageMessage) {
