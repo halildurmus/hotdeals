@@ -23,11 +23,69 @@ class CustomAlertDialog extends StatelessWidget {
         builder: (context) => this,
       );
 
+  Widget _buildCancelButton(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: OutlinedButton(
+        onPressed: () => Navigator.of(context).pop(false),
+        style: OutlinedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          side: BorderSide(color: Theme.of(context).primaryColor),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          child: Text(
+            cancelActionText!,
+            style: textTheme.bodyText1!.copyWith(
+              color: theme.primaryColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDefaultButton(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return Padding(
+      padding: EdgeInsets.only(left: cancelActionText != null ? 8 : 0),
+      child: OutlinedButton(
+        onPressed: () => Navigator.of(context).pop(true),
+        style: OutlinedButton.styleFrom(
+          backgroundColor: theme.primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          side: BorderSide(color: theme.primaryColor),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          child: Text(
+            defaultActionText ?? l(context).ok,
+            style: textTheme.bodyText1!.copyWith(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildContent(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final width = MediaQuery.of(context).size.width;
-    final buttonWidth = (width - 32 - 48) / 2 - 8;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -47,59 +105,14 @@ class CustomAlertDialog extends StatelessWidget {
               : MainAxisAlignment.spaceBetween,
           children: [
             if (cancelActionText != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: SizedBox(
-                  width: buttonWidth,
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      side: BorderSide(color: theme.primaryColor),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 11),
-                      child: Text(
-                        cancelActionText!,
-                        style: textTheme.bodyText1!.copyWith(
-                          color: theme.primaryColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            Padding(
-              padding: EdgeInsets.only(left: cancelActionText != null ? 8 : 0),
-              child: SizedBox(
-                width: buttonWidth,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: theme.primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    side: BorderSide(color: theme.primaryColor),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 11),
-                    child: Text(
-                      defaultActionText ?? l(context).ok,
-                      style: textTheme.bodyText1!.copyWith(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+              Expanded(child: _buildCancelButton(context)),
+            if (cancelActionText == null)
+              SizedBox(
+                width: width / 2.5,
+                child: _buildDefaultButton(context),
+              )
+            else
+              Expanded(child: _buildDefaultButton(context)),
           ],
         ),
       ],
