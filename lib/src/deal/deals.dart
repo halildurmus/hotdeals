@@ -41,9 +41,9 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _searchBarController.dispose();
     _pagingControllerLatest.dispose();
     _pagingControllerMostLiked.dispose();
+    _searchBarController.dispose();
     super.dispose();
   }
 
@@ -60,7 +60,11 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
 
   Widget _buildSearchBar() => SearchBar(
         controller: _searchBarController,
-        onSearchModeChanged: (value) => setState(() => _searchMode = value),
+        onSearchModeChanged: (value) {
+          if (mounted) {
+            setState(() => _searchMode = value);
+          }
+        },
       );
 
   @override
