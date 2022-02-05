@@ -22,6 +22,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
+  final int minQueryLength = 3;
   final searchService = GetIt.I.get<SearchService>();
   bool searchError = false;
   final _suggestions = <String>[];
@@ -40,9 +41,7 @@ class _SearchBarState extends State<SearchBar> {
     }
   }
 
-  Widget buildError() => ListTile(
-        title: Text(l(context).anErrorOccurred),
-      );
+  Widget buildError() => ListTile(title: Text(l(context).anErrorOccurred));
 
   void onQueryTap(String query) {
     searchParams = searchParams.copyWith(query: query);
@@ -108,7 +107,7 @@ class _SearchBarState extends State<SearchBar> {
       child = buildRecentSearches();
     } else if (searchError) {
       child = buildError();
-    } else if (query.length >= 3 && _suggestions.isNotEmpty) {
+    } else if (query.length >= minQueryLength && _suggestions.isNotEmpty) {
       child = buildSuggestions();
     } else {
       child = buildListTile(query);
@@ -125,7 +124,7 @@ class _SearchBarState extends State<SearchBar> {
 
   List<Widget> buildLeadingActions() => [
         FloatingSearchBarAction.icon(
-          onTap: () => setState(() => widget.onSearchModeChanged(false)),
+          onTap: () => widget.onSearchModeChanged(false),
           icon: const Icon(Icons.arrow_back),
           showIfOpened: true,
         ),
@@ -137,11 +136,12 @@ class _SearchBarState extends State<SearchBar> {
       ];
 
   void onFocusChanged(bool value) {
+    final isQueryEmpty =
+        searchParams.query.isEmpty && widget.controller.query.isEmpty;
     if (value) {
       widget.controller.query = searchParams.query;
-    } else if (!value && searchParams.query.isEmpty ||
-        (searchParams.query.isEmpty && widget.controller.query.isEmpty)) {
-      setState(() => widget.onSearchModeChanged(false));
+    } else if (!value && searchParams.query.isEmpty || isQueryEmpty) {
+      widget.onSearchModeChanged(false);
     }
   }
 
@@ -152,7 +152,7 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void onQueryChanged(String query) =>
-      query.length < 3 ? setState(() {}) : getSuggestions(query);
+      query.length < minQueryLength ? setState(() {}) : getSuggestions(query);
 
   Widget buildFloatingSearchBar() {
     final portraitMode =
