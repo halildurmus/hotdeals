@@ -56,7 +56,8 @@ class SignInPage extends StatelessWidget {
     try {
       await manager.signInWithFacebook();
     } on PlatformException catch (e) {
-      if (e.code != 'ERROR_ABORTED_BY_USER') {
+      // Ignore 'aborted-by-user' exceptions
+      if (e.code != 'aborted-by-user') {
         await showSignInError(context, e);
       }
     }
@@ -66,7 +67,8 @@ class SignInPage extends StatelessWidget {
     try {
       await manager.signInWithGoogle();
     } on PlatformException catch (e) {
-      if (e.code != 'ERROR_ABORTED_BY_USER') {
+      // Ignore 'aborted-by-user' exceptions
+      if (e.code != 'aborted-by-user') {
         await showSignInError(context, e);
       }
     }

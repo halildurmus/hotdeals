@@ -27,49 +27,39 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   Stream<MyUser?> get onAuthStateChanged =>
       _authStateController.stream.map(_userFromFirebase);
 
+  Future<void> _saveUserToMongo(User user) async {
+    try {
+      final savedUser = await _apiRepository.createMongoUser(user);
+      loggy.info('User successfully created on mongodb\n$savedUser');
+    } on Exception {
+      await _firebaseAuth.currentUser!.delete();
+      loggy.info('Successfully deleted the Firebase user\n$user');
+      throw PlatformException(code: 'mongo-create-user-failed');
+    }
+  }
+
   @override
   Future<MyUser> signInWithFacebook() async {
     // Trigger the sign-in flow
     final loginResult = await FacebookAuth.instance.login();
-    if (loginResult.status == LoginStatus.success) {
-      // Create an user credential from the access token
-      final userCredential = await _firebaseAuth.signInWithCredential(
-        FacebookAuthProvider.credential(loginResult.accessToken!.token),
-      );
-
-      if (userCredential.additionalUserInfo!.isNewUser) {
-        try {
-          final user =
-              await _apiRepository.createMongoUser(userCredential.user!);
-          loggy.info('User created on mongodb\n$user');
-        } on Exception {
-          await _firebaseAuth.currentUser!.delete();
-          loggy.info('Deleted the Firebase user');
-          throw PlatformException(
-            code: 'MONGODB_CREATE_USER_ERROR',
-            message: 'Could not create user on MongoDB',
-          );
+    switch (loginResult.status) {
+      case LoginStatus.success:
+        // Create an user credential from the access token
+        final userCredential = await _firebaseAuth.signInWithCredential(
+          FacebookAuthProvider.credential(loginResult.accessToken!.token),
+        );
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          await _saveUserToMongo(userCredential.user!);
         }
-      }
+        _authStateController.add(userCredential.user);
 
-      _authStateController.add(userCredential.user);
-
-      return _userFromFirebase(userCredential.user)!;
-    } else if (loginResult.status == LoginStatus.operationInProgress) {
-      throw PlatformException(
-        code: 'ERROR_OPERATION_IN_PROGRESS',
-        message: 'You have a previous login operation in progress',
-      );
-    } else if (loginResult.status == LoginStatus.cancelled) {
-      throw PlatformException(
-        code: 'ERROR_CANCELLED',
-        message: 'Sign in aborted by user',
-      );
-    } else {
-      throw PlatformException(
-        code: 'ERROR_FAILED',
-        message: 'Sign in failed',
-      );
+        return _userFromFirebase(userCredential.user)!;
+      case LoginStatus.cancelled:
+        throw PlatformException(code: 'aborted-by-user');
+      case LoginStatus.failed:
+        throw PlatformException(code: 'sign-in-failed');
+      case LoginStatus.operationInProgress:
+        throw PlatformException(code: 'sign-in-operation-in-progress');
     }
   }
 
@@ -77,45 +67,26 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
   Future<MyUser> signInWithGoogle() async {
     // Trigger the sign-in flow
     final googleUser = await GoogleSignIn().signIn();
-    if (googleUser != null) {
-      final googleAuth = await googleUser.authentication;
-      if (googleAuth.accessToken != null && googleAuth.idToken != null) {
-        // Create an user credential from the access token
-        final userCredential = await _firebaseAuth.signInWithCredential(
-          GoogleAuthProvider.credential(
-            idToken: googleAuth.idToken,
-            accessToken: googleAuth.accessToken,
-          ),
-        );
-
-        if (userCredential.additionalUserInfo!.isNewUser) {
-          try {
-            final user =
-                await _apiRepository.createMongoUser(userCredential.user!);
-            loggy.info('User created on mongodb\n$user');
-          } on Exception {
-            await _firebaseAuth.currentUser!.delete();
-            loggy.info('Deleted the Firebase user');
-            throw PlatformException(
-              code: 'MONGODB_CREATE_USER_ERROR',
-              message: 'Could not create user on MongoDB',
-            );
-          }
-        }
-
-        _authStateController.add(userCredential.user);
-
-        return _userFromFirebase(userCredential.user)!;
-      } else {
-        throw PlatformException(
-          code: 'ERROR_MISSING_GOOGLE_AUTH_TOKEN',
-          message: 'Missing Google Auth Token',
-        );
-      }
-    } else {
-      throw PlatformException(
-          code: 'ERROR_ABORTED_BY_USER', message: 'Sign in aborted by user');
+    if (googleUser == null) {
+      throw PlatformException(code: 'aborted-by-user');
     }
+    final googleAuth = await googleUser.authentication;
+    if (googleAuth.accessToken == null || googleAuth.idToken == null) {
+      throw PlatformException(code: 'missing-google-auth-token');
+    }
+    // Create a user credential from the access token
+    final userCredential = await _firebaseAuth.signInWithCredential(
+      GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
+      ),
+    );
+    if (userCredential.additionalUserInfo!.isNewUser) {
+      await _saveUserToMongo(userCredential.user!);
+    }
+    _authStateController.add(userCredential.user);
+
+    return _userFromFirebase(userCredential.user)!;
   }
 
   @override
@@ -124,7 +95,7 @@ class FirebaseAuthService with NetworkLoggy implements AuthService {
 
   @override
   Future<void> signOut() async {
-    // await FacebookAuth.instance.logOut();
+    await FacebookAuth.instance.logOut();
     await GoogleSignIn().signOut();
     _authStateController.add(null);
 
