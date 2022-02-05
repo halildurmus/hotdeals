@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
@@ -125,14 +127,14 @@ class _ResetFiltersChip extends StatelessWidget {
     final borderSide = isDarkMode
         ? null
         : BorderSide(
-            color: theme.chipTheme.backgroundColor.withOpacity(.07),
+            color: theme.chipTheme.backgroundColor!.withOpacity(.07),
             width: .25,
           );
 
     return ActionChip(
       onPressed: onPressed,
       backgroundColor:
-          isDarkMode ? null : theme.chipTheme.backgroundColor.withOpacity(.07),
+          isDarkMode ? null : theme.chipTheme.backgroundColor!.withOpacity(.07),
       side: borderSide,
       label: Row(
         mainAxisSize: MainAxisSize.min,

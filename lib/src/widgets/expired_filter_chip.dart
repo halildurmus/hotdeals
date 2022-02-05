@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 import '../utils/localization_util.dart';
@@ -72,7 +74,7 @@ class ExpiredFilterChip extends StatelessWidget {
           : BorderSide(
               color: isSelected
                   ? theme.colorScheme.secondaryVariant.withOpacity(.25)
-                  : theme.chipTheme.backgroundColor.withOpacity(.07),
+                  : theme.chipTheme.backgroundColor!.withOpacity(.07),
               width: .25,
             ),
     );
