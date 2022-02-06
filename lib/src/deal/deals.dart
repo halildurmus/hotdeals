@@ -6,6 +6,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart'
     show FloatingSearchBarController;
 import 'package:provider/provider.dart';
 
+import '../constants.dart';
 import '../models/deal.dart';
 import '../models/user_controller.dart';
 import '../search/search_bar.dart';
@@ -107,7 +108,7 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
 
       return AppBar(
         actions: actions,
-        title: Text(l(context).appTitle),
+        title: const Text(appTitle),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight * 1),
           child: Padding(

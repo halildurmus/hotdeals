@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
+import '../constants.dart';
 import '../utils/localization_util.dart';
 import 'search_params.dart';
 import 'search_results.dart';
@@ -184,7 +185,7 @@ class _SearchBarState extends State<SearchBar> {
       physics: const BouncingScrollPhysics(),
       scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
       title: Text(
-        searchParams.query.isNotEmpty ? searchParams.query : 'hotdeals',
+        searchParams.query.isNotEmpty ? searchParams.query : appTitle,
         style: Theme.of(context).textTheme.headline6,
       ),
       transition: CircularFloatingSearchBarTransition(),

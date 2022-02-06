@@ -5,13 +5,13 @@ import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
 
+import '../constants.dart';
 import '../firebase_messaging_listener.dart';
 import '../home/home.dart';
 import '../models/my_user.dart';
 import '../models/user_controller.dart';
 import '../services/api_repository.dart';
 import '../utils/error_indicator_util.dart';
-import '../utils/localization_util.dart';
 
 /// Builds the signed-in or non signed-in UI, depending on the user snapshot.
 /// This widget should be below the [MaterialApp].
@@ -42,7 +42,7 @@ class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l(context).appTitle),
+        title: const Text(appTitle),
       ),
       body: Center(
         child: CircularProgressIndicator(
@@ -54,7 +54,7 @@ class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
 
   Widget buildErrorWidget() => Scaffold(
         appBar: AppBar(
-          title: Text(l(context).appTitle),
+          title: const Text(appTitle),
         ),
         body: ErrorIndicatorUtil.buildFirstPageError(
           context,

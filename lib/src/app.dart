@@ -11,12 +11,14 @@ import 'error_screen.dart';
 import 'models/categories.dart';
 import 'models/my_user.dart';
 import 'models/stores.dart';
-import 'offline_builder.dart';
+import 'no_internet.dart';
 import 'routing/app_router.dart';
+import 'services/connection_service.dart';
 import 'settings/settings.controller.dart';
 import 'sign_in/auth_widget.dart';
 import 'sign_in/auth_widget_builder.dart';
 import 'top_level_providers.dart';
+import 'widgets/offline_builder.dart';
 
 enum _FutureState { loading, success, error }
 
@@ -62,6 +64,15 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
     });
   }
 
+  Widget _buildOfflineBuilder(BuildContext context, Widget? child) =>
+      OfflineBuilder(
+        connectionService: GetIt.I.get<ConnectionService>(),
+        connectivityBuilder: (context, isConnected, child) =>
+            isConnected ? child : const NoInternet(),
+        errorBuilder: (context) => const NoInternet(),
+        child: child,
+      );
+
   Widget _buildMaterialApp({
     Widget? home,
     AsyncSnapshot<MyUser?>? userSnapshot,
@@ -85,14 +96,14 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
           visualDensity: FlexColorScheme.comfortablePlatformDensity,
         ).toTheme.copyWith(pageTransitionsTheme: pageTransitionsTheme),
         themeMode: settingsController.themeMode,
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+        title: appTitle,
         home: home ?? AuthWidget(userSnapshot: userSnapshot!),
         onGenerateRoute: (routeSettings) => AppRouter.onGenerateRoute(
           routeSettings,
           userSnapshot!,
           settingsController,
         ),
-        builder: home == null ? buildOfflineBuilder : null,
+        builder: home == null ? _buildOfflineBuilder : null,
       );
 
   @override

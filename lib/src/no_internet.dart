@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 
+import 'constants.dart';
 import 'services/connection_service.dart';
 import 'utils/localization_util.dart';
 
@@ -21,13 +22,9 @@ class _NoInternetState extends State<NoInternet> {
   @override
   void initState() {
     final connectionService = GetIt.I.get<ConnectionService>();
-    _connection = connectionService.connectionChange.listen((isConnected) {
-      _isConnected = isConnected;
-      if (mounted) {
-        setState(() {});
-      }
-    });
     super.initState();
+    _connection = connectionService.connectionChange
+        .listen((isConnected) => setState(() => _isConnected = isConnected));
   }
 
   @override
@@ -37,72 +34,86 @@ class _NoInternetState extends State<NoInternet> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(appTitle),
+        ),
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            _Header(isConnected: _isConnected),
+            _Body(isConnected: _isConnected),
+          ],
+        ),
+      );
+}
 
-    Widget buildHeader() => Positioned(
-          height: 32,
-          left: 0,
-          right: 0,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            color: _isConnected
-                ? const Color(0xFF00EE44)
-                : const Color(0xFFEE4400),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  _isConnected ? l(context).online : l(context).offline,
-                  style: textTheme.bodyText2!.copyWith(color: Colors.white),
-                ),
-                if (!_isConnected) const SizedBox(width: 8),
-                if (!_isConnected)
-                  SizedBox.fromSize(
-                    size: const Size(12, 12),
-                    child: const CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
+class _Header extends StatelessWidget {
+  const _Header({required this.isConnected, Key? key}) : super(key: key);
+
+  final bool isConnected;
+
+  @override
+  Widget build(BuildContext context) => Positioned(
+        height: 32,
+        left: 0,
+        right: 0,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          color:
+              isConnected ? const Color(0xFF00EE44) : const Color(0xFFEE4400),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                isConnected ? l(context).online : l(context).offline,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2!
+                    .copyWith(color: Colors.white),
+              ),
+              if (!isConnected) const SizedBox(width: 8),
+              if (!isConnected)
+                SizedBox.fromSize(
+                  size: const Size(12, 12),
+                  child: const CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
-              ],
-            ),
-          ),
-        );
-
-    Widget buildBody() => Center(
-          child: _isConnected
-              ? const CircularProgressIndicator()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.wifi,
-                      color: theme.primaryColorLight,
-                      size: 40,
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      l(context).checkYourInternet,
-                      style: textTheme.bodyText2!.copyWith(fontSize: 15),
-                    ),
-                  ],
                 ),
-        );
+            ],
+          ),
+        ),
+      );
+}
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(l(context).appTitle),
-      ),
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          buildHeader(),
-          buildBody(),
-        ],
-      ),
-    );
-  }
+class _Body extends StatelessWidget {
+  const _Body({required this.isConnected, Key? key}) : super(key: key);
+
+  final bool isConnected;
+
+  @override
+  Widget build(BuildContext context) => Center(
+        child: isConnected
+            ? const CircularProgressIndicator()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.wifi,
+                    color: Theme.of(context).primaryColorLight,
+                    size: 40,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    l(context).checkYourInternet,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2!
+                        .copyWith(fontSize: 15),
+                  ),
+                ],
+              ),
+      );
 }
