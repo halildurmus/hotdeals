@@ -23,7 +23,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  final int minQueryLength = 3;
+  static const int minQueryLength = 3;
   final searchService = GetIt.I.get<SearchService>();
   bool searchError = false;
   final _suggestions = <String>[];
@@ -101,6 +101,17 @@ class _SearchBarState extends State<SearchBar> {
 
   List<Widget> buildActions() => [FloatingSearchBarAction.searchToClear()];
 
+  Widget buildBody() => FloatingSearchBarScrollNotifier(
+        child: WillPopScope(
+          onWillPop: () {
+            widget.onSearchModeChanged(false);
+
+            return Future<bool>.value(false);
+          },
+          child: SearchResults(searchParams: searchParams),
+        ),
+      );
+
   Widget buildSearchBarContent() {
     final query = widget.controller.query;
     late Widget child;
@@ -163,16 +174,7 @@ class _SearchBarState extends State<SearchBar> {
       actions: buildActions(),
       automaticallyImplyBackButton: false,
       axisAlignment: portraitMode ? 0 : -1,
-      body: FloatingSearchBarScrollNotifier(
-        child: WillPopScope(
-          onWillPop: () {
-            widget.onSearchModeChanged(false);
-
-            return Future<bool>.value(false);
-          },
-          child: SearchResults(searchParams: searchParams),
-        ),
-      ),
+      body: buildBody(),
       builder: (_, __) => buildSearchBarContent(),
       controller: widget.controller,
       debounceDelay: const Duration(milliseconds: 500),
