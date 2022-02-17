@@ -104,15 +104,14 @@ class CustomAlertDialog extends StatelessWidget {
               ? MainAxisAlignment.center
               : MainAxisAlignment.spaceBetween,
           children: [
-            if (cancelActionText != null)
+            if (cancelActionText != null) ...[
               Expanded(child: _buildCancelButton(context)),
-            if (cancelActionText == null)
+              Expanded(child: _buildDefaultButton(context)),
+            ] else
               SizedBox(
                 width: width / 2.5,
                 child: _buildDefaultButton(context),
               )
-            else
-              Expanded(child: _buildDefaultButton(context)),
           ],
         ),
       ],
