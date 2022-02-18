@@ -164,7 +164,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
         );
 
     return SafeArea(
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
