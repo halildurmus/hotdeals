@@ -67,8 +67,8 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
 
   @override
   void dispose() {
-    GetIt.I.get<CurrentRoute>().clearRouteName();
-    GetIt.I.get<CurrentRoute>().clearMessageArguments();
+    GetIt.I.get<CurrentRoute>().routeName = '';
+    GetIt.I.get<CurrentRoute>().messageArguments = null;
     super.dispose();
   }
 

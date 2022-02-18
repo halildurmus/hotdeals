@@ -24,15 +24,11 @@ class AppRouter {
             case BlockedUsers.routeName:
               return const BlockedUsers();
             case MessageScreen.routeName:
-              {
-                final args = routeSettings.arguments! as MessageArguments;
-                GetIt.I
-                    .get<CurrentRoute>()
-                    .updateRouteName(MessageScreen.routeName);
-                GetIt.I.get<CurrentRoute>().updateMessageArguments(args);
+              final args = routeSettings.arguments! as MessageArguments;
+              GetIt.I.get<CurrentRoute>().routeName = MessageScreen.routeName;
+              GetIt.I.get<CurrentRoute>().messageArguments = args;
 
-                return MessageScreen(docId: args.docId, user2: args.user2);
-              }
+              return MessageScreen(docId: args.docId, user2: args.user2);
             case Profile.routeName:
               return const Profile();
             case SettingsView.routeName:
