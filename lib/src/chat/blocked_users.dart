@@ -85,7 +85,7 @@ class _BlockedUsersState extends State<BlockedUsers> {
           defaultActionText: l(context).ok,
         ).show(context) ??
         false;
-    if (didRequestUnblockUser == true) {
+    if (didRequestUnblockUser) {
       final result =
           await GetIt.I.get<APIRepository>().unblockUser(userId: userId);
       if (result) {

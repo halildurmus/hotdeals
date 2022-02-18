@@ -32,7 +32,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
           defaultActionText: l(context).ok,
         ).show(context) ??
         false;
-    if (didRequestBlockUser == true) {
+    if (didRequestBlockUser) {
       final result = await GetIt.I
           .get<APIRepository>()
           .blockUser(userId: widget.user2.id!);
@@ -61,7 +61,7 @@ class _MessageAppBarState extends State<MessageAppBar> {
           defaultActionText: l(context).ok,
         ).show(context) ??
         false;
-    if (didRequestUnblockUser == true) {
+    if (didRequestUnblockUser) {
       final result = await GetIt.I
           .get<APIRepository>()
           .unblockUser(userId: widget.user2.id!);
