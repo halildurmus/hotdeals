@@ -5,7 +5,7 @@ homepage: https://github.com/Rodiii/flutter_firebase_picture_uploader
 maintainer: Christoph Rothermel (@rothech)
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.16.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -15,7 +15,6 @@ dependencies:
   firebase_core: ^1.6.0
   image: ^3.0.5
   image_picker: ^0.8.4+2
-  image_cropper: ^1.4.1
   shared_preferences: ^2.0.8
   path_provider: ^2.0.5
   cupertino_icons: ^1.0.3

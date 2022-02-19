@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'firebase_picture_upload_controller.dart';
@@ -85,15 +84,11 @@ class PictureUploadSettings {
 class ImageManipulationSettings {
   /// The settings how the image shall be modified before upload
   const ImageManipulationSettings({
-    this.aspectRatio = const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
     this.compressQuality = 75,
     this.enableCropping = false,
     this.maxHeight = 800,
     this.maxWidth = 800,
   });
-
-  /// The requested aspect ratio for the image
-  final CropAspectRatio aspectRatio;
 
   /// The requested compressQuality of the image [0..100]
   final int compressQuality;
@@ -507,14 +502,7 @@ class _SingleProfilePictureUploadWidgetState
       return;
     }
 
-    // crop image if requested
-    File? finalImage = File(image.path);
-    if (widget.pictureUploadWidget.settings.imageManipulationSettings
-        .enableCropping) {
-      finalImage = await widget.pictureUploadController.cropImage(
-          File(image.path),
-          widget.pictureUploadWidget.settings.imageManipulationSettings);
-    }
+    final finalImage = File(image.path);
 
     // update display state
     setState(() {

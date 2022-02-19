@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_picture_uploader/firebase_picture_uploader.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FirebasePictureUploadController {
@@ -56,18 +54,6 @@ class FirebasePictureUploadController {
     }
 
     return null;
-  }
-
-  Future<File> cropImage(
-      File imageFile, ImageManipulationSettings cropSettings) async {
-    final File? croppedFile = await ImageCropper.cropImage(
-      sourcePath: imageFile.path,
-      aspectRatio: cropSettings.aspectRatio,
-      maxWidth: cropSettings.maxWidth,
-      maxHeight: cropSettings.maxHeight,
-    );
-
-    return croppedFile!;
   }
 
   Future<Reference> uploadProfilePicture(
