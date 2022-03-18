@@ -96,14 +96,14 @@ class _PostCommentState extends State<PostComment> with UiLoggy {
       Navigator.of(context).pop();
       if (postedComment != null) {
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleCheck, size: 20),
           text: l(context).postedYourComment,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         Navigator.of(context).pop();
       } else {
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
           text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

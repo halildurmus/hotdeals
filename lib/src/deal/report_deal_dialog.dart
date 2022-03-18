@@ -70,14 +70,14 @@ class _ReportDealDialogState extends State<ReportDealDialog> with UiLoggy {
       if (sentReport) {
         Navigator.of(context).pop();
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleCheck, size: 20),
           text: l(context).successfullyReportedDeal,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         Navigator.of(context).pop();
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
           text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

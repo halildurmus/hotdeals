@@ -68,14 +68,14 @@ class _ReportUserDialogState extends State<ReportUserDialog> with UiLoggy {
       if (sentReport) {
         Navigator.of(ctx).pop();
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleCheck, size: 20),
           text: l(context).successfullyReportedUser,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(ctx).showSnackBar(snackBar);
       } else {
         Navigator.of(ctx).pop();
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
           text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(ctx).showSnackBar(snackBar);

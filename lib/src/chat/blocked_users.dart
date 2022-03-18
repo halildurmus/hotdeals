@@ -91,13 +91,13 @@ class _BlockedUsersState extends State<BlockedUsers> {
       if (result) {
         await Provider.of<UserController>(context, listen: false).getUser();
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleCheck, size: 20),
           text: l(context).successfullyUnblocked,
         ).buildSnackBar(context);
         setState(() => ScaffoldMessenger.of(context).showSnackBar(snackBar));
       } else {
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
           text: l(context).anErrorOccurredWhileUnblocking,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

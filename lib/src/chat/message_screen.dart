@@ -271,7 +271,7 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
                       child: const Icon(
-                        FontAwesomeIcons.times,
+                        FontAwesomeIcons.xmark,
                         color: Color.fromRGBO(148, 148, 148, 1),
                         size: 20,
                       ),

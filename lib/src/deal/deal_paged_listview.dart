@@ -134,7 +134,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
           Provider.of<UserController>(context, listen: false).getUser();
         } else {
           final snackBar = CustomSnackBar(
-            icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+            icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
             text: l(context).favoriteDealError,
           ).buildSnackBar(context);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -152,7 +152,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
           }
         } else {
           final snackBar = CustomSnackBar(
-            icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+            icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
             text: l(context).unfavoriteDealError,
           ).buildSnackBar(context);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -186,7 +186,7 @@ class _DealPagedListViewState extends State<DealPagedListView>
           _pagingController.refresh();
         } else {
           final snackBar = CustomSnackBar(
-            icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+            icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
             text: l(context).deleteDealError,
           ).buildSnackBar(context);
           ScaffoldMessenger.of(context).showSnackBar(snackBar);

@@ -45,7 +45,7 @@ class _DealImagesFullScreen extends State<DealImagesFullScreen> {
             padding: const EdgeInsets.only(left: 10, top: 20),
             child: IconButton(
               onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(FontAwesomeIcons.times),
+              icon: const Icon(FontAwesomeIcons.xmark),
               iconSize: 20,
             ),
           ),

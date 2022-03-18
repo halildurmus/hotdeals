@@ -49,7 +49,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       // Pops the LoadingDialog.
       Navigator.of(context).pop();
       final snackBar = CustomSnackBar(
-        icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+        icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
         text: l(context).anErrorOccurred,
       ).buildSnackBar(context);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -75,7 +75,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
       // Pops the update nickname Dialog.
       Navigator.of(context).pop();
       final snackBar = CustomSnackBar(
-        icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+        icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
         text: l(context).anErrorOccurred,
       ).buildSnackBar(context);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -126,7 +126,7 @@ class _UpdateProfileState extends State<UpdateProfile> with UiLoggy {
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
                       child: const Icon(
-                        FontAwesomeIcons.times,
+                        FontAwesomeIcons.xmark,
                         color: Color.fromRGBO(148, 148, 148, 1),
                         size: 20,
                       ),

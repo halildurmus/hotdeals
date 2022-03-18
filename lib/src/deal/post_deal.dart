@@ -164,14 +164,14 @@ class _PostDealState extends State<PostDeal> {
     Future<void> onPressed() async {
       if (dealImages.length == 1) {
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
           text: l(context).pleaseUploadAtLeastOneImage,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return;
       } else if (DealUtil.isUploadInProgress(dealImages)) {
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
           text: l(context).pleaseWaitForImageUploads,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -199,7 +199,7 @@ class _PostDealState extends State<PostDeal> {
       Navigator.of(context).pop();
       if (postedDeal != null) {
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleCheck, size: 20),
           text: l(context).successfullyPostedYourDeal,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -210,7 +210,7 @@ class _PostDealState extends State<PostDeal> {
         );
       } else {
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
           text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

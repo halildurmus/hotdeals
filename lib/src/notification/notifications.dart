@@ -120,7 +120,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     });
     await GetIt.I.get<PushNotificationService>().markAsRead(ids);
     final snackBar = CustomSnackBar(
-      icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+      icon: const Icon(FontAwesomeIcons.circleCheck, size: 20),
       text: l(context).markedNotificationAsRead(updatedNotificationCount),
     ).buildSnackBar(context);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -143,7 +143,7 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
     });
     await GetIt.I.get<PushNotificationService>().markAsUnread(ids);
     final snackBar = CustomSnackBar(
-      icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+      icon: const Icon(FontAwesomeIcons.circleCheck, size: 20),
       text: l(context).markedNotificationAsUnread(updatedNotificationCount),
     ).buildSnackBar(context);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

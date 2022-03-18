@@ -136,7 +136,7 @@ class _DealDetailsState extends State<DealDetails> {
         setState(() => _deal = deal);
       }
       final snackBar = CustomSnackBar(
-        icon: const Icon(FontAwesomeIcons.checkCircle, size: 20),
+        icon: const Icon(FontAwesomeIcons.circleCheck, size: 20),
         text: status == DealStatus.active
             ? l(context).markAsActiveSuccess
             : l(context).markAsExpiredSuccess,
@@ -144,7 +144,7 @@ class _DealDetailsState extends State<DealDetails> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } on Exception {
       final snackBar = CustomSnackBar(
-        icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+        icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
         text: l(context).anErrorOccurred,
       ).buildSnackBar(context);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -471,7 +471,7 @@ class _DealDetailsState extends State<DealDetails> {
       if (deal == null) {
         ScaffoldMessenger.of(context).clearSnackBars();
         final snackBar = CustomSnackBar(
-          icon: const Icon(FontAwesomeIcons.exclamationCircle, size: 20),
+          icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
           text: l(context).anErrorOccurred,
         ).buildSnackBar(context);
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
