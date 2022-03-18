@@ -15,11 +15,11 @@ dependencies:
   cupertino_icons: ^1.0.3
   device_info_plus: ^3.2.0
   expandable: ^5.0.1
-  file_picker: ^4.1.1
-  firebase_auth: ^3.1.1
+  file_picker: ^4.5.1
+  firebase_auth: ^3.3.11
   firebase_core: ^1.6.0
   firebase_crashlytics: ^2.2.1
-  firebase_messaging: ^11.2.4
+  firebase_messaging: ^11.2.11
   firebase_picture_uploader:
     path: lib/packages/flutter_firebase_picture_uploader
   firebase_storage: ^10.0.3
@@ -27,19 +27,19 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_chat_ui: ^1.5.0
-  flutter_facebook_auth: ^4.0.0
+  flutter_facebook_auth: ^4.1.2
   flutter_local_notifications: ^9.1.5
   flutter_localizations:
     sdk: flutter
   flutter_parsed_text: ^2.2.1
   flutter_rating_bar: ^4.0.0
   flutter_svg: ^1.0.0
-  font_awesome_flutter: ^9.1.0
+  font_awesome_flutter: ^10.0.0
   get_it: ^7.2.0
   google_nav_bar: ^5.0.5
   google_sign_in: ^5.1.1
   http: ^0.13.3
-  image_picker: ^0.8.4+4
+  image_picker: ^0.8.4+11
   infinite_scroll_pagination: ^3.1.0
   intl: ^0.17.0
   loggy: ^2.0.1
