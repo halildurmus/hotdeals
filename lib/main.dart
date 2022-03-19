@@ -131,6 +131,12 @@ void _registerSingletonClasses() {
     ..registerSingleton<SignInDialog>(const SignInDialog());
 }
 
+void _registerTimeagoLocales() {
+  // Registers Turkish messages for timeago.
+  timeago.setLocaleMessages('tr', TrMessages());
+  timeago.setLocaleMessages('tr_short', TrShortMessages());
+}
+
 Future<void> main() async {
   runZonedGuarded<Future<void>>(() async {
     _initLoggy();
@@ -152,9 +158,7 @@ Future<void> main() async {
     // background or terminated.
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
     _registerSingletonClasses();
-    // Registers Turkish messages for timeago.
-    timeago.setLocaleMessages('tr', TrMessages());
-    timeago.setLocaleMessages('tr_short', TrShortMessages());
+    _registerTimeagoLocales();
     // Runs the app with MyApp attached to the screen.
     runApp(const MyApp());
   }, (error, stack) {
