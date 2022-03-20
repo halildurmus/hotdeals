@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
 import '../models/push_notification.dart';
@@ -45,7 +45,7 @@ class PushNotificationService extends ChangeNotifier {
 
   /// Opens the database and sets the database reference.
   Future<void> load() async {
-    final path = join(await getDatabasesPath(), 'core.db');
+    final path = p.join(await getDatabasesPath(), 'core.db');
     _db = await openDatabase(
       path,
       version: 1,
