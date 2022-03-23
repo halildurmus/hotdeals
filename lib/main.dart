@@ -48,6 +48,7 @@ Future<void> _setupCrashlytics() async {
     // Disable Crashlytics collection while doing every day development.
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
   }
+
   final Function originalOnError = FlutterError.onError!;
   FlutterError.onError = (errorDetails) async {
     logError(errorDetails.toString());
