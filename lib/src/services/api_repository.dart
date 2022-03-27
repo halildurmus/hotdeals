@@ -8,6 +8,7 @@ import '../config/environment.dart';
 import '../deal/deal_status.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
+import '../models/comment_report.dart';
 import '../models/comments.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
@@ -204,6 +205,22 @@ class APIRepository with NetworkLoggy {
     final url = '$_baseUrl/notifications';
     try {
       final response = await _httpService.post(url, notification.toJson());
+
+      return response.statusCode == 201;
+    } on Exception catch (e) {
+      loggy.error(e, e);
+      return false;
+    }
+  }
+
+  Future<bool> reportComment({
+    required String dealId,
+    required CommentReport report,
+  }) async {
+    final url =
+        '$_baseUrl/deals/$dealId/comments/${report.reportedComment}/reports';
+    try {
+      final response = await _httpService.post(url, report.toJson());
 
       return response.statusCode == 201;
     } on Exception catch (e) {

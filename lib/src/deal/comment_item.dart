@@ -6,8 +6,12 @@ import 'package:provider/provider.dart';
 import '../models/comment.dart';
 import '../models/user_controller.dart';
 import '../utils/date_time_util.dart';
+import '../utils/localization_util.dart';
 import '../widgets/sign_in_dialog.dart';
 import '../widgets/user_profile_dialog.dart';
+import 'report_comment_dialog.dart';
+
+enum _CommentPopup { reportComment }
 
 class CommentItem extends StatelessWidget {
   const CommentItem({required this.comment, Key? key}) : super(key: key);
@@ -44,6 +48,29 @@ class CommentItem extends StatelessWidget {
             ],
           ),
         );
+    Widget buildCommentPopup() => PopupMenuButton<_CommentPopup>(
+          child: const SizedBox.square(
+            dimension: 32,
+            child: Icon(Icons.more_vert, size: 16),
+          ),
+          itemBuilder: (context) => [
+            PopupMenuItem<_CommentPopup>(
+              value: _CommentPopup.reportComment,
+              child: Text(l(context).reportComment),
+            )
+          ],
+          onSelected: (result) {
+            if (result == _CommentPopup.reportComment) {
+              showDialog<void>(
+                context: context,
+                builder: (context) => ReportCommentDialog(
+                  dealId: comment.dealId!,
+                  commentId: comment.id!,
+                ),
+              );
+            }
+          },
+        );
 
     Widget buildCommentDateTime() => Text(
           DateTimeUtil.formatDateTime(comment.createdAt!),
@@ -67,12 +94,18 @@ class CommentItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buildUserDetails(),
-              buildCommentDateTime(),
+              Row(
+                children: [
+                  buildUserDetails(),
+                  const SizedBox(width: 15),
+                  buildCommentDateTime(),
+                ],
+              ),
+              buildCommentPopup(),
             ],
           ),
           const SizedBox(height: 10),
-          SelectableText(comment.message)
+          SelectableText(comment.message),
         ],
       ),
     );

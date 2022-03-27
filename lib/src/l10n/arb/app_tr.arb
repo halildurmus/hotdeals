@@ -792,6 +792,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "successfullyReportedComment": "Yorum, başarıyla şikayet edildi",
+  "@successfullyReportedComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "successfullyReportedDeal": "Fırsat, başarıyla şikayet edildi",
   "@successfullyReportedDeal": {
     "description": "",
@@ -1165,6 +1172,13 @@
   },
   "dealScore": "Fırsat Puanı",
   "@dealScore": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reportComment": "Yorumu Şikayet Et",
+  "@reportComment": {
     "description": "",
     "type": "text",
     "placeholders_order": [],

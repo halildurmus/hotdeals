@@ -792,6 +792,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "successfullyReportedComment": "Successfully reported comment",
+  "@successfullyReportedComment": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "successfullyReportedDeal": "Successfully reported deal",
   "@successfullyReportedDeal": {
     "description": "",
@@ -1165,6 +1172,13 @@
   },
   "dealScore": "Deal Score",
   "@dealScore": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reportComment": "Report Comment",
+  "@reportComment": {
     "description": "",
     "type": "text",
     "placeholders_order": [],
