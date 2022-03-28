@@ -51,7 +51,7 @@ linter:
     use_setters_to_change_properties: true
     # TODO: Since these lints are coming in flutter_lints v2.0.0,
     # remove this section when we update to Dart 2.17
-    depend_on_referenced_packages: true
+    depend_on_referenced_packages: false # Temporarily disabled due to a false positive
     null_check_on_nullable_type_parameter: true
     no_leading_underscores_for_library_prefixes: true
     no_leading_underscores_for_local_identifiers: true
