@@ -5,14 +5,12 @@ import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../config/environment.dart';
-import '../deal/deal_status.dart';
 import '../models/category.dart';
 import '../models/comment.dart';
 import '../models/comment_report.dart';
 import '../models/comments.dart';
 import '../models/deal.dart';
 import '../models/deal_report.dart';
-import '../models/deal_vote_type.dart';
 import '../models/my_user.dart';
 import '../models/push_notification.dart';
 import '../models/store.dart';

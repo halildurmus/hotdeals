@@ -1,1 +1,0 @@
-enum NotificationVerb { comment, message }

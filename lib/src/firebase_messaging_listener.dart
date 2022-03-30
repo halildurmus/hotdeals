@@ -7,7 +7,6 @@ import 'package:loggy/loggy.dart' show logDebug;
 
 import 'chat/message_screen.dart';
 import 'models/current_route.dart';
-import 'models/notification_verb.dart';
 import 'models/push_notification.dart';
 import 'notification/notification_util.dart';
 import 'services/push_notification_service.dart';

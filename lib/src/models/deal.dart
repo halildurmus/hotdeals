@@ -1,4 +1,6 @@
-import '../deal/deal_status.dart';
+enum DealStatus { active, expired }
+
+enum DealVoteType { up, down, unvote }
 
 typedef Json = Map<String, dynamic>;
 

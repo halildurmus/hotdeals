@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import '../models/comment.dart';
 import '../models/deal.dart';
 import '../models/my_user.dart';
-import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller.dart';
 import '../services/api_repository.dart';

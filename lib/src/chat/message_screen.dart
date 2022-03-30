@@ -18,7 +18,6 @@ import 'package:uuid/uuid.dart';
 import '../constants.dart';
 import '../models/current_route.dart';
 import '../models/my_user.dart';
-import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../models/user_controller.dart';
 import '../services/api_repository.dart';

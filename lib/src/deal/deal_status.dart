@@ -1,1 +1,0 @@
-enum DealStatus { active, expired }

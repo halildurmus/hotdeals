@@ -1,5 +1,6 @@
-import '../models/deal_report_reason.dart';
 import '../utils/enum_util.dart';
+
+enum DealReportReason { expired, repost, spam, other }
 
 typedef Json = Map<String, dynamic>;
 

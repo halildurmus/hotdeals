@@ -1,5 +1,6 @@
-import '../models/comment_report_reason.dart';
 import '../utils/enum_util.dart';
+
+enum CommentReportReason { harassing, spam, other }
 
 typedef Json = Map<String, dynamic>;
 

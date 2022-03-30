@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart' show NetworkLoggy;
 
 import '../models/my_user.dart';
-import '../models/notification_verb.dart';
 import '../models/push_notification.dart';
 import '../services/api_repository.dart';
 import '../utils/date_time_util.dart';

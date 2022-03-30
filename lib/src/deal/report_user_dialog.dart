@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:loggy/loggy.dart';
 
 import '../models/user_report.dart';
-import '../models/user_report_reason.dart';
 import '../services/api_repository.dart';
 import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';

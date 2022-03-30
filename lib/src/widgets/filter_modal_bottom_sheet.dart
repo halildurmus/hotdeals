@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 
 import '../models/categories.dart';
 import '../models/stores.dart';
-import '../search/filter_type.dart';
 import '../search/search_params.dart';
 import '../search/search_response.dart';
 import 'modal_handle.dart';

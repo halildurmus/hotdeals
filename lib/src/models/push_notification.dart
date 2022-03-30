@@ -1,4 +1,4 @@
-import 'notification_verb.dart';
+enum NotificationVerb { comment, message }
 
 typedef Json = Map<String, dynamic>;
 

@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 
 import '../models/categories.dart';
 import '../models/stores.dart';
-import '../search/filter_type.dart';
 import '../search/search_params.dart';
 
 class CustomFilterChip extends StatelessWidget {

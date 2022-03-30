@@ -1,5 +1,7 @@
 enum DealSortBy { createdAt, price }
 
+enum FilterType { category, price, sort, store }
+
 enum Order { asc, desc }
 
 typedef Json = Map<String, dynamic>;

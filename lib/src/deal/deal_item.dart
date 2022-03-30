@@ -12,7 +12,6 @@ import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
 import '../widgets/grayscale_filtered.dart';
 import 'deal_details.dart';
-import 'deal_status.dart';
 
 class DealItem extends StatefulWidget {
   const DealItem({
