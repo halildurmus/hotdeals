@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
-import '../models/push_notification.dart';
+import '../notification/push_notification.dart';
 
 typedef Json = Map<String, dynamic>;
 

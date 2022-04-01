@@ -8,7 +8,6 @@ import 'package:loggy/loggy.dart' show NetworkLoggy;
 import 'package:provider/provider.dart';
 
 import '../models/my_user.dart';
-import '../models/push_notification.dart';
 import '../models/user_controller.dart';
 import '../services/push_notification_service.dart';
 import '../utils/error_indicator_util.dart';
@@ -16,6 +15,7 @@ import '../utils/localization_util.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/error_indicator.dart';
 import 'notification_item.dart';
+import 'push_notification.dart';
 
 enum _NotificationPopup { selectAll, deselectAll }
 

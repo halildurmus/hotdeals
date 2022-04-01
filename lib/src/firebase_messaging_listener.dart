@@ -7,8 +7,8 @@ import 'package:loggy/loggy.dart' show logDebug;
 
 import 'chat/message_screen.dart';
 import 'models/current_route.dart';
-import 'models/push_notification.dart';
 import 'notification/notification_util.dart';
+import 'notification/push_notification.dart';
 import 'services/push_notification_service.dart';
 
 /// Sets a message handler function which is called when the app is in the
