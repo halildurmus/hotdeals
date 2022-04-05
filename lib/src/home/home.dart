@@ -4,7 +4,7 @@ import '../browse/browse.dart';
 import '../chat/chat_screen.dart';
 import '../deal/deals.dart';
 import '../notification/notifications.dart';
-import '../profile/profile.dart';
+import '../user/profile.dart';
 import 'my_bottom_navigation_bar.dart';
 
 typedef Json = Map<String, dynamic>;

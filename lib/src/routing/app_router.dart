@@ -6,10 +6,10 @@ import '../chat/message_arguments.dart';
 import '../chat/message_screen.dart';
 import '../models/current_route.dart';
 import '../models/my_user.dart';
-import '../profile/profile.dart';
 import '../settings/settings.controller.dart';
 import '../settings/settings.view.dart';
 import '../sign_in/auth_widget.dart';
+import '../user/profile.dart';
 
 class AppRouter {
   static Route? onGenerateRoute(
