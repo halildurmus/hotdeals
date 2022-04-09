@@ -1121,6 +1121,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "deleteDeal": "Delete Deal",
+  "@deleteDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "updateDeal": "Update Deal",
   "@updateDeal": {
     "description": "",

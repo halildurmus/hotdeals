@@ -1121,6 +1121,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "deleteDeal": "Fırsatı Sil",
+  "@deleteDeal": {
+    "description": "",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "updateDeal": "Fırsatı Güncelle",
   "@updateDeal": {
     "description": "",

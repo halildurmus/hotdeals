@@ -16,10 +16,12 @@ import '../models/store.dart';
 import '../models/stores.dart';
 import '../models/user_controller.dart';
 import '../services/api_repository.dart';
+import '../services/firebase_storage_service.dart';
 import '../utils/date_time_util.dart';
 import '../utils/error_indicator_util.dart';
 import '../utils/localization_util.dart';
 import '../utils/navigation_util.dart';
+import '../widgets/custom_alert_dialog.dart';
 import '../widgets/custom_snackbar.dart';
 import '../widgets/expandable_text.dart';
 import '../widgets/image_fullscreen.dart';
@@ -31,8 +33,15 @@ import 'deal_score_box.dart';
 import 'images_fullscreen.dart';
 import 'post_comment.dart';
 import 'report_deal_dialog.dart';
+import 'update_deal.dart';
 
-enum _DealPopup { markAsActive, markAsExpired, reportDeal }
+enum _DealPopup {
+  deleteDeal,
+  markAsActive,
+  markAsExpired,
+  reportDeal,
+  updateDeal
+}
 
 class DealDetails extends StatefulWidget {
   const DealDetails({required this.dealId, Key? key}) : super(key: key);
@@ -154,6 +163,44 @@ class _DealDetailsState extends State<DealDetails> {
         builder: (context) => ReportDealDialog(reportedDealId: _deal!.id!),
       );
 
+  void _onUpdateButtonPressed(Deal deal) =>
+      NavigationUtil.navigate(context, UpdateDeal(deal: deal));
+
+  Future<void> _onDeleteButtonPressed(MyUser? user, Deal deal) async {
+    if (user == null) {
+      GetIt.I.get<SignInDialog>().showSignInDialog(context);
+      return;
+    }
+
+    final didRequestDelete = await CustomAlertDialog(
+          title: l(context).deleteConfirm,
+          cancelActionText: l(context).cancel,
+          defaultActionText: l(context).delete,
+        ).show(context) ??
+        false;
+    if (didRequestDelete) {
+      GetIt.I
+          .get<APIRepository>()
+          .deleteDeal(dealId: deal.id!)
+          .then((result) async {
+        // Deletes the deal images.
+        await GetIt.I
+            .get<FirebaseStorageService>()
+            .deleteImagesFromUrl(urls: [deal.coverPhoto, ...deal.photos!]);
+        if (result) {
+          _pagingController.refresh();
+          Navigator.of(context).pop();
+        } else {
+          final snackBar = CustomSnackBar(
+            icon: const Icon(FontAwesomeIcons.circleExclamation, size: 20),
+            text: l(context).deleteDealError,
+          ).buildSnackBar(context);
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -168,16 +215,26 @@ class _DealDetailsState extends State<DealDetails> {
       } else {
         final userIsPoster = _user!.id! == _deal!.postedBy!;
         items = <PopupMenuItem<_DealPopup>>[
-          if (_deal!.status == DealStatus.expired && userIsPoster)
+          if (userIsPoster) ...[
+            if (_deal!.status == DealStatus.expired)
+              PopupMenuItem<_DealPopup>(
+                value: _DealPopup.markAsActive,
+                child: Text(l(context).markAsActive),
+              )
+            else if (_deal!.status == DealStatus.active)
+              PopupMenuItem<_DealPopup>(
+                value: _DealPopup.markAsExpired,
+                child: Text(l(context).markAsExpired),
+              ),
             PopupMenuItem<_DealPopup>(
-              value: _DealPopup.markAsActive,
-              child: Text(l(context).markAsActive),
-            )
-          else if (_deal!.status == DealStatus.active && userIsPoster)
-            PopupMenuItem<_DealPopup>(
-              value: _DealPopup.markAsExpired,
-              child: Text(l(context).markAsExpired),
+              value: _DealPopup.updateDeal,
+              child: Text(l(context).updateDeal),
             ),
+            PopupMenuItem<_DealPopup>(
+              value: _DealPopup.deleteDeal,
+              child: Text(l(context).deleteDeal),
+            ),
+          ],
           if (!userIsPoster)
             PopupMenuItem<_DealPopup>(
               value: _DealPopup.reportDeal,
@@ -195,12 +252,22 @@ class _DealDetailsState extends State<DealDetails> {
                 icon: const Icon(Icons.more_vert),
                 itemBuilder: (context) => items,
                 onSelected: (result) {
-                  if (result == _DealPopup.markAsActive) {
-                    _updateDealStatus(DealStatus.active);
-                  } else if (result == _DealPopup.markAsExpired) {
-                    _updateDealStatus(DealStatus.expired);
-                  } else if (result == _DealPopup.reportDeal) {
-                    _onPressedReport();
+                  switch (result) {
+                    case _DealPopup.deleteDeal:
+                      _onDeleteButtonPressed(_user, _deal!);
+                      break;
+                    case _DealPopup.markAsActive:
+                      _updateDealStatus(DealStatus.active);
+                      break;
+                    case _DealPopup.markAsExpired:
+                      _updateDealStatus(DealStatus.expired);
+                      break;
+                    case _DealPopup.reportDeal:
+                      _onPressedReport();
+                      break;
+                    case _DealPopup.updateDeal:
+                      _onUpdateButtonPressed(_deal!);
+                      break;
                   }
                 },
               ),
