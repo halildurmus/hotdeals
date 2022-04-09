@@ -73,7 +73,6 @@ Future<void> subscribeToFCM() async {
               imageUrl: pushNotification.image,
               largeIconUrl: pushNotification.avatar,
               payload: pushNotification.object,
-              pushNotification: pushNotification,
             );
           }
           break;

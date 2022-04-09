@@ -7,7 +7,6 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 import '../settings/settings.controller.dart';
-import 'push_notification.dart';
 
 /// A static class that contains useful utility functions for notification
 /// functionality.
