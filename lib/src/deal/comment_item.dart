@@ -60,14 +60,16 @@ class CommentItem extends StatelessWidget {
             )
           ],
           onSelected: (result) {
-            if (result == _CommentPopup.reportComment) {
-              showDialog<void>(
-                context: context,
-                builder: (context) => ReportCommentDialog(
-                  dealId: comment.dealId!,
-                  commentId: comment.id!,
-                ),
-              );
+            switch (result) {
+              case _CommentPopup.reportComment:
+                showDialog<void>(
+                  context: context,
+                  builder: (context) => ReportCommentDialog(
+                    dealId: comment.dealId!,
+                    commentId: comment.id!,
+                  ),
+                );
+                break;
             }
           },
         );

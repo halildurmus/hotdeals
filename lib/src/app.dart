@@ -108,35 +108,36 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
 
   @override
   Widget build(BuildContext context) {
-    if (_futureState == _FutureState.loading) {
-      // TODO(halildurmus): Replace this with a splash screen
-      return _buildMaterialApp(
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(appTitle),
+    switch (_futureState) {
+      case _FutureState.loading:
+        // TODO(halildurmus): Replace this with a splash screen
+        return _buildMaterialApp(
+          home: Scaffold(
+            appBar: AppBar(
+              title: const Text(appTitle),
+            ),
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
-          body: const Center(
-            child: CircularProgressIndicator(),
+        );
+      case _FutureState.success:
+        return MultiProvider(
+          providers: buildTopLevelProviders(),
+          child: AuthWidgetBuilder(
+            builder: (context, userSnapshot) => AnimatedBuilder(
+              animation: settingsController,
+              builder: (context, child) =>
+                  _buildMaterialApp(userSnapshot: userSnapshot),
+            ),
           ),
-        ),
-      );
-    } else if (_futureState == _FutureState.error) {
-      return _buildMaterialApp(
-        home: ErrorScreen(
-          onTap: _fetchCategoriesAndStores,
-        ),
-      );
+        );
+      case _FutureState.error:
+        return _buildMaterialApp(
+          home: ErrorScreen(
+            onTap: _fetchCategoriesAndStores,
+          ),
+        );
     }
-
-    return MultiProvider(
-      providers: buildTopLevelProviders(),
-      child: AuthWidgetBuilder(
-        builder: (context, userSnapshot) => AnimatedBuilder(
-          animation: settingsController,
-          builder: (context, child) =>
-              _buildMaterialApp(userSnapshot: userSnapshot),
-        ),
-      ),
-    );
   }
 }

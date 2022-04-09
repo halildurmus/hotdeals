@@ -123,12 +123,16 @@ class _MessageAppBarState extends State<MessageAppBar> {
         PopupMenuButton<_MessagePopup>(
           icon: const Icon(Icons.more_vert),
           onSelected: (result) {
-            if (result == _MessagePopup.blockUser) {
-              _confirmBlockUser(context);
-            } else if (result == _MessagePopup.unblockUser) {
-              _confirmUnblockUser(context);
-            } else if (result == _MessagePopup.reportUser) {
-              _onPressedReport();
+            switch (result) {
+              case _MessagePopup.blockUser:
+                _confirmBlockUser(context);
+                break;
+              case _MessagePopup.unblockUser:
+                _confirmUnblockUser(context);
+                break;
+              case _MessagePopup.reportUser:
+                _onPressedReport();
+                break;
             }
           },
           itemBuilder: (context) => [

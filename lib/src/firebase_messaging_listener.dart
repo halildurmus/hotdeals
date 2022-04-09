@@ -48,32 +48,35 @@ Future<void> subscribeToFCM() async {
         createdAt: message.sentTime,
       );
 
-      // equals to NotificationVerb.comment.
-      if (pushNotification.verb == NotificationVerb.comment) {
-        // Saves the notification into the database
-        pushNotificationService
-            .insert(pushNotification)
-            .then((value) => logDebug('Notification saved into the db.'));
-        NotificationUtil.showNotification(
-          notification,
-          largeIconUrl: pushNotification.avatar,
-          importance: Importance.defaultImportance,
-          priority: Priority.defaultPriority,
-        );
-      } else if (pushNotification.verb == NotificationVerb.message) {
-        final currentRoute = GetIt.I.get<CurrentRoute>().routeName;
-        final messageArguments = GetIt.I.get<CurrentRoute>().messageArguments;
-        final messageDocId = messageArguments?.docId;
-        // Don't show notification if the conversation is on foreground.
-        if (currentRoute != MessageScreen.routeName &&
-            messageDocId != pushNotification.object) {
+      switch (pushNotification.verb) {
+        case NotificationVerb.comment:
+          // Saves the notification into the database
+          pushNotificationService
+              .insert(pushNotification)
+              .then((value) => logDebug('Notification saved into the db.'));
           NotificationUtil.showNotification(
             notification,
-            imageUrl: pushNotification.image,
             largeIconUrl: pushNotification.avatar,
-            payload: pushNotification.object,
+            importance: Importance.defaultImportance,
+            priority: Priority.defaultPriority,
           );
-        }
+          break;
+        case NotificationVerb.message:
+          final currentRoute = GetIt.I.get<CurrentRoute>().routeName;
+          final messageArguments = GetIt.I.get<CurrentRoute>().messageArguments;
+          final messageDocId = messageArguments?.docId;
+          // Don't show notification if the conversation is on foreground.
+          if (currentRoute != MessageScreen.routeName &&
+              messageDocId != pushNotification.object) {
+            NotificationUtil.showNotification(
+              notification,
+              imageUrl: pushNotification.image,
+              largeIconUrl: pushNotification.avatar,
+              payload: pushNotification.object,
+              pushNotification: pushNotification,
+            );
+          }
+          break;
       }
     }
   });

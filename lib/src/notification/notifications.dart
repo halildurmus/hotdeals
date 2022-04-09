@@ -252,10 +252,13 @@ class _NotificationsState extends State<Notifications> with NetworkLoggy {
               PopupMenuButton<_NotificationPopup>(
                 icon: const Icon(Icons.more_vert),
                 onSelected: (result) {
-                  if (result == _NotificationPopup.selectAll) {
-                    _onSelectAll(true);
-                  } else if (result == _NotificationPopup.deselectAll) {
-                    _onSelectAll(false);
+                  switch (result) {
+                    case _NotificationPopup.selectAll:
+                      _onSelectAll(true);
+                      break;
+                    case _NotificationPopup.deselectAll:
+                      _onSelectAll(false);
+                      break;
                   }
                 },
                 itemBuilder: (context) {

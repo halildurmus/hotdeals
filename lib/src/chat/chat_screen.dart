@@ -157,8 +157,10 @@ class _ChatScreenState extends State<ChatScreen> {
         PopupMenuButton<_ChatPopup>(
           icon: const Icon(Icons.more_vert),
           onSelected: (result) {
-            if (result == _ChatPopup.blockedUsers) {
-              Navigator.of(context).pushNamed(BlockedUsers.routeName);
+            switch (result) {
+              case _ChatPopup.blockedUsers:
+                Navigator.of(context).pushNamed(BlockedUsers.routeName);
+                break;
             }
           },
           itemBuilder: (context) => [
