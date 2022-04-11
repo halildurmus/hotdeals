@@ -103,7 +103,17 @@ class CommentItem extends StatelessWidget {
               Row(
                 children: [
                   buildUserDetails(),
-                  const SizedBox(width: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      '•',
+                      style: textTheme.bodyText2!.copyWith(
+                        color: theme.brightness == Brightness.light
+                            ? Colors.black54
+                            : Colors.grey,
+                      ),
+                    ),
+                  ),
                   buildCommentDateTime(),
                 ],
               ),
