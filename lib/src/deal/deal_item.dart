@@ -151,7 +151,7 @@ class _DealItemState extends State<DealItem> {
     Widget buildDealPrice() => Row(
           children: [
             Text(
-              '\$${deal.price.toStringAsFixed(0)}',
+              r'$' + deal.price.toStringAsFixed(0),
               style: textTheme.headline5!.copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -159,7 +159,7 @@ class _DealItemState extends State<DealItem> {
             ),
             const SizedBox(width: 4),
             Text(
-              '\$${deal.originalPrice.toStringAsFixed(0)}',
+              r'$' + deal.originalPrice.toStringAsFixed(0),
               style: textTheme.subtitle2!.copyWith(
                 color: theme.errorColor,
                 decoration: TextDecoration.lineThrough,
