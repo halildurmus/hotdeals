@@ -49,9 +49,13 @@ class CommentItem extends StatelessWidget {
           ),
         );
     Widget buildCommentPopup() => PopupMenuButton<_CommentPopup>(
-          child: const SizedBox.square(
+          child: SizedBox.square(
             dimension: 32,
-            child: Icon(Icons.more_vert, size: 16),
+            child: Icon(
+              Icons.more_horiz,
+              color: Colors.grey.shade600,
+              size: 16,
+            ),
           ),
           itemBuilder: (context) => [
             PopupMenuItem<_CommentPopup>(
