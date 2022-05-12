@@ -32,7 +32,7 @@ class _SettingsViewState extends State<SettingsView> {
 
   Future<void> _initPackageInfo() async {
     final packageInfo = await PackageInfo.fromPlatform();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         setState(() => _packageInfo = packageInfo);
       }

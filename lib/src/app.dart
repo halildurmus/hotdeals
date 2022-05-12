@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
       GetIt.I.get<Categories>().getCategories(),
       GetIt.I.get<Stores>().getStores(),
     ]).then((_) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         // If ctx is provided, pops the LoadingDialog in the ErrorScreen.
         if (ctx != null) {
           Navigator.of(ctx).pop();
@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> with NetworkLoggy {
       });
     }).catchError((e) {
       loggy.error(e);
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         // If ctx is provided, pops the LoadingDialog in the ErrorScreen.
         if (ctx != null) {
           Navigator.of(ctx).pop();

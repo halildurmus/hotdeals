@@ -93,7 +93,7 @@ class _DealsState extends State<Deals> with SingleTickerProviderStateMixin {
         IconButton(
           onPressed: () {
             setState(() => _searchMode = true);
-            WidgetsBinding.instance!
+            WidgetsBinding.instance
                 .addPostFrameCallback((_) => _searchBarController.open());
           },
           icon: const Icon(Icons.search),

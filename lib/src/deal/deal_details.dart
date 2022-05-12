@@ -815,8 +815,8 @@ class _DealDetailsState extends State<DealDetails> {
 
     Widget _buildSeeDealButton() {
       Future<void> launchURL() async {
-        await canLaunch(_deal!.dealUrl!)
-            ? await launch(_deal!.dealUrl!)
+        await canLaunchUrl(Uri.parse(_deal!.dealUrl!))
+            ? await launchUrl(Uri.parse(_deal!.dealUrl!))
             : throw Exception('Could not launch ${_deal!.dealUrl}');
       }
 
@@ -873,7 +873,7 @@ class _DealDetailsState extends State<DealDetails> {
           // Prefetch and caches the images.
           if (_images == null) {
             _images = [_deal!.coverPhoto, ..._deal!.photos!];
-            WidgetsBinding.instance!.addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
               for (final image in _images!) {
                 precacheImage(NetworkImage(image), context);
               }
