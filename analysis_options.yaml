@@ -18,6 +18,7 @@ linter:
     directives_ordering: true
     flutter_style_todos: true
     join_return_with_assignment: true
+    library_private_types_in_public_api: false
     missing_whitespace_between_adjacent_strings: true
     omit_local_variable_types: true
     one_member_abstracts: true
@@ -44,22 +45,12 @@ linter:
     unnecessary_await_in_return: true
     unnecessary_lambdas: true
     unnecessary_parenthesis: true
+    use_build_context_synchronously: false
     use_decorated_box: true
     use_if_null_to_convert_nulls_to_bools: true
     use_is_even_rather_than_modulo: true
     use_named_constants: true
     use_setters_to_change_properties: true
-    # TODO: Since these lints are coming in flutter_lints v2.0.0,
-    # remove this section when we update to Dart 2.17
-    depend_on_referenced_packages: false # Temporarily disabled due to a false positive
-    null_check_on_nullable_type_parameter: true
-    no_leading_underscores_for_library_prefixes: true
-    no_leading_underscores_for_local_identifiers: true
-    prefer_interpolation_to_compose_strings: true
-    unnecessary_constructor_name: true
-    unnecessary_late: true
-    unnecessary_null_aware_assignments: true
-    unnecessary_nullable_for_final_variable_declarations: true
 
 analyzer:
   exclude:
