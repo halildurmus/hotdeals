@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:better_open_file/better_open_file.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 import 'package:mime/mime.dart';
-import 'package:open_file/open_file.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -145,7 +145,8 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
     );
   }
 
-  Future<void> _handleMessageTap(BuildContext context, types.Message message) async {
+  Future<void> _handleMessageTap(
+      BuildContext context, types.Message message) async {
     if (message is types.FileMessage) {
       _onFileTap(message);
     } else if (message is types.ImageMessage) {
@@ -456,18 +457,18 @@ class _MessageScreenState extends State<MessageScreen> with UiLoggy {
                 customBottomWidget: isUser2Blocked || isUserBlocked
                     ? _buildBlockedText()
                     : null,
-                isAttachmentUploading: _isAttachmentUploading,
                 dateLocale: Localizations.localeOf(context).languageCode,
                 disableImageGallery: true,
+                inputOptions: InputOptions(onTextFieldTap: _markAsSeen),
+                isAttachmentUploading: _isAttachmentUploading,
                 l10n: _getChatL10n(),
-                showUserAvatars: true,
-                theme: _chatTheme(theme),
                 messages: messages,
                 onAttachmentPressed: _handleAttachmentPressed,
                 onMessageTap: _handleMessageTap,
                 onPreviewDataFetched: _handlePreviewDataFetched,
-                onTextFieldTap: _markAsSeen,
                 onSendPressed: _handleSendPressed,
+                showUserAvatars: true,
+                theme: _chatTheme(theme),
                 user: types.User(id: user.uid, imageUrl: user.avatar),
               ),
             );

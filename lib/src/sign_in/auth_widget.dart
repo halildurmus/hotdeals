@@ -1,4 +1,4 @@
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:android_id/android_id.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -29,8 +29,7 @@ class _AuthWidgetState extends State<AuthWidget> with UiLoggy {
   late Future<MyUser?> _userFuture;
 
   Future<void> _saveFCMTokenToDatabase(String token) async {
-    final androidDeviceInfo = GetIt.I.get<AndroidDeviceInfo>();
-    final deviceId = androidDeviceInfo.androidId!;
+    final deviceId = await const AndroidId().getId() ?? 'unknown';
     await GetIt.I
         .get<APIRepository>()
         .addFCMToken(deviceId: deviceId, token: token);
