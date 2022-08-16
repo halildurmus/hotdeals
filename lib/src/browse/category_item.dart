@@ -26,10 +26,7 @@ class CategoryItem extends StatelessWidget {
         child: ListTile(
           horizontalTitleGap: 0,
           leading: Text(
-            // TODO(halildurmus): Temporary workaround for changes in Flutter v3.
-            category.iconLigature.endsWith('_baseline')
-                ? category.iconLigature
-                : '${category.iconLigature}_baseline',
+            category.iconLigature,
             style: TextStyle(
               color: isDarkMode ? theme.primaryColorLight : theme.primaryColor,
               fontFamily: category.iconFontFamily,
