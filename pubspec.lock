@@ -361,7 +361,7 @@ packages:
   firebase_picture_uploader:
     dependency: "direct main"
     description:
-      path: "lib/packages/flutter_firebase_picture_uploader"
+      path: "packages/flutter_firebase_picture_uploader"
       relative: true
     source: path
     version: "1.2.3"
