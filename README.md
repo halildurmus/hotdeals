@@ -2,7 +2,7 @@
 
 ![GitHub top language](https://img.shields.io/github/languages/top/halildurmus/hotdeals?style=for-the-badge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/halildurmus/hotdeals/blob/master/LICENSE)
-![Visits](https://visitor-badge.glitch.me/badge?page_id=jwenjian.visitor-badge)
+![Visits](https://visitor-badge.glitch.me/badge?page_id=halildurmus.hotdeals)
 
 > **hotdeals** is an **online marketplace** app developed with **[Flutter](https://github.com/flutter/flutter)**.
 The app's **Backend** can be found **[here](https://github.com/halildurmus/hotdeals-backend)**.
