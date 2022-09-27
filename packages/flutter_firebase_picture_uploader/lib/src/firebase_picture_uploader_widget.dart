@@ -425,8 +425,7 @@ class _SingleProfilePictureUploadWidgetState
         ),
       ),
       builder: (BuildContext ctx) {
-        final TextTheme textTheme = Theme.of(ctx).textTheme;
-
+        final textTheme = Theme.of(ctx).textTheme;
         return Wrap(
           children: <Widget>[
             Padding(
@@ -617,8 +616,9 @@ class _SingleProfilePictureUploadWidgetState
             widget.pictureUploadWidget.buttonStyle.width,
             widget.pictureUploadWidget.buttonStyle.height,
           ),
+          backgroundColor:
+              widget.pictureUploadWidget.buttonStyle.backgroundColor,
           padding: EdgeInsets.zero,
-          primary: widget.pictureUploadWidget.buttonStyle.backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
