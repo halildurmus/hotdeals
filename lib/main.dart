@@ -1,38 +1,35 @@
 import 'dart:async';
-import 'dart:isolate';
 
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'src/app.dart';
-import 'src/config/environment.dart';
-import 'src/firebase_messaging_listener.dart';
-import 'src/models/categories.dart';
-import 'src/models/current_route.dart';
-import 'src/models/stores.dart';
-import 'src/search/search_service.dart';
-import 'src/services/api_repository.dart';
-import 'src/services/connection_service.dart';
-import 'src/services/firebase_storage_service.dart';
-import 'src/services/firestore_service.dart';
-import 'src/services/image_picker_service.dart';
-import 'src/services/push_notification_service.dart';
-import 'src/settings/settings.controller.dart';
-import 'src/settings/settings.service.dart';
-import 'src/utils/crashlytics_printer.dart';
-import 'src/utils/custom_loggy_printer.dart';
-import 'src/utils/tr_messages.dart';
-import 'src/widgets/loading_dialog.dart';
-import 'src/widgets/sign_in_dialog.dart';
+import 'src/app/app.dart';
+import 'src/core/connection_service.dart';
+import 'src/core/crashlytics_printer.dart';
+import 'src/core/custom_loggy_printer.dart';
+import 'src/core/firebase_crashlytics_service.dart';
+import 'src/core/firebase_storage_service.dart';
+import 'src/core/local_storage_repository.dart';
+import 'src/core/package_info_provider.dart';
+import 'src/core/provider_logger.dart';
+import 'src/core/shared_preferences_repository.dart';
+import 'src/features/chat/data/firestore_service.dart';
+import 'src/features/notifications/data/providers.dart';
+import 'src/features/notifications/data/push_notification_service.dart';
+import 'src/features/notifications/domain/push_notification.dart';
+import 'src/l10n/timeago_tr_messages.dart';
 
 void _initLoggy() {
   Loggy.initLoggy(
@@ -44,6 +41,12 @@ void _initLoggy() {
 }
 
 Future<void> _setupCrashlytics() async {
+  PlatformDispatcher.instance.onError = (error, stack) {
+    logError(error.toString());
+    FirebaseCrashlytics.instance.recordError(error, stack);
+    return true;
+  };
+
   if (kDebugMode) {
     // Disable Crashlytics collection while doing every day development.
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
@@ -52,6 +55,7 @@ Future<void> _setupCrashlytics() async {
   final Function originalOnError = FlutterError.onError!;
   FlutterError.onError = (errorDetails) async {
     logError(errorDetails.toString());
+    FlutterError.presentError(errorDetails);
     if (kReleaseMode) {
       // Pass all uncaught errors from the framework to Crashlytics.
       await FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
@@ -60,20 +64,67 @@ Future<void> _setupCrashlytics() async {
     }
   };
 
-  if (kReleaseMode) {
-    // Pass all uncaught errors outside of the Flutter context to Crashlytics.
-    Isolate.current.addErrorListener(RawReceivePort((pair) async {
-      final List<dynamic> errorAndStacktrace = pair;
-      logError('Caught error outside of isolate: ${errorAndStacktrace.first}');
-      await FirebaseCrashlytics.instance.recordError(
-        errorAndStacktrace.first,
-        errorAndStacktrace.last,
+  ErrorWidget.builder = (errorDetails) => Align(
+        alignment: Alignment.center,
+        child: Text(
+          'Error!\n${errorDetails.exception}',
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+        ),
       );
-    }).sendPort);
+}
+
+void _registerTimeagoLocales() {
+  // Registers Turkish Locale messages for timeago package.
+  timeago.setLocaleMessages('tr', TrMessages());
+  timeago.setLocaleMessages('tr_short', TrShortMessages());
+}
+
+/// A Firebase message handler function which is called when the app is in the
+/// background or terminated.
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  logInfo('Handling a background message: ${message.messageId}');
+  await Firebase.initializeApp();
+  final notification = message.notification;
+  final android = message.notification?.android;
+  if (notification != null && android != null) {
+    // Creates a new PushNotificationServiceImpl instance.
+    final pushNotificationService = PushNotificationService();
+    // Loads the sqlite database.
+    await pushNotificationService.load();
+    // Constructs a PushNotification from the RemoteMessage.
+    final pushNotification = PushNotification(
+      title: notification.title,
+      titleLocKey: notification.titleLocKey,
+      titleLocArgs: notification.titleLocArgs,
+      body: notification.body,
+      bodyLocKey: notification.bodyLocKey,
+      bodyLocArgs: notification.bodyLocArgs,
+      actor: message.data['actor'] as String,
+      verb: NotificationVerb.values.byName(message.data['verb']! as String),
+      object: message.data['object'] as String,
+      avatar: message.data['avatar'] as String,
+      message: message.data['message'] as String,
+      image: message.data['image'] as String?,
+      uid: FirebaseAuth.instance.currentUser!.uid,
+      createdAt: message.sentTime,
+    );
+
+    // Saves the notification into the database if the notification's verb
+    // equals to NotificationVerb.comment.
+    if (pushNotification.verb == NotificationVerb.comment) {
+      await pushNotificationService.insert(pushNotification);
+      logInfo('Background notification saved into the db.');
+    }
   }
 }
 
-Future<void> _setupLocalNotifications() async {
+Future<void> main() async {
+  _initLoggy();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await _setupCrashlytics();
+
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const notificationChannel = AndroidNotificationChannel(
     'high_importance_channel',
@@ -88,82 +139,44 @@ Future<void> _setupLocalNotifications() async {
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(notificationChannel);
-  GetIt.I.registerSingleton<AndroidNotificationChannel>(notificationChannel);
-  GetIt.I.registerSingleton<FlutterLocalNotificationsPlugin>(
-      flutterLocalNotificationsPlugin);
-}
 
-void _initEnvConfig() {
-  // Reads the environment value.
-  const environmentKey = String.fromEnvironment(
-    'ENV',
-    defaultValue: Environment.dev,
+  // Sets a message handler function which is called when the app is in the
+  // background or terminated.
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  _registerTimeagoLocales();
+
+  final pushNotificationService = PushNotificationService();
+  final futures = await Future.wait([
+    // See https://github.com/FirebaseExtended/flutterfire/issues/6011
+    FirebaseMessaging.instance.getToken(),
+    PackageInfo.fromPlatform(),
+    SharedPreferences.getInstance(),
+    pushNotificationService.load(),
+  ], eagerError: true);
+
+  runApp(
+    ProviderScope(
+      observers: kDebugMode ? [ProviderLogger()] : null,
+      overrides: [
+        androidNotificationChannelProvider
+            .overrideWithValue(notificationChannel),
+        connectionServiceProvider
+            .overrideWithValue(ConnectionService()..initialize()),
+        firebaseCrashlyticsProvider
+            .overrideWithValue(FirebaseCrashlytics.instance),
+        firebaseStorageServiceProvider.overrideWithValue(
+            FirebaseStorageService(FirebaseStorage.instance)),
+        firestoreServiceProvider
+            .overrideWithValue(FirestoreService(FirebaseFirestore.instance)),
+        flutterLocalNotificationsPluginProvider
+            .overrideWithValue(flutterLocalNotificationsPlugin),
+        localStorageRepositoryProvider.overrideWithValue(
+            SharedPreferencesRepository(futures[2] as SharedPreferences)),
+        packageInfoProvider.overrideWithValue(futures[1] as PackageInfo),
+        pushNotificationServiceProvider
+            .overrideWithValue(pushNotificationService),
+      ],
+      child: const MyApp(),
+    ),
   );
-  // Initializies the proper environment configuration.
-  final environment = Environment()..initialize(environmentKey);
-  GetIt.I.registerSingleton<Environment>(environment);
-}
-
-Future<void> _initSettings() async {
-  // Initializes a new SharedPreferences instance.
-  final prefs = await SharedPreferences.getInstance();
-  // Sets up the SearchService, and registers it as a Singleton class.
-  GetIt.I.registerSingleton<SearchService>(SearchService(prefs));
-  // Sets up the SettingsController, and registers it as a Singleton class.
-  GetIt.I.registerSingleton<SettingsController>(
-      SettingsController(SettingsService(prefs)));
-  // Loads the user's preferred settings.
-  await GetIt.I.get<SettingsController>().loadSettings();
-}
-
-void _registerSingletonClasses() {
-  GetIt.I
-    ..registerSingleton<CurrentRoute>(CurrentRoute())
-    ..registerSingleton<ConnectionService>(ConnectionService()..initialize())
-    ..registerSingleton<PushNotificationService>(
-        PushNotificationService()..load())
-    ..registerSingleton<FirebaseStorageService>(FirebaseStorageService())
-    ..registerSingleton<FirestoreService>(FirestoreService())
-    ..registerSingleton<ImagePickerService>(ImagePickerService())
-    ..registerSingleton<APIRepository>(APIRepository())
-    ..registerSingleton<Categories>(Categories())
-    ..registerSingleton<Stores>(Stores())
-    ..registerSingleton<LoadingDialog>(const LoadingDialog())
-    ..registerSingleton<SignInDialog>(const SignInDialog());
-}
-
-void _registerTimeagoLocales() {
-  // Registers Turkish messages for timeago.
-  timeago.setLocaleMessages('tr', TrMessages());
-  timeago.setLocaleMessages('tr_short', TrShortMessages());
-}
-
-Future<void> main() async {
-  runZonedGuarded<Future<void>>(() async {
-    _initLoggy();
-    WidgetsFlutterBinding.ensureInitialized();
-    // Initializes a new Firebase App instance.
-    await Firebase.initializeApp();
-    _setupCrashlytics();
-    _initEnvConfig();
-    final futures = await Future.wait<dynamic>([
-      DeviceInfoPlugin().androidInfo,
-      // See https://github.com/FirebaseExtended/flutterfire/issues/6011
-      FirebaseMessaging.instance.getToken(),
-      _setupLocalNotifications(),
-      _initSettings(),
-    ]);
-    final androidDeviceInfo = futures[0] as AndroidDeviceInfo;
-    GetIt.I.registerSingleton<AndroidDeviceInfo>(androidDeviceInfo);
-    // Sets a message handler function which is called when the app is in the
-    // background or terminated.
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    _registerSingletonClasses();
-    _registerTimeagoLocales();
-    // Runs the app with MyApp attached to the screen.
-    runApp(const MyApp());
-  }, (error, stack) {
-    logError(error.toString());
-    FirebaseCrashlytics.instance.recordError(error, stack);
-  });
 }
