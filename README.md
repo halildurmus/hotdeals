@@ -2,7 +2,7 @@
 
 ![GitHub top language](https://img.shields.io/github/languages/top/halildurmus/hotdeals?style=for-the-badge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/halildurmus/hotdeals/blob/master/LICENSE)
-![Visits](https://badges.pufler.dev/visits/halildurmus/hotdeals?style=for-the-badge)
+![Visits](https://visitor-badge.glitch.me/badge?page_id=jwenjian.visitor-badge)
 
 > **hotdeals** is an **online marketplace** app developed with **[Flutter](https://github.com/flutter/flutter)**.
 The app's **Backend** can be found **[here](https://github.com/halildurmus/hotdeals-backend)**.
@@ -40,13 +40,13 @@ The app's **Backend** can be found **[here](https://github.com/halildurmus/hotde
 ## Features
 
 - **CRUD** deals
-- **Vote** and **Comment** on deals
+- **Favorite**, **vote** and **comment** on deals
 - **Search as you type** & **Faceted search** (*using Elasticsearch*)
-- **In-app Chat** (*using Firebase Firestore*)
+- **In-app Chat** (*using Firebase Firestore* and *[flutter_chat_ui](https://github.com/flyerhq/flutter_chat_ui)*)
 - **Social Login** with *Facebook* and *Google* (*using Firebase Authentication*)
 - **Push notifications** (*using Firebase Cloud Messaging*)
-- **State management** with *[Provider](https://github.com/rrousselGit/provider)*
-- **Service Locator** Pattern (*using [get_it](https://github.com/fluttercommunity/get_it)*)
+- **State management** with *[riverpod](https://github.com/rrousselGit/riverpod)*
+- **Routing** with *[go_router](https://github.com/flutter/packages/tree/main/packages/go_router)
 - **Infinite Scrolling Pagination** (*using [infinite_scroll_pagination](https://github.com/EdsonBueno/infinite_scroll_pagination)*)
 - **Light** and **Dark** themes
 - **Localization**
@@ -66,8 +66,8 @@ To get a local copy up and running follow these simple steps.
 
 1. Clone the repo using: `git clone https://github.com/halildurmus/hotdeals.git`
 2. Register the app on [Firebase](https://firebase.google.com).
-3. Download the configuration file from the [Firebase Console](https://console.firebase.google.com) (google-services.json) and copy it into the `android/app` directory.
-4. Open `android/app/src/main/res/values/strings.xml` file and change `facebook_app_id` and `fb_login_protocol_scheme` values with yours.
+3. To register your app with Firebase, follow the instructions in [here](https://firebase.google.com/docs/flutter/setup?platform=android)
+4. If you want to support Facebook Login, follow the instructions in [here](https://facebook.meedu.app/docs/4.x.x/android).
 5. The environment configuration will be read from `config/dev_config.dart` by default unless you specify the environment using `--dart-define=ENV=prod` in the run args. Depending your environment, you may need to change `apiBaseUrl` inside the `dev_config.dart`.
 6. To get the packages needed for the app, run:
 ```Dart
