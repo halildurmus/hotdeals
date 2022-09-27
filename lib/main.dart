@@ -15,7 +15,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-import 'firebase_options.dart';
 import 'src/app/app.dart';
 import 'src/core/connection_service.dart';
 import 'src/core/crashlytics_printer.dart';
@@ -123,9 +122,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   _initLoggy();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
   await _setupCrashlytics();
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
