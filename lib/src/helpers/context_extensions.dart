@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../common_widgets/loading_dialog.dart';
+
 extension BuildContextHelper on BuildContext {
-  /// Shorter and easier way to access `AppLocalizations.of(context)`.
+  /// Easier way to access `AppLocalizations.of(context)`.
   /// ```dart
   /// var titleText = l.title;
   /// ```
   AppLocalizations get l => AppLocalizations.of(this)!;
 
-  /// Shorter and easier way to access `Localizations.localeOf(context)`.
+  /// Easier way to access `Localizations.localeOf(context)`.
   Locale get locale => Localizations.localeOf(this);
 
-  /// Shorter and easier way to access `MediaQuery.of(context)`.
+  /// Easier way to access `MediaQuery.of(context)`.
   MediaQueryData get mq => MediaQuery.of(this);
 
-  /// Shorter and easier way to show a [SnackBar].
+  /// Easier way to show a [LoadingDialog].
+  void showLoadingDialog() => const LoadingDialog().showLoadingDialog(this);
+
+  /// Easier way to show a [SnackBar].
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
       SnackBar snackBar) {
     return ScaffoldMessenger.of(this).showSnackBar(snackBar);
   }
 
-  /// Shorter and easier way to access `Theme.of(context)`.
+  /// Easier way to access `Theme.of(context)`.
   ThemeData get t => Theme.of(this);
 
-  /// Shorter and easier way to access `Theme.of(context).colorScheme`.
+  /// Easier way to access `Theme.of(context).colorScheme`.
   ColorScheme get colorScheme => t.colorScheme;
 
-  /// Shorter and easier way to access `Theme.of(context).textTheme`.
+  /// Easier way to access `Theme.of(context).textTheme`.
   TextTheme get textTheme => t.textTheme;
 
   /// Whether the current theme brightness is [Brightness.dark].

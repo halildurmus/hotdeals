@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../common_widgets/custom_snack_bar.dart';
 import '../../../../../common_widgets/dialog_button.dart';
-import '../../../../../common_widgets/loading_dialog.dart';
 import '../../../../../helpers/context_extensions.dart';
 import '../report_comment_dialog_controller.dart';
 
@@ -30,7 +29,7 @@ class _ReportCommentDialogState extends ConsumerState<ReportCommentDialog> {
     final controller = ref.watch(reportCommentDialogControllerProvider);
 
     Future<void> sendReport() async {
-      unawaited(ref.read(loadingDialogProvider).showLoadingDialog(context));
+      context.showLoadingDialog();
       await controller.sendReport(
         commentId: widget.commentId,
         dealId: widget.dealId,

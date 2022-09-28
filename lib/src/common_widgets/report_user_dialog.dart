@@ -7,7 +7,6 @@ import 'package:loggy/loggy.dart';
 import '../helpers/context_extensions.dart';
 import 'custom_snack_bar.dart';
 import 'dialog_button.dart';
-import 'loading_dialog.dart';
 import 'report_user_dialog_controller.dart';
 
 class ReportUserDialog extends ConsumerWidget with UiLoggy {
@@ -20,7 +19,7 @@ class ReportUserDialog extends ConsumerWidget with UiLoggy {
     final controller = ref.watch(reportUserDialogControllerProvider);
 
     Future<void> sendReport() async {
-      unawaited(ref.read(loadingDialogProvider).showLoadingDialog(context));
+      context.showLoadingDialog();
       await controller.sendReport(
         userId: userId,
         onSuccess: () {

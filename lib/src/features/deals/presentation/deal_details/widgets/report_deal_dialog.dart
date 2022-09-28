@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../common_widgets/custom_snack_bar.dart';
 import '../../../../../common_widgets/dialog_button.dart';
-import '../../../../../common_widgets/loading_dialog.dart';
 import '../../../../../helpers/context_extensions.dart';
 import '../report_deal_dialog_controller.dart';
 
@@ -19,7 +18,7 @@ class ReportDealDialog extends ConsumerWidget {
     final controller = ref.watch(reportDealDialogControllerProvider);
 
     Future<void> sendReport() async {
-      unawaited(ref.read(loadingDialogProvider).showLoadingDialog(context));
+      context.showLoadingDialog();
       await controller.sendReport(
         dealId: dealId,
         onSuccess: () {

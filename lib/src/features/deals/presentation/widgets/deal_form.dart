@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_picture_uploader/firebase_picture_uploader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:validators/validators.dart';
 
 import '../../../../common_widgets/custom_snack_bar.dart';
-import '../../../../common_widgets/loading_dialog.dart';
 import '../../../../helpers/context_extensions.dart';
 import '../../domain/deal.dart';
 import '../../domain/deal_form_data.dart';
@@ -85,8 +82,7 @@ class _DealFormState extends ConsumerState<DealForm> {
       return;
     }
 
-    unawaited(ref.read(loadingDialogProvider).showLoadingDialog(context));
-
+    context.showLoadingDialog();
     final photos = await DealUtil.getDownloadUrls(_dealImages);
     final deal = Deal(
       id: widget.deal?.id,
