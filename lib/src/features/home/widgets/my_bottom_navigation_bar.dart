@@ -8,18 +8,12 @@ import '../../../helpers/context_extensions.dart';
 import '../../auth/presentation/user_controller.dart';
 import '../../chat/data/firestore_service.dart';
 import '../../notifications/data/push_notification_service.dart';
+import '../home_screen_controller.dart';
 
 typedef Json = Map<String, dynamic>;
 
 class MyBottomNavigationBar extends ConsumerStatefulWidget {
-  const MyBottomNavigationBar({
-    required this.activeScreen,
-    required this.onActiveScreenChanged,
-    super.key,
-  });
-
-  final int activeScreen;
-  final ValueChanged<int> onActiveScreenChanged;
+  const MyBottomNavigationBar({super.key});
 
   @override
   ConsumerState<MyBottomNavigationBar> createState() =>
@@ -28,18 +22,13 @@ class MyBottomNavigationBar extends ConsumerStatefulWidget {
 
 class _MyBottomNavigationBarState extends ConsumerState<MyBottomNavigationBar> {
   var unreadMessageCount = 0;
-  var activeScreen = 0;
-
-  @override
-  void initState() {
-    activeScreen = widget.activeScreen;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
     if (user == null) return const SizedBox();
+    final activeScreenIndex = ref.watch(homeScreenControllerProvider);
+
     final unreadNotificationCount = ref.watch(pushNotificationServiceProvider
         .select((value) => value.unreadNotifications));
     ref.listen(
@@ -94,7 +83,7 @@ class _MyBottomNavigationBarState extends ConsumerState<MyBottomNavigationBar> {
               GButton(
                 icon: FontAwesomeIcons.comment,
                 iconSize: 20,
-                leading: widget.activeScreen == 2 || unreadMessageCount == 0
+                leading: activeScreenIndex == 2 || unreadMessageCount == 0
                     ? null
                     : Badge(
                         badgeColor: context.t.primaryColor.withOpacity(.3),
@@ -115,17 +104,16 @@ class _MyBottomNavigationBarState extends ConsumerState<MyBottomNavigationBar> {
               ),
               GButton(
                 icon: Icons.notifications_outlined,
-                leading:
-                    widget.activeScreen == 3 || unreadNotificationCount == 0
-                        ? null
-                        : Badge(
-                            badgeColor: context.t.primaryColor.withOpacity(.3),
-                            elevation: 0,
-                            child: Icon(
-                              Icons.notifications_outlined,
-                              color: context.t.primaryColorLight,
-                            ),
-                          ),
+                leading: activeScreenIndex == 3 || unreadNotificationCount == 0
+                    ? null
+                    : Badge(
+                        badgeColor: context.t.primaryColor.withOpacity(.3),
+                        elevation: 0,
+                        child: Icon(
+                          Icons.notifications_outlined,
+                          color: context.t.primaryColorLight,
+                        ),
+                      ),
                 text: context.l.notifications,
               ),
               GButton(
@@ -137,13 +125,9 @@ class _MyBottomNavigationBarState extends ConsumerState<MyBottomNavigationBar> {
                 text: context.l.profile,
               ),
             ],
-            selectedIndex: activeScreen,
-            onTabChange: (index) {
-              setState(() {
-                activeScreen = index;
-                widget.onActiveScreenChanged(activeScreen);
-              });
-            },
+            selectedIndex: activeScreenIndex,
+            onTabChange:
+                ref.read(homeScreenControllerProvider.notifier).setActiveScreen,
           ),
         ),
       ),
