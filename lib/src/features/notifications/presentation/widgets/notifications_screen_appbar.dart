@@ -15,11 +15,13 @@ class NotificationsScreenAppBar extends ConsumerWidget {
     final controller = ref.watch(notificationsControllerProvider);
     if (!controller.isSelectionModeActive) {
       return AppBar(
+        automaticallyImplyLeading: false,
         title: Text(context.l.notifications),
       );
     }
 
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: context.isDarkMode
           ? context.t.primaryColor
           : context.t.primaryColorDark,

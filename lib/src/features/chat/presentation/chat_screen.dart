@@ -27,6 +27,7 @@ class ChatScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(context.l.chats),
         actions: [
           PopupMenuButton<_ChatPopup>(

@@ -19,6 +19,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(context.l.profile),
         actions: [
           IconButton(
