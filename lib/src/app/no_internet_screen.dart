@@ -40,7 +40,6 @@ class _NoInternetScreenState extends ConsumerState<NoInternetScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
         title: const Text(appTitle),
       ),
       body: Stack(
@@ -68,8 +67,8 @@ class _NoInternetScreenState extends ConsumerState<NoInternetScreen> {
                     SizedBox.fromSize(
                       size: const Size.square(12),
                       child: const CircularProgressIndicator(
+                        color: Colors.white,
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     ),
                   ],
@@ -80,21 +79,25 @@ class _NoInternetScreenState extends ConsumerState<NoInternetScreen> {
           Center(
             child: _isConnected
                 ? const CircularProgressIndicator()
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.wifi,
-                        color: context.t.primaryColorLight,
-                        size: 40,
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                        context.l.checkYourInternet,
-                        style:
-                            context.textTheme.bodyText2!.copyWith(fontSize: 15),
-                      ),
-                    ],
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.wifi,
+                          color: context.t.primaryColorLight,
+                          size: 40,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          context.l.checkYourInternet,
+                          style: context.textTheme.bodyText2!
+                              .copyWith(fontSize: 15),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
           ),
         ],
