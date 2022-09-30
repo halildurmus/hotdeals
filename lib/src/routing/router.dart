@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart' show kDebugMode;
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../common_widgets/error_page.dart';
 import '../common_widgets/fullscreen_image.dart';
 import '../features/auth/domain/my_user.dart';
 import '../features/auth/presentation/sign_in_screen.dart';
@@ -23,11 +24,13 @@ import '../features/home/home_screen.dart';
 import '../features/profile/presentation/update_profile/update_profile_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 
-/// Caches and Exposes a [GoRouter]
+/// Caches and Exposes a [GoRouter].
 final routerProvider = Provider<GoRouter>(
   (ref) {
     final router = RouterNotifier(ref);
     return GoRouter(
+      errorPageBuilder: (_, state) =>
+          MaterialPage(child: ErrorPage(state.error)),
       debugLogDiagnostics: kDebugMode,
       initialLocation: '/',
       redirect: router._redirectLogic,
