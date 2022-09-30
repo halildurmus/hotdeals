@@ -15,11 +15,19 @@ class LoadingDialog extends StatelessWidget {
 
   Widget _buildAlertDialog(BuildContext context) {
     return AlertDialog(
-      content: Row(
+      insetPadding:
+          EdgeInsets.symmetric(horizontal: context.mq.size.width * .25),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      content: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        direction: Axis.horizontal,
+        spacing: 20,
         children: [
-          const CircularProgressIndicator(),
-          const SizedBox(width: 16),
-          Text(context.l.loading),
+          const CircularProgressIndicator.adaptive(strokeWidth: 2),
+          Text(context.l.loading, style: context.textTheme.bodyMedium),
         ],
       ),
     );
