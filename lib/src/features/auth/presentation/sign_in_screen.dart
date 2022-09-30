@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +14,22 @@ class SignInScreen extends ConsumerWidget {
 
   static const String routeName = '/sign-in';
 
+  Future<void> _signInWith(
+    Future<User> Function() signInMethod,
+    BuildContext context,
+  ) async {
+    context.showLoadingDialog();
+    try {
+      await signInMethod();
+    } on PlatformException catch (e) {
+      Navigator.of(context).pop();
+      await ExceptionAlertDialog(
+        title: context.l.signInFailed,
+        exception: e,
+      ).show(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authApi = ref.read(authApiProvider);
@@ -21,10 +38,8 @@ class SignInScreen extends ConsumerWidget {
         appBar: AppBar(
           title: const Text(appTitle),
         ),
-        body: Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(context.t.primaryColor),
-          ),
+        body: const Center(
+          child: CircularProgressIndicator(),
         ),
       );
     }
@@ -51,29 +66,13 @@ class SignInScreen extends ConsumerWidget {
               runSpacing: 12,
               children: [
                 SocialButton.facebook(
-                  onPressed: () async {
-                    try {
-                      await authApi.signInWithFacebook();
-                    } on PlatformException catch (e) {
-                      await ExceptionAlertDialog(
-                        title: context.l.signInFailed,
-                        exception: e,
-                      ).show(context);
-                    }
-                  },
+                  onPressed: () async =>
+                      await _signInWith(authApi.signInWithFacebook, context),
                   text: context.l.continueWithFacebook,
                 ),
                 SocialButton.google(
-                  onPressed: () async {
-                    try {
-                      await authApi.signInWithGoogle();
-                    } on PlatformException catch (e) {
-                      await ExceptionAlertDialog(
-                        title: context.l.signInFailed,
-                        exception: e,
-                      ).show(context);
-                    }
-                  },
+                  onPressed: () async =>
+                      await _signInWith(authApi.signInWithGoogle, context),
                   text: context.l.continueWithGoogle,
                 ),
               ],
