@@ -9,16 +9,14 @@ import '../domain/notifications_screen_data.dart';
 import '../domain/push_notification.dart';
 
 final notificationsControllerProvider = StateNotifierProvider.autoDispose<
-        NotificationsController, NotificationsScreenData>(
-    (ref) => NotificationsController(
-          ref.read,
-          pagingController: PagingController(firstPageKey: 0),
-        ),
-    name: 'NotificationsControllerProvider');
+    NotificationsController, NotificationsScreenData>(
+  (ref) => NotificationsController(ref.read, PagingController(firstPageKey: 0)),
+  name: 'NotificationsControllerProvider',
+);
 
 class NotificationsController extends StateNotifier<NotificationsScreenData>
     with NetworkLoggy {
-  NotificationsController(Reader read, {required this.pagingController})
+  NotificationsController(Reader read, this.pagingController)
       : _pushNotificationService = read(pushNotificationServiceProvider),
         super(
           NotificationsScreenData(

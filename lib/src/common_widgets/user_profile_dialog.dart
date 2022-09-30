@@ -46,12 +46,10 @@ class UserProfileDialog extends ConsumerWidget {
         ref.watch(_postedCommentAndDealCountFutureProvider(userId));
 
     if (user.isLoading || commentAndDealCount.isLoading) {
-      return SizedBox(
+      return const SizedBox(
         height: 100,
         child: Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(context.t.primaryColor),
-          ),
+          child: CircularProgressIndicator(),
         ),
       );
     }

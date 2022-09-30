@@ -88,29 +88,27 @@ class _BlockedUserCardState extends ConsumerState<_BlockedUserCard> {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         trailing: OutlinedButton(
-          onPressed: () async {
-            await CustomAlertDialog(
-              title: context.l.unblockUser,
-              content: context.l.unblockConfirm,
-              defaultAction: () async => await controller.unblockUser(
-                userId: widget.user.id!,
-                onSuccess: () async {
-                  await ref.read(userProvider.notifier).refreshUser();
-                  ref.refresh(_blockedUsersFutureProvider);
-                  if (!mounted) return;
-                  CustomSnackBar.success(
-                    text: context.l.successfullyUnblocked,
-                  ).showSnackBar(context);
-                },
-                onFailure: () {
-                  CustomSnackBar.error(
-                    text: context.l.anErrorOccurredWhileUnblocking,
-                  ).showSnackBar(context);
-                },
-              ),
-              cancelActionText: context.l.cancel,
-            ).show(context);
-          },
+          onPressed: () => CustomAlertDialog(
+            title: context.l.unblockUser,
+            content: context.l.unblockConfirm,
+            defaultAction: () async => await controller.unblockUser(
+              userId: widget.user.id!,
+              onSuccess: () async {
+                await ref.read(userProvider.notifier).refreshUser();
+                ref.refresh(_blockedUsersFutureProvider);
+                if (!mounted) return;
+                CustomSnackBar.success(
+                  text: context.l.successfullyUnblocked,
+                ).showSnackBar(context);
+              },
+              onFailure: () {
+                CustomSnackBar.error(
+                  text: context.l.anErrorOccurredWhileUnblocking,
+                ).showSnackBar(context);
+              },
+            ),
+            cancelActionText: context.l.cancel,
+          ).show(context),
           style: OutlinedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
