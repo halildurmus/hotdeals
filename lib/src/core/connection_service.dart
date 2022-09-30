@@ -10,14 +10,13 @@ final connectionServiceProvider = Provider<ConnectionService>(
 
 class ConnectionService {
   // Returns the current connection status.
-  bool hasConnection = false;
+  var hasConnection = false;
 
   // Creates a StreamController for tracking connection changes.
-  StreamController<bool> connectionChangeController =
-      StreamController<bool>.broadcast();
+  final connectionChangeController = StreamController<bool>.broadcast();
 
   // Creates an instance of Connectivity from package:flutter_connectivity.
-  final Connectivity _connectivity = Connectivity();
+  final _connectivity = Connectivity();
 
   // Hooks into flutter_connectivity's Stream to listen for changes
   // and checks the connection status out of the gate.
@@ -28,15 +27,17 @@ class ConnectionService {
 
   Stream<bool> get connectionChange => connectionChangeController.stream;
 
-  // A clean up method to close our StreamController. Because this is meant to
-  // exist through the entire application life cycle this isn't really an issue.
-  void dispose() => connectionChangeController.close();
-
   // flutter_connectivity's listener.
   void _connectionChange(ConnectivityResult result) => checkConnection();
 
   // Checks if there is a connection.
   Future<bool> checkConnection() async {
+    // TODO(halildurmus): Get rid of this workaround
+    // Sometimes the connectivity check will return true even though the device
+    // is offline. I think this happens because the onConnectivityChanged callback
+    // is triggered so fast that when this function does a lookup, the device is
+    // still online. To fix this, I added a 1-second delay as a workaround.
+    await Future<void>.delayed(const Duration(seconds: 1));
     final previousConnection = hasConnection;
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -56,4 +57,8 @@ class ConnectionService {
 
     return hasConnection;
   }
+
+  // A clean up method to close our StreamController. Because this is meant to
+  // exist through the entire application life cycle this isn't really an issue.
+  void dispose() => connectionChangeController.close();
 }
