@@ -56,11 +56,14 @@ class DealItem extends StatelessWidget {
                 top: 88,
                 child: Row(
                   children: [
-                    FloatingActionButton(
+                    MaterialButton(
                       onPressed: onEditButtonPressed,
-                      backgroundColor: context.t.backgroundColor,
-                      heroTag: null,
-                      mini: true,
+                      color: context.t.backgroundColor,
+                      elevation: 8,
+                      height: 40,
+                      minWidth: 40,
+                      shape: const CircleBorder(),
+                      padding: EdgeInsets.zero,
                       child: Icon(
                         Icons.edit,
                         color:
@@ -68,11 +71,14 @@ class DealItem extends StatelessWidget {
                         size: 18,
                       ),
                     ),
-                    FloatingActionButton(
+                    MaterialButton(
                       onPressed: onDeleteButtonPressed,
-                      backgroundColor: context.t.backgroundColor,
-                      heroTag: null,
-                      mini: true,
+                      color: context.t.backgroundColor,
+                      elevation: 8,
+                      height: 40,
+                      minWidth: 40,
+                      shape: const CircleBorder(),
+                      padding: EdgeInsets.zero,
                       child: Icon(
                         Icons.delete_forever,
                         color: context.t.errorColor,
@@ -85,11 +91,14 @@ class DealItem extends StatelessWidget {
             Positioned(
               right: 0,
               top: 88,
-              child: FloatingActionButton(
+              child: MaterialButton(
                 onPressed: onFavoriteButtonPressed,
-                backgroundColor: context.t.backgroundColor,
-                heroTag: null,
-                mini: true,
+                color: context.t.backgroundColor,
+                elevation: 8,
+                height: 40,
+                minWidth: 40,
+                shape: const CircleBorder(),
+                padding: EdgeInsets.zero,
                 child: Icon(
                   isFavorited
                       ? FontAwesomeIcons.solidHeart

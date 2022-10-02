@@ -535,18 +535,22 @@ class _FavoriteButton extends ConsumerWidget {
     final user = ref.watch(userProvider)!;
     final isFavorited = user.favorites?.contains(dealId) ?? false;
 
-    return FloatingActionButton(
+    return MaterialButton(
       onPressed: () => ref
           .read(dealDetailsControllerProvider(dealId).notifier)
           .onFavoriteButtonPressed(
             isFavorited: isFavorited,
             onSuccess: ref.read(userProvider.notifier).refreshUser,
           ),
-      backgroundColor: Theme.of(context).backgroundColor,
-      elevation: 3,
+      color: context.t.backgroundColor,
+      elevation: 8,
+      height: 50,
+      minWidth: 50,
+      shape: const CircleBorder(),
+      padding: EdgeInsets.zero,
       child: Icon(
         isFavorited ? FontAwesomeIcons.solidHeart : FontAwesomeIcons.heart,
-        color: Theme.of(context).primaryColor,
+        color: context.t.primaryColor,
       ),
     );
   }
