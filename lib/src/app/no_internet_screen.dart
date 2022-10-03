@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../common_widgets/error_indicator.dart';
 import '../core/connection_service.dart';
 import '../helpers/context_extensions.dart';
 import '../l10n/localization_constants.dart';
@@ -42,63 +43,46 @@ class _NoInternetScreenState extends ConsumerState<NoInternetScreen> {
       appBar: AppBar(
         title: const Text(appTitle),
       ),
-      body: Stack(
-        fit: StackFit.expand,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Positioned(
+          AnimatedContainer(
+            color: _isConnected
+                ? const Color(0xFF00EE44)
+                : const Color(0xFFEE4400),
+            duration: const Duration(milliseconds: 300),
             height: 32,
-            left: 0,
-            right: 0,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              color: _isConnected
-                  ? const Color(0xFF00EE44)
-                  : const Color(0xFFEE4400),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (!_isConnected)
+                  SizedBox.fromSize(
+                    size: const Size.square(12),
+                    child: const CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
                     _isConnected ? context.l.online : context.l.offline,
                     style: context.textTheme.bodyText2!
                         .copyWith(color: Colors.white),
                   ),
-                  if (!_isConnected) ...[
-                    const SizedBox(width: 8),
-                    SizedBox.fromSize(
-                      size: const Size.square(12),
-                      child: const CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          Center(
-            child: _isConnected
-                ? const CircularProgressIndicator()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.wifi,
-                          color: context.t.primaryColorLight,
-                          size: 40,
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          context.l.checkYourInternet,
-                          style: context.textTheme.bodyText2!
-                              .copyWith(fontSize: 15),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+          Flexible(
+            child: Center(
+              child: _isConnected
+                  ? const CircularProgressIndicator()
+                  : ErrorIndicator(
+                      icon: FontAwesomeIcons.wifi,
+                      title: context.l.checkYourInternet,
                     ),
-                  ),
+            ),
           ),
         ],
       ),
