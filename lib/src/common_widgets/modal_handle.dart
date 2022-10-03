@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/context_extensions.dart';
+
 class ModalHandle extends StatelessWidget {
   const ModalHandle({super.key});
 
@@ -14,7 +16,7 @@ class ModalHandle extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2.5),
-              color: Theme.of(context).dividerColor,
+              color: context.t.dividerColor,
             ),
           ),
         ),

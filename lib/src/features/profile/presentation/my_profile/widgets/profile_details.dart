@@ -28,7 +28,7 @@ class ProfileDetails extends StatelessWidget {
             direction: Axis.vertical,
             spacing: 5,
             children: [
-              Text(user.nickname!, style: context.textTheme.headline6),
+              Text(user.nickname!, style: context.textTheme.titleLarge),
               Text(user.email!, style: context.textTheme.caption),
               OutlinedButton(
                 onPressed: () => context.go('/update-profile'),

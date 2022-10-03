@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/context_extensions.dart';
+
 class SettingsListItem extends StatelessWidget {
   const SettingsListItem({
     required this.leading,
@@ -29,9 +31,7 @@ class SettingsListItem extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1!
+          style: context.textTheme.bodyText1!
               .copyWith(fontWeight: FontWeight.w500),
         ),
         subtitle: subtitle != null ? Text(subtitle!) : null,

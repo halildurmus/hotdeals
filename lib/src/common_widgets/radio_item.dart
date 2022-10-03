@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/context_extensions.dart';
+
 class RadioItem<V> extends StatelessWidget {
   const RadioItem({
     required this.leading,
@@ -32,10 +34,9 @@ class RadioItem<V> extends StatelessWidget {
         ),
         title: Text(
           text,
-          style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                fontWeight:
-                    providerValue == radioValue ? FontWeight.bold : null,
-              ),
+          style: context.textTheme.bodyText1!.copyWith(
+            fontWeight: providerValue == radioValue ? FontWeight.bold : null,
+          ),
         ),
         trailing: Radio<V>(
           value: radioValue,

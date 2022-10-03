@@ -102,8 +102,6 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with UiLoggy {
   }
 
   Future<String> saveFile(String fileURL, String messageID) async {
-    if (Platform.isAndroid) {
-    } else if (Platform.isIOS) {}
     final reference =
         ref.read(firebaseStorageServiceProvider).refFromURL(url: fileURL);
     final bytes = await reference.getData();

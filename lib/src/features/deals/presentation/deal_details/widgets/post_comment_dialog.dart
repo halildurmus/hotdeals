@@ -63,7 +63,7 @@ class _PostCommentState extends ConsumerState<PostCommentDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(context.l.postAComment, style: context.textTheme.headline6),
+            Text(context.l.postAComment, style: context.textTheme.titleLarge),
             const SizedBox(height: 20),
             Form(
               key: controller.formKey,

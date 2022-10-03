@@ -62,7 +62,7 @@ class _ReportCommentDialogState extends ConsumerState<ReportCommentDialog> {
               children: [
                 Text(
                   context.l.reportComment,
-                  style: context.textTheme.headline6,
+                  style: context.textTheme.titleLarge,
                 ),
                 const SizedBox(height: 10),
                 CheckboxListTile(

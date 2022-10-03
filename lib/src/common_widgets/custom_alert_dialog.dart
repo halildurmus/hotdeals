@@ -37,9 +37,8 @@ class CustomAlertDialog extends StatelessWidget {
         ),
         title: Text(
           title,
+          style: context.textTheme.titleLarge!,
           textAlign: TextAlign.center,
-          style: context.textTheme.headline6!
-              .copyWith(fontWeight: FontWeight.bold),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -47,8 +46,8 @@ class CustomAlertDialog extends StatelessWidget {
             if (content != null) ...[
               Text(
                 content!,
-                textAlign: TextAlign.center,
                 style: context.textTheme.bodyText1,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
             ],

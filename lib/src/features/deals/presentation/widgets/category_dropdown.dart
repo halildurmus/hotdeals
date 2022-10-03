@@ -39,7 +39,7 @@ class CategoryDropdown extends ConsumerWidget {
                 title:
                     Text(value.localizedName(Localizations.localeOf(context))),
                 trailing: (controller.selectedCategory == value)
-                    ? Icon(Icons.check, color: Theme.of(context).primaryColor)
+                    ? Icon(Icons.check, color: context.t.primaryColor)
                     : null,
               ),
             ),

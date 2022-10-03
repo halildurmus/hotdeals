@@ -51,7 +51,7 @@ class ReportUserDialog extends ConsumerWidget with UiLoggy {
               children: [
                 Text(
                   context.l.reportUser,
-                  style: context.textTheme.headline6,
+                  style: context.textTheme.titleLarge,
                 ),
                 const SizedBox(height: 10),
                 CheckboxListTile(

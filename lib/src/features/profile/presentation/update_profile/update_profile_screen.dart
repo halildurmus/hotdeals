@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 
 import '../../../../common_widgets/custom_alert_dialog.dart';
@@ -56,10 +54,6 @@ class _UpdateProfileState extends ConsumerState<UpdateProfileScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l.updateProfile),
-        leading: IconButton(
-          onPressed: context.pop,
-          icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
-        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

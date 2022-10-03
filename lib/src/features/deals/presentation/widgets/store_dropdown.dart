@@ -35,7 +35,7 @@ class StoreDropdown extends ConsumerWidget {
               child: ListTile(
                 title: Text(value.name),
                 trailing: (controller.selectedStore == value)
-                    ? Icon(Icons.check, color: Theme.of(context).primaryColor)
+                    ? Icon(Icons.check, color: context.t.primaryColor)
                     : null,
               ),
             ),

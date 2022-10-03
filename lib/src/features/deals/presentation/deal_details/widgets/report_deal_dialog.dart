@@ -50,7 +50,7 @@ class ReportDealDialog extends ConsumerWidget {
               children: [
                 Text(
                   context.l.reportDeal,
-                  style: context.textTheme.headline6,
+                  style: context.textTheme.titleLarge,
                 ),
                 const SizedBox(height: 10),
                 CheckboxListTile(

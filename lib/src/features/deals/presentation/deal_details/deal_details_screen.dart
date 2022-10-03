@@ -122,7 +122,7 @@ class _DealDetailsScreenState extends ConsumerState<DealDetailsScreen> {
                         : throw Exception('Could not launch $uri');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    backgroundColor: context.colorScheme.secondary,
                     fixedSize: Size(context.mq.size.width, 50),
                   ),
                   child: Text(context.l.seeDeal),
@@ -466,10 +466,8 @@ class _DealTitle extends StatelessWidget {
       title,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
-      style: Theme.of(context)
-          .textTheme
-          .headline6!
-          .copyWith(fontWeight: FontWeight.bold),
+      style:
+          context.textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
     );
   }
 }
@@ -507,18 +505,16 @@ class _DealPrices extends StatelessWidget {
       children: [
         Text(
           r'$' + deal.price.toStringAsFixed(0),
-          style: Theme.of(context)
-              .textTheme
-              .headline5!
+          style: context.textTheme.headline5!
               .copyWith(fontWeight: FontWeight.bold),
         ),
         Text(
           r'$' + deal.originalPrice.toStringAsFixed(0),
-          style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                color: Theme.of(context).errorColor,
-                decoration: TextDecoration.lineThrough,
-                fontSize: 16,
-              ),
+          style: context.textTheme.subtitle2!.copyWith(
+            color: context.t.errorColor,
+            decoration: TextDecoration.lineThrough,
+            fontSize: 16,
+          ),
         ),
       ],
     );

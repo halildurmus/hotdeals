@@ -244,7 +244,7 @@ class _DealFormState extends ConsumerState<DealForm> {
           ElevatedButton(
             onPressed: () => _onPressed(controller),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
+              backgroundColor: context.colorScheme.secondary,
               fixedSize: Size(context.mq.size.width, 50),
             ),
             child: Text(widget.buttonTitle),

@@ -99,7 +99,7 @@ class _SearchBarState extends ConsumerState<SearchBar> {
         title: controller.searchParams.query.isNotEmpty
             ? Text(
                 controller.searchParams.query,
-                style: context.textTheme.headline6,
+                style: context.textTheme.titleLarge,
               )
             : null,
       ),

@@ -247,8 +247,7 @@ class _Prices extends StatelessWidget {
       children: [
         Text(
           r'$' + deal.price.toStringAsFixed(0),
-          style: context.textTheme.headline5!.copyWith(
-            fontSize: 16,
+          style: context.textTheme.titleMedium!.copyWith(
             fontWeight: FontWeight.bold,
           ),
         ),

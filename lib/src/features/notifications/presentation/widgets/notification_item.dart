@@ -111,7 +111,7 @@ class _Leading extends StatelessWidget {
                 isItemSelected
                     ? Icons.check_circle
                     : Icons.radio_button_unchecked,
-                color: Theme.of(context).primaryColor,
+                color: context.t.primaryColor,
               ),
             ],
           ),

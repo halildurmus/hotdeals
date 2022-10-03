@@ -57,7 +57,7 @@ class SettingsScreen extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text(
               '$appName v$version ($buildNumber)',
-              style: Theme.of(context).textTheme.bodyText2,
+              style: context.textTheme.bodyText2,
             ),
           )
         ],

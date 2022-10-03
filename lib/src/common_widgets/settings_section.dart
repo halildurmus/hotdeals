@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/context_extensions.dart';
+
 class SettingsSection extends StatelessWidget {
   const SettingsSection({
     required this.children,
@@ -19,8 +21,7 @@ class SettingsSection extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Text(
             title,
-            style:
-                Theme.of(context).textTheme.headline6!.copyWith(fontSize: 16),
+            style: context.textTheme.headline6!.copyWith(fontSize: 16),
           ),
         ),
         ...children,
