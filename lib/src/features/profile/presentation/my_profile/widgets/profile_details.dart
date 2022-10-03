@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../../../helpers/context_extensions.dart';
 import '../../../../auth/domain/my_user.dart';
 
@@ -19,9 +21,15 @@ class ProfileDetails extends StatelessWidget {
           GestureDetector(
             onTap: () =>
                 context.go('/image?url=${Uri.encodeComponent(user.avatar!)}'),
-            child: CircleAvatar(
-              backgroundImage: NetworkImage(user.avatar!),
-              radius: 50,
+            child: CachedNetworkImage(
+              imageUrl: user.avatar!,
+              imageBuilder: (_, imageProvider) => CircleAvatar(
+                backgroundImage: imageProvider,
+                radius: 50,
+              ),
+              errorWidget: (_, __, ___) =>
+                  const CircleAvatarShimmer(radius: 50),
+              placeholder: (_, __) => const CircleAvatarShimmer(radius: 50),
             ),
           ),
           Wrap(

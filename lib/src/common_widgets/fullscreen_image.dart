@@ -15,14 +15,25 @@ class FullScreenImage extends StatelessWidget {
       appBar: AppBar(),
       body: CachedNetworkImage(
         imageUrl: imageUrl,
-        imageBuilder: (context, imageProvider) => PhotoView(
-          backgroundDecoration: BoxDecoration(color: context.t.backgroundColor),
-          filterQuality: FilterQuality.low,
-          imageProvider: imageProvider,
+        imageBuilder: (_, imageProvider) => PhotoView(
+            backgroundDecoration:
+                BoxDecoration(color: context.t.backgroundColor),
+            filterQuality: FilterQuality.low,
+            imageProvider: imageProvider,
+          ),
+        errorWidget: (_, __, ___) => Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error),
+              const SizedBox(width: 4),
+              Text(context.l.anErrorOccurred),
+            ],
+          ),
         ),
-        placeholder: (_, __) =>
-            const Center(child: CircularProgressIndicator()),
-        errorWidget: (_, __, ___) => const Center(child: Icon(Icons.error)),
+        progressIndicatorBuilder: (context, url, progress) => Center(
+          child: CircularProgressIndicator(value: progress.progress),
+        ),
       ),
     );
   }

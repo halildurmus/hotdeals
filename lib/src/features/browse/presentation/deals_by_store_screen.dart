@@ -7,6 +7,7 @@ import '../../../core/hotdeals_repository.dart';
 import '../../../helpers/context_extensions.dart';
 import '../../deals/presentation/widgets/deal_paged_list_view.dart';
 import '../domain/store.dart';
+import 'widgets/store_item.dart';
 
 class DealsByStoreScreen extends ConsumerWidget {
   const DealsByStoreScreen(this.store, {super.key});
@@ -20,21 +21,19 @@ class DealsByStoreScreen extends ConsumerWidget {
         preferredSize: const Size.fromHeight(70),
         child: AppBar(
           centerTitle: true,
-          title: Container(
-            color: context.isDarkMode ? Colors.white : null,
-            padding:
-                context.isDarkMode ? const EdgeInsets.all(3) : EdgeInsets.zero,
-            height: 55,
-            width: 55,
-            child: CachedNetworkImage(
-              imageUrl: store.logo,
-              imageBuilder: (_, imageProvider) => DecoratedBox(
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: imageProvider),
-                ),
+          title: CachedNetworkImage(
+            height: 50,
+            width: 50,
+            imageUrl: store.logo,
+            imageBuilder: (_, imageProvider) => DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: context.isDarkMode ? Colors.white : null,
+                image: DecorationImage(image: imageProvider),
               ),
-              placeholder: (_, __) => const SizedBox.square(dimension: 50),
             ),
+            errorWidget: (_, __, ___) => const StoreImageShimmer(),
+            placeholder: (_, __) => const StoreImageShimmer(),
           ),
         ),
       ),

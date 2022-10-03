@@ -69,14 +69,16 @@ class _CommentPagedListViewState extends State<CommentPagedListView>
       pagingController: _pagingController,
       builderDelegate: PagedChildBuilderDelegate<Comment>(
         animateTransitions: true,
-        itemBuilder: (context, comment, index) => CommentItem(comment: comment),
-        firstPageErrorIndicatorBuilder: (context) => NoConnectionError(
+        itemBuilder: (_, comment, __) => CommentItem(comment: comment),
+        firstPageErrorIndicatorBuilder: (_) => NoConnectionError(
           onPressed: _pagingController.refresh,
         ),
-        newPageErrorIndicatorBuilder: (context) => SomethingWentWrongError(
+        firstPageProgressIndicatorBuilder: (_) => const CommentItemShimmer(),
+        newPageErrorIndicatorBuilder: (_) => SomethingWentWrongError(
           onPressed: _pagingController.refresh,
         ),
-        noItemsFoundIndicatorBuilder: (context) => widget.noCommentsFound,
+        newPageProgressIndicatorBuilder: (_) => const CommentItemShimmer(),
+        noItemsFoundIndicatorBuilder: (_) => widget.noCommentsFound,
       ),
       separatorBuilder: (_, __) => const SizedBox(height: 5),
     );

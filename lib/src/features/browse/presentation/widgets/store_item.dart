@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/hotdeals_repository.dart';
 import '../../../../helpers/context_extensions.dart';
@@ -46,7 +47,8 @@ class StoreItem extends ConsumerWidget {
                   image: DecorationImage(image: imageProvider),
                 ),
               ),
-              placeholder: (_, __) => const SizedBox.square(dimension: 50),
+              errorWidget: (_, __, ___) => const StoreImageShimmer(),
+              placeholder: (_, __) => const StoreImageShimmer(),
             ),
             Text(
               store.name,
@@ -64,6 +66,31 @@ class StoreItem extends ConsumerWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class StoreImageShimmer extends StatelessWidget {
+  const StoreImageShimmer({this.height = 50, super.key});
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor:
+          context.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300,
+      highlightColor:
+          context.isDarkMode ? Colors.grey.shade600 : Colors.grey.shade100,
+      child: SizedBox.square(
+        dimension: height,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.white,
+          ),
         ),
       ),
     );

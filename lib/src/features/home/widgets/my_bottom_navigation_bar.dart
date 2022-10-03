@@ -1,9 +1,11 @@
 import 'package:badges/badges.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+import '../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../helpers/context_extensions.dart';
 import '../../auth/presentation/user_controller.dart';
 import '../../chat/data/firestore_service.dart';
@@ -118,9 +120,15 @@ class _MyBottomNavigationBarState extends ConsumerState<MyBottomNavigationBar> {
               ),
               GButton(
                 icon: Icons.person_outlined,
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(user.avatar!),
-                  radius: 12,
+                leading: CachedNetworkImage(
+                  imageUrl: user.avatar!,
+                  imageBuilder: (_, imageProvider) => CircleAvatar(
+                    backgroundImage: imageProvider,
+                    radius: 12,
+                  ),
+                  errorWidget: (_, __, ___) =>
+                      const CircleAvatarShimmer(radius: 12),
+                  placeholder: (_, __) => const CircleAvatarShimmer(radius: 12),
                 ),
                 text: context.l.profile,
               ),

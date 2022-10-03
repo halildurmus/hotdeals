@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart';
 
+import '../../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../../core/hotdeals_repository.dart';
 import '../../../../helpers/context_extensions.dart';
 import '../../../../helpers/date_time_helper.dart';
@@ -118,9 +119,10 @@ class _Leading extends StatelessWidget {
         if (isSelectionModeActive) const SizedBox(width: 16),
         CachedNetworkImage(
           imageUrl: user.avatar!,
-          imageBuilder: (ctx, imageProvider) =>
+          imageBuilder: (_, imageProvider) =>
               CircleAvatar(backgroundImage: imageProvider),
-          placeholder: (context, url) => const CircleAvatar(),
+          errorWidget: (_, __, ___) => const CircleAvatarShimmer(),
+          placeholder: (_, __) => const CircleAvatarShimmer(),
         ),
       ],
     );

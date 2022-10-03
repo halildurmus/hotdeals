@@ -52,9 +52,9 @@ class FirestoreImageState extends State<FirestoreImage> {
   Widget build(BuildContext context) {
     return _loaded
         ? FadeInImage(
+            fit: BoxFit.fitWidth,
             image: NetworkImage(_imageUrl),
             placeholder: placeholder,
-            fit: BoxFit.fitWidth,
           )
         : fallback;
   }

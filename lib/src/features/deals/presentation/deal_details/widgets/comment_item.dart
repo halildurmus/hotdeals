@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 
+import '../../../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../../../common_widgets/user_profile_dialog.dart';
 import '../../../../../helpers/context_extensions.dart';
 import '../../../../../helpers/date_time_helper.dart';
@@ -30,7 +32,6 @@ class CommentItem extends ConsumerWidget {
       ),
       child: ListTile(
         horizontalTitleGap: 8,
-        minVerticalPadding: 16,
         leading: GestureDetector(
           onTap: () => showDialog<void>(
             context: context,
@@ -40,9 +41,11 @@ class CommentItem extends ConsumerWidget {
             imageUrl: poster.avatar!,
             imageBuilder: (_, imageProvider) =>
                 CircleAvatar(backgroundImage: imageProvider, radius: 16),
-            placeholder: (_, __) => const CircleAvatar(radius: 16),
+            errorWidget: (_, __, ___) => const CircleAvatarShimmer(radius: 16),
+            placeholder: (_, __) => const CircleAvatarShimmer(radius: 16),
           ),
         ),
+        minVerticalPadding: 16,
         title: Wrap(
           spacing: 8,
           children: [
@@ -111,6 +114,58 @@ class _PopupMenuButton extends StatelessWidget {
             break;
         }
       },
+    );
+  }
+}
+
+class CommentItemShimmer extends StatelessWidget {
+  const CommentItemShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor:
+          context.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300,
+      highlightColor:
+          context.isDarkMode ? Colors.grey.shade600 : Colors.grey.shade100,
+      child: ListTile(
+        horizontalTitleGap: 8,
+        leading: const CircleAvatar(radius: 16),
+        minVerticalPadding: 16,
+        title: Container(
+          height: DefaultTextStyle.of(context).style.fontSize! * .8,
+          margin: const EdgeInsets.only(right: 150),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Wrap(
+            direction: Axis.vertical,
+            spacing: 8,
+            children: [
+              Container(
+                height: DefaultTextStyle.of(context).style.fontSize! * .8,
+                width: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                ),
+              ),
+              Container(
+                height: DefaultTextStyle.of(context).style.fontSize! * .8,
+                width: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

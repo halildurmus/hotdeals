@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../common_widgets/custom_alert_dialog.dart';
 import '../../../common_widgets/custom_snack_bar.dart';
 import '../../../common_widgets/error_indicator.dart';
@@ -79,9 +80,10 @@ class _BlockedUserCardState extends ConsumerState<_BlockedUserCard> {
         ),
         leading: CachedNetworkImage(
           imageUrl: widget.user.avatar!,
-          imageBuilder: (ctx, imageProvider) =>
+          imageBuilder: (_, imageProvider) =>
               CircleAvatar(backgroundImage: imageProvider),
-          placeholder: (context, url) => const CircleAvatar(),
+          errorWidget: (_, __, ___) => const CircleAvatarShimmer(),
+          placeholder: (_, __) => const CircleAvatarShimmer(),
         ),
         title: Text(
           widget.user.nickname!,

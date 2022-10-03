@@ -187,7 +187,7 @@ class _DealPagedListViewState extends ConsumerState<DealPagedListView>
         padding: const EdgeInsets.symmetric(vertical: 16),
         builderDelegate: PagedChildBuilderDelegate<Deal>(
           animateTransitions: true,
-          itemBuilder: (context, deal, index) {
+          itemBuilder: (_, deal, index) {
             final isFavorited = user?.favorites!.contains(deal.id!) ?? false;
             return DealItem(
               onTap: widget.usePushInNavigation
@@ -205,13 +205,15 @@ class _DealPagedListViewState extends ConsumerState<DealPagedListView>
               showControlButtons: user != null && (deal.postedBy! == user.id!),
             );
           },
-          firstPageErrorIndicatorBuilder: (context) => NoConnectionError(
+          firstPageErrorIndicatorBuilder: (_) => NoConnectionError(
             onPressed: _pagingController.refresh,
           ),
-          newPageErrorIndicatorBuilder: (context) => SomethingWentWrongError(
+          firstPageProgressIndicatorBuilder: (_) => const DealItemShimmer(),
+          newPageErrorIndicatorBuilder: (_) => SomethingWentWrongError(
             onPressed: _pagingController.refresh,
           ),
-          noItemsFoundIndicatorBuilder: (context) => widget.noDealsFound,
+          newPageProgressIndicatorBuilder: (_) => const DealItemShimmer(),
+          noItemsFoundIndicatorBuilder: (_) => widget.noDealsFound,
         ),
       );
     }

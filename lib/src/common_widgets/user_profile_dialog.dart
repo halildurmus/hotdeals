@@ -10,6 +10,7 @@ import '../features/auth/presentation/user_controller.dart';
 import '../features/chat/data/firestore_service.dart';
 import '../features/chat/domain/chat_util.dart';
 import '../helpers/context_extensions.dart';
+import 'circle_avatar_shimmer.dart';
 import 'error_indicator.dart';
 import 'report_user_dialog.dart';
 
@@ -97,8 +98,12 @@ class UserProfileDialog extends ConsumerWidget {
                     CachedNetworkImage(
                       imageUrl: user.value!.avatar!,
                       imageBuilder: (_, imageProvider) => CircleAvatar(
-                          backgroundImage: imageProvider, radius: 36),
-                      placeholder: (_, __) => const CircleAvatar(radius: 36),
+                        backgroundImage: imageProvider,
+                        radius: 36,
+                      ),
+                      errorWidget: (_, __, ___) =>
+                          const CircleAvatarShimmer(radius: 36),
+                      placeholder: (_, __) => const CircleAvatarShimmer(radius: 36),
                     ),
                     const SizedBox(width: 30),
                     Wrap(

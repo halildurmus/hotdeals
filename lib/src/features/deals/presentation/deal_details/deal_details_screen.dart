@@ -8,6 +8,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../../common_widgets/custom_snack_bar.dart';
 import '../../../../common_widgets/error_indicator.dart';
 import '../../../../common_widgets/expandable_text.dart';
@@ -20,6 +21,7 @@ import '../../../auth/presentation/user_controller.dart';
 import '../../../browse/data/categories_provider.dart';
 import '../../../browse/data/stores_provider.dart';
 import '../../../browse/domain/store.dart';
+import '../../../browse/presentation/widgets/store_item.dart';
 import '../../../settings/presentation/locale_controller.dart';
 import '../../domain/comment.dart';
 import '../../domain/deal.dart';
@@ -219,7 +221,20 @@ class _CarouselState extends State<_Carousel> {
                     '/deals/${widget.deal.id}/images?index=$currentIndex',
                     extra: images,
                   ),
-                  child: Image.network(url, fit: BoxFit.cover),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: url,
+                    errorWidget: (_, __, ___) => Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.error),
+                          const SizedBox(width: 4),
+                          Text(context.l.anErrorOccurred),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               )
               .toList(),
@@ -441,6 +456,7 @@ class _StoreImage extends StatelessWidget {
       child: CachedNetworkImage(
         height: 45,
         width: 45,
+        imageUrl: store.logo,
         imageBuilder: (ctx, imageProvider) => DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
@@ -448,8 +464,8 @@ class _StoreImage extends StatelessWidget {
             image: DecorationImage(image: imageProvider),
           ),
         ),
-        placeholder: (context, url) => const SizedBox.square(dimension: 40),
-        imageUrl: store.logo,
+        errorWidget: (_, __, ___) => const StoreImageShimmer(height: 45),
+        placeholder: (_, __) => const StoreImageShimmer(height: 45),
       ),
     );
   }
@@ -690,9 +706,10 @@ class _PosterDetails extends StatelessWidget {
         children: [
           CachedNetworkImage(
             imageUrl: poster.avatar!,
-            imageBuilder: (ctx, imageProvider) =>
+            imageBuilder: (_, imageProvider) =>
                 CircleAvatar(backgroundImage: imageProvider),
-            placeholder: (context, url) => const CircleAvatar(),
+            errorWidget: (_, __, ___) => const CircleAvatarShimmer(),
+            placeholder: (_, __) => const CircleAvatarShimmer(),
           ),
           const SizedBox(width: 8),
           Column(

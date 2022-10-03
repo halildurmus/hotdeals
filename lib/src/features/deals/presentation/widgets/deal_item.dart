@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../common_widgets/grayscale_filtered.dart';
 import '../../../../core/hotdeals_repository.dart';
@@ -350,15 +352,136 @@ class _DealCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+    return CachedNetworkImage(
+      height: 60,
+      width: 60,
+      imageUrl: photoUrl,
+      imageBuilder: (_, imageProvider) => DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: context.isDarkMode ? Colors.white : null,
+          image: DecorationImage(image: imageProvider),
+        ),
       ),
-      child: Image.network(
-        photoUrl,
-        fit: BoxFit.cover,
-        height: 60,
-        width: 60,
+      errorWidget: (_, __, ___) => const _DealCoverShimmer(),
+      placeholder: (_, __) => const _DealCoverShimmer(),
+    );
+  }
+}
+
+class _DealCoverShimmer extends StatelessWidget {
+  const _DealCoverShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor:
+          context.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300,
+      highlightColor:
+          context.isDarkMode ? Colors.grey.shade600 : Colors.grey.shade100,
+      child: SizedBox.square(
+        dimension: 60,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DealItemShimmer extends StatelessWidget {
+  const DealItemShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Shimmer.fromColors(
+        baseColor:
+            context.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300,
+        highlightColor:
+            context.isDarkMode ? Colors.grey.shade600 : Colors.grey.shade100,
+        child: ListTile(
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 8,
+          ),
+          leading: SizedBox.square(
+            dimension: 60,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+              ),
+            ),
+          ),
+          minVerticalPadding: 8,
+          title: Container(
+            height: DefaultTextStyle.of(context).style.fontSize! * .8,
+            margin: const EdgeInsets.only(right: 50),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.white,
+            ),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Wrap(
+              direction: Axis.vertical,
+              spacing: 8,
+              children: [
+                Container(
+                  height: DefaultTextStyle.of(context).style.fontSize! * .8,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                ),
+                Container(
+                  height: DefaultTextStyle.of(context).style.fontSize! * .8,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                  ),
+                ),
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    Container(
+                      height: DefaultTextStyle.of(context).style.fontSize! * .8,
+                      width: 35,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      height: DefaultTextStyle.of(context).style.fontSize! * .8,
+                      width: 35,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      height: DefaultTextStyle.of(context).style.fontSize! * .8,
+                      width: 35,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

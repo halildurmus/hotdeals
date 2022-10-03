@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loggy/loggy.dart' show UiLoggy;
 
+import '../../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../../common_widgets/custom_alert_dialog.dart';
 import '../../../../common_widgets/custom_snack_bar.dart';
 import '../../../../common_widgets/settings_list_item.dart';
@@ -73,7 +74,8 @@ class _UpdateProfileState extends ConsumerState<UpdateProfileScreen>
               imageUrl: user.avatar!,
               imageBuilder: (_, imageProvider) =>
                   CircleAvatar(backgroundImage: imageProvider),
-              placeholder: (_, __) => const CircleAvatar(),
+              errorWidget: (_, __, ___) => const CircleAvatarShimmer(),
+              placeholder: (_, __) => const CircleAvatarShimmer(),
             ),
             title: context.l.avatar,
           ),

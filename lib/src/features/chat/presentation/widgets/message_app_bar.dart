@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../../common_widgets/custom_alert_dialog.dart';
 import '../../../../common_widgets/custom_snack_bar.dart';
 import '../../../../common_widgets/report_user_dialog.dart';
@@ -116,7 +117,8 @@ class _MessageAppBarState extends ConsumerState<MessageAppBar> {
           imageUrl: widget.user2.avatar!,
           imageBuilder: (_, imageProvider) =>
               CircleAvatar(backgroundImage: imageProvider, radius: 16),
-          placeholder: (_, __) => const CircleAvatar(radius: 16),
+          errorWidget: (_, __, ___) => const CircleAvatarShimmer(radius: 16),
+          placeholder: (_, __) => const CircleAvatarShimmer(radius: 16),
         ),
         title: Text(
           widget.user2.nickname!,

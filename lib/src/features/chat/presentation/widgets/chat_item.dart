@@ -4,6 +4,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../common_widgets/circle_avatar_shimmer.dart';
 import '../../../../helpers/context_extensions.dart';
 import '../../../../helpers/date_time_helper.dart';
 import '../../../settings/presentation/locale_controller.dart';
@@ -38,7 +39,8 @@ class ChatItem extends ConsumerWidget {
             imageUrl: chat.user2.avatar!,
             imageBuilder: (_, imageProvider) =>
                 CircleAvatar(backgroundImage: imageProvider),
-            placeholder: (_, __) => const CircleAvatar(),
+            errorWidget: (_, __, ___) => const CircleAvatarShimmer(),
+            placeholder: (_, __) => const CircleAvatarShimmer(),
           ),
         ],
       ),

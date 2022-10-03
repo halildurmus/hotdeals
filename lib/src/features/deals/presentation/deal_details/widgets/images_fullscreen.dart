@@ -44,6 +44,24 @@ class _DealImagesFullScreen extends State<DealImagesFullScreen> {
                     imageProvider: NetworkImage(url),
                     backgroundDecoration:
                         BoxDecoration(color: context.t.backgroundColor),
+                    errorBuilder: (_, __, ___) => Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.error),
+                          const SizedBox(width: 4),
+                          Text(context.l.anErrorOccurred),
+                        ],
+                      ),
+                    ),
+                    loadingBuilder: (_, event) => Center(
+                      child: CircularProgressIndicator(
+                        value: event == null
+                            ? 0
+                            : event.cumulativeBytesLoaded /
+                                event.expectedTotalBytes!,
+                      ),
+                    ),
                   ),
                 )
                 .toList(),
