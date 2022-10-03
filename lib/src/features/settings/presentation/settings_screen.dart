@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../common_widgets/settings_list_item.dart';
 import '../../../common_widgets/settings_section.dart';
@@ -29,10 +27,6 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l.settings),
-        leading: IconButton(
-          onPressed: context.pop,
-          icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
-        ),
       ),
       body: Column(
         children: [

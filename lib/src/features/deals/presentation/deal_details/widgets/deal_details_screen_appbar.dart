@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common_widgets/custom_alert_dialog.dart';
@@ -119,10 +118,6 @@ class DealDetailsScreenAppBar extends ConsumerWidget {
           ),
       ],
       centerTitle: true,
-      leading: IconButton(
-        onPressed: context.pop,
-        icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
-      ),
       title: Text(deal.title),
     );
   }

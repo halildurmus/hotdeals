@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view.dart';
+
+import '../../../../helpers/context_extensions.dart';
 
 class ChatImagePreview extends StatelessWidget {
   const ChatImagePreview({
@@ -17,17 +17,10 @@ class ChatImagePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         title: Text(fileName),
-        titleSpacing: 0,
-        leading: IconButton(
-          onPressed: context.pop,
-          icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
-        ),
       ),
       body: PhotoView(
-        backgroundDecoration:
-            BoxDecoration(color: Theme.of(context).backgroundColor),
+        backgroundDecoration: BoxDecoration(color: context.t.backgroundColor),
         filterQuality: FilterQuality.low,
         imageProvider: NetworkImage(imageUri),
       ),

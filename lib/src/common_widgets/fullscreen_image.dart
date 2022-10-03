@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view.dart';
+
+import '../helpers/context_extensions.dart';
 
 class FullScreenImage extends StatelessWidget {
   const FullScreenImage({required this.imageUrl, super.key});
@@ -12,18 +12,11 @@ class FullScreenImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: context.pop,
-          icon: const Icon(FontAwesomeIcons.arrowLeft, size: 20),
-        ),
-      ),
+      appBar: AppBar(),
       body: CachedNetworkImage(
         imageUrl: imageUrl,
-        imageBuilder: (ctx, imageProvider) => PhotoView(
-          backgroundDecoration: BoxDecoration(
-            color: Theme.of(ctx).backgroundColor,
-          ),
+        imageBuilder: (context, imageProvider) => PhotoView(
+          backgroundDecoration: BoxDecoration(color: context.t.backgroundColor),
           filterQuality: FilterQuality.low,
           imageProvider: imageProvider,
         ),
