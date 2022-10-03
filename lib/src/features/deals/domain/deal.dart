@@ -4,8 +4,8 @@ enum DealVoteType { up, down, unvote }
 
 typedef Json = Map<String, dynamic>;
 
-List<Deal> dealsFromJson(List<dynamic> jsonArray) => List<Deal>.from(
-    jsonArray.map<dynamic>((dynamic e) => Deal.fromJson(e as Json)));
+List<Deal> dealsFromJson(List<dynamic> json) =>
+    List.from(json.map((e) => Deal.fromJson(e as Json)));
 
 class Deal {
   const Deal({
@@ -32,7 +32,7 @@ class Deal {
 
   factory Deal.fromJson(Json json) => Deal(
         id: json['id'] as String,
-        status: _getStatus(json['status'] as String),
+        status: _dealStatus(json['status'] as String),
         postedBy: json['postedBy'] as String,
         coverPhoto: json['coverPhoto'] as String,
         dealUrl: json['dealUrl'] as String,
@@ -47,13 +47,13 @@ class Deal {
         price: json['price'] as double,
         dealScore: json['dealScore'] as int,
         views: json['views'] as int,
-        isNew: _calculateIsNew(DateTime.parse(json['createdAt'] as String)),
+        isNew: _isDealNew(DateTime.parse(json['createdAt'] as String)),
         createdAt: DateTime.parse(json['createdAt'] as String),
       );
 
   factory Deal.fromJsonES(Json json) => Deal(
         id: json['id'] as String,
-        status: _getStatus(json['status'] as String),
+        status: _dealStatus(json['status'] as String),
         postedBy: json['postedBy'] as String,
         coverPhoto: json['coverPhoto'] as String,
         title: json['title'] as String,
@@ -68,7 +68,7 @@ class Deal {
         price: (json['numberFacets'] as List<dynamic>).singleWhere(
                 (e) => (e['facetName'] as String) == 'price')['facetValue']
             as double,
-        isNew: _calculateIsNew(DateTime.parse(json['createdAt'] as String)),
+        isNew: _isDealNew(DateTime.parse(json['createdAt'] as String)),
       );
 
   final String? id;
@@ -108,8 +108,8 @@ class Deal {
       'Deal{id: $id, status: $status, postedBy: $postedBy, coverPhoto: $coverPhoto, photos: $photos, title: $title, description: $description, dealScore: $dealScore, views: $views, category: $category, originalPrice: $originalPrice, price: $price, specialMark: $isNew, createdAt: $createdAt, updatedAt: $updatedAt}';
 }
 
-DealStatus _getStatus(String status) =>
+DealStatus _dealStatus(String status) =>
     DealStatus.values.byName(status.toLowerCase());
 
-bool _calculateIsNew(DateTime createdAt) =>
+bool _isDealNew(DateTime createdAt) =>
     DateTime.now().difference(createdAt) <= const Duration(days: 1);

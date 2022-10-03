@@ -1,8 +1,7 @@
 typedef Json = Map<String, dynamic>;
 
-List<MyUser> usersFromJson(List<dynamic> jsonArray) =>
-    List<MyUser>.from(jsonArray
-        .map<dynamic>((dynamic e) => MyUser.fromJsonExtendedDTO(e as Json)));
+List<MyUser> usersFromJson(List<dynamic> json) =>
+    List.from(json.map((e) => MyUser.fromJsonExtendedDTO(e as Json)));
 
 class MyUser {
   MyUser({
@@ -81,14 +80,10 @@ class MyUser {
   int get hashCode => id.hashCode ^ uid.hashCode;
 }
 
-Set<String> _setFromJson(List<dynamic> list) =>
-    <String>{}..addAll(List.from(list));
+Set<String> _setFromJson(List<dynamic> list) => {}..addAll(List.from(list));
 
 Map<String, String> _fcmTokensFromJson(Json json) {
   final fcmTokens = <String, String>{};
-  json.forEach((k, dynamic v) {
-    fcmTokens.putIfAbsent(k, () => v as String);
-  });
-
+  json.forEach((k, v) => fcmTokens.putIfAbsent(k, () => v as String));
   return fcmTokens;
 }

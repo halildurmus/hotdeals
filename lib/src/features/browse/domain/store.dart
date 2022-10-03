@@ -1,7 +1,7 @@
 typedef Json = Map<String, dynamic>;
 
-List<Store> storesFromJson(List<dynamic> jsonArray) =>
-    List<Store>.from(jsonArray.map((e) => Store.fromJson(e as Json)));
+List<Store> storesFromJson(List<dynamic> json) =>
+    List<Store>.from(json.map((e) => Store.fromJson(e as Json)));
 
 class Store {
   const Store({required this.name, required this.logo, this.id});
