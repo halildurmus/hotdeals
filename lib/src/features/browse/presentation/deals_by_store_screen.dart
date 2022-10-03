@@ -2,14 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../common_widgets/error_indicator.dart';
-import '../../../../core/hotdeals_repository.dart';
-import '../../../../helpers/context_extensions.dart';
-import '../../../deals/presentation/widgets/deal_paged_list_view.dart';
-import '../../domain/store.dart';
+import '../../../common_widgets/error_indicator.dart';
+import '../../../core/hotdeals_repository.dart';
+import '../../../helpers/context_extensions.dart';
+import '../../deals/presentation/widgets/deal_paged_list_view.dart';
+import '../domain/store.dart';
 
-class DealsByStore extends ConsumerWidget {
-  const DealsByStore({required this.store, super.key});
+class DealsByStoreScreen extends ConsumerWidget {
+  const DealsByStoreScreen(this.store, {super.key});
 
   final Store store;
 
@@ -49,6 +49,7 @@ class DealsByStore extends ConsumerWidget {
           icon: Icons.local_offer,
           title: context.l.couldNotFindAnyDeal,
         ),
+        usePushInNavigation: true,
       ),
     );
   }

@@ -10,8 +10,8 @@ import '../features/auth/presentation/sign_in_screen.dart';
 import '../features/auth/presentation/user_controller.dart';
 import '../features/browse/domain/category.dart';
 import '../features/browse/domain/store.dart';
-import '../features/browse/presentation/widgets/deals_by_category.dart';
-import '../features/browse/presentation/widgets/deals_by_store.dart';
+import '../features/browse/presentation/deals_by_category_screen.dart';
+import '../features/browse/presentation/deals_by_store_screen.dart';
 import '../features/chat/presentation/blocked_users_screen.dart';
 import '../features/chat/presentation/message_screen.dart';
 import '../features/chat/presentation/widgets/chat_image_preview.dart';
@@ -112,7 +112,7 @@ class RouterNotifier extends ChangeNotifier {
                   path: 'byCategory',
                   builder: (context, state) {
                     final category = state.extra! as Category;
-                    return DealsByCategory(category: category);
+                    return DealsByCategoryScreen(category);
                   },
                 ),
                 GoRoute(
@@ -120,7 +120,7 @@ class RouterNotifier extends ChangeNotifier {
                   path: 'byStore',
                   builder: (context, state) {
                     final store = state.extra! as Store;
-                    return DealsByStore(store: store);
+                    return DealsByStoreScreen(store);
                   },
                 ),
                 GoRoute(

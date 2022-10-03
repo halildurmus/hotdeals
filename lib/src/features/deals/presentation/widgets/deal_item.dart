@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
 
@@ -13,6 +12,7 @@ import '../../domain/deal.dart';
 
 class DealItem extends StatelessWidget {
   const DealItem({
+    required this.onTap,
     required this.deal,
     required this.index,
     required this.isFavorited,
@@ -24,6 +24,7 @@ class DealItem extends StatelessWidget {
     super.key,
   });
 
+  final VoidCallback onTap;
   final Deal deal;
   final int index;
   final bool isFavorited;
@@ -45,11 +46,11 @@ class DealItem extends StatelessWidget {
               Opacity(
                 opacity: .75,
                 child: GrayscaleColorFiltered(
-                  child: _Stack(deal: deal),
+                  child: _Stack(onTap, deal),
                 ),
               )
             else
-              _Stack(deal: deal),
+              _Stack(onTap, deal),
             if (showControlButtons)
               Positioned(
                 right: 48,
@@ -140,8 +141,9 @@ class _Mark extends StatelessWidget {
 }
 
 class _Stack extends ConsumerWidget {
-  const _Stack({required this.deal});
+  const _Stack(this.onTap, this.deal);
 
+  final VoidCallback onTap;
   final Deal deal;
 
   @override
@@ -159,7 +161,7 @@ class _Stack extends ConsumerWidget {
               borderRadius: BorderRadius.circular(8),
             ),
             child: ListTile(
-              onTap: () => context.go('/deals/${deal.id}'),
+              onTap: onTap,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 8,

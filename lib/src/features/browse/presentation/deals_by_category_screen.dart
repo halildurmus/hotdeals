@@ -3,24 +3,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart'
     show PagingController;
 
-import '../../../../common_widgets/error_indicator.dart';
-import '../../../../core/hotdeals_repository.dart';
-import '../../../../helpers/context_extensions.dart';
-import '../../../deals/domain/deal.dart';
-import '../../../deals/presentation/widgets/deal_paged_list_view.dart';
-import '../../domain/category.dart';
-import 'filter_chips.dart';
+import '../../../common_widgets/error_indicator.dart';
+import '../../../core/hotdeals_repository.dart';
+import '../../../helpers/context_extensions.dart';
+import '../../deals/domain/deal.dart';
+import '../../deals/presentation/widgets/deal_paged_list_view.dart';
+import '../domain/category.dart';
+import 'widgets/filter_chips.dart';
 
-class DealsByCategory extends ConsumerStatefulWidget {
-  const DealsByCategory({required this.category, super.key});
+class DealsByCategoryScreen extends ConsumerStatefulWidget {
+  const DealsByCategoryScreen(this.category, {super.key});
 
   final Category category;
 
   @override
-  ConsumerState<DealsByCategory> createState() => _DealsByCategoryState();
+  ConsumerState<DealsByCategoryScreen> createState() => _DealsByCategoryState();
 }
 
-class _DealsByCategoryState extends ConsumerState<DealsByCategory> {
+class _DealsByCategoryState extends ConsumerState<DealsByCategoryScreen> {
   late Category category;
   late PagingController<int, Deal> _pagingController;
 
@@ -71,6 +71,7 @@ class _DealsByCategoryState extends ConsumerState<DealsByCategory> {
                 title: context.l.couldNotFindAnyDeal,
               ),
               pagingController: _pagingController,
+              usePushInNavigation: true,
             ),
           ),
         ],

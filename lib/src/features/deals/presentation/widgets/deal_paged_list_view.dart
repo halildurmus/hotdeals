@@ -21,7 +21,6 @@ import 'deal_item.dart';
 class DealPagedListView extends ConsumerStatefulWidget {
   const DealPagedListView({
     required this.noDealsFound,
-    super.key,
     this.dealsFuture,
     this.pageSize = 20,
     this.pagingController,
@@ -29,20 +28,23 @@ class DealPagedListView extends ConsumerStatefulWidget {
     this.searchParams,
     this.searchResultsFuture,
     this.showFilterBar = false,
+    this.usePushInNavigation = false,
     this.useRefreshIndicator = true,
+    super.key,
   });
 
   const DealPagedListView.withFilterBar({
     required this.noDealsFound,
     required this.searchParams,
     required this.searchResultsFuture,
-    super.key,
     this.dealsFuture,
     this.pageSize = 20,
     this.pagingController,
     this.removeDealWhenUnfavorited = false,
     this.showFilterBar = true,
+    this.usePushInNavigation = false,
     this.useRefreshIndicator = false,
+    super.key,
   });
 
   final Future<List<Deal>> Function(int page, int size)? dealsFuture;
@@ -54,6 +56,7 @@ class DealPagedListView extends ConsumerStatefulWidget {
   final Future<SearchResponse> Function(int page, int size)?
       searchResultsFuture;
   final bool showFilterBar;
+  final bool usePushInNavigation;
   final bool useRefreshIndicator;
 
   @override
@@ -187,6 +190,9 @@ class _DealPagedListViewState extends ConsumerState<DealPagedListView>
           itemBuilder: (context, deal, index) {
             final isFavorited = user?.favorites!.contains(deal.id!) ?? false;
             return DealItem(
+              onTap: widget.usePushInNavigation
+                  ? () => context.push('/deals/${deal.id}')
+                  : () => context.go('/deals/${deal.id}'),
               deal: deal,
               index: index,
               isFavorited: isFavorited,

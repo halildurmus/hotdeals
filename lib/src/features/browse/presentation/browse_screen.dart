@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../helpers/context_extensions.dart';
-import 'widgets/browse_categories_tab.dart';
-import 'widgets/browse_stores_tab.dart';
+import '../data/categories_provider.dart';
+import '../data/stores_provider.dart';
+import 'widgets/category_item.dart';
+import 'widgets/store_item.dart';
 
 class BrowseScreen extends StatelessWidget {
   const BrowseScreen({super.key});
@@ -31,10 +34,48 @@ class BrowseScreen extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            BrowseCategoriesTab(),
-            BrowseStoresTab(),
+            _BrowseCategoriesTab(),
+            _BrowseStoresTab(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _BrowseCategoriesTab extends ConsumerWidget {
+  const _BrowseCategoriesTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final categories = ref.watch(categoriesProvider).mainCategories;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      child: ListView.builder(
+        itemCount: categories.length,
+        itemBuilder: (_, index) => CategoryItem(category: categories[index]),
+      ),
+    );
+  }
+}
+
+class _BrowseStoresTab extends ConsumerWidget {
+  const _BrowseStoresTab();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stores = ref.watch(storesProvider).stores;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          childAspectRatio: 1.2,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
+          maxCrossAxisExtent: 200,
+        ),
+        itemCount: stores.length,
+        itemBuilder: (_, index) => StoreItem(store: stores[index]),
       ),
     );
   }
