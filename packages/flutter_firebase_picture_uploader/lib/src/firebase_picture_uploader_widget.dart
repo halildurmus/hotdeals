@@ -157,6 +157,7 @@ class PictureUploadWidget extends StatefulWidget {
     this.enabled = true,
     this.initialImages,
     required this.onPicturesChange,
+    super.key,
   })  : buttonStyle = buttonStyle ?? PictureUploadButtonStyle(),
         localization = localization ?? PictureUploadLocalization(),
         settings = settings ?? PictureUploadSettings(),
@@ -187,7 +188,7 @@ class PictureUploadWidget extends StatefulWidget {
   final Function onPicturesChange;
 
   @override
-  _PictureUploadWidgetState createState() => _PictureUploadWidgetState();
+  State<PictureUploadWidget> createState() => _PictureUploadWidgetState();
 }
 
 /// State of the widget
@@ -214,7 +215,7 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
   }
 
   bool activeJobsContainUploadWidget() {
-    for (var job in _activeUploadedFiles) {
+    for (final job in _activeUploadedFiles) {
       if (job.storageReference == null &&
           job.image == null &&
           job.imageProvider == null &&
@@ -228,7 +229,7 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
 
   void onImageChange(UploadJob uploadJob) {
     // update UploadJobs list
-    for (int i = _activeUploadedFiles.length - 1; i >= 0; i--) {
+    for (var i = _activeUploadedFiles.length - 1; i >= 0; i--) {
       if (_activeUploadedFiles[i].id == uploadJob.id) {
         _activeUploadedFiles[i] = uploadJob;
         break;
@@ -252,7 +253,7 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
         // issue occurred? => remove
         if (uploadJob.storageReference == null) {
           // remove from active uploaded files
-          for (int i = _activeUploadedFiles.length - 1; i >= 0; i--) {
+          for (var i = _activeUploadedFiles.length - 1; i >= 0; i--) {
             if (_activeUploadedFiles[i].id == uploadJob.id) {
               _activeUploadedFiles.removeAt(i);
               break;
@@ -268,7 +269,7 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
       } else if (uploadJob.action == UploadAction.actionDelete &&
           uploadJob.image == null) {
         // remove from active uploaded files
-        for (int i = _activeUploadedFiles.length - 1; i >= 0; i--) {
+        for (var i = _activeUploadedFiles.length - 1; i >= 0; i--) {
           if (_activeUploadedFiles[i].id == uploadJob.id) {
             _activeUploadedFiles.removeAt(i);
             break;
@@ -291,14 +292,15 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
   }
 
   List<SingleProfilePictureUploadWidget> getCurrentlyUploadedFilesWidgets() {
-    final List<SingleProfilePictureUploadWidget> uploadedImages = [];
+    final uploadedImages = <SingleProfilePictureUploadWidget>[];
 
-    int cnt = 0;
+    var cnt = 0;
 
-    for (UploadJob uploadJob in _activeUploadedFiles) {
-      int displayedImagesCount = _activeUploadedFiles.length;
-      if (activeJobsContainUploadWidget())
+    for (final uploadJob in _activeUploadedFiles) {
+      var displayedImagesCount = _activeUploadedFiles.length;
+      if (activeJobsContainUploadWidget()) {
         displayedImagesCount = displayedImagesCount - 1;
+      }
 
       uploadedImages.add(SingleProfilePictureUploadWidget(
         initialValue: uploadJob,
@@ -320,8 +322,7 @@ class _PictureUploadWidgetState extends State<PictureUploadWidget> {
       _activeUploadedFiles.add(UploadJob());
     }
 
-    final List<SingleProfilePictureUploadWidget> pictureUploadWidgets =
-        getCurrentlyUploadedFilesWidgets();
+    final pictureUploadWidgets = getCurrentlyUploadedFilesWidgets();
 
     return Wrap(
         spacing: 5.0,
@@ -353,7 +354,7 @@ class SingleProfilePictureUploadWidget extends StatefulWidget {
   final FirebasePictureUploadController pictureUploadController;
 
   @override
-  _SingleProfilePictureUploadWidgetState createState() =>
+  State<SingleProfilePictureUploadWidget> createState() =>
       _SingleProfilePictureUploadWidgetState();
 }
 
@@ -380,8 +381,9 @@ class _SingleProfilePictureUploadWidgetState
   void onProfileImageURLReceived(String? downloadURL) {
     if (downloadURL != null) {
       setState(() {
-        _uploadJob.imageProvider = CachedNetworkImageProvider(downloadURL);
-        _uploadJob.uploadProcessing = false;
+        _uploadJob
+          ..imageProvider = CachedNetworkImageProvider(downloadURL)
+          ..uploadProcessing = false;
       });
     }
   }
@@ -505,8 +507,9 @@ class _SingleProfilePictureUploadWidgetState
 
     // update display state
     setState(() {
-      _uploadJob.image = finalImage;
-      _uploadJob.uploadProcessing = true;
+      _uploadJob
+        ..image = finalImage
+        ..uploadProcessing = true;
     });
     widget.onPictureChange(_uploadJob);
 
@@ -526,14 +529,12 @@ class _SingleProfilePictureUploadWidgetState
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (error, stackTrace) {
-      _uploadJob.image = null;
-      _uploadJob.storageReference = null;
+      _uploadJob
+        ..image = null
+        ..storageReference = null;
 
       if (widget.pictureUploadWidget.settings.onErrorFunction != null) {
         widget.pictureUploadWidget.settings.onErrorFunction!(error, stackTrace);
-      } else {
-        print(error);
-        print(stackTrace);
       }
     }
 
@@ -575,9 +576,6 @@ class _SingleProfilePictureUploadWidgetState
 
       if (widget.pictureUploadWidget.settings.onErrorFunction != null) {
         widget.pictureUploadWidget.settings.onErrorFunction!(error, stackTrace);
-      } else {
-        print(error);
-        print(stackTrace);
       }
     }
 
@@ -629,7 +627,7 @@ class _SingleProfilePictureUploadWidgetState
   }
 
   Widget getExistingImageWidget() {
-    final Container existingImageWidget = Container(
+    final existingImageWidget = Container(
       padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
@@ -651,10 +649,10 @@ class _SingleProfilePictureUploadWidgetState
       ),
     );
 
-    final Widget processingIndicator = Container(
+    final Widget processingIndicator = SizedBox(
       width: widget.pictureUploadWidget.buttonStyle.width,
       height: widget.pictureUploadWidget.buttonStyle.height + 10,
-      child: const Center(child: const CircularProgressIndicator()),
+      child: const Center(child: CircularProgressIndicator()),
     );
 
     final Widget deleteButton = SizedBox(
@@ -735,22 +733,23 @@ class UploadJob {
   set storageReference(Reference? storageReference) {
     _storageReference = storageReference;
     if (_storageReference != null && _storageReference!.fullPath != '') {
-      final String fileName = _storageReference!.fullPath.split('/').last;
+      final fileName = _storageReference!.fullPath.split('/').last;
 
       // The filename mist be like custom1_..._custom_x_id_customy.(jpg|png|...)
-      final List<String> fileParts = fileName.split('_');
-      final String id = fileParts[fileParts.length - 2];
+      final fileParts = fileName.split('_');
+      final id = fileParts[fileParts.length - 2];
       this.id = int.parse(id);
     }
   }
 
   bool compareTo(UploadJob other) {
-    if (storageReference != null && other.storageReference != null)
+    if (storageReference != null && other.storageReference != null) {
       return storageReference!.fullPath == other.storageReference!.fullPath;
-    else if (image != null && other.image != null)
+    } else if (image != null && other.image != null) {
       return image!.path == other.image!.path;
-    else
+    } else {
       return false;
+    }
   }
 
   @override
@@ -759,7 +758,7 @@ class UploadJob {
       return false;
     }
 
-    final UploadJob otherUploadJob = other;
+    final otherUploadJob = other;
 
     return id == otherUploadJob.id;
   }

@@ -2,10 +2,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class FirestoreImage extends StatefulWidget {
-  FirestoreImage({
+  const FirestoreImage({
     required this.reference,
     required this.fallback,
     required this.placeholder,
+    super.key,
   });
 
   final Reference reference;
@@ -13,27 +14,23 @@ class FirestoreImage extends StatefulWidget {
   final ImageProvider placeholder;
 
   @override
-  FirestoreImageState createState() =>
-      FirestoreImageState(reference, fallback, placeholder);
+  State<FirestoreImage> createState() => _FirestoreImageState();
 }
 
-class FirestoreImageState extends State<FirestoreImage> {
-  FirestoreImageState(Reference reference, this.fallback, this.placeholder) {
-    reference
+class _FirestoreImageState extends State<FirestoreImage> {
+  late String _imageUrl;
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    widget.reference
         .getDownloadURL()
         .then(_setImageData)
         .catchError((error, stackTrace) {
       _setError();
-      //Catcher.reportCheckedError(error, stackTrace);
-      print(stackTrace);
     });
+    super.initState();
   }
-
-  final Widget fallback;
-  final ImageProvider placeholder;
-
-  late String _imageUrl;
-  bool _loaded = false;
 
   void _setImageData(dynamic url) {
     setState(() {
@@ -54,8 +51,8 @@ class FirestoreImageState extends State<FirestoreImage> {
         ? FadeInImage(
             fit: BoxFit.fitWidth,
             image: NetworkImage(_imageUrl),
-            placeholder: placeholder,
+            placeholder: widget.placeholder,
           )
-        : fallback;
+        : widget.fallback;
   }
 }

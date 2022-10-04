@@ -25,20 +25,16 @@ class FirebasePictureUploadController {
     if (useCaching) {
       try {
         persistentKeyValueStore ??= await SharedPreferences.getInstance();
-        final String? cachedURL =
-            persistentKeyValueStore!.getString(storageURL);
+        final cachedURL = persistentKeyValueStore!.getString(storageURL);
         if (cachedURL != null) {
           return cachedURL;
         }
-      } on Exception catch (error, stackTrace) {
-        print(error);
-        print(stackTrace);
-      }
+      } catch (_) {}
     }
 
     // if downloadLink is null get it from the storage
     try {
-      final String downloadLink =
+      final downloadLink =
           await _storageInstance.ref().child(storageURL).getDownloadURL();
 
       // cache link
@@ -58,12 +54,12 @@ class FirebasePictureUploadController {
 
   Future<Reference> uploadProfilePicture(
       File image, String uploadDirectory, int id) async {
-    final String uploadPath = '$uploadDirectory${id.toString()}_800.jpg';
-    final Reference imgRef = _storageInstance.ref().child(uploadPath);
+    final uploadPath = '$uploadDirectory${id.toString()}_800.jpg';
+    final imgRef = _storageInstance.ref().child(uploadPath);
 
     // start upload
-    final UploadTask uploadTask =
-        imgRef.putFile(image, new SettableMetadata(contentType: 'image/jpg'));
+    final uploadTask =
+        imgRef.putFile(image, SettableMetadata(contentType: 'image/jpg'));
 
     // wait until upload is complete
     try {
