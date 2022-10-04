@@ -33,10 +33,9 @@ class ConnectionService {
   // Checks if there is a connection.
   Future<bool> checkConnection() async {
     // TODO(halildurmus): Get rid of this workaround
-    // Sometimes the connectivity check will return true even though the device
-    // is offline. I think this happens because the onConnectivityChanged callback
-    // is triggered so fast that when this function does a lookup, the device is
-    // still online. To fix this, I added a 1-second delay as a workaround.
+    // Sometimes the onConnectivityChanged callback is triggered so fast that
+    // when this function does a lookup, the device is still connected to the
+    // internet. To fix this, I added a 1-second delay as a workaround.
     await Future<void>.delayed(const Duration(seconds: 1));
     final previousConnection = hasConnection;
     try {
