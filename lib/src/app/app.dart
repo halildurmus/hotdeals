@@ -44,12 +44,12 @@ class MyApp extends ConsumerWidget with NetworkLoggy {
 
     return categoriesAndStores.maybeWhen(
       data: (data) {
-        loggy.info('Categories and stores loaded successfully.');
+        loggy.info('Categories and stores fetched successfully.');
         ref.read(categoriesProvider).categories = data[0] as List<Category>;
         ref.read(storesProvider).stores = data[1] as List<Store>;
         final locale = ref.watch(localeControllerProvider);
-        final themeMode = ref.watch(themeModeControllerProvider);
         final router = ref.watch(routerProvider);
+        final themeMode = ref.watch(themeModeControllerProvider);
 
         return MaterialApp.router(
           builder: (context, child) => OfflineBuilder(child: child),
@@ -57,9 +57,7 @@ class MyApp extends ConsumerWidget with NetworkLoggy {
           debugShowCheckedModeBanner: false,
           locale: locale,
           localizationsDelegates: localizationDelegates,
-          routeInformationParser: router.routeInformationParser,
-          routeInformationProvider: router.routeInformationProvider,
-          routerDelegate: router.routerDelegate,
+          routerConfig: router,
           supportedLocales: supportedLocales,
           theme: lightAppTheme,
           themeMode: themeMode,
