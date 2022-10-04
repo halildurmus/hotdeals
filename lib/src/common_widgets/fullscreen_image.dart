@@ -16,11 +16,10 @@ class FullScreenImage extends StatelessWidget {
       body: CachedNetworkImage(
         imageUrl: imageUrl,
         imageBuilder: (_, imageProvider) => PhotoView(
-            backgroundDecoration:
-                BoxDecoration(color: context.t.backgroundColor),
-            filterQuality: FilterQuality.low,
-            imageProvider: imageProvider,
-          ),
+          backgroundDecoration: BoxDecoration(color: context.t.backgroundColor),
+          filterQuality: FilterQuality.low,
+          imageProvider: imageProvider,
+        ),
         errorWidget: (_, __, ___) => Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +30,7 @@ class FullScreenImage extends StatelessWidget {
             ],
           ),
         ),
-        progressIndicatorBuilder: (context, url, progress) => Center(
+        progressIndicatorBuilder: (_, __, progress) => Center(
           child: CircularProgressIndicator(value: progress.progress),
         ),
       ),

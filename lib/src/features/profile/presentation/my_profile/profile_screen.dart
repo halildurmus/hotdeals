@@ -32,8 +32,12 @@ class ProfileScreen extends ConsumerWidget {
         length: 2,
         child: NestedScrollView(
           headerSliverBuilder: (context, value) => [
-            SliverToBoxAdapter(child: ProfileDetails(user: user)),
-            const SliverToBoxAdapter(child: MyProfileTabBar()),
+            SliverToBoxAdapter(
+              child: ProfileDetails(user: user),
+            ),
+            const SliverToBoxAdapter(
+              child: MyProfileTabBar(),
+            ),
           ],
           body: const TabBarView(
             children: [
