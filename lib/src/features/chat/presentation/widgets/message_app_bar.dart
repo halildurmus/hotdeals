@@ -28,19 +28,20 @@ class _MessageAppBarState extends ConsumerState<MessageAppBar> {
       title: context.l.blockUser,
       content: context.l.blockConfirm,
       defaultAction: () async {
-        final result = await ref
+        final result = await AsyncValue.guard(() => ref
             .read(hotdealsRepositoryProvider)
-            .blockUser(userId: widget.user2.id!);
-        if (result) {
-          await ref.read(userProvider.notifier).refreshUser();
-          if (!mounted) return;
-          CustomSnackBar.success(text: context.l.successfullyBlocked)
-              .showSnackBar(context);
-        } else {
-          if (!mounted) return;
-          CustomSnackBar.error(text: context.l.anErrorOccurredWhileBlocking)
-              .showSnackBar(context);
-        }
+            .blockUser(userId: widget.user2.id!));
+        result.maybeWhen(
+          data: (data) async {
+            await ref.read(userProvider.notifier).refreshUser();
+            if (!mounted) return;
+            CustomSnackBar.success(text: context.l.successfullyBlocked)
+                .showSnackBar(context);
+          },
+          orElse: () =>
+              CustomSnackBar.error(text: context.l.anErrorOccurredWhileBlocking)
+                  .showSnackBar(context),
+        );
       },
       cancelActionText: context.l.cancel,
     ).show(context);
@@ -51,19 +52,20 @@ class _MessageAppBarState extends ConsumerState<MessageAppBar> {
       title: context.l.unblockUser,
       content: context.l.unblockConfirm,
       defaultAction: () async {
-        final result = await ref
+        final result = await AsyncValue.guard(() => ref
             .read(hotdealsRepositoryProvider)
-            .unblockUser(userId: widget.user2.id!);
-        if (result) {
-          await ref.read(userProvider.notifier).refreshUser();
-          if (!mounted) return;
-          CustomSnackBar.success(text: context.l.successfullyUnblocked)
-              .showSnackBar(context);
-        } else {
-          if (!mounted) return;
-          CustomSnackBar.error(text: context.l.anErrorOccurredWhileUnblocking)
-              .showSnackBar(context);
-        }
+            .unblockUser(userId: widget.user2.id!));
+        result.maybeWhen(
+          data: (data) async {
+            await ref.read(userProvider.notifier).refreshUser();
+            if (!mounted) return;
+            CustomSnackBar.success(text: context.l.successfullyUnblocked)
+                .showSnackBar(context);
+          },
+          orElse: () => CustomSnackBar.error(
+                  text: context.l.anErrorOccurredWhileUnblocking)
+              .showSnackBar(context),
+        );
       },
       cancelActionText: context.l.cancel,
     ).show(context);

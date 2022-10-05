@@ -15,8 +15,9 @@ class UserController extends StateNotifier<MyUser?> {
   UserController(Ref ref)
       : _hotdealsApi = ref.read(hotdealsRepositoryProvider),
         _notificationService = ref.read(notificationServiceProvider),
+        _ref = ref,
         super(null) {
-    ref.watch(authStateChangesProvider).maybeWhen(
+    ref.watch(idTokenChangesProvider).maybeWhen(
           data: _handleAuthStateChanges,
           orElse: () => null,
         );
@@ -24,14 +25,17 @@ class UserController extends StateNotifier<MyUser?> {
 
   final HotdealsApi _hotdealsApi;
   final NotificationService _notificationService;
+  final Ref _ref;
 
   Future<void> _handleAuthStateChanges(User? user) async {
     if (user == null) {
       if (state == null) return;
+      _ref.read(idTokenProvider.notifier).state = null;
       state = null;
       return;
     }
 
+    _ref.read(idTokenProvider.notifier).state = await user.getIdToken();
     await refreshUser();
     await _notificationService.subscribe();
   }

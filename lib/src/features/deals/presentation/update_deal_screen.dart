@@ -32,20 +32,21 @@ class _UpdateDealScreenState extends ConsumerState<UpdateDealScreen> {
             buttonTitle: context.l.updateDeal,
             deal: widget.deal,
             onPressed: (deal) async {
-              final updatedDeal = await ref
-                  .read(hotdealsRepositoryProvider)
-                  .updateDeal(deal: deal);
+              final updatedDeal = await AsyncValue.guard(() =>
+                  ref.read(hotdealsRepositoryProvider).updateDeal(deal: deal));
               if (!mounted) return;
               // Pops the loading dialog.
               Navigator.of(context).pop();
-              if (updatedDeal != null) {
-                CustomSnackBar.success(
-                  text: context.l.successfullyUpdatedYourDeal,
-                ).showSnackBar(context);
-                context.go('/deals/${updatedDeal.id}');
-              } else {
-                const CustomSnackBar.error().showSnackBar(context);
-              }
+              updatedDeal.maybeWhen(
+                data: (data) {
+                  CustomSnackBar.success(
+                    text: context.l.successfullyUpdatedYourDeal,
+                  ).showSnackBar(context);
+                  context.go('/deals/${data.id}');
+                },
+                orElse: () =>
+                    const CustomSnackBar.error().showSnackBar(context),
+              );
             },
           ),
         ),

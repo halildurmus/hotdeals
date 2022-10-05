@@ -54,11 +54,13 @@ class PostCommentDialogController with NetworkLoggy {
       avatar: poster.avatar!,
       tokens: poster.fcmTokens!.values.toList(),
     );
-    final result = await _hotdealsRepository.sendPushNotification(
-        notification: notification);
-    if (result) {
-      loggy.info('Push notification sent to: ${poster.nickname}');
-    }
+    final result = await AsyncValue.guard(() =>
+        _hotdealsRepository.sendPushNotification(notification: notification));
+    result.maybeWhen(
+      data: (_) => loggy.info('Push notification sent to: ${poster.nickname}'),
+      orElse: () => loggy
+          .error('Push notification failed to sent to: ${poster.nickname}'),
+    );
   }
 
   Future<void> postComment({
@@ -68,17 +70,18 @@ class PostCommentDialogController with NetworkLoggy {
     required VoidCallback onSuccess,
   }) async {
     final comment = Comment(message: textController.text);
-    final result = await _hotdealsRepository.postComment(
-        dealId: deal.id!, comment: comment);
-    if (result != null) {
-      // Send push notification to the poster if the commentator is not
-      // the poster.
-      if (poster.id! != deal.postedBy!) {
-        await _sendPushNotification(comment: result, deal: deal);
-      }
-      onSuccess();
-    } else {
-      onFailure();
-    }
+    final result = await AsyncValue.guard(() =>
+        _hotdealsRepository.postComment(dealId: deal.id!, comment: comment));
+    result.maybeWhen(
+      data: (data) async {
+        // Send push notification to the poster if the commentator is not
+        // the poster.
+        if (poster.id! != deal.postedBy!) {
+          await _sendPushNotification(comment: data, deal: deal);
+        }
+        onSuccess();
+      },
+      orElse: onFailure,
+    );
   }
 }

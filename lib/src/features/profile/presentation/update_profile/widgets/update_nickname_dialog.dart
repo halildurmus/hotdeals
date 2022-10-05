@@ -29,7 +29,13 @@ class UpdateNicknameDialog extends ConsumerWidget with UiLoggy {
       if (!next.isRefreshing) {
         Navigator.of(context).pop();
         if (next.hasError) {
-          const CustomSnackBar.error().showSnackBar(context);
+          const errorMessage = 'This nickname is already being used!';
+          if (next.error.toString().contains(errorMessage)) {
+            const CustomSnackBar.error(text: errorMessage)
+                .showSnackBar(context);
+          } else {
+            const CustomSnackBar.error().showSnackBar(context);
+          }
         } else if (next.value ?? false) {
           CustomSnackBar.success(
             text: context.l.successfullyUpdatedYourNickname,

@@ -40,8 +40,11 @@ class ReportCommentDialogController {
           : null,
     );
 
-    final result =
-        await _hotdealsRepository.reportComment(dealId: dealId, report: report);
-    result ? onSuccess() : onFailure();
+    final result = await AsyncValue.guard(() =>
+        _hotdealsRepository.reportComment(dealId: dealId, report: report));
+    result.maybeWhen(
+      data: (_) => onSuccess(),
+      orElse: onFailure,
+    );
   }
 }

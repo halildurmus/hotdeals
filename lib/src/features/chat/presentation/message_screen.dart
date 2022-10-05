@@ -93,12 +93,15 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with UiLoggy {
       tokens: widget.user2.fcmTokens!.values.toList(),
     );
 
-    final result = await ref
+    final result = await AsyncValue.guard(() => ref
         .read(hotdealsRepositoryProvider)
-        .sendPushNotification(notification: notification);
-    if (result) {
-      loggy.debug('Push notification sent to: ${widget.user2.nickname}');
-    }
+        .sendPushNotification(notification: notification));
+    result.maybeWhen(
+      data: (_) =>
+          loggy.info('Push notification sent to: ${widget.user2.nickname}'),
+      orElse: () => loggy.error(
+          'Push notification failed to send to: ${widget.user2.nickname}'),
+    );
   }
 
   Future<String> saveFile(String fileURL, String messageID) async {

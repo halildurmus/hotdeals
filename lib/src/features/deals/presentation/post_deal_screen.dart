@@ -28,22 +28,21 @@ class _PostDealScreenState extends ConsumerState<PostDealScreen> {
           child: DealForm(
             buttonTitle: context.l.postDeal,
             onPressed: (deal) async {
-              final postedDeal = await ref
-                  .read(hotdealsRepositoryProvider)
-                  .postDeal(deal: deal);
-
+              final postedDeal = await AsyncValue.guard(() =>
+                  ref.read(hotdealsRepositoryProvider).postDeal(deal: deal));
               if (!mounted) return;
               // Pops the loading dialog.
               Navigator.of(context).pop();
-
-              if (postedDeal != null) {
-                CustomSnackBar.success(
-                  text: context.l.successfullyPostedYourDeal,
-                ).showSnackBar(context);
-                context.go('/deals/${postedDeal.id}');
-              } else {
-                const CustomSnackBar.error().showSnackBar(context);
-              }
+              postedDeal.maybeWhen(
+                data: (data) {
+                  CustomSnackBar.success(
+                    text: context.l.successfullyPostedYourDeal,
+                  ).showSnackBar(context);
+                  context.go('/deals/${data.id}');
+                },
+                orElse: () =>
+                    const CustomSnackBar.error().showSnackBar(context),
+              );
             },
           ),
         ),

@@ -41,7 +41,11 @@ class ReportDealDialogController {
           : null,
     );
 
-    final result = await _hotdealsRepository.reportDeal(report: report);
-    result ? onSuccess() : onFailure();
+    final result = await AsyncValue.guard(
+        () => _hotdealsRepository.reportDeal(report: report));
+    result.maybeWhen(
+      data: (_) => onSuccess(),
+      orElse: onFailure,
+    );
   }
 }

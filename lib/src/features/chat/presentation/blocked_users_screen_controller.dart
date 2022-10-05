@@ -21,7 +21,11 @@ class BlockedUsersScreenController {
     required VoidCallback onFailure,
     required VoidCallback onSuccess,
   }) async {
-    final result = await _hotdealsRepository.unblockUser(userId: userId);
-    result ? onSuccess() : onFailure();
+    final result = await AsyncValue.guard(
+        () => _hotdealsRepository.unblockUser(userId: userId));
+    result.maybeWhen(
+      data: (_) => onSuccess(),
+      orElse: onFailure,
+    );
   }
 }

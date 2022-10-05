@@ -12,21 +12,21 @@ import '../../../core/hotdeals_repository.dart';
 import 'auth_api.dart';
 
 final authApiProvider = Provider<AuthApi>(
-  (ref) =>
-      FirebaseAuthRepository(ref.read, firebaseAuth: FirebaseAuth.instance),
+  (ref) => FirebaseAuthRepository(ref.read, FirebaseAuth.instance),
   name: 'AuthApiProvider',
 );
 
-final authStateChangesProvider = StreamProvider<User?>(
-  (ref) => ref.watch(authApiProvider).authStateChanges,
-  name: 'AuthStateChangesProvider',
+final idTokenChangesProvider = StreamProvider<User?>(
+  (ref) => ref.watch(authApiProvider).idTokenChanges,
+  name: 'IdTokenChangesProvider',
 );
 
+final idTokenProvider =
+    StateProvider<String?>((ref) => null, name: 'IdTokenProvider');
+
 class FirebaseAuthRepository with NetworkLoggy implements AuthApi {
-  FirebaseAuthRepository(
-    Reader read, {
-    required FirebaseAuth firebaseAuth,
-  })  : _firebaseAuth = firebaseAuth,
+  FirebaseAuthRepository(Reader read, FirebaseAuth firebaseAuth)
+      : _firebaseAuth = firebaseAuth,
         _hotdealsApi = read(hotdealsRepositoryProvider);
 
   final FirebaseAuth _firebaseAuth;
@@ -37,6 +37,12 @@ class FirebaseAuthRepository with NetworkLoggy implements AuthApi {
 
   @override
   User? get currentUser => _firebaseAuth.currentUser;
+
+  @override
+  Stream<User?> get idTokenChanges => _firebaseAuth.idTokenChanges();
+
+  @override
+  Future<String?> getIdToken() => currentUser!.getIdToken();
 
   Future<void> _saveUserToMongo(User user) async {
     try {
@@ -101,7 +107,6 @@ class FirebaseAuthRepository with NetworkLoggy implements AuthApi {
   Future<void> signOut() async {
     await FacebookAuth.instance.logOut();
     await GoogleSignIn().signOut();
-
     return _firebaseAuth.signOut();
   }
 }

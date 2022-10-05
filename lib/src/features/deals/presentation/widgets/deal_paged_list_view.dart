@@ -116,34 +116,29 @@ class _DealPagedListViewState extends ConsumerState<DealPagedListView>
     }
   }
 
-  void onFavoriteButtonPressed(MyUser? user, String dealId, bool isFavorited) {
+  void onFavoriteButtonPressed(
+      MyUser? user, String dealId, bool isFavorited) async {
     if (!isFavorited) {
-      ref
-          .read(hotdealsRepositoryProvider)
-          .favoriteDeal(dealId: dealId)
-          .then((result) {
-        if (result) {
-          ref.read(userProvider.notifier).refreshUser();
-        } else {
-          CustomSnackBar.error(text: context.l.favoriteDealError)
-              .showSnackBar(context);
-        }
-      });
+      final result = await AsyncValue.guard(() =>
+          ref.read(hotdealsRepositoryProvider).favoriteDeal(dealId: dealId));
+      result.maybeWhen(
+        data: (_) => ref.read(userProvider.notifier).refreshUser(),
+        orElse: () => CustomSnackBar.error(text: context.l.favoriteDealError)
+            .showSnackBar(context),
+      );
     } else {
-      ref
-          .read(hotdealsRepositoryProvider)
-          .unfavoriteDeal(dealId: dealId)
-          .then((result) {
-        if (result) {
+      final result = await AsyncValue.guard(() =>
+          ref.read(hotdealsRepositoryProvider).unfavoriteDeal(dealId: dealId));
+      result.maybeWhen(
+        data: (_) {
           ref.read(userProvider.notifier).refreshUser();
           if (widget.removeDealWhenUnfavorited) {
             _pagingController.itemList?.removeWhere((e) => e.id == dealId);
           }
-        } else {
-          CustomSnackBar.error(text: context.l.unfavoriteDealError)
-              .showSnackBar(context);
-        }
-      });
+        },
+        orElse: () => CustomSnackBar.error(text: context.l.unfavoriteDealError)
+            .showSnackBar(context),
+      );
     }
   }
 
@@ -152,20 +147,19 @@ class _DealPagedListViewState extends ConsumerState<DealPagedListView>
       title: context.l.deleteConfirm,
       cancelActionText: context.l.cancel,
       defaultAction: () async {
-        final isDealDeleted = await ref
-            .read(hotdealsRepositoryProvider)
-            .deleteDeal(dealId: deal.id!);
-        if (isDealDeleted) {
-          // Deletes the deal images.
-          await ref
-              .read(firebaseStorageServiceProvider)
-              .deleteImagesFromUrl([deal.coverPhoto, ...deal.photos!]);
-          _pagingController.refresh();
-        } else {
-          if (!mounted) return;
-          CustomSnackBar.error(text: context.l.deleteDealError)
-              .showSnackBar(context);
-        }
+        final result = await AsyncValue.guard(() =>
+            ref.read(hotdealsRepositoryProvider).deleteDeal(dealId: deal.id!));
+        result.maybeWhen(
+          data: (_) async {
+            // Deletes the deal images.
+            await ref
+                .read(firebaseStorageServiceProvider)
+                .deleteImagesFromUrl([deal.coverPhoto, ...deal.photos!]);
+            _pagingController.refresh();
+          },
+          orElse: () => CustomSnackBar.error(text: context.l.deleteDealError)
+              .showSnackBar(context),
+        );
       },
       defaultActionText: context.l.delete,
     ).show(context);

@@ -14,40 +14,42 @@ import '../features/search/domain/search_response.dart';
 import '../features/search/domain/search_suggestion.dart';
 
 abstract class HotdealsApi {
-  Future<bool> blockUser({required String userId});
+  Future<void> blockUser({required String userId});
 
-  Future<bool> unblockUser({required String userId});
+  Future<void> unblockUser({required String userId});
 
-  Future<bool> favoriteDeal({required String dealId});
+  Future<void> favoriteDeal({required String dealId});
 
-  Future<bool> unfavoriteDeal({required String dealId});
+  Future<void> unfavoriteDeal({required String dealId});
 
-  Future<Deal?> postDeal({required Deal deal});
+  Future<Deal> postDeal({required Deal deal});
 
-  Future<Deal?> updateDeal({required Deal deal});
+  Future<Deal> updateDeal({required Deal deal});
 
-  Future<bool> deleteDeal({required String dealId});
+  Future<void> deleteDeal({required String dealId});
 
-  Future<bool> sendPushNotification({required PushNotification notification});
+  Future<void> sendPushNotification({
+    required PushNotification notification,
+  });
 
-  Future<bool> reportComment({
+  Future<void> reportComment({
     required String dealId,
     required CommentReport report,
   });
 
-  Future<bool> reportDeal({required DealReport report});
+  Future<void> reportDeal({required DealReport report});
 
-  Future<bool> reportUser({required UserReport report});
+  Future<void> reportUser({required UserReport report});
 
-  Future<Comments?> getDealComments({
+  Future<Comments> getDealComments({
     required String dealId,
     int? page,
     int? size,
   });
 
-  Future<int?> getDealCommentCount({required String dealId});
+  Future<int> getDealCommentCount({required String dealId});
 
-  Future<Comment?> postComment({
+  Future<Comment> postComment({
     required String dealId,
     required Comment comment,
   });
@@ -58,9 +60,9 @@ abstract class HotdealsApi {
 
   Future<MyUser> createMongoUser(User user);
 
-  Future<MyUser?> getMongoUser();
+  Future<MyUser> getMongoUser();
 
-  Future<List<MyUser>?> getBlockedUsers();
+  Future<List<MyUser>> getBlockedUsers();
 
   Future<MyUser> getUserExtendedById({required String id});
 
@@ -68,9 +70,12 @@ abstract class HotdealsApi {
 
   Future<MyUser> getUserByUid({required String uid});
 
-  Future<bool> addFCMToken({required String deviceId, required String token});
+  Future<void> addFCMToken({
+    required String deviceId,
+    required String token,
+  });
 
-  Future<bool> deleteFCMToken({required String token});
+  Future<void> deleteFCMToken({required String token});
 
   Future<Deal> updateDealStatus({
     required String dealId,
@@ -89,7 +94,9 @@ abstract class HotdealsApi {
 
   Future<List<Deal>> getUserFavorites({int? page, int? size});
 
-  Future<SearchSuggestion> getDealSuggestions({required String query});
+  Future<SearchSuggestion> getDealSuggestions({
+    required String query,
+  });
 
   Future<List<Deal>> getUserDeals({int? page, int? size});
 
@@ -99,7 +106,9 @@ abstract class HotdealsApi {
     int? size,
   });
 
-  Future<SearchResponse> searchDeals({required SearchParams searchParams});
+  Future<SearchResponse> searchDeals({
+    required SearchParams searchParams,
+  });
 
   Future<List<Deal>> getDealsByStoreId({
     required String storeId,
@@ -111,15 +120,17 @@ abstract class HotdealsApi {
 
   Future<List<Deal>> getMostLikedDeals({int? page, int? size});
 
-  Future<int?> getNumberOfCommentsPostedByUser({required String userId});
+  Future<int> getNumberOfCommentsPostedByUser({
+    required String userId,
+  });
 
-  Future<int?> getNumberOfDealsByStoreId({required String storeId});
+  Future<int> getNumberOfDealsByStoreId({required String storeId});
 
-  Future<int?> getNumberOfDealsPostedByUser({required String userId});
+  Future<int> getNumberOfDealsPostedByUser({required String userId});
 
-  Future<Deal?> getDealById({required String dealId});
+  Future<Deal> getDealById({required String dealId});
 
-  Future<Deal?> voteDeal({
+  Future<Deal> voteDeal({
     required String dealId,
     required DealVoteType voteType,
   });

@@ -5,6 +5,10 @@ abstract class AuthApi {
 
   User? get currentUser;
 
+  Stream<User?> get idTokenChanges;
+
+  Future<String?> getIdToken();
+
   Future<User> signInWithFacebook();
 
   Future<User> signInWithGoogle();
