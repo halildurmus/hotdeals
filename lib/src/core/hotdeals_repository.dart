@@ -248,8 +248,8 @@ class HotdealsRepository with NetworkLoggy implements HotdealsApi {
   @override
   Future<MyUser> createMongoUser(User user) => _wrap(() async {
         const url = '/users';
-        const defaultAvatar =
-            'https://ui-avatars.com/api/?length=1&background=008080&rounded=true&name=';
+        final defaultAvatar =
+            'https://avatars.dicebear.com/api/bottts/${user.uid}.png';
         final data = {
           'uid': user.uid,
           'email': user.email,
