@@ -17,19 +17,19 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import 'src/app/app.dart';
 import 'src/core/connection_service.dart';
-import 'src/core/crashlytics_printer.dart';
-import 'src/core/custom_loggy_printer.dart';
-import 'src/core/firebase_crashlytics_service.dart';
 import 'src/core/firebase_storage_service.dart';
 import 'src/core/local_storage_repository.dart';
 import 'src/core/package_info_provider.dart';
-import 'src/core/provider_logger.dart';
 import 'src/core/shared_preferences_repository.dart';
 import 'src/features/chat/data/firestore_service.dart';
 import 'src/features/notifications/data/providers.dart';
 import 'src/features/notifications/data/push_notification_service.dart';
 import 'src/features/notifications/domain/push_notification.dart';
 import 'src/l10n/timeago_tr_messages.dart';
+import 'src/logging/crashlytics_printer.dart';
+import 'src/logging/custom_loggy_printer.dart';
+import 'src/logging/firebase_crashlytics_service.dart';
+import 'src/logging/provider_logger.dart';
 
 void _initLoggy() {
   Loggy.initLoggy(
