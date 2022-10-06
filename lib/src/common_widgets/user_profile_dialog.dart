@@ -103,7 +103,8 @@ class UserProfileDialog extends ConsumerWidget {
                       ),
                       errorWidget: (_, __, ___) =>
                           const CircleAvatarShimmer(radius: 36),
-                      placeholder: (_, __) => const CircleAvatarShimmer(radius: 36),
+                      placeholder: (_, __) =>
+                          const CircleAvatarShimmer(radius: 36),
                     ),
                     const SizedBox(width: 30),
                     Wrap(

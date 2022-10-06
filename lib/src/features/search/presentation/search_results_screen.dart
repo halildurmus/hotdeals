@@ -8,8 +8,8 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart'
 import '../../../common_widgets/error_indicator.dart';
 import '../../../core/hotdeals_repository.dart';
 import '../../../helpers/context_extensions.dart';
-import '../../deals/domain/deal.dart';
-import '../../deals/presentation/widgets/deal_paged_list_view.dart';
+import '../../deal/domain/deal.dart';
+import '../../deal/presentation/widgets/deal_paged_list_view.dart';
 import '../domain/search_params.dart';
 
 class SearchResultsScreen extends ConsumerStatefulWidget {

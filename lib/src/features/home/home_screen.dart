@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../browse/presentation/browse_screen.dart';
 import '../chat/presentation/chat_screen.dart';
-import '../deals/presentation/deals_screen.dart';
+import '../deal/presentation/deals_screen.dart';
 import '../notifications/presentation/notifications_controller.dart';
 import '../notifications/presentation/notifications_screen.dart';
 import '../profile/presentation/my_profile/profile_screen.dart';

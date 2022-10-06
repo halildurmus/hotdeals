@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../common_widgets/error_indicator.dart';
 import '../../../../../core/hotdeals_repository.dart';
 import '../../../../../helpers/context_extensions.dart';
-import '../../../../deals/presentation/widgets/deal_paged_list_view.dart';
+import '../../../../deal/presentation/widgets/deal_paged_list_view.dart';
 
 class MyDealsTab extends ConsumerWidget {
   const MyDealsTab({super.key});
