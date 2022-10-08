@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final firebaseStorageServiceProvider = Provider<FirebaseStorageService>(
-    (ref) => throw UnimplementedError(),
-    name: 'FirebaseStorageServiceProvider');
+final firebaseStorageServiceProvider = Provider<FirebaseStorageService>((ref) {
+  return FirebaseStorageService(FirebaseStorage.instance);
+}, name: 'FirebaseStorageServiceProvider');
 
 typedef Json = Map<String, dynamic>;
 
@@ -23,14 +23,12 @@ class FirebaseStorageService {
   }) async {
     final storageRef = _storage
         .ref()
-        .child('uploads')
-        .child('${DateTime.now().millisecondsSinceEpoch}-$fileName');
+        .child('uploads/${DateTime.now().millisecondsSinceEpoch}-$fileName');
     final uploadTask = storageRef.putFile(
       File(filePath),
       SettableMetadata(contentType: mimeType),
     );
     final snapshot = await uploadTask;
-
     return snapshot.ref.getDownloadURL();
   }
 
@@ -38,20 +36,18 @@ class FirebaseStorageService {
     required String filePath,
     required String fileName,
     required String mimeType,
-    required String userID,
+    required String userId,
   }) async {
-    final storageRef =
-        _storage.ref().child('avatars').child('$userID-$fileName');
+    final storageRef = _storage.ref().child('avatars/$userId-$fileName');
     final uploadTask = storageRef.putFile(
       File(filePath),
       SettableMetadata(contentType: mimeType),
     );
     final snapshot = await uploadTask;
-
     return snapshot.ref.getDownloadURL();
   }
 
-  Future<void> deleteImagesFromRef({required List<Reference> refs}) async =>
+  Future<void> deleteImagesFromRef({required List<Reference> refs}) =>
       Future.wait([...refs.map((e) => e.delete())]);
 
   Future<void> deleteImagesFromUrl(List<String> urls) async {

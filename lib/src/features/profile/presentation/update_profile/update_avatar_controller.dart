@@ -36,7 +36,7 @@ class UpdateAvatarController extends StateNotifier<AsyncValue<bool>> {
       filePath: file.path,
       fileName: file.name,
       mimeType: mimeType,
-      userID: userId,
+      userId: userId,
     );
   }
 

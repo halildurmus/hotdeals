@@ -22,7 +22,7 @@ final getMessageDocumentFutureProvider =
 );
 
 final firestoreServiceProvider = Provider<FirestoreService>(
-    (ref) => throw UnimplementedError(),
+    (ref) => FirestoreService(FirebaseFirestore.instance),
     name: 'FirestoreServiceProvider');
 
 typedef Json = Map<String, dynamic>;

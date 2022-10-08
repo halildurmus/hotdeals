@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -17,18 +15,15 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import 'src/app/app.dart';
 import 'src/core/connection_service.dart';
-import 'src/core/firebase_storage_service.dart';
 import 'src/core/local_storage_repository.dart';
 import 'src/core/package_info_provider.dart';
 import 'src/core/shared_preferences_repository.dart';
-import 'src/features/chat/data/firestore_service.dart';
 import 'src/features/notifications/data/providers.dart';
 import 'src/features/notifications/data/push_notification_service.dart';
 import 'src/features/notifications/domain/push_notification.dart';
 import 'src/l10n/timeago_tr_messages.dart';
 import 'src/logging/crashlytics_printer.dart';
 import 'src/logging/custom_loggy_printer.dart';
-import 'src/logging/firebase_crashlytics_service.dart';
 import 'src/logging/provider_logger.dart';
 
 void _initLoggy() {
@@ -162,12 +157,6 @@ Future<void> main() async {
             .overrideWithValue(notificationChannel),
         connectionServiceProvider
             .overrideWithValue(ConnectionService()..initialize()),
-        firebaseCrashlyticsProvider
-            .overrideWithValue(FirebaseCrashlytics.instance),
-        firebaseStorageServiceProvider.overrideWithValue(
-            FirebaseStorageService(FirebaseStorage.instance)),
-        firestoreServiceProvider
-            .overrideWithValue(FirestoreService(FirebaseFirestore.instance)),
         flutterLocalNotificationsPluginProvider
             .overrideWithValue(flutterLocalNotificationsPlugin),
         localStorageRepositoryProvider.overrideWithValue(
