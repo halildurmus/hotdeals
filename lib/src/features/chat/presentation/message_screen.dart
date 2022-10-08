@@ -122,7 +122,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with UiLoggy {
   }
 
   Future<void> onImageTap(types.ImageMessage message) async => context.go(
-        '/chats/${widget.docId}/images/${message.id}?name=${message.name}&uri=${message.uri}',
+        '/chats/${widget.docId}/images/${message.id}?name=${message.name}&uri=${Uri.encodeComponent(message.uri)}',
         extra: widget.user2,
       );
 

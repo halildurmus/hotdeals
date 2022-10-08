@@ -93,8 +93,7 @@ class RouterNotifier extends ChangeNotifier {
                   path: 'images/:imageId',
                   builder: (context, state) {
                     final fileName = state.queryParams['name']!;
-                    final imageUri = state.queryParams['uri']!
-                        .replaceFirst('o/uploads/', 'o/uploads%2F');
+                    final imageUri = state.queryParams['uri']!;
                     return ChatImagePreview(
                       fileName: fileName,
                       imageUri: imageUri,
