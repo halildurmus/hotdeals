@@ -5,7 +5,8 @@
 ![Visits](https://visitor-badge.glitch.me/badge?page_id=halildurmus.hotdeals)
 
 > **hotdeals** is an **online marketplace** app developed with **[Flutter](https://github.com/flutter/flutter)**.
-The app's **Backend** can be found **[here](https://github.com/halildurmus/hotdeals-backend)**.
+
+> The app's **Backend** can be found **[here](https://github.com/halildurmus/hotdeals-backend)**.
 
 ## Table of Contents
 
